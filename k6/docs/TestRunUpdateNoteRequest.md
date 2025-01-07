@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Value** | **string** | User-defined note for the test run. | 
+**Value** | **NullableString** | User-defined note for the test run. | 
 
 ## Methods
 
 ### NewTestRunUpdateNoteRequest
 
-`func NewTestRunUpdateNoteRequest(value string, ) *TestRunUpdateNoteRequest`
+`func NewTestRunUpdateNoteRequest(value NullableString, ) *TestRunUpdateNoteRequest`
 
 NewTestRunUpdateNoteRequest instantiates a new TestRunUpdateNoteRequest object
 This constructor will assign default values to properties that have it defined,
@@ -45,6 +45,16 @@ and a boolean to check if the value has been set.
 SetValue sets Value field to given value.
 
 
+### SetValueNil
+
+`func (o *TestRunUpdateNoteRequest) SetValueNil(b bool)`
+
+ SetValueNil sets the value for Value to be an explicit nil
+
+### UnsetValue
+`func (o *TestRunUpdateNoteRequest) UnsetValue()`
+
+UnsetValue ensures that no value is present for Value, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

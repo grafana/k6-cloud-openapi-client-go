@@ -4,16 +4,16 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**VuhMaxPerMonth** | **int32** | Max amount of virtual user hours (VUh) used per one calendar month. | 
-**VuMaxPerTest** | **int32** | Max number of concurrent virtual users (VUs) used in one test. | 
-**VuBrowserMaxPerTest** | **int32** | Max number of concurrent browser virtual users (VUs) used in one test. | 
-**DurationMaxPerTest** | **int32** | Max duration of a test in seconds. | 
+**VuhMaxPerMonth** | **NullableInt32** | Max amount of virtual user hours (VUh) used per one calendar month. | 
+**VuMaxPerTest** | **NullableInt32** | Max number of concurrent virtual users (VUs) used in one test. | 
+**VuBrowserMaxPerTest** | **NullableInt32** | Max number of concurrent browser virtual users (VUs) used in one test. | 
+**DurationMaxPerTest** | **NullableInt32** | Max duration of a test in seconds. | 
 
 ## Methods
 
 ### NewProjectSettings
 
-`func NewProjectSettings(vuhMaxPerMonth int32, vuMaxPerTest int32, vuBrowserMaxPerTest int32, durationMaxPerTest int32, ) *ProjectSettings`
+`func NewProjectSettings(vuhMaxPerMonth NullableInt32, vuMaxPerTest NullableInt32, vuBrowserMaxPerTest NullableInt32, durationMaxPerTest NullableInt32, ) *ProjectSettings`
 
 NewProjectSettings instantiates a new ProjectSettings object
 This constructor will assign default values to properties that have it defined,
@@ -48,6 +48,16 @@ and a boolean to check if the value has been set.
 SetVuhMaxPerMonth sets VuhMaxPerMonth field to given value.
 
 
+### SetVuhMaxPerMonthNil
+
+`func (o *ProjectSettings) SetVuhMaxPerMonthNil(b bool)`
+
+ SetVuhMaxPerMonthNil sets the value for VuhMaxPerMonth to be an explicit nil
+
+### UnsetVuhMaxPerMonth
+`func (o *ProjectSettings) UnsetVuhMaxPerMonth()`
+
+UnsetVuhMaxPerMonth ensures that no value is present for VuhMaxPerMonth, not even an explicit nil
 ### GetVuMaxPerTest
 
 `func (o *ProjectSettings) GetVuMaxPerTest() int32`
@@ -68,6 +78,16 @@ and a boolean to check if the value has been set.
 SetVuMaxPerTest sets VuMaxPerTest field to given value.
 
 
+### SetVuMaxPerTestNil
+
+`func (o *ProjectSettings) SetVuMaxPerTestNil(b bool)`
+
+ SetVuMaxPerTestNil sets the value for VuMaxPerTest to be an explicit nil
+
+### UnsetVuMaxPerTest
+`func (o *ProjectSettings) UnsetVuMaxPerTest()`
+
+UnsetVuMaxPerTest ensures that no value is present for VuMaxPerTest, not even an explicit nil
 ### GetVuBrowserMaxPerTest
 
 `func (o *ProjectSettings) GetVuBrowserMaxPerTest() int32`
@@ -88,6 +108,16 @@ and a boolean to check if the value has been set.
 SetVuBrowserMaxPerTest sets VuBrowserMaxPerTest field to given value.
 
 
+### SetVuBrowserMaxPerTestNil
+
+`func (o *ProjectSettings) SetVuBrowserMaxPerTestNil(b bool)`
+
+ SetVuBrowserMaxPerTestNil sets the value for VuBrowserMaxPerTest to be an explicit nil
+
+### UnsetVuBrowserMaxPerTest
+`func (o *ProjectSettings) UnsetVuBrowserMaxPerTest()`
+
+UnsetVuBrowserMaxPerTest ensures that no value is present for VuBrowserMaxPerTest, not even an explicit nil
 ### GetDurationMaxPerTest
 
 `func (o *ProjectSettings) GetDurationMaxPerTest() int32`
@@ -108,6 +138,16 @@ and a boolean to check if the value has been set.
 SetDurationMaxPerTest sets DurationMaxPerTest field to given value.
 
 
+### SetDurationMaxPerTestNil
+
+`func (o *ProjectSettings) SetDurationMaxPerTestNil(b bool)`
+
+ SetDurationMaxPerTestNil sets the value for DurationMaxPerTest to be an explicit nil
+
+### UnsetDurationMaxPerTest
+`func (o *ProjectSettings) UnsetDurationMaxPerTest()`
+
+UnsetDurationMaxPerTest ensures that no value is present for DurationMaxPerTest, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

@@ -4,9 +4,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ByUser** | Pointer to **int32** | The user that set the status if applicable. | [optional] 
-**Message** | Pointer to **string** | Human-readable string describing the error if applicable. | [optional] 
-**Code** | Pointer to **string** | Service-defined error code if applicable. | [optional] 
+**ByUser** | Pointer to **NullableInt32** | The user that set the status if applicable. | [optional] 
+**Message** | Pointer to **NullableString** | Human-readable string describing the error if applicable. | [optional] 
+**Code** | Pointer to **NullableString** | Service-defined error code if applicable. | [optional] 
 
 ## Methods
 
@@ -52,6 +52,16 @@ SetByUser sets ByUser field to given value.
 
 HasByUser returns a boolean if a field has been set.
 
+### SetByUserNil
+
+`func (o *TestRunStatusExtra) SetByUserNil(b bool)`
+
+ SetByUserNil sets the value for ByUser to be an explicit nil
+
+### UnsetByUser
+`func (o *TestRunStatusExtra) UnsetByUser()`
+
+UnsetByUser ensures that no value is present for ByUser, not even an explicit nil
 ### GetMessage
 
 `func (o *TestRunStatusExtra) GetMessage() string`
@@ -77,6 +87,16 @@ SetMessage sets Message field to given value.
 
 HasMessage returns a boolean if a field has been set.
 
+### SetMessageNil
+
+`func (o *TestRunStatusExtra) SetMessageNil(b bool)`
+
+ SetMessageNil sets the value for Message to be an explicit nil
+
+### UnsetMessage
+`func (o *TestRunStatusExtra) UnsetMessage()`
+
+UnsetMessage ensures that no value is present for Message, not even an explicit nil
 ### GetCode
 
 `func (o *TestRunStatusExtra) GetCode() string`
@@ -102,6 +122,16 @@ SetCode sets Code field to given value.
 
 HasCode returns a boolean if a field has been set.
 
+### SetCodeNil
+
+`func (o *TestRunStatusExtra) SetCodeNil(b bool)`
+
+ SetCodeNil sets the value for Code to be an explicit nil
+
+### UnsetCode
+`func (o *TestRunStatusExtra) UnsetCode()`
+
+UnsetCode ensures that no value is present for Code, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

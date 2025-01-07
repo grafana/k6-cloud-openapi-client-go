@@ -4,9 +4,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Starts** | Pointer to **time.Time** | The date after which the schedule will start running the test. | [optional] 
-**Repeats** | Pointer to [**PatchedScheduleRequestRepeats**](PatchedScheduleRequestRepeats.md) |  | [optional] 
-**Ends** | Pointer to [**PatchedScheduleRequestEnds**](PatchedScheduleRequestEnds.md) |  | [optional] 
+**Starts** | Pointer to **NullableTime** | The date after which the schedule will start running the test. | [optional] 
+**Repeats** | Pointer to [**NullableScheduleRepeatsRequest**](ScheduleRepeatsRequest.md) |  | [optional] 
+**Ends** | Pointer to [**NullableScheduleEndsRequest**](ScheduleEndsRequest.md) |  | [optional] 
 
 ## Methods
 
@@ -52,22 +52,32 @@ SetStarts sets Starts field to given value.
 
 HasStarts returns a boolean if a field has been set.
 
+### SetStartsNil
+
+`func (o *PatchedScheduleRequest) SetStartsNil(b bool)`
+
+ SetStartsNil sets the value for Starts to be an explicit nil
+
+### UnsetStarts
+`func (o *PatchedScheduleRequest) UnsetStarts()`
+
+UnsetStarts ensures that no value is present for Starts, not even an explicit nil
 ### GetRepeats
 
-`func (o *PatchedScheduleRequest) GetRepeats() PatchedScheduleRequestRepeats`
+`func (o *PatchedScheduleRequest) GetRepeats() ScheduleRepeatsRequest`
 
 GetRepeats returns the Repeats field if non-nil, zero value otherwise.
 
 ### GetRepeatsOk
 
-`func (o *PatchedScheduleRequest) GetRepeatsOk() (*PatchedScheduleRequestRepeats, bool)`
+`func (o *PatchedScheduleRequest) GetRepeatsOk() (*ScheduleRepeatsRequest, bool)`
 
 GetRepeatsOk returns a tuple with the Repeats field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetRepeats
 
-`func (o *PatchedScheduleRequest) SetRepeats(v PatchedScheduleRequestRepeats)`
+`func (o *PatchedScheduleRequest) SetRepeats(v ScheduleRepeatsRequest)`
 
 SetRepeats sets Repeats field to given value.
 
@@ -77,22 +87,32 @@ SetRepeats sets Repeats field to given value.
 
 HasRepeats returns a boolean if a field has been set.
 
+### SetRepeatsNil
+
+`func (o *PatchedScheduleRequest) SetRepeatsNil(b bool)`
+
+ SetRepeatsNil sets the value for Repeats to be an explicit nil
+
+### UnsetRepeats
+`func (o *PatchedScheduleRequest) UnsetRepeats()`
+
+UnsetRepeats ensures that no value is present for Repeats, not even an explicit nil
 ### GetEnds
 
-`func (o *PatchedScheduleRequest) GetEnds() PatchedScheduleRequestEnds`
+`func (o *PatchedScheduleRequest) GetEnds() ScheduleEndsRequest`
 
 GetEnds returns the Ends field if non-nil, zero value otherwise.
 
 ### GetEndsOk
 
-`func (o *PatchedScheduleRequest) GetEndsOk() (*PatchedScheduleRequestEnds, bool)`
+`func (o *PatchedScheduleRequest) GetEndsOk() (*ScheduleEndsRequest, bool)`
 
 GetEndsOk returns a tuple with the Ends field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetEnds
 
-`func (o *PatchedScheduleRequest) SetEnds(v PatchedScheduleRequestEnds)`
+`func (o *PatchedScheduleRequest) SetEnds(v ScheduleEndsRequest)`
 
 SetEnds sets Ends field to given value.
 
@@ -102,6 +122,16 @@ SetEnds sets Ends field to given value.
 
 HasEnds returns a boolean if a field has been set.
 
+### SetEndsNil
+
+`func (o *PatchedScheduleRequest) SetEndsNil(b bool)`
+
+ SetEndsNil sets the value for Ends to be an explicit nil
+
+### UnsetEnds
+`func (o *PatchedScheduleRequest) UnsetEnds()`
+
+UnsetEnds ensures that no value is present for Ends, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

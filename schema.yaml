@@ -1,104 +1,207 @@
 openapi: 3.1.0
 info:
-  title: ''
-  version: 0.0.0
-  description: HTTP API for interacting with k6 Cloud.
+  title: Grafana Cloud k6
+  version: 1.0.0
+  description: HTTP API for interacting with Grafana Cloud k6.
   contact:
     name: Grafana Support
     url: https://grafana.com/help/
     email: info@grafana.com
 paths:
-  /load_tests:
+  /cloud/v6/load_tests:
     get:
-      operationId: projects_load_tests_list
-      description: List all load tests.
+      operationId: load_tests_list
+      description: List all available tests.
+      summary: List all tests.
       parameters:
-        - $ref: '#/components/parameters/stackId'
-        - name: $count
-          required: false
-          in: query
-          description: Include collection length in the response object as '@count'.
-          schema:
-            type: boolean
-        - name: $orderby
-          required: false
-          in: query
-          description: |-
-            Comma separated list of fields to use when ordering the results. The default order is ascending and can be reversed by appending `desc` specifier. Available fields:
-            - name
-            - created
-            - updated
-          schema:
-            type: string
-            default: created desc
-          example: name desc,created
-        - name: $skip
-          required: false
-          in: query
-          description: The initial index from which to return the results.
-          schema:
-            type: integer
-        - name: $top
-          required: false
-          in: query
-          description: Number of results to return per page.
-          schema:
-            type: integer
-            default: 1000
-            maximum: 1000
+      - $ref: '#/components/parameters/stackId'
+      - in: query
+        name: $count
+        schema:
+          type: boolean
+        description: Include collection length in the response object as `@count`.
+      - in: query
+        name: $orderby
+        schema:
+          type: string
+        description: |-
+          Comma-separated list of fields to use when ordering the results. Available fields:
+          - id
+          - project_id
+          - name
+          - created
+          - updated
+
+          The default ascending order can be reversed by appending the `desc` specifier.
+        examples:
+          Multiple:
+            value: id desc,project_id
+      - in: query
+        name: $skip
+        schema:
+          type: integer
+        description: The initial index from which to return the results.
+      - in: query
+        name: $top
+        schema:
+          type: integer
+          default: 1000
+          maximum: 1000
+        description: Number of results to return per page.
       tags:
-        - load-tests
+      - load_tests
       security:
-        - k6ApiToken: [ ]
+      - k6ApiToken: []
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedLoadTestList'
+                $ref: '#/components/schemas/LoadTestListResponse'
               examples:
-                Success:
+                OK:
                   value:
-                    '@count': 123
-                    '@nextLink': http://api.example.org/accounts/?$skip=400&$top=100
                     value:
-                      - id: 1234
-                        project_id: 312
-                        name: Orders API Soak Test
-                        baseline_test_run_id: null
-                        created: '2024-12-03T09:53:00.553'
-                        updated: '2024-12-03T09:53:00.553'
-          description: ''
+                    - id: 1234
+                      project_id: 312
+                      name: Orders API Soak Test
+                      baseline_test_run_id: null
+                      created: '2024-12-03T09:53:00.553'
+                      updated: '2024-12-03T09:53:00.553'
+                    '@count': 123
+                    '@nextLink': https://api.k6.io/cloud/v6/load_tests?$skip=50&$top=20
+          description: OK.
         '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /cloud/v6/load_tests/{id}/test_runs:
+    get:
+      operationId: load_tests_test_runs_retrieve
+      description: List all runs of a load test.
+      summary: List all runs of a load test.
+      parameters:
+      - $ref: '#/components/parameters/stackId'
+      - in: query
+        name: $count
+        schema:
+          type: boolean
+        description: Include collection length in the response object as `@count`.
+      - in: query
+        name: $skip
+        schema:
+          type: integer
+        description: The initial index from which to return the results.
+      - in: query
+        name: $top
+        schema:
+          type: integer
+          default: 1000
+          maximum: 1000
+        description: Number of results to return per page.
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: ID of the load test.
+        required: true
+      tags:
+      - test_runs
+      security:
+      - k6ApiToken: []
+      responses:
+        '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-          description: ''
-  /load_tests/{id}:
+                $ref: '#/components/schemas/TestRunListResponse'
+              examples:
+                OK:
+                  value:
+                    value:
+                    - id: 1234
+                      test_id: 123
+                      project_id: 12
+                      started_by: user@example.com
+                      created: '2024-06-01T19:00:00Z'
+                      ended: null
+                      cost:
+                        total_vuh: 10.0
+                        breakdown:
+                          protocol_vuh: 10.0
+                          browser_vuh: 0.0
+                      note: User-defined note for the test run.
+                      retention_expiry: '2024-07-01T19:30:30Z'
+                      distribution:
+                      - load_zone: amazon:us:ashburn
+                        percent: 100
+                      options:
+                        stages:
+                        - duration: 10m
+                          target: 10
+                        - duration: 20m
+                          target: 10
+                        cloud:
+                          distribution:
+                            amazon:us:ashburn:
+                              loadZone: amazon:us:ashburn
+                              percent: 100
+                          projectID: 12
+                      result: null
+                      result_details: {}
+                      status: running
+                      status_details:
+                        type: running
+                        entered: '2024-06-01T19:00:20Z'
+                      status_history:
+                      - type: created
+                        entered: '2024-06-01T19:00:00Z'
+                      - type: initializing
+                        entered: '2024-06-01T19:00:10Z'
+                      - type: running
+                        entered: '2024-06-01T19:00:20Z'
+                    '@count': 123
+                    '@nextLink': https://api.k6.io/cloud/v6/load_tests/123/test_runs?$skip=50&$top=20
+          description: OK.
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /cloud/v6/load_tests/{id}:
     get:
       operationId: load_tests_retrieve
-      description: Describe a single load test.
+      description: Fetch a single load test.
+      summary: Get a load test by ID.
       parameters:
-        - $ref: '#/components/parameters/stackId'
-        - in: path
-          name: id
-          schema:
-            type: integer
-          description: Id of the load test.
-          required: true
+      - $ref: '#/components/parameters/stackId'
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: ID of the load test.
+        required: true
       tags:
-        - load-tests
+      - load_tests
       security:
-        - k6ApiToken: [ ]
+      - k6ApiToken: []
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LoadTest'
+                $ref: '#/components/schemas/LoadTestApiModel'
               examples:
-                Success:
+                OK:
                   value:
                     id: 1234
                     project_id: 312
@@ -106,992 +209,631 @@ paths:
                     baseline_test_run_id: null
                     created: '2024-12-03T09:53:00.553'
                     updated: '2024-12-03T09:53:00.553'
-          description: ''
+          description: OK.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
         '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-          description: ''
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
     patch:
       operationId: load_tests_partial_update
       description: Update a load test.
+      summary: Update a load test.
       parameters:
-        - $ref: '#/components/parameters/stackId'
-        - in: path
-          name: id
-          schema:
-            type: integer
-          description: Id of the load test.
-          required: true
+      - $ref: '#/components/parameters/stackId'
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: ID of the load test.
+        required: true
       tags:
-        - load-tests
+      - load_tests
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedLoadTestRequest'
+              $ref: '#/components/schemas/PatchLoadTestApiModel'
             examples:
               Update:
                 value:
                   name: New Test Name
                   baseline_test_run_id: 123
       security:
-        - k6ApiToken: [ ]
+      - k6ApiToken: []
       responses:
         '204':
-          description: No response body
-        '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-          description: ''
-        '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-          description: ''
+          description: OK.
         '409':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-          description: Name already taken.
+                $ref: '#/components/schemas/ErrorResponseApiModel'
+          description: The name is already taken.
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
     delete:
       operationId: load_tests_destroy
       description: Delete a load test.
+      summary: Delete a load test.
       parameters:
-        - $ref: '#/components/parameters/stackId'
-        - in: path
-          name: id
-          schema:
-            type: integer
-          description: Id of the load test.
-          required: true
+      - $ref: '#/components/parameters/stackId'
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: ID of the load test.
+        required: true
       tags:
-        - load-tests
+      - load_tests
       security:
-        - k6ApiToken: [ ]
+      - k6ApiToken: []
       responses:
         '204':
-          description: No response body
-        '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-          description: ''
+          description: OK.
         '409':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-          description: Can not delete while the test is running.
-  /load_tests/{id}/schedule:
-    get:
-      operationId: load_tests_schedules_retrieve
-      description: Describe a single schedule.
-      parameters:
-        - $ref: '#/components/parameters/stackId'
-        - in: path
-          name: id
-          schema:
-            type: integer
-          description: Id of the load test.
-          required: true
-      tags:
-        - load-tests
-      security:
-        - k6ApiToken: [ ]
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Schedule'
-              examples:
-                RepeatsEvery2HoursOnWeekends:
-                  value:
-                    id: 123
-                    load_test_id: 234
-                    active: true
-                    starts: '2024-07-16T08:46:04.021Z'
-                    repeats:
-                      frequency: hourly
-                      interval: 2
-                      days:
-                        - saturday
-                        - sunday
-                    ends: null
-                    next_run: '2024-07-20T01:46:04.021Z'
-                DailyEndsAfter10Runs:
-                  value:
-                    id: 123
-                    load_test_id: 234
-                    active: true
-                    starts: '2024-07-16T08:46:04.021Z'
-                    repeats:
-                      frequency: daily
-                    ends:
-                      after_runs: 10
-                    next_run: '2024-07-17T08:46:04.021Z'
-                RunOnce:
-                  value:
-                    id: 123
-                    load_test_id: 234
-                    active: false
-                    starts: '2024-08-01T12:00:00.000Z'
-                    repeats: null
-                    ends: null
-                    next_run: null
-                TriggeredOnceInThePast:
-                  value:
-                    id: 123
-                    load_test_id: 234
-                    active: false
-                    starts: '2023-08-01T12:00:00.000Z'
-                    repeats: null
-                    ends: null
-                    next_run: null
-          description: ''
+                $ref: '#/components/schemas/ErrorResponseApiModel'
+          description: Cannot delete test while it's running.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
         '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-          description: Load test not found or schedule does not exist.
-  /load_tests/{id}/script:
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /cloud/v6/load_tests/{id}/script:
     get:
       operationId: load_tests_script_retrieve
       description: |-
-        Get the test script.
+        Download the test script.
 
-        The script can be either in the form of a single javascript file or a k6 .tar archive -
-        the type is identified by the response content type.
+        The script can be either in the form of a single JavaScript file or a k6 .tar archive -
+        the type is identified by the request content type.
+      summary: Download the test script.
       parameters:
-        - $ref: '#/components/parameters/stackId'
-        - in: path
-          name: id
-          schema:
-            type: integer
-          description: Id of the load test.
-          required: true
+      - $ref: '#/components/parameters/stackId'
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: ID of the load test.
+        required: true
       tags:
-        - load-tests
+      - load_tests
       security:
-        - k6ApiToken: [ ]
+      - k6ApiToken: []
       responses:
         '200':
           content:
             text/javascript:
               schema:
                 type: string
+              examples:
+                TextScript:
+                  value: |
+                    import http from 'k6/http';
+                    import { sleep } from 'k6';
+
+                    export const options = {
+                      vus: 10,
+                      duration: '30s',
+                      cloud: {
+                        // Project: Default project
+                        projectID: 3684621,
+                        // Test runs with the same name groups test runs together.
+                        name: 'Test (04/12/2024-20:28:06)'
+                      }
+                    };
+
+                    export default function() {
+                      http.get('https://test.k6.io');
+                      sleep(1);
+                    }
+                  summary: Text Script
             application/x-tar:
               schema:
                 type: string
                 format: binary
-          description: ''
+              examples:
+                K6ArchiveScript:
+                  value: (.tar data)
+                  summary: K6 Archive Script
+          description: OK.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
         '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-          description: ''
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
     put:
       operationId: load_tests_script_update
       description: |-
-        Upload script for the test.
+        Upload the script for a test.
 
-        The script can be either in the form of a single javascript file or a k6 .tar archive -
+        The script can be either in the form of a single JavaScript text file or a k6 .tar archive -
         the type is auto-detected by the API. Any received payload that is not a .tar archive
-        is assumed to be a javascript file.
+        is assumed to be a JavaScript file.
+      summary: Upload the script for a test.
       parameters:
-        - $ref: '#/components/parameters/stackId'
-        - in: path
-          name: id
-          schema:
-            type: integer
-          description: Id of the load test.
-          required: true
+      - $ref: '#/components/parameters/stackId'
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: ID of the load test.
+        required: true
       tags:
-        - load-tests
+      - load_tests
       requestBody:
         content:
           application/octet-stream:
             schema:
               type: string
               format: binary
+            examples:
+              TextScript:
+                value: |
+                  import http from 'k6/http';
+                  import { sleep } from 'k6';
+
+                  export const options = {
+                    vus: 10,
+                    duration: '30s',
+                    cloud: {
+                      // Project: Default project
+                      projectID: 3684621,
+                      // Test runs with the same name groups test runs together.
+                      name: 'Test (04/12/2024-20:28:06)'
+                    }
+                  };
+
+                  export default function() {
+                    http.get('https://test.k6.io');
+                    sleep(1);
+                  }
+                summary: Text Script
+              K6ArchiveScript:
+                value: (.tar data)
+                summary: K6 Archive Script
       security:
-        - k6ApiToken: [ ]
+      - k6ApiToken: []
       responses:
         '204':
-          description: No response body
+          description: OK.
         '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-          description: ''
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
         '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-          description: ''
-  /load_tests/{id}/start:
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /cloud/v6/load_tests/{id}/start:
     post:
       operationId: load_tests_start
-      description: Start a test in the Cloud.
+      description: Start a test in Grafana Cloud.
+      summary: Start a test in Grafana Cloud.
       parameters:
-        - $ref: '#/components/parameters/stackId'
-        - in: path
-          name: id
-          schema:
-            type: integer
-          description: Id of the load test.
-          required: true
+      - $ref: '#/components/parameters/stackId'
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: ID of the load test.
+        required: true
       tags:
-        - load-tests
+      - load_tests
       security:
-        - k6ApiToken: [ ]
+      - k6ApiToken: []
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TestRun'
+                $ref: '#/components/schemas/TestRunApiModel'
               examples:
-                Completed:
+                Started:
                   value:
                     id: 1234
                     test_id: 123
                     project_id: 12
-                    started_by: 321
-                    created: '2024-06-24T19:44:26.46Z'
-                    ended: '2024-06-24T20:45:27.46Z'
-                    cost:
-                      total_vuh: 10.0
-                      breakdown:
-                        protocol_vuh: 10.0
-                        browser_vuh: 0.0
-                    note: User-defined note for the test run.
-                    retention_expiry: '2024-07-01T19:45:26.46Z'
-                    distribution:
-                      - load_zone: amazon:us:ashburn
-                        percent: 100
-                    options:
-                      stages:
-                        - duration: 10m
-                          target: 10
-                        - duration: 20m
-                          target: 10
-                      cloud:
-                        distribution:
-                          amazon:us:ashburn:
-                            loadZone: amazon:us:ashburn
-                            percent: 100
-                        projectID: 12
-                    result: passed
-                    result_details: { }
-                    status: completed
-                    status_details:
-                      type: completed
-                      entered: '2024-06-24T19:45:26.46Z'
-                    status_history:
-                      - type: created
-                        entered: '2024-06-24T19:44:26.46Z'
-                      - type: initializing
-                        entered: '2024-06-24T19:44:46.46Z'
-                      - type: running
-                        entered: '2024-06-24T19:45:26.469Z'
-                      - type: processing_metrics
-                        entered: '2024-06-24T20:45:26.469Z'
-                      - type: completed
-                        entered: '2024-06-24T20:45:27.469Z'
-                ValidationError:
-                  value:
-                    id: 1234
-                    test_id: 123
-                    project_id: 12
-                    started_by: 321
-                    created: '2024-06-24T19:44:26.46Z'
-                    ended: '2024-06-24T20:44:36.46Z'
+                    started_by: user@example.com
+                    created: '2024-06-01T19:00:00Z'
+                    ended: null
                     cost: null
                     note: ''
-                    retention_expiry: '2024-07-01T19:45:26.46Z'
+                    retention_expiry: '2024-06-07T19:00:00Z'
                     distribution: null
                     options: null
-                    result: error
-                    result_details:
-                      message: Validation error
-                      code: '123'
-                    status: aborted
+                    result: null
+                    result_details: null
+                    status: created
                     status_details:
-                      type: aborted
-                      entered: '2024-06-24T19:44:36.46Z'
-                      extra:
-                        by_user: null
-                        message: Validation error
-                        code: '123'
+                      type: created
+                      entered: '2024-06-01T19:00:00Z'
                     status_history:
-                      - type: created
-                        entered: '2024-06-24T19:44:26.46Z'
-                      - type: aborted
-                        entered: '2024-06-24T19:44:36.46Z'
-                        extra:
-                          by_user: null
-                          message: Validation error
-                          code: '123'
-          description: ''
-        '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-          description: ''
+                    - type: created
+                      entered: '2024-06-01T19:00:00Z'
+          description: OK.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
         '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-          description: ''
-        '409':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-          description: Can not run this type of test in the Cloud.
-  /load_tests/{id}/test_runs:
-    get:
-      operationId: load_tests_test_runs_list
-      description: List test runs of a single load test.
-      parameters:
-        - $ref: '#/components/parameters/stackId'
-        - in: path
-          name: id
-          schema:
-            type: integer
-          description: Id of the load test.
-          required: true
-        - name: $count
-          required: false
-          in: query
-          description: Include collection length in the response object as '@count'.
-          schema:
-            type: boolean
-        - name: $orderby
-          required: false
-          in: query
-          description: |-
-            Comma separated list of fields to use when ordering the results. The default order is ascending and can be reversed by appending `desc` specifier. Available fields:
-            - created
-            - ended
-            - retention_expiry
-            - status
-            - cost/total_vuh
-          schema:
-            type: string
-            default: created desc
-          example: created desc,ended
-        - name: $skip
-          required: false
-          in: query
-          description: The initial index from which to return the results.
-          schema:
-            type: integer
-        - name: $top
-          required: false
-          in: query
-          description: Number of results to return per page.
-          schema:
-            type: integer
-            default: 1000
-            maximum: 1000
-      tags:
-        - load-tests
-      security:
-        - k6ApiToken: [ ]
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PaginatedTestRunList'
-              examples:
-                Completed:
-                  value:
-                    '@count': 123
-                    '@nextLink': http://api.example.org/accounts/?$skip=400&$top=100
-                    value:
-                      - id: 1234
-                        test_id: 123
-                        project_id: 12
-                        started_by: 321
-                        created: '2024-06-24T19:44:26.46Z'
-                        ended: '2024-06-24T20:45:27.46Z'
-                        cost:
-                          total_vuh: 10.0
-                          breakdown:
-                            protocol_vuh: 10.0
-                            browser_vuh: 0.0
-                        note: User-defined note for the test run.
-                        retention_expiry: '2024-07-01T19:45:26.46Z'
-                        distribution:
-                          - load_zone: amazon:us:ashburn
-                            percent: 100
-                        options:
-                          stages:
-                            - duration: 10m
-                              target: 10
-                            - duration: 20m
-                              target: 10
-                          cloud:
-                            distribution:
-                              amazon:us:ashburn:
-                                loadZone: amazon:us:ashburn
-                                percent: 100
-                            projectID: 12
-                        result: passed
-                        result_details: { }
-                        status: completed
-                        status_details:
-                          type: completed
-                          entered: '2024-06-24T19:45:26.46Z'
-                        status_history:
-                          - type: created
-                            entered: '2024-06-24T19:44:26.46Z'
-                          - type: initializing
-                            entered: '2024-06-24T19:44:46.46Z'
-                          - type: running
-                            entered: '2024-06-24T19:45:26.469Z'
-                          - type: processing_metrics
-                            entered: '2024-06-24T20:45:26.469Z'
-                          - type: completed
-                            entered: '2024-06-24T20:45:27.469Z'
-                ValidationError:
-                  value:
-                    '@count': 123
-                    '@nextLink': http://api.example.org/accounts/?$skip=400&$top=100
-                    value:
-                      - id: 1234
-                        test_id: 123
-                        project_id: 12
-                        started_by: 321
-                        created: '2024-06-24T19:44:26.46Z'
-                        ended: '2024-06-24T20:44:36.46Z'
-                        cost: null
-                        note: ''
-                        retention_expiry: '2024-07-01T19:45:26.46Z'
-                        distribution: null
-                        options: null
-                        result: error
-                        result_details:
-                          message: Validation error
-                          code: '123'
-                        status: aborted
-                        status_details:
-                          type: aborted
-                          entered: '2024-06-24T19:44:36.46Z'
-                          extra:
-                            by_user: null
-                            message: Validation error
-                            code: '123'
-                        status_history:
-                          - type: created
-                            entered: '2024-06-24T19:44:26.46Z'
-                          - type: aborted
-                            entered: '2024-06-24T19:44:36.46Z'
-                            extra:
-                              by_user: null
-                              message: Validation error
-                              code: '123'
-          description: ''
-        '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-          description: Load test not found.
-  /load_zones:
-    get:
-      operationId: load_zones_list
-      description: List all available load zones.
-      parameters:
-        - $ref: '#/components/parameters/stackId'
-        - name: $count
-          required: false
-          in: query
-          description: Include collection length in the response object as '@count'.
-          schema:
-            type: boolean
-        - name: $orderby
-          required: false
-          in: query
-          description: |-
-            Comma separated list of fields to use when ordering the results. The default order is ascending and can be reversed by appending `desc` specifier. Available fields:
-            - name
-            - private
-          schema:
-            type: string
-            default: name
-          example: name desc,private
-        - name: $skip
-          required: false
-          in: query
-          description: The initial index from which to return the results.
-          schema:
-            type: integer
-        - name: $top
-          required: false
-          in: query
-          description: Number of results to return per page.
-          schema:
-            type: integer
-            default: 1000
-            maximum: 1000
-      tags:
-        - load-zones
-      security:
-        - k6ApiToken: [ ]
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PaginatedLoadZoneList'
-              examples:
-                PublicLoadZones:
-                  value:
-                    '@count': 123
-                    '@nextLink': http://api.example.org/accounts/?$skip=400&$top=100
-                    value:
-                      - id: 123
-                        name: amazon:us:ashburn
-                        title: Ashburn, US (Amazon)
-                        private: false
-                        provider_name: amazon
-                        provider_details:
-                          region: us-east-1
-                PrivateLoadZones:
-                  value:
-                    '@count': 123
-                    '@nextLink': http://api.example.org/accounts/?$skip=400&$top=100
-                    value:
-                      - id: 124
-                        name: my-private-lz
-                        title: my-private-lz
-                        private: true
-                        provider_name: k8s
-                        provider_details: { }
-          description: ''
-  /load_zones/{id}:
-    delete:
-      operationId: load_zones_destroy
-      description: Delete private load zone.
-      parameters:
-        - $ref: '#/components/parameters/stackId'
-        - in: path
-          name: id
-          schema:
-            type: string
-          description: Id of the private load zone to delete.
-          required: true
-      tags:
-        - load-zones
-      security:
-        - k6ApiToken: [ ]
-      responses:
-        '204':
-          description: No response body
-        '404':
-          description: No response body
-  /projects:
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /cloud/v6/projects:
     get:
       operationId: projects_list
-      description: List projects.
+      description: List all available projects.
+      summary: List all projects.
       parameters:
-        - $ref: '#/components/parameters/stackId'
-        - name: $orderby
-          in: query
-          description: Comma separated list of fields to use when ordering the results.
-            Use `field_name desc` for descending ordering.
-          required: false
-          explode: false
-          style: form
-          schema:
-            type: array
-            items:
-              type: string
-              enum:
-                - name
-                - name desc
-                - is_default
-                - is_default desc
-                - created
-                - created desc
-                - updated
-                - updated desc
-        - name: $filter
-          in: query
-          description: Filter items by property values.
-          required: false
-          schema:
-            type: string
-        - name: $top
-          in: query
-          description: Limit number of returned records.
-          required: false
-          schema:
-            type: integer
-        - name: $skip
-          in: query
-          description: Skip (offset) specified number of records before returning result.
-          required: false
-          schema:
-            type: integer
-        - name: $count
-          in: query
-          description: Return count of items after applying any filtering.
-          required: false
-          schema:
-            type: boolean
+      - $ref: '#/components/parameters/stackId'
+      - in: query
+        name: $count
+        schema:
+          type: boolean
+        description: Include collection length in the response object as `@count`.
+      - in: query
+        name: $orderby
+        schema:
+          type: string
+        description: |-
+          Comma-separated list of fields to use when ordering the results. Available fields:
+          - created
+
+          The default ascending order can be reversed by appending the `desc` specifier.
+        examples:
+          Simple:
+            value: created desc
+      - in: query
+        name: $skip
+        schema:
+          type: integer
+        description: The initial index from which to return the results.
+      - in: query
+        name: $top
+        schema:
+          type: integer
+          default: 1000
+          maximum: 1000
+        description: Number of results to return per page.
+      tags:
+      - projects
       security:
-        - k6ApiToken: [ ]
+      - k6ApiToken: []
       responses:
         '200':
-          description: List of `Project` collection items
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  '@count':
-                    type: integer
-                    example: 123
-                    description: Object count in the collection
-                  '@nextLink':
-                    type: string
-                    format: uri
-                    description: A reference to the next page of results. The property
-                      is included until there are no more pages of results to retrieve.
-                    example: http://api.example.org/accounts/?$skip=400&$top=100
+                $ref: '#/components/schemas/ProjectListResponse'
+              examples:
+                OK:
                   value:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Project'
-                    description: List of the resulting values
-                required:
-                  - value
+                    value:
+                    - id: 123
+                      name: My Project
+                      is_default: false
+                      created: '2024-12-04T19:57:46.339Z'
+                      updated: '2024-12-04T19:57:46.339Z'
+                    '@count': 123
+                    '@nextLink': https://api.k6.io/cloud/v6/projects?$skip=50&$top=20
+          description: OK.
         '400':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-      tags:
-        - projects
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
     post:
       operationId: projects_create
       description: Create a new project.
+      summary: Create a project.
+      tags:
+      - projects
       requestBody:
-        description: New `Project` item to be created
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateProjectRequest'
+              $ref: '#/components/schemas/CreateProjectApiModel'
+            examples:
+              Create:
+                value:
+                  name: My Project
+        required: true
       security:
-        - k6ApiToken: [ ]
+      - k6ApiToken: []
       responses:
         '201':
-          description: Newly created entity
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Project'
-        '409':
-          description: Name already taken.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-      tags:
-        - projects
-  /projects/{id}:
-    get:
-      operationId: project_retrieve
-      description: Retrieve a single project.
+                $ref: '#/components/schemas/ProjectApiModel'
+              examples:
+                OK:
+                  value:
+                    id: 123
+                    name: My Project
+                    is_default: false
+                    created: '2024-12-04T19:57:46.339Z'
+                    updated: '2024-12-04T19:57:46.339Z'
+          description: OK.
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
       parameters:
-        - $ref: '#/components/parameters/stackId'
-        - in: path
-          name: id
-          schema:
-            type: integer
-          description: Id of the project
-          required: true
+      - $ref: '#/components/parameters/stackId'
+  /cloud/v6/projects/{id}/limits:
+    get:
+      operationId: projects_limits_retrieve
+      description: Fetch limits for a project.
+      summary: Get project limits.
+      parameters:
+      - $ref: '#/components/parameters/stackId'
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: ID of the project.
+        required: true
+      tags:
+      - projects
       security:
-        - k6ApiToken: [ ]
+      - k6ApiToken: []
       responses:
         '200':
-          description: Single `Project` item.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Project'
+                $ref: '#/components/schemas/ProjectLimitsApiModel'
+              examples:
+                OK:
+                  value:
+                    project_id: 123
+                    vuh_max_per_month: 50
+                    vu_max_per_test: null
+                    vu_browser_max_per_test: 5
+                    duration_max_per_test: 600
+          description: OK.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
         '404':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-        '400':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-      tags:
-        - projects
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
     patch:
-      operationId: project_update
-      description: Update project fields.
+      operationId: projects_limits_partial_update
+      description: |-
+        Update limits for a project.
+
+        Set a limit to `null` to remove it.
+      summary: Update project limits.
       parameters:
-        - $ref: '#/components/parameters/stackId'
-        - in: path
-          name: id
-          schema:
-            type: integer
-          description: Id of the project
-          required: true
+      - $ref: '#/components/parameters/stackId'
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: ID of the project.
+        required: true
+      tags:
+      - projects
       requestBody:
-        description: New values for an existing `Project` item.
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                  description: Project name.
-                  readOnly: false
-                description:
-                  type: string
-                  description: Project description.
-                  readOnly: false
-                settings:
-                  $ref: '#/components/schemas/ProjectSettings'
-                  description: Project specific settings.
-                  readOnly: false
+              $ref: '#/components/schemas/PatchProjectLimitsRequest'
             examples:
-              UpdateName:
-                value:
-                  name: New Name
               UpdateAll:
                 value:
-                  name: New Name
-                  description: New Description
-                  settings:
-                    vuh_max_per_month: 200
-                    vu_max_per_test: 10
-                    vu_browser_max_per_test: 2
-                    duration_max_per_test: 3600
-              RemoveLimits:
+                  vuh_max_per_month: 50
+                  vu_max_per_test: 20
+                  vu_browser_max_per_test: 5
+                  duration_max_per_test: 600
+                summary: Update All
+              UpdateSingle:
                 value:
-                  settings:
-                    vuh_max_per_month: null
-                    vu_max_per_test: null
-                    vu_browser_max_per_test: null
-                    duration_max_per_test: null
+                  vuh_max_per_month: 55
+                summary: Update Single
+              RemoveAll:
+                value:
+                  vuh_max_per_month: null
+                  vu_max_per_test: null
+                  vu_browser_max_per_test: null
+                  duration_max_per_test: null
+                summary: Remove All
+              RemoveSingle:
+                value:
+                  duration_max_per_test: null
+                summary: Remove Single
       security:
-        - k6ApiToken: [ ]
+      - k6ApiToken: []
       responses:
         '204':
-          description: Successful update without any data returned
+          description: OK.
         '400':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
         '404':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-        '409':
-          description: Name already taken
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-      tags:
-        - projects
-    delete:
-      operationId: project_delete
-      description: Delete a project.
-      parameters:
-        - $ref: '#/components/parameters/stackId'
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int64
-          description: Project ID
-      security:
-        - k6ApiToken: [ ]
-      responses:
-        '204':
-          description: Successfully deleted
-        '404':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-      tags:
-        - projects
-  /projects/{id}/set_default:
-    post:
-      operationId: project_set_default
-      tags:
-        - projects
-      description: Set this project as default for running tests in the organization.
-        This will replace the current default project, if any.
-      parameters:
-        - $ref: '#/components/parameters/stackId'
-        - in: path
-          name: id
-          schema:
-            type: integer
-          description: Id of the project
-          required: true
-      security:
-        - k6ApiToken: [ ]
-      responses:
-        '204':
-          description: '`set_default` successful call'
-  /projects/{id}/load_tests:
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /cloud/v6/projects/{id}/load_tests:
     get:
-      operationId: load_tests_list
-      description: List load tests in the project.
+      operationId: projects_load_tests_retrieve
+      description: List load tests in a project.
+      summary: List load tests in a project.
       parameters:
-        - $ref: '#/components/parameters/stackId'
-        - name: $count
-          required: false
-          in: query
-          description: Include collection length in the response object as '@count'.
-          schema:
-            type: boolean
-        - name: $orderby
-          required: false
-          in: query
-          description: |-
-            Comma separated list of fields to use when ordering the results. The default order is ascending and can be reversed by appending `desc` specifier. Available fields:
-            - name
-            - created
-            - updated
-          schema:
-            type: string
-            default: created desc
-          example: name desc,created
-        - name: $skip
-          required: false
-          in: query
-          description: The initial index from which to return the results.
-          schema:
-            type: integer
-        - name: $top
-          required: false
-          in: query
-          description: Number of results to return per page.
-          schema:
-            type: integer
-            default: 1000
-            maximum: 1000
-        - in: path
-          name: id
-          schema:
-            type: integer
-          description: Id of the project
-          required: true
+      - $ref: '#/components/parameters/stackId'
+      - in: query
+        name: $count
+        schema:
+          type: boolean
+        description: Include collection length in the response object as `@count`.
+      - in: query
+        name: $orderby
+        schema:
+          type: string
+        description: |-
+          Comma-separated list of fields to use when ordering the results. Available fields:
+          - id
+          - project_id
+          - name
+          - created
+          - updated
+
+          The default ascending order can be reversed by appending the `desc` specifier.
+        examples:
+          Multiple:
+            value: id desc,project_id
+      - in: query
+        name: $skip
+        schema:
+          type: integer
+        description: The initial index from which to return the results.
+      - in: query
+        name: $top
+        schema:
+          type: integer
+          default: 1000
+          maximum: 1000
+        description: Number of results to return per page.
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: ID of the project.
+        required: true
       tags:
-        - projects
+      - load_tests
       security:
-        - k6ApiToken: [ ]
+      - k6ApiToken: []
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedLoadTestList'
+                $ref: '#/components/schemas/LoadTestListResponse'
               examples:
-                Success:
+                OK:
                   value:
-                    '@count': 123
-                    '@nextLink': http://api.example.org/accounts/?$skip=400&$top=100
                     value:
-                      - id: 1234
-                        project_id: 312
-                        name: Orders API Soak Test
-                        baseline_test_run_id: null
-                        created: '2024-12-03T09:53:00.553'
-                        updated: '2024-12-03T09:53:00.553'
-          description: ''
+                    - id: 1234
+                      project_id: 312
+                      name: Orders API Soak Test
+                      baseline_test_run_id: null
+                      created: '2024-12-03T09:53:00.553'
+                      updated: '2024-12-03T09:53:00.553'
+                    '@count': 123
+                    '@nextLink': https://api.k6.io/cloud/v6/projects/312/load_tests?$skip=50&$top=20
+          description: OK.
         '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-          description: ''
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
         '404':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
     post:
       operationId: projects_load_tests_create
       description: |-
         Create a new test in the project.
 
-        The script can be either in the form of a single javascript file or a k6 .tar archive -
+        The script can be either in the form of a single JavaScript text file or a k6 .tar archive -
         the type is auto-detected by the API. Any received payload that is not a .tar archive
-        is assumed to be a javascript file.
+        is assumed to be a JavaScript file.
+      summary: Create a new test.
       parameters:
-        - $ref: '#/components/parameters/stackId'
-        - in: path
-          name: id
-          schema:
-            type: integer
-          description: Id of the project
-          required: true
+      - $ref: '#/components/parameters/stackId'
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: ID of the project.
+        required: true
       tags:
-        - projects
+      - load_tests
       requestBody:
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/CreateLoadTestRequest'
+              $ref: '#/components/schemas/CreateLoadTestApiModel'
+            examples:
+              TextScript:
+                value:
+                  name: Orders API Soak Test
+                  script: |
+                    import http from 'k6/http';
+                    import { sleep } from 'k6';
+
+                    export const options = {
+                      vus: 10,
+                      duration: '30s',
+                      cloud: {
+                        // Project: Default project
+                        projectID: 3684621,
+                        // Test runs with the same name groups test runs together.
+                        name: 'Test (04/12/2024-20:28:06)'
+                      }
+                    };
+
+                    export default function() {
+                      http.get('https://test.k6.io');
+                      sleep(1);
+                    }
+                summary: Text Script
+              K6ArchiveScript:
+                value:
+                  name: Orders API Soak Test
+                  script: (.tar data)
+                summary: K6 Archive Script
         required: true
       security:
-        - k6ApiToken: [ ]
+      - k6ApiToken: []
       responses:
         '201':
-          headers:
-            Location:
-              schema:
-                type: string
-              description: The URL of the created test
-              required: true
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LoadTest'
+                $ref: '#/components/schemas/LoadTestApiModel'
               examples:
-                Success:
+                OK:
                   value:
                     id: 1234
                     project_id: 312
@@ -1099,834 +841,354 @@ paths:
                     baseline_test_run_id: null
                     created: '2024-12-03T09:53:00.553'
                     updated: '2024-12-03T09:53:00.553'
-          description: ''
-        '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-          description: ''
+          description: OK.
         '409':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-          description: Name already taken.
-  /schedules:
-    get:
-      operationId: schedules_list
-      description: List all schedules.
-      parameters:
-        - $ref: '#/components/parameters/stackId'
-        - name: $count
-          required: false
-          in: query
-          description: Include collection length in the response object as '@count'.
-          schema:
-            type: boolean
-        - name: $orderby
-          required: false
-          in: query
-          description: |-
-            Comma separated list of fields to use when ordering the results. The default order is ascending and can be reversed by appending `desc` specifier. Available fields:
-            - id
-            - starts
-            - next_run
-          schema:
-            type: string
-            default: id
-          example: id desc,starts
-        - name: $skip
-          required: false
-          in: query
-          description: The initial index from which to return the results.
-          schema:
-            type: integer
-        - name: $top
-          required: false
-          in: query
-          description: Number of results to return per page.
-          schema:
-            type: integer
-            default: 1000
-            maximum: 1000
-      tags:
-        - schedules
-      security:
-        - k6ApiToken: [ ]
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PaginatedScheduleList'
-              examples:
-                RepeatsEvery2HoursOnWeekends:
-                  value:
-                    '@count': 123
-                    '@nextLink': http://api.example.org/accounts/?$skip=400&$top=100
-                    value:
-                      - id: 123
-                        load_test_id: 234
-                        active: true
-                        starts: '2024-07-16T08:46:04.021Z'
-                        repeats:
-                          frequency: hourly
-                          interval: 2
-                          days:
-                            - saturday
-                            - sunday
-                        ends: null
-                        next_run: '2024-07-20T01:46:04.021Z'
-                DailyEndsAfter10Runs:
-                  value:
-                    '@count': 123
-                    '@nextLink': http://api.example.org/accounts/?$skip=400&$top=100
-                    value:
-                      - id: 123
-                        load_test_id: 234
-                        active: true
-                        starts: '2024-07-16T08:46:04.021Z'
-                        repeats:
-                          frequency: daily
-                        ends:
-                          after_runs: 10
-                        next_run: '2024-07-17T08:46:04.021Z'
-                RunOnce:
-                  value:
-                    '@count': 123
-                    '@nextLink': http://api.example.org/accounts/?$skip=400&$top=100
-                    value:
-                      - id: 123
-                        load_test_id: 234
-                        active: false
-                        starts: '2024-08-01T12:00:00.000Z'
-                        repeats: null
-                        ends: null
-                        next_run: null
-                TriggeredOnceInThePast:
-                  value:
-                    '@count': 123
-                    '@nextLink': http://api.example.org/accounts/?$skip=400&$top=100
-                    value:
-                      - id: 123
-                        load_test_id: 234
-                        active: false
-                        starts: '2023-08-01T12:00:00.000Z'
-                        repeats: null
-                        ends: null
-                        next_run: null
-          description: ''
-    post:
-      operationId: schedules_create
-      description: Create a schedule for the test.
-      tags:
-        - schedules
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ScheduleCreateRequestRequest'
-            examples:
-              RepeatsEvery2HoursOnWeekends:
-                value:
-                  load_test_id: 234
-                  starts: '2024-07-16T08:46:04.021Z'
-                  repeats:
-                    frequency: hourly
-                    interval: 2
-                    days:
-                      - saturday
-                      - sunday
-                  ends: null
-              DailyEndsAfter10Runs:
-                value:
-                  load_test_id: 234
-                  starts: '2024-07-16T08:46:04.021Z'
-                  repeats:
-                    frequency: daily
-                  ends:
-                    after_runs: 10
-              RunOnce:
-                value:
-                  load_test_id: 234
-                  starts: '2024-08-01T12:00:00.000Z'
-                  repeats: null
-                  ends: null
-        required: true
-      security:
-        - k6ApiToken: [ ]
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Schedule'
-              examples:
-                RepeatsEvery2HoursOnWeekends:
-                  value:
-                    id: 123
-                    load_test_id: 234
-                    active: true
-                    starts: '2024-07-16T08:46:04.021Z'
-                    repeats:
-                      frequency: hourly
-                      interval: 2
-                      days:
-                        - saturday
-                        - sunday
-                    ends: null
-                    next_run: '2024-07-20T01:46:04.021Z'
-                DailyEndsAfter10Runs:
-                  value:
-                    id: 123
-                    load_test_id: 234
-                    active: true
-                    starts: '2024-07-16T08:46:04.021Z'
-                    repeats:
-                      frequency: daily
-                    ends:
-                      after_runs: 10
-                    next_run: '2024-07-17T08:46:04.021Z'
-                RunOnce:
-                  value:
-                    id: 123
-                    load_test_id: 234
-                    active: false
-                    starts: '2024-08-01T12:00:00.000Z'
-                    repeats: null
-                    ends: null
-                    next_run: null
-                TriggeredOnceInThePast:
-                  value:
-                    id: 123
-                    load_test_id: 234
-                    active: false
-                    starts: '2023-08-01T12:00:00.000Z'
-                    repeats: null
-                    ends: null
-                    next_run: null
-          description: ''
+                $ref: '#/components/schemas/ErrorResponseApiModel'
+          description: The name is already taken.
         '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-          description: ''
-        '409':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-          description: Already exists.
-  /schedules/{id}:
-    get:
-      operationId: schedules_retrieve
-      description: Describe a single schedule.
-      parameters:
-        - $ref: '#/components/parameters/stackId'
-        - in: path
-          name: id
-          schema:
-            type: integer
-          description: Id of the schedule.
-          required: true
-      tags:
-        - schedules
-      security:
-        - k6ApiToken: [ ]
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Schedule'
-              examples:
-                RepeatsEvery2HoursOnWeekends:
-                  value:
-                    id: 123
-                    load_test_id: 234
-                    active: true
-                    starts: '2024-07-16T08:46:04.021Z'
-                    repeats:
-                      frequency: hourly
-                      interval: 2
-                      days:
-                        - saturday
-                        - sunday
-                    ends: null
-                    next_run: '2024-07-20T01:46:04.021Z'
-                DailyEndsAfter10Runs:
-                  value:
-                    id: 123
-                    load_test_id: 234
-                    active: true
-                    starts: '2024-07-16T08:46:04.021Z'
-                    repeats:
-                      frequency: daily
-                    ends:
-                      after_runs: 10
-                    next_run: '2024-07-17T08:46:04.021Z'
-                RunOnce:
-                  value:
-                    id: 123
-                    load_test_id: 234
-                    active: false
-                    starts: '2024-08-01T12:00:00.000Z'
-                    repeats: null
-                    ends: null
-                    next_run: null
-                TriggeredOnceInThePast:
-                  value:
-                    id: 123
-                    load_test_id: 234
-                    active: false
-                    starts: '2023-08-01T12:00:00.000Z'
-                    repeats: null
-                    ends: null
-                    next_run: null
-          description: ''
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
         '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /cloud/v6/projects/{id}:
+    get:
+      operationId: projects_retrieve
+      description: Retrieve a single project.
+      summary: Get a project by ID.
+      parameters:
+      - $ref: '#/components/parameters/stackId'
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: ID of the project.
+        required: true
+      tags:
+      - projects
+      security:
+      - k6ApiToken: []
+      responses:
+        '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-          description: ''
+                $ref: '#/components/schemas/ProjectApiModel'
+              examples:
+                OK:
+                  value:
+                    id: 123
+                    name: My Project
+                    is_default: false
+                    created: '2024-12-04T19:57:46.339Z'
+                    updated: '2024-12-04T19:57:46.339Z'
+          description: OK.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
     patch:
-      operationId: schedules_partial_update
-      description: Update a schedule.
+      operationId: projects_partial_update
+      description: Update a project.
+      summary: Update a project.
       parameters:
-        - $ref: '#/components/parameters/stackId'
-        - in: path
-          name: id
-          schema:
-            type: integer
-          description: Id of the schedule.
-          required: true
+      - $ref: '#/components/parameters/stackId'
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: ID of the project.
+        required: true
       tags:
-        - schedules
+      - projects
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedScheduleRequest'
+              $ref: '#/components/schemas/PatchProjectApiModel'
             examples:
               Update:
                 value:
-                  starts: '2024-08-01T12:00:00.000Z'
-                  repeats:
-                    frequency: weekly
-                  ends:
-                    on_date: '2024-09-30T12:00:00.000Z'
-              UpdateToRunOnce:
-                value:
-                  repeats: null
-                  ends: null
+                  name: New Project Name
+        required: true
       security:
-        - k6ApiToken: [ ]
+      - k6ApiToken: []
       responses:
         '204':
-          description: No response body
+          description: OK.
         '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-          description: ''
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
         '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-          description: ''
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
     delete:
-      operationId: schedules_destroy
-      description: Delete a schedule.
+      operationId: projects_destroy
+      description: Delete a project.
+      summary: Delete a project.
       parameters:
-        - $ref: '#/components/parameters/stackId'
-        - in: path
-          name: id
-          schema:
-            type: integer
-          description: Id of the schedule.
-          required: true
-      tags:
-        - schedules
-      security:
-        - k6ApiToken: [ ]
-      responses:
-        '204':
-          description: No response body
-        '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-          description: ''
-  /schedules/{id}/activate:
-    post:
-      operationId: schedules_activate_create
-      description: |-
-        Activate a schedule.
-
-        A schedule deactivates automatically after the conditions specified
-        in the `ends` objects are met and can be activated again. An activated schedule behaves
-        like a newly created one.
-
-        A schedule can not be activated if the defined `ends.on_date` is past the current
-        date. The end date should be updated or removed to make the activation possible.
-      parameters:
-        - $ref: '#/components/parameters/stackId'
-        - in: path
-          name: id
-          schema:
-            type: integer
-          description: Id of the schedule.
-          required: true
-      tags:
-        - schedules
-      security:
-        - k6ApiToken: [ ]
-      responses:
-        '204':
-          description: No response body
-        '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-          description: Can not activate a schedule beyond the end date.
-        '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-          description: ''
-        '409':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-          description: Already active.
-  /schedules/{id}/deactivate:
-    post:
-      operationId: schedules_deactivate_create
-      description: Deactivate a schedule. A deactivated schedule will not trigger
-        new test runs.
-      parameters:
-        - $ref: '#/components/parameters/stackId'
-        - in: path
-          name: id
-          schema:
-            type: integer
-          description: Id of the schedule.
-          required: true
-      tags:
-        - schedules
-      security:
-        - k6ApiToken: [ ]
-      responses:
-        '204':
-          description: No response body
-        '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-          description: ''
-        '409':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-          description: Already inactive.
-  /static_ips:
-    get:
-      operationId: static_ips_list
-      description: |-
-        List all static IPs.
-
-        IP addresses for the newly acquired static IPs will not be available until the provisioning
-        status is `provisioned`.
-      parameters:
-        - $ref: '#/components/parameters/stackId'
-        - name: $count
-          required: false
-          in: query
-          description: Include collection length in the response object as '@count'.
-          schema:
-            type: boolean
-        - name: $orderby
-          required: false
-          in: query
-          description: |-
-            Comma separated list of fields to use when ordering the results. The default order is ascending and can be reversed by appending `desc` specifier. Available fields:
-            - load_zone
-            - provisioning_status
-          schema:
-            type: string
-            default: load_zone
-          example: load_zone desc,provisioning_status
-        - name: $skip
-          required: false
-          in: query
-          description: The initial index from which to return the results.
-          schema:
-            type: integer
-        - name: $top
-          required: false
-          in: query
-          description: Number of results to return per page.
-          schema:
-            type: integer
-            default: 1000
-            maximum: 1000
-      tags:
-        - static-ips
-      security:
-        - k6ApiToken: [ ]
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PaginatedStaticIPList'
-              examples:
-                SingleIP:
-                  value:
-                    '@count': 123
-                    '@nextLink': http://api.example.org/accounts/?$skip=400&$top=100
-                    value:
-                      - id: 123
-                        ip: 176.196.131.13
-                        created: '2024-07-11T14:08:31.924Z'
-                        provisioning_status: provisioned
-                        load_zone: amazon:us:ashburn
-          description: ''
-  /static_ips/acquire:
-    post:
-      parameters:
-        - $ref: '#/components/parameters/stackId'
-      operationId: static_ips_acquire_create
-      description: |-
-        Acquire multiple static IPs in the provided load zones.
-
-        Static IPs are allocated asynchronously. The IP addresses will be available only after
-        the provisioning status is `provisioned`.
-      tags:
-        - static-ips
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/StaticIPAcquireRequest'
-            examples:
-              AcquireMultiple:
-                value:
-                  load_zones:
-                    - load_zone: amazon:us:ashburn
-                      count: 2
-                    - load_zone: amazon:gb:london
-                      count: 1
+      - $ref: '#/components/parameters/stackId'
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: ID of the project.
         required: true
-      security:
-        - k6ApiToken: [ ]
-      responses:
-        '202':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/StaticIPList'
-              examples:
-                MultipleIPs:
-                  value:
-                    value:
-                      - id: 123
-                        ip: 176.196.131.13
-                        created: '2024-07-11T14:08:31.924Z'
-                        provisioning_status: provisioning
-                        load_zone: amazon:us:ashburn
-                      - id: 124
-                        ip: 176.196.131.14
-                        created: '2024-07-11T14:08:31.924Z'
-                        provisioning_status: provisioning
-                        load_zone: amazon:us:ashburn
-                      - id: 125
-                        ip: 131.196.176.13
-                        created: '2024-07-11T14:08:31.924Z'
-                        provisioning_status: provisioning
-                        load_zone: amazon:gb:london
-          description: List of the Static IPs being provisioned.
-        '400':
-          description: Validation error or reached the max limit of Static IPs. Please
-            contact the support if you need to increase the limit.
-  /static_ips/release:
-    post:
-      parameters:
-        - $ref: '#/components/parameters/stackId'
-      operationId: static_ips_release_create
-      description: Release and eventually delete multiple static IPs.
       tags:
-        - static-ips
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/StaticIPReleaseRequest'
-            examples:
-              SingleIP:
-                value:
-                  ids:
-                    - 123
-        required: true
+      - projects
       security:
-        - k6ApiToken: [ ]
+      - k6ApiToken: []
       responses:
-        '202':
+        '204':
+          description: OK.
+        '409':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/StaticIPList'
-              examples:
-                SingleIP:
-                  value:
-                    value:
-                      - id: 123
-                        ip: 176.196.131.13
-                        created: '2024-07-11T14:08:31.924Z'
-                        provisioning_status: releasing
-                        load_zone: amazon:us:ashburn
-          description: List of the Static IPs being released.
-        '400':
-          description: Validation error.
-        '409':
-          description: Can not release unacquired IP.
-  /test_runs:
+                $ref: '#/components/schemas/ErrorResponseApiModel'
+          description: Cannot delete project with a running test.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /cloud/v6/test_runs:
     get:
       operationId: test_runs_list
-      description: List load test runs.
+      description: List all available test runs.
+      summary: List all test runs.
       parameters:
-        - $ref: '#/components/parameters/stackId'
-        - name: $count
-          required: false
-          in: query
-          description: Include collection length in the response object as '@count'.
-          schema:
-            type: boolean
-        - name: $orderby
-          required: false
-          in: query
-          description: |-
-            Comma separated list of fields to use when ordering the results. The default order is ascending and can be reversed by appending `desc` specifier. Available fields:
-            - created
-            - ended
-            - retention_expiry
-            - status
-            - cost/total_vuh
-          schema:
-            type: string
-            default: created desc
-          example: created desc,ended
-        - name: $skip
-          required: false
-          in: query
-          description: The initial index from which to return the results.
-          schema:
-            type: integer
-        - name: $top
-          required: false
-          in: query
-          description: Number of results to return per page.
-          schema:
-            type: integer
-            default: 1000
-            maximum: 1000
+      - $ref: '#/components/parameters/stackId'
+      - in: query
+        name: $count
+        schema:
+          type: boolean
+        description: Include collection length in the response object as `@count`.
+      - in: query
+        name: $skip
+        schema:
+          type: integer
+        description: The initial index from which to return the results.
+      - in: query
+        name: $top
+        schema:
+          type: integer
+          default: 1000
+          maximum: 1000
+        description: Number of results to return per page.
       tags:
-        - test-runs
+      - test_runs
       security:
-        - k6ApiToken: [ ]
+      - k6ApiToken: []
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedTestRunList'
+                $ref: '#/components/schemas/TestRunListResponse'
               examples:
-                Completed:
+                OK:
                   value:
-                    '@count': 123
-                    '@nextLink': http://api.example.org/accounts/?$skip=400&$top=100
                     value:
-                      - id: 1234
-                        test_id: 123
-                        project_id: 12
-                        started_by: 321
-                        created: '2024-06-24T19:44:26.46Z'
-                        ended: '2024-06-24T20:45:27.46Z'
-                        cost:
-                          total_vuh: 10.0
-                          breakdown:
-                            protocol_vuh: 10.0
-                            browser_vuh: 0.0
-                        note: User-defined note for the test run.
-                        retention_expiry: '2024-07-01T19:45:26.46Z'
-                        distribution:
-                          - load_zone: amazon:us:ashburn
-                            percent: 100
-                        options:
-                          stages:
-                            - duration: 10m
-                              target: 10
-                            - duration: 20m
-                              target: 10
-                          cloud:
-                            distribution:
-                              amazon:us:ashburn:
-                                loadZone: amazon:us:ashburn
-                                percent: 100
-                            projectID: 12
-                        result: passed
-                        result_details: { }
-                        status: completed
-                        status_details:
-                          type: completed
-                          entered: '2024-06-24T19:45:26.46Z'
-                        status_history:
-                          - type: created
-                            entered: '2024-06-24T19:44:26.46Z'
-                          - type: initializing
-                            entered: '2024-06-24T19:44:46.46Z'
-                          - type: running
-                            entered: '2024-06-24T19:45:26.469Z'
-                          - type: processing_metrics
-                            entered: '2024-06-24T20:45:26.469Z'
-                          - type: completed
-                            entered: '2024-06-24T20:45:27.469Z'
-                ValidationError:
-                  value:
+                    - id: 1234
+                      test_id: 123
+                      project_id: 12
+                      started_by: user@example.com
+                      created: '2024-06-01T19:00:00Z'
+                      ended: null
+                      cost:
+                        total_vuh: 10.0
+                        breakdown:
+                          protocol_vuh: 10.0
+                          browser_vuh: 0.0
+                      note: User-defined note for the test run.
+                      retention_expiry: '2024-07-01T19:30:30Z'
+                      distribution:
+                      - load_zone: amazon:us:ashburn
+                        percent: 100
+                      options:
+                        stages:
+                        - duration: 10m
+                          target: 10
+                        - duration: 20m
+                          target: 10
+                        cloud:
+                          distribution:
+                            amazon:us:ashburn:
+                              loadZone: amazon:us:ashburn
+                              percent: 100
+                          projectID: 12
+                      result: null
+                      result_details: {}
+                      status: running
+                      status_details:
+                        type: running
+                        entered: '2024-06-01T19:00:20Z'
+                      status_history:
+                      - type: created
+                        entered: '2024-06-01T19:00:00Z'
+                      - type: initializing
+                        entered: '2024-06-01T19:00:10Z'
+                      - type: running
+                        entered: '2024-06-01T19:00:20Z'
                     '@count': 123
-                    '@nextLink': http://api.example.org/accounts/?$skip=400&$top=100
-                    value:
-                      - id: 1234
-                        test_id: 123
-                        project_id: 12
-                        started_by: 321
-                        created: '2024-06-24T19:44:26.46Z'
-                        ended: '2024-06-24T20:44:36.46Z'
-                        cost: null
-                        note: ''
-                        retention_expiry: '2024-07-01T19:45:26.46Z'
-                        distribution: null
-                        options: null
-                        result: error
-                        result_details:
-                          message: Validation error
-                          code: '123'
-                        status: aborted
-                        status_details:
-                          type: aborted
-                          entered: '2024-06-24T19:44:36.46Z'
-                          extra:
-                            by_user: null
-                            message: Validation error
-                            code: '123'
-                        status_history:
-                          - type: created
-                            entered: '2024-06-24T19:44:26.46Z'
-                          - type: aborted
-                            entered: '2024-06-24T19:44:36.46Z'
-                            extra:
-                              by_user: null
-                              message: Validation error
-                              code: '123'
-          description: ''
-  /test_runs/{id}:
+                    '@nextLink': https://api.k6.io/cloud/v6/test_runs?$skip=50&$top=20
+          description: OK.
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /cloud/v6/test_runs/{id}:
     get:
       operationId: test_runs_retrieve
-      description: Describe a single load test run.
+      description: Fetch a single test run.
+      summary: Get a test run by ID.
       parameters:
-        - $ref: '#/components/parameters/stackId'
-        - in: path
-          name: id
-          schema:
-            type: integer
-          description: Id of the load test run.
-          required: true
+      - $ref: '#/components/parameters/stackId'
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: ID of the load test run.
+        required: true
       tags:
-        - test-runs
+      - test_runs
       security:
-        - k6ApiToken: [ ]
+      - k6ApiToken: []
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TestRun'
+                $ref: '#/components/schemas/TestRunApiModel'
               examples:
-                Completed:
+                Running:
                   value:
                     id: 1234
                     test_id: 123
                     project_id: 12
-                    started_by: 321
-                    created: '2024-06-24T19:44:26.46Z'
-                    ended: '2024-06-24T20:45:27.46Z'
+                    started_by: user@example.com
+                    created: '2024-06-01T19:00:00Z'
+                    ended: null
                     cost:
                       total_vuh: 10.0
                       breakdown:
                         protocol_vuh: 10.0
                         browser_vuh: 0.0
                     note: User-defined note for the test run.
-                    retention_expiry: '2024-07-01T19:45:26.46Z'
+                    retention_expiry: '2024-07-01T19:30:30Z'
                     distribution:
-                      - load_zone: amazon:us:ashburn
-                        percent: 100
+                    - load_zone: amazon:us:ashburn
+                      percent: 100
                     options:
                       stages:
-                        - duration: 10m
-                          target: 10
-                        - duration: 20m
-                          target: 10
+                      - duration: 10m
+                        target: 10
+                      - duration: 20m
+                        target: 10
                       cloud:
                         distribution:
                           amazon:us:ashburn:
                             loadZone: amazon:us:ashburn
                             percent: 100
                         projectID: 12
-                    result: passed
-                    result_details: { }
+                    result: null
+                    result_details: {}
+                    status: running
+                    status_details:
+                      type: running
+                      entered: '2024-06-01T19:00:20Z'
+                    status_history:
+                    - type: created
+                      entered: '2024-06-01T19:00:00Z'
+                    - type: initializing
+                      entered: '2024-06-01T19:00:10Z'
+                    - type: running
+                      entered: '2024-06-01T19:00:20Z'
+                Completed:
+                  value:
+                    id: 1234
+                    test_id: 123
+                    project_id: 12
+                    started_by: user@example.com
+                    created: '2024-06-01T19:00:00Z'
+                    ended: '2024-06-01T19:30:30Z'
+                    cost:
+                      total_vuh: 10.0
+                      breakdown:
+                        protocol_vuh: 10.0
+                        browser_vuh: 0.0
+                    note: User-defined note for the test run.
+                    retention_expiry: '2024-07-01T19:30:30Z'
+                    distribution:
+                    - load_zone: amazon:us:ashburn
+                      percent: 100
+                    options:
+                      stages:
+                      - duration: 10m
+                        target: 10
+                      - duration: 20m
+                        target: 10
+                      cloud:
+                        distribution:
+                          amazon:us:ashburn:
+                            loadZone: amazon:us:ashburn
+                            percent: 100
+                        projectID: 12
+                    result: success
+                    result_details: {}
                     status: completed
                     status_details:
                       type: completed
-                      entered: '2024-06-24T19:45:26.46Z'
+                      entered: '2024-06-01T19:30:30Z'
                     status_history:
-                      - type: created
-                        entered: '2024-06-24T19:44:26.46Z'
-                      - type: initializing
-                        entered: '2024-06-24T19:44:46.46Z'
-                      - type: running
-                        entered: '2024-06-24T19:45:26.469Z'
-                      - type: processing_metrics
-                        entered: '2024-06-24T20:45:26.469Z'
-                      - type: completed
-                        entered: '2024-06-24T20:45:27.469Z'
+                    - type: created
+                      entered: '2024-06-01T19:00:00Z'
+                    - type: initializing
+                      entered: '2024-06-01T19:00:10Z'
+                    - type: running
+                      entered: '2024-06-01T19:00:20Z'
+                    - type: processing_metrics
+                      entered: '2024-06-01T19:30:20Z'
+                    - type: completed
+                      entered: '2024-06-01T19:30:30Z'
                 ValidationError:
                   value:
                     id: 1234
                     test_id: 123
                     project_id: 12
-                    started_by: 321
-                    created: '2024-06-24T19:44:26.46Z'
-                    ended: '2024-06-24T20:44:36.46Z'
+                    started_by: user@example.com
+                    created: '2024-06-01T19:00:00Z'
+                    ended: '2024-06-01T19:00:10Z'
                     cost: null
                     note: ''
-                    retention_expiry: '2024-07-01T19:45:26.46Z'
+                    retention_expiry: '2024-07-01T19:00:10Z'
                     distribution: null
                     options: null
                     result: error
-                    result_details:
-                      message: Validation error
-                      code: '123'
+                    result_details: {}
                     status: aborted
                     status_details:
                       type: aborted
@@ -1934,239 +1196,282 @@ paths:
                       extra:
                         by_user: null
                         message: Validation error
-                        code: '123'
+                        code: 123
                     status_history:
-                      - type: created
-                        entered: '2024-06-24T19:44:26.46Z'
-                      - type: aborted
-                        entered: '2024-06-24T19:44:36.46Z'
-                        extra:
-                          by_user: null
-                          message: Validation error
-                          code: '123'
-          description: ''
+                    - type: created
+                      entered: '2024-06-01T19:00:00Z'
+                    - type: aborted
+                      entered: '2024-06-01T19:00:10Z'
+                      extra:
+                        by_user: null
+                        message: Validation error
+                        code: 123
+                  summary: Validation Error
+          description: OK.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
         '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-          description: ''
-    delete:
-      operationId: test_runs_destroy
-      description: Delete a load test run.
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+    patch:
+      operationId: test_runs_partial_update
+      description: Update a test run.
+      summary: Update a test run.
       parameters:
-        - $ref: '#/components/parameters/stackId'
-        - in: path
-          name: id
-          schema:
-            type: integer
-          description: Id of the load test run.
-          required: true
+      - $ref: '#/components/parameters/stackId'
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: ID of the load test run.
+        required: true
       tags:
-        - test-runs
-      security:
-        - k6ApiToken: [ ]
-      responses:
-        '204':
-          description: No response body
-        '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-          description: ''
-        '409':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-          description: Can not delete while the test is running.
-  /test_runs/{id}/abort:
-    post:
-      operationId: test_runs_abort
-      description: Abort a running test.
-      parameters:
-        - $ref: '#/components/parameters/stackId'
-        - in: path
-          name: id
-          schema:
-            type: integer
-          description: Id of the load test run.
-          required: true
-      tags:
-        - test-runs
-      security:
-        - k6ApiToken: [ ]
-      responses:
-        '202':
-          description: No response body
-        '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-          description: ''
-        '409':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-          description: Can not abort a non-running test.
-  /test_runs/{id}/note:
-    put:
-      operationId: test_runs_note_update
-      description: Update load test run note.
-      parameters:
-        - $ref: '#/components/parameters/stackId'
-        - in: path
-          name: id
-          schema:
-            type: integer
-          description: Id of the load test run.
-          required: true
-      tags:
-        - test-runs
+      - test_runs
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TestRunUpdateNoteRequest'
+              $ref: '#/components/schemas/PatchTestRunApiModel'
             examples:
               Update:
                 value:
-                  value: This test run has custom description.
+                  note: New note for the test run
         required: true
       security:
-        - k6ApiToken: [ ]
+      - k6ApiToken: []
       responses:
         '204':
-          description: No response body
+          description: OK.
         '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-          description: ''
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
         '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-          description: ''
-  /test_runs/{id}/save:
-    post:
-      operationId: test_runs_save
-      description: |-
-        Persist test run result data to keep it past the data-retention period.
-
-        See
-        https://grafana.com/docs/grafana-cloud/cost-management-and-billing/understand-your-invoice/k6-invoice/#data-retention
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+    delete:
+      operationId: test_runs_destroy
+      description: Delete a test run.
+      summary: Delete a test run.
       parameters:
-        - $ref: '#/components/parameters/stackId'
-        - in: path
-          name: id
-          schema:
-            type: integer
-          description: Id of the load test run.
-          required: true
+      - $ref: '#/components/parameters/stackId'
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: ID of the load test run.
+        required: true
       tags:
-        - test-runs
+      - test_runs
       security:
-        - k6ApiToken: [ ]
+      - k6ApiToken: []
       responses:
         '204':
-          description: No response body
-        '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-          description: ''
+          description: OK.
         '409':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-          description: Test run results data is already deleted or no available save
-            slots left.
-  /test_runs/{id}/script:
+                $ref: '#/components/schemas/ErrorResponseApiModel'
+          description: Cannot delete test while it's running.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /cloud/v6/test_runs/{id}/abort:
+    post:
+      operationId: test_runs_abort
+      description: Abort a running test.
+      summary: Abort a running test.
+      parameters:
+      - $ref: '#/components/parameters/stackId'
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: ID of the load test run.
+        required: true
+      tags:
+      - test_runs
+      security:
+      - k6ApiToken: []
+      responses:
+        '204':
+          description: OK.
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApiModel'
+          description: Cannot abort a non-running test.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /cloud/v6/test_runs/{id}/save:
+    post:
+      operationId: test_runs_save
+      description: Persist test run results to keep them past the data-retention period.
+      summary: Save test run results.
+      parameters:
+      - $ref: '#/components/parameters/stackId'
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: ID of the load test run.
+        required: true
+      tags:
+      - test_runs
+      security:
+      - k6ApiToken: []
+      responses:
+        '204':
+          description: OK.
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApiModel'
+              examples:
+                Deleted:
+                  value:
+                    error:
+                      message: Test run has been deleted
+                      code: conflict
+                LimitReached:
+                  value:
+                    error:
+                      message: The maximum number of saved test runs has been reached
+                      code: conflict
+                  summary: Limit reached
+          description: The test run results have been deleted, or the maximum number
+            of saved test runs has been reached.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /cloud/v6/test_runs/{id}/script:
     get:
       operationId: test_runs_script_retrieve
-      description: |-
-        Get the test run script.
-
-        The script can be either in the form of a single javascript file or a k6 .tar archive -
-        the type is identified by the response content type.
+      description: Download the test run script.
+      summary: Download the test run script.
       parameters:
-        - $ref: '#/components/parameters/stackId'
-        - in: path
-          name: id
-          schema:
-            type: integer
-          description: Id of the load test run.
-          required: true
+      - $ref: '#/components/parameters/stackId'
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: ID of the load test run.
+        required: true
       tags:
-        - test-runs
+      - test_runs
       security:
-        - k6ApiToken: [ ]
+      - k6ApiToken: []
       responses:
         '200':
           content:
             text/javascript:
               schema:
                 type: string
+              examples:
+                TextScript:
+                  value: |
+                    import http from 'k6/http';
+                    import { sleep } from 'k6';
+
+                    export const options = {
+                      vus: 10,
+                      duration: '30s',
+                      cloud: {
+                        // Project: Default project
+                        projectID: 3684621,
+                        // Test runs with the same name groups test runs together.
+                        name: 'Test (04/12/2024-20:28:06)'
+                      }
+                    };
+
+                    export default function() {
+                      http.get('https://test.k6.io');
+                      sleep(1);
+                    }
+                  summary: Text Script
             application/x-tar:
               schema:
                 type: string
                 format: binary
-          description: ''
+              examples:
+                K6ArchiveScript:
+                  value: (.tar data)
+                  summary: K6 Archive Script
+          description: OK.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
         '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-          description: ''
-  /test_runs/{id}/unsave:
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /cloud/v6/test_runs/{id}/unsave:
     post:
       operationId: test_runs_unsave
       description: |-
-        Disable persistence of the test run result data past the data-retention period.
-        The data will be automatically deleted at the end of the retention period.
+        Disable persistence of the test run results past the data-retention period.
 
-        See
-        https://grafana.com/docs/grafana-cloud/cost-management-and-billing/understand-your-invoice/k6-invoice/#data-retention
+        The data will be automatically deleted at the end of the retention period.
+      summary: Unsave test run results.
       parameters:
-        - $ref: '#/components/parameters/stackId'
-        - in: path
-          name: id
-          schema:
-            type: integer
-          description: Id of the load test run.
-          required: true
+      - $ref: '#/components/parameters/stackId'
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: ID of the load test run.
+        required: true
       tags:
-        - test-runs
+      - test_runs
       security:
-        - k6ApiToken: [ ]
+      - k6ApiToken: []
       responses:
         '204':
-          description: No response body
+          description: OK.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
         '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-          description: ''
-  /validate_options:
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /cloud/v6/validate_options:
     post:
-      parameters:
-        - $ref: '#/components/parameters/stackId'
       operationId: validate_options
       description: |-
-        Verify a test can be run in the Cloud with the provided k6 script options.
+        Verify a test can be run in Grafana Cloud with the provided k6 script options.
 
         Project ID can be specified in the root object as well as under `options.cloud`.
+      summary: Validate k6 script options.
       tags:
-        - load-tests
+      - load_tests
       requestBody:
         content:
           application/json:
@@ -2177,12 +1482,12 @@ paths:
                 value:
                   options:
                     stages:
-                      - duration: 1m
-                        target: 20
-                      - duration: 3m
-                        target: 20
-                      - duration: 30s
-                        target: 0
+                    - duration: 1m
+                      target: 20
+                    - duration: 3m
+                      target: 20
+                    - duration: 30s
+                      target: 0
                     cloud:
                       distribution:
                         amazon:us:ashburn:
@@ -2191,7 +1496,7 @@ paths:
                       projectID: 123456
         required: true
       security:
-        - k6ApiToken: [ ]
+      - k6ApiToken: []
       responses:
         '200':
           content:
@@ -2199,1158 +1504,694 @@ paths:
               schema:
                 $ref: '#/components/schemas/ValidateOptionsResponse'
               examples:
-                Success:
+                OK:
                   value:
                     vuh_usage: 1.5
-          description: ''
+          description: OK.
         '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorResponse'
-          description: ''
-  /variables:
-    get:
-      operationId: variables_list
-      description: |-
-        List all environment variables in the stack. The values are accessible only by
-        the stack owner and admins.
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
       parameters:
-        - $ref: '#/components/parameters/stackId'
-        - name: $count
-          required: false
-          in: query
-          description: Include collection length in the response object as '@count'.
-          schema:
-            type: boolean
-        - name: $orderby
-          required: false
-          in: query
-          description: |-
-            Comma separated list of fields to use when ordering the results. The default order is ascending and can be reversed by appending `desc` specifier. Available fields:
-            - name
-            - created
-            - updated
-          schema:
-            type: string
-            default: name
-          example: name desc,created
-        - name: $skip
-          required: false
-          in: query
-          description: The initial index from which to return the results.
-          schema:
-            type: integer
-        - name: $top
-          required: false
-          in: query
-          description: Number of results to return per page.
-          schema:
-            type: integer
-            default: 1000
-            maximum: 1000
-      tags:
-        - variables
-      security:
-        - k6ApiToken: [ ]
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PaginatedStackEnvVarList'
-          description: ''
-    post:
-      operationId: variables_create
-      description: Create a new environment variable in the stack. Requires admin/owner
-        permissions.
-      tags:
-        - variables
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateStackEnvVarRequestRequest'
-        required: true
-      security:
-        - k6ApiToken: [ ]
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/StackEnvVar'
-          description: ''
-        '400':
-          description: Validation error.
-        '409':
-          description: Name already taken or reached the max number of variables.
-  /variables/{id}:
-    patch:
-      operationId: variables_partial_update
-      description: Update an environment variable. Requires admin/owner permissions.
-      parameters:
-        - $ref: '#/components/parameters/stackId'
-        - in: path
-          name: id
-          schema:
-            type: integer
-          description: Id or name of the variable.
-          required: true
-      tags:
-        - variables
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedStackEnvVarRequest'
-      security:
-        - k6ApiToken: [ ]
-      responses:
-        '204':
-          description: No response body
-        '400':
-          description: Validation error.
-    delete:
-      operationId: variables_destroy
-      description: Delete an environment variable. Requires admin/owner permissions.
-      parameters:
-        - $ref: '#/components/parameters/stackId'
-        - in: path
-          name: id
-          schema:
-            type: integer
-          description: Id or name of the variable.
-          required: true
-      tags:
-        - variables
-      security:
-        - k6ApiToken: [ ]
-      responses:
-        '204':
-          description: No response body
+      - $ref: '#/components/parameters/stackId'
 components:
-  parameters:
-    stackId:
-      in: header
-      name: X-Stack-Id
-      description: |
-        Numeric ID of the Grafana stack representing the request scope.
-        - If the API is called with a *Personal API token*, the user must be a member of the specified stack.
-        - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-      schema:
-        type: string
-      required: true
   schemas:
-    ApiError:
+    CreateLoadTestApiModel:
+      additionalProperties: false
+      properties:
+        name:
+          description: Unique name of the test within the project.
+          maxLength: 300
+          minLength: 1
+          title: Name
+          type: string
+        script:
+          description: Test script in the form of a UTF-8 encoded text or a k6 .tar
+            archive.
+          format: binary
+          title: Script
+          type: string
+      required:
+      - name
+      - script
+      title: CreateLoadTest
       type: object
+    CreateProjectApiModel:
+      properties:
+        name:
+          description: Project name.
+          maxLength: 255
+          minLength: 1
+          title: Name
+          type: string
+      required:
+      - name
+      title: CreateProject
+      type: object
+    DistributionZoneApiModel:
+      properties:
+        load_zone:
+          description: Name of the load zone.
+          title: Load Zone
+          type: string
+        percent:
+          description: Percentage of the load that runs from the load zone.
+          title: Percent
+          type: integer
+      required:
+      - load_zone
+      - percent
+      title: DistributionZone
+      type: object
+    ErrorApiModel:
+      description: Details of the error.
       properties:
         message:
+          description: Human-readable string describing the error.
+          title: Message
           type: string
-          description: Human-readable string describing the error
         code:
+          description: Service-defined error code.
+          title: Code
           type: string
-          description: Service-defined error code
         target:
-          type: string
-          description: A string indicating the target of the error, for example, the
-            name of the property in error
+          default: null
+          description: A string indicating the target of the error. For example, the
+            name of the property in error.
+          title: Target
+          type:
+          - string
+          - 'null'
         details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiErrorDetail'
+          default: null
           description: Array of objects with more specific error information when
-            applicable
+            applicable.
+          items:
+            $ref: '#/components/schemas/ErrorDetailsApiModel'
+          title: Details
+          type:
+          - array
+          - 'null'
       required:
-        - code
-        - details
-        - message
-    ApiErrorDetail:
+      - message
+      - code
+      title: Error
       type: object
+    ErrorDetailsApiModel:
       properties:
         message:
+          description: Human-readable string describing the error.
+          title: Message
           type: string
-          description: Human-readable string describing the error
         code:
+          description: Service-defined error code.
+          title: Code
           type: string
-          description: Service-defined error code
         target:
-          type: string
-          description: A string indicating the target of the error, for example, the
-            name of the property in error
+          default: null
+          description: A string indicating the target of the error. For example, the
+            name of the property in error.
+          title: Target
+          type:
+          - string
+          - 'null'
       required:
-        - code
-        - message
-    ApiErrorResponse:
+      - message
+      - code
+      title: ErrorDetails
       type: object
+    ErrorResponseApiModel:
       properties:
         error:
-          $ref: '#/components/schemas/ApiError'
-          description: Details of the error.
+          $ref: '#/components/schemas/ErrorApiModel'
       required:
-        - error
-    CreateLoadTestRequest:
+      - error
+      title: ErrorResponse
       type: object
-      properties:
-        name:
-          type: string
-          minLength: 1
-          description: Unique name of the test within the project
-          maxLength: 300
-        script:
-          type: string
-          format: binary
-          description: k6 script file that is executed when the test is started
-      required:
-        - name
-        - script
-    CreateProjectRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Project name.
-          readOnly: false
-        description:
-          type: string
-          description: Project description.
-          readOnly: false
-        settings:
-          $ref: '#/components/schemas/ProjectSettings'
-          readOnly: false
-          description: Project specific settings.
-      required:
-        - name
-    CreateStackEnvVarRequestRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          minLength: 1
-          description: Name of the variable.
-          maxLength: 100
-        value:
-          type: string
-          minLength: 1
-          description: Variable value.
-          maxLength: 5000
-        description:
-          type:
-            - string
-          nullable: true
-          description: Description of the variable.
-      required:
-        - name
-        - value
-    LoadTest:
-      type: object
+    LoadTestApiModel:
       properties:
         id:
+          description: ID of the load test.
+          title: Id
           type: integer
-          readOnly: true
-          description: Id of the load test
         project_id:
+          description: ID of the parent project.
+          title: Project Id
           type: integer
-          readOnly: true
-          description: Id of the parent project
         name:
-          type: string
-          description: Unique name of the test within the project
+          description: Unique name of the test within the project.
           maxLength: 300
+          minLength: 1
+          title: Name
+          type: string
         baseline_test_run_id:
+          description: ID of a baseline test run used for results comparison.
+          title: Baseline Test Run Id
           type:
-            - integer
-          nullable: true
-          description: Id of a baseline test run used for results comparison
+          - integer
+          - 'null'
         created:
-          type: string
+          description: The date when the test was created.
           format: date-time
-          readOnly: true
-          description: The date when the test was created
+          title: Created
+          type: string
         updated:
-          type: string
+          description: The date when the test was last updated.
           format: date-time
-          readOnly: true
-          description: The date when the test was last time updated
-      required:
-        - baseline_test_run_id
-        - created
-        - id
-        - name
-        - project_id
-        - updated
-    LoadZone:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-          description: Id of the load zone.
-        name:
-          type:
-            - string
-          nullable: true
-          description: Unique load zone name used in k6 script.
-          readOnly: true
-        title:
+          title: Updated
           type: string
-          description: Human readable load zone name.
-          readOnly: true
-        private:
-          type: boolean
-          description: If the load zone is a private load zone owned by the organization.
-        provider_name:
-          type: string
-          readOnly: true
-          description: Name of the load zone provider. Usually, `amazon` for public
-            load zones and `k8s` for the private ones.
-        provider_details:
-          type: object
-          additionalProperties: { }
-          description: Provider specific details.
       required:
-        - id
-        - name
-        - private
-        - provider_details
-        - provider_name
-        - title
-    PaginatedLoadTestList:
+      - id
+      - project_id
+      - name
+      - baseline_test_run_id
+      - created
+      - updated
+      title: LoadTest
       type: object
+    LoadTestListResponse:
       properties:
+        value:
+          description: List of the resulting values.
+          items:
+            $ref: '#/components/schemas/LoadTestApiModel'
+          title: Value
+          type: array
         '@count':
+          description: Object count in the collection.
+          examples:
+          - 123
+          title: '@Count'
           type: integer
-          example: 123
-          description: Object count in the collection
         '@nextLink':
-          type: string
-          format: uri
           description: A reference to the next page of results. The property is included
             until there are no more pages of results to retrieve.
-          example: http://api.example.org/accounts/?$skip=400&$top=100
-        value:
-          type: array
-          items:
-            $ref: '#/components/schemas/LoadTest'
-          description: List of the resulting values
-      required:
-        - value
-    PaginatedLoadZoneList:
-      type: object
-      properties:
-        '@count':
-          type: integer
-          example: 123
-          description: Object count in the collection
-        '@nextLink':
-          type: string
+          examples:
+          - http://api.example.org/accounts/?%24skip=400&%24top=100
           format: uri
-          description: A reference to the next page of results. The property is included
-            until there are no more pages of results to retrieve.
-          example: http://api.example.org/accounts/?$skip=400&$top=100
-        value:
-          type: array
-          items:
-            $ref: '#/components/schemas/LoadZone'
-          description: List of the resulting values
-      required:
-        - value
-    PaginatedScheduleList:
-      type: object
-      properties:
-        '@count':
-          type: integer
-          example: 123
-          description: Object count in the collection
-        '@nextLink':
+          title: '@Nextlink'
           type: string
-          format: uri
-          description: A reference to the next page of results. The property is included
-            until there are no more pages of results to retrieve.
-          example: http://api.example.org/accounts/?$skip=400&$top=100
-        value:
-          type: array
-          items:
-            $ref: '#/components/schemas/Schedule'
-          description: List of the resulting values
       required:
-        - value
-    PaginatedStackEnvVarList:
+      - value
+      title: LoadTestListResponse
       type: object
-      properties:
-        '@count':
-          type: integer
-          example: 123
-          description: Object count in the collection
-        '@nextLink':
-          type: string
-          format: uri
-          description: A reference to the next page of results. The property is included
-            until there are no more pages of results to retrieve.
-          example: http://api.example.org/accounts/?$skip=400&$top=100
-        value:
-          type: array
-          items:
-            $ref: '#/components/schemas/StackEnvVar'
-          description: List of the resulting values
-      required:
-        - value
-    PaginatedStaticIPList:
-      type: object
-      properties:
-        '@count':
-          type: integer
-          example: 123
-          description: Object count in the collection
-        '@nextLink':
-          type: string
-          format: uri
-          description: A reference to the next page of results. The property is included
-            until there are no more pages of results to retrieve.
-          example: http://api.example.org/accounts/?$skip=400&$top=100
-        value:
-          type: array
-          items:
-            $ref: '#/components/schemas/StaticIP'
-          description: List of the resulting values
-      required:
-        - value
-    PaginatedTestRunList:
-      type: object
-      properties:
-        '@count':
-          type: integer
-          example: 123
-          description: Object count in the collection
-        '@nextLink':
-          type: string
-          format: uri
-          description: A reference to the next page of results. The property is included
-            until there are no more pages of results to retrieve.
-          example: http://api.example.org/accounts/?$skip=400&$top=100
-        value:
-          type: array
-          items:
-            $ref: '#/components/schemas/TestRun'
-          description: List of the resulting values
-      required:
-        - value
-    PatchedLoadTestRequest:
-      type: object
+    PatchLoadTestApiModel:
+      additionalProperties: false
       properties:
         name:
-          type: string
-          minLength: 1
-          description: Unique name of the test within the project
+          description: Unique name of the test within the project.
           maxLength: 300
+          minLength: 1
+          title: Name
+          type: string
         baseline_test_run_id:
+          description: ID of a baseline test run used for results comparison.
+          title: Baseline Test Run Id
           type:
-            - integer
-          nullable: true
-          description: Id of a baseline test run used for results comparison
-    PatchedScheduleRequest:
+          - integer
+          - 'null'
+      title: PatchLoadTest
       type: object
-      properties:
-        starts:
-          type:
-            - string
-          nullable: true
-          format: date-time
-          description: The date after which the schedule will start running the test.
-        repeats:
-          oneOf:
-            - $ref: '#/components/schemas/ScheduleRepeatsRequest'
-          nullable: true
-          description: Schedule recurrence settings. If null, the test will run only
-            once on the `starts` date.
-        ends:
-          oneOf:
-            - $ref: '#/components/schemas/ScheduleEndsRequest'
-          nullable: true
-          description: When given, determines when the schedule will end. Either `on_date`
-            or `after_runs` must be provided but not both. If null, the schedule runs
-            forever.
-    PatchedStackEnvVarRequest:
-      type: object
+    PatchProjectApiModel:
+      additionalProperties: false
       properties:
         name:
-          type: string
-          minLength: 1
-          description: Name of the variable.
-          maxLength: 100
-        value:
-          type: string
-          minLength: 1
-          description: Variable value.
-          maxLength: 5000
-        description:
-          type:
-            - string
-          nullable: true
-          description: Description of the variable.
-    Project:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-          description: Project ID.
-          readOnly: true
-        name:
-          type: string
           description: Project name.
-          readOnly: false
-        description:
+          maxLength: 255
+          minLength: 1
+          title: Name
           type: string
-          description: Project description.
-          readOnly: false
-        is_default:
-          type: boolean
-          description: Use this project as default for running test when no explicit
-            project ID is provided.
-          readOnly: true
-        settings:
-          $ref: '#/components/schemas/ProjectSettings'
-          readOnly: false
-          description: Project specific settings.
-        created:
-          type: string
-          format: date-time
-          readOnly: true
-          description: The date when the project was created.
-        updated:
-          type: string
-          format: date-time
-          readOnly: true
-          description: The date when the project was last time updated.
       required:
-        - id
-        - name
-        - description
-        - is_default
-        - settings
-        - created
-        - updated
-    ProjectSettings:
+      - name
+      title: PatchProject
       type: object
+    PatchProjectLimitsRequest:
+      additionalProperties: false
       properties:
         vuh_max_per_month:
-          type:
-            - integer
-          nullable: true
-          format: int32
-          description: Max amount of virtual user hours (VUh) used per one calendar
+          description: Max amount of virtual user hours (VUH) used per one calendar
             month.
-          readOnly: false
+          minimum: 1
+          title: Vuh Max Per Month
+          type:
+          - integer
+          - 'null'
         vu_max_per_test:
-          type:
-            - integer
-          nullable: true
-          format: int32
           description: Max number of concurrent virtual users (VUs) used in one test.
-          readOnly: false
-        vu_browser_max_per_test:
+          minimum: 1
+          title: Vu Max Per Test
           type:
-            - integer
-          nullable: true
-          format: int32
+          - integer
+          - 'null'
+        vu_browser_max_per_test:
           description: Max number of concurrent browser virtual users (VUs) used in
             one test.
-          readOnly: false
+          minimum: 1
+          title: Vu Browser Max Per Test
+          type:
+          - integer
+          - 'null'
         duration_max_per_test:
-          type:
-            - integer
-          nullable: true
-          format: int32
           description: Max duration of a test in seconds.
-          readOnly: false
-      required:
-        - vuh_max_per_month
-        - vu_max_per_test
-        - vu_browser_max_per_test
-        - duration_max_per_test
-    Schedule:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-          description: Id of the schedule.
-        load_test_id:
-          type: integer
-          readOnly: true
-          description: Id of the test to run.
-        active:
-          type: boolean
-          readOnly: true
-          description: Id of the schedule.
-        starts:
-          type:
-            - string
-          nullable: true
-          format: date-time
-          description: The date after which the schedule will start running the test.
-        repeats:
-          oneOf:
-            - $ref: '#/components/schemas/ScheduleRepeats'
-          nullable: true
-          description: Schedule recurrence settings. If null, the test will run only
-            once on the `starts` date.
-        ends:
-          oneOf:
-            - $ref: '#/components/schemas/ScheduleEnds'
-          nullable: true
-          description: When given, determines when the schedule will end. Either `on_date`
-            or `after_runs` must be provided but not both. If null, the schedule runs
-            forever.
-        next_run:
-          type:
-            - string
-          nullable: true
-          format: date-time
-          readOnly: true
-          description: The date of the next scheduled test run. If the schedule is
-            inactive or past the end date or all runs have been used up, the value
-            is null.
-      required:
-        - active
-        - ends
-        - id
-        - load_test_id
-        - next_run
-        - repeats
-        - starts
-    ScheduleCreateRequestRequest:
-      type: object
-      properties:
-        load_test_id:
-          type: integer
-          description: Id of the test to run.
-        starts:
-          type:
-            - string
-          nullable: true
-          format: date-time
-          description: The date after which the schedule will start running the test.
-        repeats:
-          oneOf:
-            - $ref: '#/components/schemas/ScheduleRepeatsRequest'
-          nullable: true
-          description: Schedule recurrence settings. If null, the test will run only
-            once on the `starts` date.
-        ends:
-          oneOf:
-            - $ref: '#/components/schemas/ScheduleEndsRequest'
-          nullable: true
-          description: When given, determines when the schedule will end. Either `on_date`
-            or `after_runs` must be provided but not both. If null, the schedule runs
-            forever.
-      required:
-        - ends
-        - load_test_id
-        - repeats
-        - starts
-    ScheduleEnds:
-      type: object
-      properties:
-        on_date:
-          type: string
-          format: date-time
-          description: A datetime instance specifying the upper-bound limit of the
-            recurrence.
-        after_runs:
-          type: integer
           minimum: 1
-          description: Determines how many times the schedule will start the test.
-    ScheduleEndsRequest:
-      type: object
-      properties:
-        on_date:
-          type: string
-          format: date-time
-          description: A datetime instance specifying the upper-bound limit of the
-            recurrence.
-        after_runs:
-          type: integer
-          minimum: 1
-          description: Determines how many times the schedule will start the test.
-    ScheduleRepeats:
-      type: object
-      properties:
-        frequency:
-          enum:
-            - hourly
-            - daily
-            - weekly
-            - monthly
-            - yearly
-          type: string
-          x-spec-enum-id: 3de4292b8f1974e3
-          description: |-
-            The unit type of the recurrence interval.
-
-            * `hourly` - hourly
-            * `daily` - daily
-            * `weekly` - weekly
-            * `monthly` - monthly
-            * `yearly` - yearly
-        interval:
-          type: integer
-          minimum: 1
-          default: 1
-          description: The interval between each freq iteration. An interval of 2
-            with 'hourly' frequency means once every 2 hours.
-        days:
-          type: array
-          items:
-            enum:
-              - monday
-              - tuesday
-              - wednesday
-              - thursday
-              - friday
-              - saturday
-              - sunday
-            type: string
-            description: |-
-              * `monday` - monday
-              * `tuesday` - tuesday
-              * `wednesday` - wednesday
-              * `thursday` - thursday
-              * `friday` - friday
-              * `saturday` - saturday
-              * `sunday` - sunday
-            x-spec-enum-id: abec3bc0521eb9a1
-          description: When given, define the days of the week where the recurrence
-            will be applied. The default is every day of the week.
-      required:
-        - frequency
-    ScheduleRepeatsRequest:
-      type: object
-      properties:
-        frequency:
-          enum:
-            - hourly
-            - daily
-            - weekly
-            - monthly
-            - yearly
-          type: string
-          x-spec-enum-id: 3de4292b8f1974e3
-          description: |-
-            The unit type of the recurrence interval.
-
-            * `hourly` - hourly
-            * `daily` - daily
-            * `weekly` - weekly
-            * `monthly` - monthly
-            * `yearly` - yearly
-        interval:
-          type: integer
-          minimum: 1
-          default: 1
-          description: The interval between each freq iteration. An interval of 2
-            with 'hourly' frequency means once every 2 hours.
-        days:
-          type: array
-          items:
-            enum:
-              - monday
-              - tuesday
-              - wednesday
-              - thursday
-              - friday
-              - saturday
-              - sunday
-            type: string
-            description: |-
-              * `monday` - monday
-              * `tuesday` - tuesday
-              * `wednesday` - wednesday
-              * `thursday` - thursday
-              * `friday` - friday
-              * `saturday` - saturday
-              * `sunday` - sunday
-            x-spec-enum-id: abec3bc0521eb9a1
-          description: When given, define the days of the week where the recurrence
-            will be applied. The default is every day of the week.
-      required:
-        - frequency
-    StackEnvVar:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-          description: Id of the variable.
-        name:
-          type: string
-          description: Name of the variable.
-          maxLength: 100
-        value:
-          type: string
-          description: Variable value.
-          maxLength: 5000
-        description:
+          title: Duration Max Per Test
           type:
-            - string
-          nullable: true
-          description: Description of the variable.
-        created:
-          type: string
-          format: date-time
-          readOnly: true
-          description: The date when the variable was created.
-        updated:
-          type: string
-          format: date-time
-          readOnly: true
-          description: The date when the variable was last time updated.
-      required:
-        - created
-        - id
-        - name
-        - updated
-        - value
-    StaticIP:
+          - integer
+          - 'null'
+      title: PatchProjectLimitsRequest
       type: object
+    PatchTestRunApiModel:
+      additionalProperties: false
       properties:
-        id:
-          type: integer
-          readOnly: true
-          description: Id of the Static IP.
-        ip:
-          type:
-            - string
-          nullable: true
-          description: Acquired IP address or null if the IP is still in the `provisioning`
-            status.
-        created:
-          type: string
-          format: date-time
-          readOnly: true
-          description: The date and time the Static IP acquisition was requested.
-        provisioning_status:
-          enum:
-            - provisioning
-            - provisioned
-            - releasing
-          type: string
-          x-spec-enum-id: a4969e8cdb03fc0a
-          description: |-
-            Provisioning status of the Static IP. Only the IPs with status `provisioned` areavailable in tests.
-
-            * `provisioning` - provisioning
-            * `provisioned` - provisioned
-            * `releasing` - releasing
-        load_zone:
-          type: string
-          description: Load zone identifier in form of (<vendor:countrycode:city>)
-          readOnly: true
-      required:
-        - created
-        - id
-        - load_zone
-        - provisioning_status
-    StaticIPAcquireLoadZoneRequest:
-      type: object
-      properties:
-        load_zone:
-          type: string
-          minLength: 1
-          description: Name of the load zone.
-        count:
-          type: integer
-          minimum: 1
-          description: Number of Static IPs to acquire.
-      required:
-        - count
-        - load_zone
-    StaticIPAcquireRequest:
-      type: object
-      properties:
-        load_zones:
-          type: array
-          items:
-            $ref: '#/components/schemas/StaticIPAcquireLoadZoneRequest'
-          description: List of the load zones with the number of IPs to acquire.
-      required:
-        - load_zones
-    StaticIPList:
-      type: object
-      properties:
-        value:
-          type: array
-          items:
-            $ref: '#/components/schemas/StaticIP'
-          description: List of the Static IPs.
-      required:
-        - value
-    StaticIPReleaseRequest:
-      type: object
-      properties:
-        ids:
-          type: array
-          items:
-            type: integer
-          description: List of Static IPs IDs to release and delete.
-          maxItems: 500
-          minItems: 1
-      required:
-        - ids
-    TestCost:
-      type: object
-      properties:
-        total_vuh:
-          type: number
-          format: double
-          maximum: 1000000000000000000
-          exclusiveMaximum: true
-          minimum: -1000000000000000000
-          exclusiveMinimum: true
-          description: Total number of VUh charged for the test run.
-        breakdown:
-          allOf:
-            - $ref: '#/components/schemas/TestCostBreakdown'
-          description: Breakdown details of the test cost.
-      required:
-        - breakdown
-        - total_vuh
-    TestCostBreakdown:
-      type: object
-      properties:
-        protocol_vuh:
-          type: number
-          format: double
-          maximum: 1000000000000000000
-          exclusiveMaximum: true
-          minimum: -1000000000000000000
-          exclusiveMinimum: true
-          description: Number of VUh charged for the protocol part of the test run.
-        browser_vuh:
-          type: number
-          format: double
-          maximum: 1000000000000000000
-          exclusiveMaximum: true
-          minimum: -1000000000000000000
-          exclusiveMinimum: true
-          description: Number of VUh charged for the browser part of the test run.
-      required:
-        - browser_vuh
-        - protocol_vuh
-    TestRun:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-          description: Id of the test run.
-        test_id:
-          type: integer
-          readOnly: true
-          description: Id of the parent test.
-        project_id:
-          type:
-            - integer
-          nullable: true
-          readOnly: true
-          description: Id of the parent project.
-        started_by:
-          type:
-            - integer
-          nullable: true
-          readOnly: true
-          description: Id of the user who started the test if started with a user
-            token.
-        created:
-          type: string
-          format: date-time
-          readOnly: true
-          description: Date and time when the test run was started.
-        ended:
-          type:
-            - string
-          nullable: true
-          format: date-time
-          readOnly: true
-          description: Date and time when the test run ended. Unset if the test is
-            still running.
         note:
-          type: string
-          readOnly: true
           description: User-defined note for the test run.
-        retention_expiry:
-          type:
-            - string
-          nullable: true
-          format: date-time
-          readOnly: true
-          description: The expiry date of test run results retention beyond which
-            the data is automatically deleted if the test tun is not saved, otherwise
-            - null.
-        cost:
-          oneOf:
-            - $ref: '#/components/schemas/TestCost'
-          nullable: true
-          description: Test run cost details.
-        status:
+          title: Note
           type: string
-          description: Current test run status.
-        status_details:
-          allOf:
-            - $ref: '#/components/schemas/TestRunStatus'
-          description: Details of the current test run status.
-        status_history:
-          type: array
-          items:
-            $ref: '#/components/schemas/TestRunStatus'
-          description: List of test run status objects sorted by enter time representing
-            the status history.
-        result:
-          type:
-            - string
-          nullable: true
-          enum:
-            - passed
-            - failed
-            - error
-          description: Test run result. If thresholds are defined and have been tainted,
-            the result is `'passed'`, otherwise - `'failed'`. If the execution had
-            not completed successfully, the result is `'error'`. The result is available
-            only after the test is no longer running, otherwise it is `null`.
-        result_details:
-          type:
-            - object
-          nullable: true
-          additionalProperties: { }
-          description: Test run result details.
-        distribution:
-          type:
-            - array
-          nullable: true
-          items:
-            $ref: '#/components/schemas/TestRunDistribution'
-          description: List the load zones the test runs in and the corresponding
-            load distribution percent.
-        options:
-          type:
-            - object
-          nullable: true
-          additionalProperties: { }
-          description: The original options object if available.
       required:
-        - cost
-        - created
-        - distribution
-        - ended
-        - id
-        - note
-        - options
-        - project_id
-        - result
-        - result_details
-        - retention_expiry
-        - started_by
-        - status
-        - status_details
-        - status_history
-        - test_id
-    TestRunDistribution:
+      - note
+      title: PatchTestRun
       type: object
+    ProjectApiModel:
       properties:
-        load_zone:
-          type: string
-          description: Name of the load zone.
-        percent:
+        id:
+          description: Project ID.
+          title: Id
           type: integer
-          description: Percentage of the load that runs from the load zone.
+        name:
+          description: Project name.
+          maxLength: 255
+          minLength: 1
+          title: Name
+          type: string
+        is_default:
+          description: Use this project as default for running tests when no explicit
+            project ID is provided.
+          title: Is Default
+          type: boolean
+        created:
+          description: The date when the project was created.
+          format: date-time
+          title: Created
+          type: string
+        updated:
+          description: The date when the project was last updated.
+          format: date-time
+          title: Updated
+          type: string
       required:
-        - load_zone
-        - percent
-    TestRunStatus:
+      - id
+      - name
+      - is_default
+      - created
+      - updated
+      title: Project
       type: object
+    ProjectLimitsApiModel:
+      properties:
+        project_id:
+          description: ID of the related project.
+          title: Project Id
+          type: integer
+        vuh_max_per_month:
+          description: Max amount of virtual user hours (VUH) used per one calendar
+            month.
+          minimum: 1
+          title: Vuh Max Per Month
+          type:
+          - integer
+          - 'null'
+        vu_max_per_test:
+          description: Max number of concurrent virtual users (VUs) used in one test.
+          minimum: 1
+          title: Vu Max Per Test
+          type:
+          - integer
+          - 'null'
+        vu_browser_max_per_test:
+          description: Max number of concurrent browser virtual users (VUs) used in
+            one test.
+          minimum: 1
+          title: Vu Browser Max Per Test
+          type:
+          - integer
+          - 'null'
+        duration_max_per_test:
+          description: Max duration of a test in seconds.
+          minimum: 1
+          title: Duration Max Per Test
+          type:
+          - integer
+          - 'null'
+      required:
+      - project_id
+      - vuh_max_per_month
+      - vu_max_per_test
+      - vu_browser_max_per_test
+      - duration_max_per_test
+      title: ProjectLimits
+      type: object
+    ProjectListResponse:
+      properties:
+        value:
+          description: List of the resulting values.
+          items:
+            $ref: '#/components/schemas/ProjectApiModel'
+          title: Value
+          type: array
+        '@count':
+          description: Object count in the collection.
+          examples:
+          - 123
+          title: '@Count'
+          type: integer
+        '@nextLink':
+          description: A reference to the next page of results. The property is included
+            until there are no more pages of results to retrieve.
+          examples:
+          - http://api.example.org/accounts/?%24skip=400&%24top=100
+          format: uri
+          title: '@Nextlink'
+          type: string
+      required:
+      - value
+      title: ProjectListResponse
+      type: object
+    StatusApiModel:
+      description: Details of the test run status.
       properties:
         type:
+          description: 'Type of simple test run status: `created`, `queued`, `initializing`,
+            `running`, `processing_metrics`, `completed` or `aborted`.'
+          title: Type
           type: string
-          description: Type of the test run status.
-          enum:
-            - created
-            - queued
-            - initializing
-            - running
-            - processing_metrics
-            - completed
-            - aborted
         entered:
-          type: string
-          format: date-time
           description: Date and time when the test run entered the status.
+          format: date-time
+          title: Entered
+          type: string
         extra:
-          type: object
-          description: Extra information specific to the test run status.
-          properties:
-            by_user:
-              type:
-                - integer
-              nullable: true
-              description: The user that set the status if applicable.
-            message:
-              type:
-                - string
-              nullable: true
-              description: Human-readable string describing the error if applicable.
-            code:
-              type:
-                - string
-              nullable: true
-              description: Service-defined error code if applicable.
+          default: null
+          description: Extra information about the indicated status.
+          oneOf:
+          - $ref: '#/components/schemas/StatusExtraApiModel'
+          - type: 'null'
       required:
-        - entered
-        - type
-    TestRunUpdateNoteRequest:
+      - type
+      - entered
+      title: Status
       type: object
+    StatusExtraApiModel:
+      properties:
+        by_user:
+          description: Email of the user that set the status if applicable.
+          format: email
+          title: By User
+          type:
+          - string
+          - 'null'
+        message:
+          description: Human-readable string describing the error if applicable.
+          title: Message
+          type:
+          - string
+          - 'null'
+        code:
+          description: Service-defined error code if applicable.
+          title: Code
+          type:
+          - integer
+          - 'null'
+      required:
+      - by_user
+      - message
+      - code
+      title: StatusExtra
+      type: object
+    TestCostApiModel:
+      properties:
+        total_vuh:
+          anyOf:
+          - type: number
+          - type: string
+          description: Total number of VUH charged for the test run.
+          title: Total Vuh
+        breakdown:
+          $ref: '#/components/schemas/TestCostBreakdownApiModel'
+      required:
+      - total_vuh
+      - breakdown
+      title: TestCost
+      type: object
+    TestCostBreakdownApiModel:
+      description: Breakdown details of the test cost.
+      properties:
+        protocol_vuh:
+          anyOf:
+          - type: number
+          - type: string
+          description: Number of VUH charged for the protocol part of the test run.
+          title: Protocol Vuh
+        browser_vuh:
+          anyOf:
+          - type: number
+          - type: string
+          description: Number of VUH charged for the browser part of the test run.
+          title: Browser Vuh
+      required:
+      - protocol_vuh
+      - browser_vuh
+      title: TestCostBreakdown
+      type: object
+    TestRunApiModel:
+      description: The API model for a test run.
+      properties:
+        id:
+          description: ID of the test run.
+          title: Id
+          type: integer
+        test_id:
+          description: ID of the parent test.
+          title: Test Id
+          type: integer
+        project_id:
+          description: ID of the parent project.
+          title: Project Id
+          type: integer
+        started_by:
+          description: Email of the user who started the test if started with a user
+            token.
+          format: email
+          title: Started By
+          type:
+          - string
+          - 'null'
+        created:
+          description: Date and time when the test run was started.
+          format: date-time
+          title: Created
+          type: string
+        ended:
+          description: Date and time when the test run ended. Unset if the test is
+            still running.
+          format: date-time
+          title: Ended
+          type:
+          - string
+          - 'null'
+        note:
+          description: User-defined note for the test run.
+          title: Note
+          type: string
+        retention_expiry:
+          description: Timestamp after which the test run results are deleted or null
+            if the test run is saved.
+          format: date-time
+          title: Retention Expiry
+          type:
+          - string
+          - 'null'
+        cost:
+          description: |-
+            Test run cost details. The cost is available only after test run validation.
+
+            - For test runs still in progress, the value is an estimate of the full cost that will be charged upon successful completion.
+            - For finished test runs, the value is the real cost charged for the test run.
+          oneOf:
+          - $ref: '#/components/schemas/TestCostApiModel'
+          - type: 'null'
+        status:
+          description: Current test run status.
+          title: Status
+          type: string
+        status_details:
+          $ref: '#/components/schemas/StatusApiModel'
+          description: Details of the current test run status.
+        status_history:
+          description: List of test run status objects sorted by the enter time representing
+            the status history.
+          items:
+            $ref: '#/components/schemas/StatusApiModel'
+          title: Status History
+          type: array
+        distribution:
+          description: List of the load zones configured for the test and the corresponding
+            distribution percentages.
+          items:
+            $ref: '#/components/schemas/DistributionZoneApiModel'
+          title: Distribution
+          type:
+          - array
+          - 'null'
+        result:
+          description: Test run result. `passed` if there were no issues, `failed`
+            if thresholds were breached, `error` if the execution was not completed.
+          title: Result
+          type:
+          - string
+          - 'null'
+        result_details:
+          description: Additional information about the test run result.
+          title: Result Details
+          type:
+          - object
+          - 'null'
+        options:
+          description: The original options object if available.
+          title: Options
+          type:
+          - object
+          - 'null'
+      required:
+      - id
+      - test_id
+      - project_id
+      - started_by
+      - created
+      - ended
+      - note
+      - retention_expiry
+      - cost
+      - status
+      - status_details
+      - status_history
+      - distribution
+      - result
+      - result_details
+      - options
+      title: TestRun
+      type: object
+    TestRunListResponse:
       properties:
         value:
-          type:
-            - string
-          nullable: true
-          description: User-defined note for the test run.
+          description: List of the resulting values.
+          items:
+            $ref: '#/components/schemas/TestRunApiModel'
+          title: Value
+          type: array
+        '@count':
+          description: Object count in the collection.
+          examples:
+          - 123
+          title: '@Count'
+          type: integer
+        '@nextLink':
+          description: A reference to the next page of results. The property is included
+            until there are no more pages of results to retrieve.
+          examples:
+          - http://api.example.org/accounts/?%24skip=400&%24top=100
+          format: uri
+          title: '@Nextlink'
+          type: string
       required:
-        - value
-    ValidateOptionsRequest:
+      - value
+      title: TestRunListResponse
       type: object
+    ValidateOptionsRequest:
       properties:
         project_id:
-          type: integer
-          description: Id of a project where the test belongs
+          default: null
+          description: ID of a project where the test belongs.
+          title: Project Id
+          type:
+          - integer
+          - 'null'
         options:
+          description: k6 script options object to validate.
+          title: Options
           type: object
-          additionalProperties: { }
-          description: k6 script options object to validate
       required:
-        - options
-    ValidateOptionsResponse:
+      - options
+      title: ValidateOptionsRequest
       type: object
+    ValidateOptionsResponse:
       properties:
         vuh_usage:
+          description: How many VUH will be charged for the test.
+          title: Vuh Usage
           type: number
-          format: double
-          description: How many VUh will be charged for the test
       required:
-        - vuh_usage
+      - vuh_usage
+      title: ValidateOptionsResponse
+      type: object
   securitySchemes:
     k6ApiToken:
       type: http
       scheme: bearer
       description: Token-based authentication using k6 Personal API token or Grafana
         Stack API token.
+  parameters:
+    stackId:
+      in: header
+      name: X-Stack-Id
+      description: |-
+        Numeric ID of the Grafana stack representing the request scope.
+        - If the API is called with a *Personal API token*, the user must be a member of the specified stack.
+        - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
+      schema:
+        type: integer
+      required: true
+  responses:
+    ValidationError:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponseApiModel'
+      description: Request validation error.
+    Unauthorized:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponseApiModel'
+      description: Invalid token or authentication scheme.
+    PermissionDenied:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponseApiModel'
+      description: The user does not have permission to perform this action.
+    NotFound:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponseApiModel'
+      description: Resource not found.
+    UnexpectedError:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponseApiModel'
+      description: Unexpected error.
 servers:
-  - url: https://api.k6.io
+- url: https://api.k6.io
+  description: Global k6 Cloud API.
 tags:
-  - name: load-tests
-  - name: load-zones
-  - name: projects
-  - name: schedules
-  - name: static-ips
-  - name: test-runs
-  - name: variables
+- name: load_tests
+  description: API endpoints for managing and starting tests.
+- name: projects
+  description: API endpoints for managing projects.
+- name: test_runs
+  description: API endpoints for managing test runs.

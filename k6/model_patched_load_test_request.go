@@ -23,7 +23,7 @@ type PatchedLoadTestRequest struct {
 	// Unique name of the test within the project
 	Name *string `json:"name,omitempty"`
 	// Id of a baseline test run used for results comparison
-	BaselineTestRunId    *int32 `json:"baseline_test_run_id,omitempty"`
+	BaselineTestRunId    NullableInt32 `json:"baseline_test_run_id,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -78,36 +78,47 @@ func (o *PatchedLoadTestRequest) SetName(v string) {
 	o.Name = &v
 }
 
-// GetBaselineTestRunId returns the BaselineTestRunId field value if set, zero value otherwise.
+// GetBaselineTestRunId returns the BaselineTestRunId field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *PatchedLoadTestRequest) GetBaselineTestRunId() int32 {
-	if o == nil || IsNil(o.BaselineTestRunId) {
+	if o == nil || IsNil(o.BaselineTestRunId.Get()) {
 		var ret int32
 		return ret
 	}
-	return *o.BaselineTestRunId
+	return *o.BaselineTestRunId.Get()
 }
 
 // GetBaselineTestRunIdOk returns a tuple with the BaselineTestRunId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *PatchedLoadTestRequest) GetBaselineTestRunIdOk() (*int32, bool) {
-	if o == nil || IsNil(o.BaselineTestRunId) {
+	if o == nil {
 		return nil, false
 	}
-	return o.BaselineTestRunId, true
+	return o.BaselineTestRunId.Get(), o.BaselineTestRunId.IsSet()
 }
 
 // HasBaselineTestRunId returns a boolean if a field has been set.
 func (o *PatchedLoadTestRequest) HasBaselineTestRunId() bool {
-	if o != nil && !IsNil(o.BaselineTestRunId) {
+	if o != nil && o.BaselineTestRunId.IsSet() {
 		return true
 	}
 
 	return false
 }
 
-// SetBaselineTestRunId gets a reference to the given int32 and assigns it to the BaselineTestRunId field.
+// SetBaselineTestRunId gets a reference to the given NullableInt32 and assigns it to the BaselineTestRunId field.
 func (o *PatchedLoadTestRequest) SetBaselineTestRunId(v int32) {
-	o.BaselineTestRunId = &v
+	o.BaselineTestRunId.Set(&v)
+}
+
+// SetBaselineTestRunIdNil sets the value for BaselineTestRunId to be an explicit nil
+func (o *PatchedLoadTestRequest) SetBaselineTestRunIdNil() {
+	o.BaselineTestRunId.Set(nil)
+}
+
+// UnsetBaselineTestRunId ensures that no value is present for BaselineTestRunId, not even an explicit nil
+func (o *PatchedLoadTestRequest) UnsetBaselineTestRunId() {
+	o.BaselineTestRunId.Unset()
 }
 
 func (o PatchedLoadTestRequest) MarshalJSON() ([]byte, error) {
@@ -123,8 +134,8 @@ func (o PatchedLoadTestRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Name) {
 		toSerialize["name"] = o.Name
 	}
-	if !IsNil(o.BaselineTestRunId) {
-		toSerialize["baseline_test_run_id"] = o.BaselineTestRunId
+	if o.BaselineTestRunId.IsSet() {
+		toSerialize["baseline_test_run_id"] = o.BaselineTestRunId.Get()
 	}
 
 	for key, value := range o.AdditionalProperties {

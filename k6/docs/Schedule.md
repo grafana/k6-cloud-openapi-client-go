@@ -7,16 +7,16 @@ Name | Type | Description | Notes
 **Id** | **int32** | Id of the schedule. | [readonly] 
 **LoadTestId** | **int32** | Id of the test to run. | [readonly] 
 **Active** | **bool** | Id of the schedule. | [readonly] 
-**Starts** | **time.Time** | The date after which the schedule will start running the test. | 
-**Repeats** | [**ScheduleRepeats**](ScheduleRepeats.md) |  | 
-**Ends** | [**ScheduleEnds**](ScheduleEnds.md) |  | 
-**NextRun** | **time.Time** | The date of the next scheduled test run. If the schedule is inactive or past the end date or all runs have been used up, the value is null. | [readonly] 
+**Starts** | **NullableTime** | The date after which the schedule will start running the test. | 
+**Repeats** | [**NullableScheduleRepeats**](ScheduleRepeats.md) |  | 
+**Ends** | [**NullableScheduleEnds**](ScheduleEnds.md) |  | 
+**NextRun** | **NullableTime** | The date of the next scheduled test run. If the schedule is inactive or past the end date or all runs have been used up, the value is null. | [readonly] 
 
 ## Methods
 
 ### NewSchedule
 
-`func NewSchedule(id int32, loadTestId int32, active bool, starts time.Time, repeats ScheduleRepeats, ends ScheduleEnds, nextRun time.Time, ) *Schedule`
+`func NewSchedule(id int32, loadTestId int32, active bool, starts NullableTime, repeats NullableScheduleRepeats, ends NullableScheduleEnds, nextRun NullableTime, ) *Schedule`
 
 NewSchedule instantiates a new Schedule object
 This constructor will assign default values to properties that have it defined,
@@ -111,6 +111,16 @@ and a boolean to check if the value has been set.
 SetStarts sets Starts field to given value.
 
 
+### SetStartsNil
+
+`func (o *Schedule) SetStartsNil(b bool)`
+
+ SetStartsNil sets the value for Starts to be an explicit nil
+
+### UnsetStarts
+`func (o *Schedule) UnsetStarts()`
+
+UnsetStarts ensures that no value is present for Starts, not even an explicit nil
 ### GetRepeats
 
 `func (o *Schedule) GetRepeats() ScheduleRepeats`
@@ -131,6 +141,16 @@ and a boolean to check if the value has been set.
 SetRepeats sets Repeats field to given value.
 
 
+### SetRepeatsNil
+
+`func (o *Schedule) SetRepeatsNil(b bool)`
+
+ SetRepeatsNil sets the value for Repeats to be an explicit nil
+
+### UnsetRepeats
+`func (o *Schedule) UnsetRepeats()`
+
+UnsetRepeats ensures that no value is present for Repeats, not even an explicit nil
 ### GetEnds
 
 `func (o *Schedule) GetEnds() ScheduleEnds`
@@ -151,6 +171,16 @@ and a boolean to check if the value has been set.
 SetEnds sets Ends field to given value.
 
 
+### SetEndsNil
+
+`func (o *Schedule) SetEndsNil(b bool)`
+
+ SetEndsNil sets the value for Ends to be an explicit nil
+
+### UnsetEnds
+`func (o *Schedule) UnsetEnds()`
+
+UnsetEnds ensures that no value is present for Ends, not even an explicit nil
 ### GetNextRun
 
 `func (o *Schedule) GetNextRun() time.Time`
@@ -171,6 +201,16 @@ and a boolean to check if the value has been set.
 SetNextRun sets NextRun field to given value.
 
 
+### SetNextRunNil
+
+`func (o *Schedule) SetNextRunNil(b bool)`
+
+ SetNextRunNil sets the value for NextRun to be an explicit nil
+
+### UnsetNextRun
+`func (o *Schedule) UnsetNextRun()`
+
+UnsetNextRun ensures that no value is present for NextRun, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

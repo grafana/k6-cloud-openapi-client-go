@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Id** | **int32** | Id of the Static IP. | [readonly] 
-**Ip** | Pointer to **string** | Acquired IP address or null if the IP is still in the &#x60;provisioning&#x60; status. | [optional] 
+**Ip** | Pointer to **NullableString** | Acquired IP address or null if the IP is still in the &#x60;provisioning&#x60; status. | [optional] 
 **Created** | **time.Time** | The date and time the Static IP acquisition was requested. | [readonly] 
 **ProvisioningStatus** | **string** | Provisioning status of the Static IP. Only the IPs with status &#x60;provisioned&#x60; areavailable in tests.  * &#x60;provisioning&#x60; - provisioning * &#x60;provisioned&#x60; - provisioned * &#x60;releasing&#x60; - releasing | 
 **LoadZone** | **string** | Load zone identifier in form of (&lt;vendor:countrycode:city&gt;) | [readonly] 
@@ -74,6 +74,16 @@ SetIp sets Ip field to given value.
 
 HasIp returns a boolean if a field has been set.
 
+### SetIpNil
+
+`func (o *StaticIP) SetIpNil(b bool)`
+
+ SetIpNil sets the value for Ip to be an explicit nil
+
+### UnsetIp
+`func (o *StaticIP) UnsetIp()`
+
+UnsetIp ensures that no value is present for Ip, not even an explicit nil
 ### GetCreated
 
 `func (o *StaticIP) GetCreated() time.Time`

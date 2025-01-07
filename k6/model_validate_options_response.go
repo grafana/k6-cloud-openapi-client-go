@@ -1,9 +1,9 @@
 /*
+Grafana Cloud k6
 
+HTTP API for interacting with Grafana Cloud k6.
 
-HTTP API for interacting with k6 Cloud.
-
-API version: 0.0.0
+API version: 1.0.0
 Contact: info@grafana.com
 */
 
@@ -20,8 +20,8 @@ var _ MappedNullable = &ValidateOptionsResponse{}
 
 // ValidateOptionsResponse struct for ValidateOptionsResponse
 type ValidateOptionsResponse struct {
-	// How many VUh will be charged for the test
-	VuhUsage             float64 `json:"vuh_usage"`
+	// How many VUH will be charged for the test.
+	VuhUsage             float32 `json:"vuh_usage"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -31,7 +31,7 @@ type _ValidateOptionsResponse ValidateOptionsResponse
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewValidateOptionsResponse(vuhUsage float64) *ValidateOptionsResponse {
+func NewValidateOptionsResponse(vuhUsage float32) *ValidateOptionsResponse {
 	this := ValidateOptionsResponse{}
 	this.VuhUsage = vuhUsage
 	return &this
@@ -46,9 +46,9 @@ func NewValidateOptionsResponseWithDefaults() *ValidateOptionsResponse {
 }
 
 // GetVuhUsage returns the VuhUsage field value
-func (o *ValidateOptionsResponse) GetVuhUsage() float64 {
+func (o *ValidateOptionsResponse) GetVuhUsage() float32 {
 	if o == nil {
-		var ret float64
+		var ret float32
 		return ret
 	}
 
@@ -57,7 +57,7 @@ func (o *ValidateOptionsResponse) GetVuhUsage() float64 {
 
 // GetVuhUsageOk returns a tuple with the VuhUsage field value
 // and a boolean to check if the value has been set.
-func (o *ValidateOptionsResponse) GetVuhUsageOk() (*float64, bool) {
+func (o *ValidateOptionsResponse) GetVuhUsageOk() (*float32, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -65,7 +65,7 @@ func (o *ValidateOptionsResponse) GetVuhUsageOk() (*float64, bool) {
 }
 
 // SetVuhUsage sets field value
-func (o *ValidateOptionsResponse) SetVuhUsage(v float64) {
+func (o *ValidateOptionsResponse) SetVuhUsage(v float32) {
 	o.VuhUsage = v
 }
 

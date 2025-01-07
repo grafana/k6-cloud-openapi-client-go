@@ -1,8 +1,8 @@
 # k6-cloud-openapi-client
 
-**Code generated Go client for the [k6 Cloud Public API](https://github.com/grafana/k6-cloud-general-api/tree/main/api_public).**
+**Code generated Go client for the [Grafana Cloud k6 REST API v6](https://grafana.com/docs/grafana-cloud/testing/k6/reference/cloud-rest-api/v6/).**
 
-_Code generated from the OpenAPI specification._
+_Code generated from the OpenAPI specification that can be found at https://api.k6.io/cloud/v6/openapi._
 
 ## Getting started
 
@@ -28,9 +28,7 @@ You can find further details about how to install it [here](https://openapi-gene
 Once you have the `openapi-generator` installed, the first step is to retrieve the schema, in case
 the `schema.yaml` file stored in the repository is no longer up-to-date.
 
-You can download it from: https://admin-dev-us-east-0.grafana-dev.net/directory-k6-cloud/openapi.
-
-Alternatively, you can use the one stored in the API's repository: https://github.com/grafana/k6-cloud-general-api/tree/main/openapi. 
+You can download it from: https://api.k6.io/cloud/v6/openapi.
 
 ### Generate the client
 

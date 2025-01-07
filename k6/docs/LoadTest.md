@@ -7,7 +7,7 @@ Name | Type | Description | Notes
 **Id** | **int32** | Id of the load test | [readonly] 
 **ProjectId** | **int32** | Id of the parent project | [readonly] 
 **Name** | **string** | Unique name of the test within the project | 
-**BaselineTestRunId** | **int32** | Id of a baseline test run used for results comparison | 
+**BaselineTestRunId** | **NullableInt32** | Id of a baseline test run used for results comparison | 
 **Created** | **time.Time** | The date when the test was created | [readonly] 
 **Updated** | **time.Time** | The date when the test was last time updated | [readonly] 
 
@@ -15,7 +15,7 @@ Name | Type | Description | Notes
 
 ### NewLoadTest
 
-`func NewLoadTest(id int32, projectId int32, name string, baselineTestRunId int32, created time.Time, updated time.Time, ) *LoadTest`
+`func NewLoadTest(id int32, projectId int32, name string, baselineTestRunId NullableInt32, created time.Time, updated time.Time, ) *LoadTest`
 
 NewLoadTest instantiates a new LoadTest object
 This constructor will assign default values to properties that have it defined,
@@ -110,6 +110,16 @@ and a boolean to check if the value has been set.
 SetBaselineTestRunId sets BaselineTestRunId field to given value.
 
 
+### SetBaselineTestRunIdNil
+
+`func (o *LoadTest) SetBaselineTestRunIdNil(b bool)`
+
+ SetBaselineTestRunIdNil sets the value for BaselineTestRunId to be an explicit nil
+
+### UnsetBaselineTestRunId
+`func (o *LoadTest) UnsetBaselineTestRunId()`
+
+UnsetBaselineTestRunId ensures that no value is present for BaselineTestRunId, not even an explicit nil
 ### GetCreated
 
 `func (o *LoadTest) GetCreated() time.Time`

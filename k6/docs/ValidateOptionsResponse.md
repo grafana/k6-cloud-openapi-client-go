@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**VuhUsage** | **float64** | How many VUh will be charged for the test | 
+**VuhUsage** | **float32** | How many VUH will be charged for the test. | 
 
 ## Methods
 
 ### NewValidateOptionsResponse
 
-`func NewValidateOptionsResponse(vuhUsage float64, ) *ValidateOptionsResponse`
+`func NewValidateOptionsResponse(vuhUsage float32, ) *ValidateOptionsResponse`
 
 NewValidateOptionsResponse instantiates a new ValidateOptionsResponse object
 This constructor will assign default values to properties that have it defined,
@@ -27,20 +27,20 @@ but it doesn't guarantee that properties required by API are set
 
 ### GetVuhUsage
 
-`func (o *ValidateOptionsResponse) GetVuhUsage() float64`
+`func (o *ValidateOptionsResponse) GetVuhUsage() float32`
 
 GetVuhUsage returns the VuhUsage field if non-nil, zero value otherwise.
 
 ### GetVuhUsageOk
 
-`func (o *ValidateOptionsResponse) GetVuhUsageOk() (*float64, bool)`
+`func (o *ValidateOptionsResponse) GetVuhUsageOk() (*float32, bool)`
 
 GetVuhUsageOk returns a tuple with the VuhUsage field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetVuhUsage
 
-`func (o *ValidateOptionsResponse) SetVuhUsage(v float64)`
+`func (o *ValidateOptionsResponse) SetVuhUsage(v float32)`
 
 SetVuhUsage sets VuhUsage field to given value.
 

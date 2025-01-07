@@ -28,7 +28,7 @@ type LoadTest struct {
 	// Unique name of the test within the project
 	Name string `json:"name"`
 	// Id of a baseline test run used for results comparison
-	BaselineTestRunId int32 `json:"baseline_test_run_id"`
+	BaselineTestRunId NullableInt32 `json:"baseline_test_run_id"`
 	// The date when the test was created
 	Created time.Time `json:"created"`
 	// The date when the test was last time updated
@@ -42,7 +42,7 @@ type _LoadTest LoadTest
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewLoadTest(id int32, projectId int32, name string, baselineTestRunId int32, created time.Time, updated time.Time) *LoadTest {
+func NewLoadTest(id int32, projectId int32, name string, baselineTestRunId NullableInt32, created time.Time, updated time.Time) *LoadTest {
 	this := LoadTest{}
 	this.Id = id
 	this.ProjectId = projectId
@@ -134,27 +134,29 @@ func (o *LoadTest) SetName(v string) {
 }
 
 // GetBaselineTestRunId returns the BaselineTestRunId field value
+// If the value is explicit nil, the zero value for int32 will be returned
 func (o *LoadTest) GetBaselineTestRunId() int32 {
-	if o == nil {
+	if o == nil || o.BaselineTestRunId.Get() == nil {
 		var ret int32
 		return ret
 	}
 
-	return o.BaselineTestRunId
+	return *o.BaselineTestRunId.Get()
 }
 
 // GetBaselineTestRunIdOk returns a tuple with the BaselineTestRunId field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *LoadTest) GetBaselineTestRunIdOk() (*int32, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.BaselineTestRunId, true
+	return o.BaselineTestRunId.Get(), o.BaselineTestRunId.IsSet()
 }
 
 // SetBaselineTestRunId sets field value
 func (o *LoadTest) SetBaselineTestRunId(v int32) {
-	o.BaselineTestRunId = v
+	o.BaselineTestRunId.Set(&v)
 }
 
 // GetCreated returns the Created field value
@@ -218,7 +220,7 @@ func (o LoadTest) ToMap() (map[string]interface{}, error) {
 	toSerialize["id"] = o.Id
 	toSerialize["project_id"] = o.ProjectId
 	toSerialize["name"] = o.Name
-	toSerialize["baseline_test_run_id"] = o.BaselineTestRunId
+	toSerialize["baseline_test_run_id"] = o.BaselineTestRunId.Get()
 	toSerialize["created"] = o.Created
 	toSerialize["updated"] = o.Updated
 

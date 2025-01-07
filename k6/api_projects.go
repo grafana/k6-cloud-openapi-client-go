@@ -1,9 +1,9 @@
 /*
+Grafana Cloud k6
 
+HTTP API for interacting with Grafana Cloud k6.
 
-HTTP API for interacting with k6 Cloud.
-
-API version: 0.0.0
+API version: 1.0.0
 Contact: info@grafana.com
 */
 
@@ -17,69 +17,529 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	"os"
 	"strings"
 )
 
 // ProjectsAPIService ProjectsAPI service
 type ProjectsAPIService service
 
-type ApiLoadTestsListRequest struct {
-	ctx        context.Context
-	ApiService *ProjectsAPIService
-	xStackId   *string
-	id         int32
-	count      *bool
-	orderby    *string
-	skip       *int32
-	top        *int32
+type ApiProjectsCreateRequest struct {
+	ctx                   context.Context
+	ApiService            *ProjectsAPIService
+	xStackId              *int32
+	createProjectApiModel *CreateProjectApiModel
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r ApiLoadTestsListRequest) XStackId(xStackId string) ApiLoadTestsListRequest {
+func (r ApiProjectsCreateRequest) XStackId(xStackId int32) ApiProjectsCreateRequest {
 	r.xStackId = &xStackId
 	return r
 }
 
-// Include collection length in the response object as &#39;@count&#39;.
-func (r ApiLoadTestsListRequest) Count(count bool) ApiLoadTestsListRequest {
-	r.count = &count
+func (r ApiProjectsCreateRequest) CreateProjectApiModel(createProjectApiModel CreateProjectApiModel) ApiProjectsCreateRequest {
+	r.createProjectApiModel = &createProjectApiModel
 	return r
 }
 
-// Comma separated list of fields to use when ordering the results. The default order is ascending and can be reversed by appending &#x60;desc&#x60; specifier. Available fields: - name - created - updated
-func (r ApiLoadTestsListRequest) Orderby(orderby string) ApiLoadTestsListRequest {
-	r.orderby = &orderby
-	return r
-}
-
-// The initial index from which to return the results.
-func (r ApiLoadTestsListRequest) Skip(skip int32) ApiLoadTestsListRequest {
-	r.skip = &skip
-	return r
-}
-
-// Number of results to return per page.
-func (r ApiLoadTestsListRequest) Top(top int32) ApiLoadTestsListRequest {
-	r.top = &top
-	return r
-}
-
-func (r ApiLoadTestsListRequest) Execute() (*PaginatedLoadTestList, *http.Response, error) {
-	return r.ApiService.LoadTestsListExecute(r)
+func (r ApiProjectsCreateRequest) Execute() (*ProjectApiModel, *http.Response, error) {
+	return r.ApiService.ProjectsCreateExecute(r)
 }
 
 /*
-LoadTestsList Method for LoadTestsList
+ProjectsCreate Create a project.
 
-List load tests in the project.
+Create a new project.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id Id of the project
-	@return ApiLoadTestsListRequest
+	@return ApiProjectsCreateRequest
 */
-func (a *ProjectsAPIService) LoadTestsList(ctx context.Context, id int32) ApiLoadTestsListRequest {
-	return ApiLoadTestsListRequest{
+func (a *ProjectsAPIService) ProjectsCreate(ctx context.Context) ApiProjectsCreateRequest {
+	return ApiProjectsCreateRequest{
+		ApiService: a,
+		ctx:        ctx,
+	}
+}
+
+// Execute executes the request
+//
+//	@return ProjectApiModel
+func (a *ProjectsAPIService) ProjectsCreateExecute(r ApiProjectsCreateRequest) (*ProjectApiModel, *http.Response, error) {
+	var (
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ProjectApiModel
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsCreate")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/cloud/v6/projects"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.xStackId == nil {
+		return localVarReturnValue, nil, reportError("xStackId is required and must be specified")
+	}
+	if r.createProjectApiModel == nil {
+		return localVarReturnValue, nil, reportError("createProjectApiModel is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	parameterAddToHeaderOrQuery(localVarHeaderParams, "X-Stack-Id", r.xStackId, "simple", "")
+	// body params
+	localVarPostBody = r.createProjectApiModel
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 400 {
+			var v ErrorResponseApiModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 401 {
+			var v ErrorResponseApiModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v ErrorResponseApiModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 500 {
+			var v ErrorResponseApiModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiProjectsDestroyRequest struct {
+	ctx        context.Context
+	ApiService *ProjectsAPIService
+	xStackId   *int32
+	id         int32
+}
+
+// Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
+func (r ApiProjectsDestroyRequest) XStackId(xStackId int32) ApiProjectsDestroyRequest {
+	r.xStackId = &xStackId
+	return r
+}
+
+func (r ApiProjectsDestroyRequest) Execute() (*http.Response, error) {
+	return r.ApiService.ProjectsDestroyExecute(r)
+}
+
+/*
+ProjectsDestroy Delete a project.
+
+Delete a project.
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id ID of the project.
+	@return ApiProjectsDestroyRequest
+*/
+func (a *ProjectsAPIService) ProjectsDestroy(ctx context.Context, id int32) ApiProjectsDestroyRequest {
+	return ApiProjectsDestroyRequest{
+		ApiService: a,
+		ctx:        ctx,
+		id:         id,
+	}
+}
+
+// Execute executes the request
+func (a *ProjectsAPIService) ProjectsDestroyExecute(r ApiProjectsDestroyRequest) (*http.Response, error) {
+	var (
+		localVarHTTPMethod = http.MethodDelete
+		localVarPostBody   interface{}
+		formFiles          []formFile
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsDestroy")
+	if err != nil {
+		return nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/cloud/v6/projects/{id}"
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.xStackId == nil {
+		return nil, reportError("xStackId is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	parameterAddToHeaderOrQuery(localVarHeaderParams, "X-Stack-Id", r.xStackId, "simple", "")
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 409 {
+			var v ErrorResponseApiModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+			return localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 401 {
+			var v ErrorResponseApiModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+			return localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v ErrorResponseApiModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+			return localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 404 {
+			var v ErrorResponseApiModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+			return localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 500 {
+			var v ErrorResponseApiModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+		}
+		return localVarHTTPResponse, newErr
+	}
+
+	return localVarHTTPResponse, nil
+}
+
+type ApiProjectsLimitsPartialUpdateRequest struct {
+	ctx                       context.Context
+	ApiService                *ProjectsAPIService
+	xStackId                  *int32
+	id                        int32
+	patchProjectLimitsRequest *PatchProjectLimitsRequest
+}
+
+// Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
+func (r ApiProjectsLimitsPartialUpdateRequest) XStackId(xStackId int32) ApiProjectsLimitsPartialUpdateRequest {
+	r.xStackId = &xStackId
+	return r
+}
+
+func (r ApiProjectsLimitsPartialUpdateRequest) PatchProjectLimitsRequest(patchProjectLimitsRequest PatchProjectLimitsRequest) ApiProjectsLimitsPartialUpdateRequest {
+	r.patchProjectLimitsRequest = &patchProjectLimitsRequest
+	return r
+}
+
+func (r ApiProjectsLimitsPartialUpdateRequest) Execute() (*http.Response, error) {
+	return r.ApiService.ProjectsLimitsPartialUpdateExecute(r)
+}
+
+/*
+ProjectsLimitsPartialUpdate Update project limits.
+
+Update limits for a project.
+
+Set a limit to `null` to remove it.
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id ID of the project.
+	@return ApiProjectsLimitsPartialUpdateRequest
+*/
+func (a *ProjectsAPIService) ProjectsLimitsPartialUpdate(ctx context.Context, id int32) ApiProjectsLimitsPartialUpdateRequest {
+	return ApiProjectsLimitsPartialUpdateRequest{
+		ApiService: a,
+		ctx:        ctx,
+		id:         id,
+	}
+}
+
+// Execute executes the request
+func (a *ProjectsAPIService) ProjectsLimitsPartialUpdateExecute(r ApiProjectsLimitsPartialUpdateRequest) (*http.Response, error) {
+	var (
+		localVarHTTPMethod = http.MethodPatch
+		localVarPostBody   interface{}
+		formFiles          []formFile
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsLimitsPartialUpdate")
+	if err != nil {
+		return nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/cloud/v6/projects/{id}/limits"
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.xStackId == nil {
+		return nil, reportError("xStackId is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	parameterAddToHeaderOrQuery(localVarHeaderParams, "X-Stack-Id", r.xStackId, "simple", "")
+	// body params
+	localVarPostBody = r.patchProjectLimitsRequest
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 400 {
+			var v ErrorResponseApiModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+			return localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 401 {
+			var v ErrorResponseApiModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+			return localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v ErrorResponseApiModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+			return localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 404 {
+			var v ErrorResponseApiModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+			return localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 500 {
+			var v ErrorResponseApiModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+		}
+		return localVarHTTPResponse, newErr
+	}
+
+	return localVarHTTPResponse, nil
+}
+
+type ApiProjectsLimitsRetrieveRequest struct {
+	ctx        context.Context
+	ApiService *ProjectsAPIService
+	xStackId   *int32
+	id         int32
+}
+
+// Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
+func (r ApiProjectsLimitsRetrieveRequest) XStackId(xStackId int32) ApiProjectsLimitsRetrieveRequest {
+	r.xStackId = &xStackId
+	return r
+}
+
+func (r ApiProjectsLimitsRetrieveRequest) Execute() (*ProjectLimitsApiModel, *http.Response, error) {
+	return r.ApiService.ProjectsLimitsRetrieveExecute(r)
+}
+
+/*
+ProjectsLimitsRetrieve Get project limits.
+
+Fetch limits for a project.
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id ID of the project.
+	@return ApiProjectsLimitsRetrieveRequest
+*/
+func (a *ProjectsAPIService) ProjectsLimitsRetrieve(ctx context.Context, id int32) ApiProjectsLimitsRetrieveRequest {
+	return ApiProjectsLimitsRetrieveRequest{
 		ApiService: a,
 		ctx:        ctx,
 		id:         id,
@@ -88,22 +548,204 @@ func (a *ProjectsAPIService) LoadTestsList(ctx context.Context, id int32) ApiLoa
 
 // Execute executes the request
 //
-//	@return PaginatedLoadTestList
-func (a *ProjectsAPIService) LoadTestsListExecute(r ApiLoadTestsListRequest) (*PaginatedLoadTestList, *http.Response, error) {
+//	@return ProjectLimitsApiModel
+func (a *ProjectsAPIService) ProjectsLimitsRetrieveExecute(r ApiProjectsLimitsRetrieveRequest) (*ProjectLimitsApiModel, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
 		localVarPostBody    interface{}
 		formFiles           []formFile
-		localVarReturnValue *PaginatedLoadTestList
+		localVarReturnValue *ProjectLimitsApiModel
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.LoadTestsList")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsLimitsRetrieve")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/projects/{id}/load_tests"
+	localVarPath := localBasePath + "/cloud/v6/projects/{id}/limits"
 	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.xStackId == nil {
+		return localVarReturnValue, nil, reportError("xStackId is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	parameterAddToHeaderOrQuery(localVarHeaderParams, "X-Stack-Id", r.xStackId, "simple", "")
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 401 {
+			var v ErrorResponseApiModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v ErrorResponseApiModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 404 {
+			var v ErrorResponseApiModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 500 {
+			var v ErrorResponseApiModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiProjectsListRequest struct {
+	ctx        context.Context
+	ApiService *ProjectsAPIService
+	xStackId   *int32
+	count      *bool
+	orderby    *string
+	skip       *int32
+	top        *int32
+}
+
+// Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
+func (r ApiProjectsListRequest) XStackId(xStackId int32) ApiProjectsListRequest {
+	r.xStackId = &xStackId
+	return r
+}
+
+// Include collection length in the response object as &#x60;@count&#x60;.
+func (r ApiProjectsListRequest) Count(count bool) ApiProjectsListRequest {
+	r.count = &count
+	return r
+}
+
+// Comma-separated list of fields to use when ordering the results. Available fields: - created  The default ascending order can be reversed by appending the &#x60;desc&#x60; specifier.
+func (r ApiProjectsListRequest) Orderby(orderby string) ApiProjectsListRequest {
+	r.orderby = &orderby
+	return r
+}
+
+// The initial index from which to return the results.
+func (r ApiProjectsListRequest) Skip(skip int32) ApiProjectsListRequest {
+	r.skip = &skip
+	return r
+}
+
+// Number of results to return per page.
+func (r ApiProjectsListRequest) Top(top int32) ApiProjectsListRequest {
+	r.top = &top
+	return r
+}
+
+func (r ApiProjectsListRequest) Execute() (*ProjectListResponse, *http.Response, error) {
+	return r.ApiService.ProjectsListExecute(r)
+}
+
+/*
+ProjectsList List all projects.
+
+List all available projects.
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiProjectsListRequest
+*/
+func (a *ProjectsAPIService) ProjectsList(ctx context.Context) ApiProjectsListRequest {
+	return ApiProjectsListRequest{
+		ApiService: a,
+		ctx:        ctx,
+	}
+}
+
+// Execute executes the request
+//
+//	@return ProjectListResponse
+func (a *ProjectsAPIService) ProjectsListExecute(r ApiProjectsListRequest) (*ProjectListResponse, *http.Response, error) {
+	var (
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ProjectListResponse
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsList")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/cloud/v6/projects"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -117,9 +759,6 @@ func (a *ProjectsAPIService) LoadTestsListExecute(r ApiLoadTestsListRequest) (*P
 	}
 	if r.orderby != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "$orderby", r.orderby, "form", "")
-	} else {
-		var defaultValue string = "created desc"
-		r.orderby = &defaultValue
 	}
 	if r.skip != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "$skip", r.skip, "form", "")
@@ -171,7 +810,7 @@ func (a *ProjectsAPIService) LoadTestsListExecute(r ApiLoadTestsListRequest) (*P
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 400 {
-			var v ApiErrorResponse
+			var v ErrorResponseApiModel
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -181,8 +820,30 @@ func (a *ProjectsAPIService) LoadTestsListExecute(r ApiLoadTestsListRequest) (*P
 			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
-		if localVarHTTPResponse.StatusCode == 404 {
-			var v ApiErrorResponse
+		if localVarHTTPResponse.StatusCode == 401 {
+			var v ErrorResponseApiModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v ErrorResponseApiModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 500 {
+			var v ErrorResponseApiModel
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -206,393 +867,40 @@ func (a *ProjectsAPIService) LoadTestsListExecute(r ApiLoadTestsListRequest) (*P
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiProjectDeleteRequest struct {
-	ctx        context.Context
-	ApiService *ProjectsAPIService
-	xStackId   *string
-	id         int64
-}
-
-// Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r ApiProjectDeleteRequest) XStackId(xStackId string) ApiProjectDeleteRequest {
-	r.xStackId = &xStackId
-	return r
-}
-
-func (r ApiProjectDeleteRequest) Execute() (*http.Response, error) {
-	return r.ApiService.ProjectDeleteExecute(r)
-}
-
-/*
-ProjectDelete Method for ProjectDelete
-
-Delete a project.
-
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id Project ID
-	@return ApiProjectDeleteRequest
-*/
-func (a *ProjectsAPIService) ProjectDelete(ctx context.Context, id int64) ApiProjectDeleteRequest {
-	return ApiProjectDeleteRequest{
-		ApiService: a,
-		ctx:        ctx,
-		id:         id,
-	}
-}
-
-// Execute executes the request
-func (a *ProjectsAPIService) ProjectDeleteExecute(r ApiProjectDeleteRequest) (*http.Response, error) {
-	var (
-		localVarHTTPMethod = http.MethodDelete
-		localVarPostBody   interface{}
-		formFiles          []formFile
-	)
-
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectDelete")
-	if err != nil {
-		return nil, &GenericOpenAPIError{error: err.Error()}
-	}
-
-	localVarPath := localBasePath + "/projects/{id}"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
-
-	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := url.Values{}
-	localVarFormParams := url.Values{}
-	if r.xStackId == nil {
-		return nil, reportError("xStackId is required and must be specified")
-	}
-
-	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{}
-
-	// set Content-Type header
-	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
-	if localVarHTTPContentType != "" {
-		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
-	}
-
-	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
-
-	// set Accept header
-	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
-	if localVarHTTPHeaderAccept != "" {
-		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
-	}
-	parameterAddToHeaderOrQuery(localVarHeaderParams, "X-Stack-Id", r.xStackId, "simple", "")
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
-	if err != nil {
-		return nil, err
-	}
-
-	localVarHTTPResponse, err := a.client.callAPI(req)
-	if err != nil || localVarHTTPResponse == nil {
-		return localVarHTTPResponse, err
-	}
-
-	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
-	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
-	if err != nil {
-		return localVarHTTPResponse, err
-	}
-
-	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
-		}
-		if localVarHTTPResponse.StatusCode == 404 {
-			var v ApiErrorResponse
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarHTTPResponse, newErr
-			}
-			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-			newErr.model = v
-		}
-		return localVarHTTPResponse, newErr
-	}
-
-	return localVarHTTPResponse, nil
-}
-
-type ApiProjectRetrieveRequest struct {
-	ctx        context.Context
-	ApiService *ProjectsAPIService
-	xStackId   *string
-	id         int32
-}
-
-// Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r ApiProjectRetrieveRequest) XStackId(xStackId string) ApiProjectRetrieveRequest {
-	r.xStackId = &xStackId
-	return r
-}
-
-func (r ApiProjectRetrieveRequest) Execute() (*Project, *http.Response, error) {
-	return r.ApiService.ProjectRetrieveExecute(r)
-}
-
-/*
-ProjectRetrieve Method for ProjectRetrieve
-
-Retrieve a single project.
-
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id Id of the project
-	@return ApiProjectRetrieveRequest
-*/
-func (a *ProjectsAPIService) ProjectRetrieve(ctx context.Context, id int32) ApiProjectRetrieveRequest {
-	return ApiProjectRetrieveRequest{
-		ApiService: a,
-		ctx:        ctx,
-		id:         id,
-	}
-}
-
-// Execute executes the request
-//
-//	@return Project
-func (a *ProjectsAPIService) ProjectRetrieveExecute(r ApiProjectRetrieveRequest) (*Project, *http.Response, error) {
-	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *Project
-	)
-
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectRetrieve")
-	if err != nil {
-		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
-	}
-
-	localVarPath := localBasePath + "/projects/{id}"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
-
-	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := url.Values{}
-	localVarFormParams := url.Values{}
-	if r.xStackId == nil {
-		return localVarReturnValue, nil, reportError("xStackId is required and must be specified")
-	}
-
-	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{}
-
-	// set Content-Type header
-	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
-	if localVarHTTPContentType != "" {
-		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
-	}
-
-	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
-
-	// set Accept header
-	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
-	if localVarHTTPHeaderAccept != "" {
-		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
-	}
-	parameterAddToHeaderOrQuery(localVarHeaderParams, "X-Stack-Id", r.xStackId, "simple", "")
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
-	if err != nil {
-		return localVarReturnValue, nil, err
-	}
-
-	localVarHTTPResponse, err := a.client.callAPI(req)
-	if err != nil || localVarHTTPResponse == nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
-	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
-	if err != nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
-		}
-		if localVarHTTPResponse.StatusCode == 404 {
-			var v ApiErrorResponse
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-			newErr.model = v
-			return localVarReturnValue, localVarHTTPResponse, newErr
-		}
-		if localVarHTTPResponse.StatusCode == 400 {
-			var v ApiErrorResponse
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-			newErr.model = v
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-	if err != nil {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	return localVarReturnValue, localVarHTTPResponse, nil
-}
-
-type ApiProjectSetDefaultRequest struct {
-	ctx        context.Context
-	ApiService *ProjectsAPIService
-	xStackId   *string
-	id         int32
-}
-
-// Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r ApiProjectSetDefaultRequest) XStackId(xStackId string) ApiProjectSetDefaultRequest {
-	r.xStackId = &xStackId
-	return r
-}
-
-func (r ApiProjectSetDefaultRequest) Execute() (*http.Response, error) {
-	return r.ApiService.ProjectSetDefaultExecute(r)
-}
-
-/*
-ProjectSetDefault Method for ProjectSetDefault
-
-Set this project as default for running tests in the organization. This will replace the current default project, if any.
-
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id Id of the project
-	@return ApiProjectSetDefaultRequest
-*/
-func (a *ProjectsAPIService) ProjectSetDefault(ctx context.Context, id int32) ApiProjectSetDefaultRequest {
-	return ApiProjectSetDefaultRequest{
-		ApiService: a,
-		ctx:        ctx,
-		id:         id,
-	}
-}
-
-// Execute executes the request
-func (a *ProjectsAPIService) ProjectSetDefaultExecute(r ApiProjectSetDefaultRequest) (*http.Response, error) {
-	var (
-		localVarHTTPMethod = http.MethodPost
-		localVarPostBody   interface{}
-		formFiles          []formFile
-	)
-
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectSetDefault")
-	if err != nil {
-		return nil, &GenericOpenAPIError{error: err.Error()}
-	}
-
-	localVarPath := localBasePath + "/projects/{id}/set_default"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
-
-	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := url.Values{}
-	localVarFormParams := url.Values{}
-	if r.xStackId == nil {
-		return nil, reportError("xStackId is required and must be specified")
-	}
-
-	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{}
-
-	// set Content-Type header
-	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
-	if localVarHTTPContentType != "" {
-		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
-	}
-
-	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{}
-
-	// set Accept header
-	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
-	if localVarHTTPHeaderAccept != "" {
-		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
-	}
-	parameterAddToHeaderOrQuery(localVarHeaderParams, "X-Stack-Id", r.xStackId, "simple", "")
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
-	if err != nil {
-		return nil, err
-	}
-
-	localVarHTTPResponse, err := a.client.callAPI(req)
-	if err != nil || localVarHTTPResponse == nil {
-		return localVarHTTPResponse, err
-	}
-
-	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
-	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
-	if err != nil {
-		return localVarHTTPResponse, err
-	}
-
-	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
-		}
-		return localVarHTTPResponse, newErr
-	}
-
-	return localVarHTTPResponse, nil
-}
-
-type ApiProjectUpdateRequest struct {
+type ApiProjectsPartialUpdateRequest struct {
 	ctx                  context.Context
 	ApiService           *ProjectsAPIService
-	xStackId             *string
+	xStackId             *int32
 	id                   int32
-	projectUpdateRequest *ProjectUpdateRequest
+	patchProjectApiModel *PatchProjectApiModel
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r ApiProjectUpdateRequest) XStackId(xStackId string) ApiProjectUpdateRequest {
+func (r ApiProjectsPartialUpdateRequest) XStackId(xStackId int32) ApiProjectsPartialUpdateRequest {
 	r.xStackId = &xStackId
 	return r
 }
 
-// New values for an existing &#x60;Project&#x60; item.
-func (r ApiProjectUpdateRequest) ProjectUpdateRequest(projectUpdateRequest ProjectUpdateRequest) ApiProjectUpdateRequest {
-	r.projectUpdateRequest = &projectUpdateRequest
+func (r ApiProjectsPartialUpdateRequest) PatchProjectApiModel(patchProjectApiModel PatchProjectApiModel) ApiProjectsPartialUpdateRequest {
+	r.patchProjectApiModel = &patchProjectApiModel
 	return r
 }
 
-func (r ApiProjectUpdateRequest) Execute() (*http.Response, error) {
-	return r.ApiService.ProjectUpdateExecute(r)
+func (r ApiProjectsPartialUpdateRequest) Execute() (*http.Response, error) {
+	return r.ApiService.ProjectsPartialUpdateExecute(r)
 }
 
 /*
-ProjectUpdate Method for ProjectUpdate
+ProjectsPartialUpdate Update a project.
 
-Update project fields.
+Update a project.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id Id of the project
-	@return ApiProjectUpdateRequest
+	@param id ID of the project.
+	@return ApiProjectsPartialUpdateRequest
 */
-func (a *ProjectsAPIService) ProjectUpdate(ctx context.Context, id int32) ApiProjectUpdateRequest {
-	return ApiProjectUpdateRequest{
+func (a *ProjectsAPIService) ProjectsPartialUpdate(ctx context.Context, id int32) ApiProjectsPartialUpdateRequest {
+	return ApiProjectsPartialUpdateRequest{
 		ApiService: a,
 		ctx:        ctx,
 		id:         id,
@@ -600,19 +908,19 @@ func (a *ProjectsAPIService) ProjectUpdate(ctx context.Context, id int32) ApiPro
 }
 
 // Execute executes the request
-func (a *ProjectsAPIService) ProjectUpdateExecute(r ApiProjectUpdateRequest) (*http.Response, error) {
+func (a *ProjectsAPIService) ProjectsPartialUpdateExecute(r ApiProjectsPartialUpdateRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod = http.MethodPatch
 		localVarPostBody   interface{}
 		formFiles          []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectUpdate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsPartialUpdate")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/projects/{id}"
+	localVarPath := localBasePath + "/cloud/v6/projects/{id}"
 	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
@@ -620,6 +928,9 @@ func (a *ProjectsAPIService) ProjectUpdateExecute(r ApiProjectUpdateRequest) (*h
 	localVarFormParams := url.Values{}
 	if r.xStackId == nil {
 		return nil, reportError("xStackId is required and must be specified")
+	}
+	if r.patchProjectApiModel == nil {
+		return nil, reportError("patchProjectApiModel is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -641,7 +952,7 @@ func (a *ProjectsAPIService) ProjectUpdateExecute(r ApiProjectUpdateRequest) (*h
 	}
 	parameterAddToHeaderOrQuery(localVarHeaderParams, "X-Stack-Id", r.xStackId, "simple", "")
 	// body params
-	localVarPostBody = r.projectUpdateRequest
+	localVarPostBody = r.patchProjectApiModel
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return nil, err
@@ -665,7 +976,29 @@ func (a *ProjectsAPIService) ProjectUpdateExecute(r ApiProjectUpdateRequest) (*h
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 400 {
-			var v ApiErrorResponse
+			var v ErrorResponseApiModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+			return localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 401 {
+			var v ErrorResponseApiModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+			return localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v ErrorResponseApiModel
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -676,7 +1009,7 @@ func (a *ProjectsAPIService) ProjectUpdateExecute(r ApiProjectUpdateRequest) (*h
 			return localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
-			var v ApiErrorResponse
+			var v ErrorResponseApiModel
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -686,8 +1019,8 @@ func (a *ProjectsAPIService) ProjectUpdateExecute(r ApiProjectUpdateRequest) (*h
 			newErr.model = v
 			return localVarHTTPResponse, newErr
 		}
-		if localVarHTTPResponse.StatusCode == 409 {
-			var v ApiErrorResponse
+		if localVarHTTPResponse.StatusCode == 500 {
+			var v ErrorResponseApiModel
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -702,208 +1035,58 @@ func (a *ProjectsAPIService) ProjectUpdateExecute(r ApiProjectUpdateRequest) (*h
 	return localVarHTTPResponse, nil
 }
 
-type ApiProjectsCreateRequest struct {
-	ctx                  context.Context
-	ApiService           *ProjectsAPIService
-	createProjectRequest *CreateProjectRequest
-}
-
-// New &#x60;Project&#x60; item to be created
-func (r ApiProjectsCreateRequest) CreateProjectRequest(createProjectRequest CreateProjectRequest) ApiProjectsCreateRequest {
-	r.createProjectRequest = &createProjectRequest
-	return r
-}
-
-func (r ApiProjectsCreateRequest) Execute() (*Project, *http.Response, error) {
-	return r.ApiService.ProjectsCreateExecute(r)
-}
-
-/*
-ProjectsCreate Method for ProjectsCreate
-
-Create a new project.
-
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiProjectsCreateRequest
-*/
-func (a *ProjectsAPIService) ProjectsCreate(ctx context.Context) ApiProjectsCreateRequest {
-	return ApiProjectsCreateRequest{
-		ApiService: a,
-		ctx:        ctx,
-	}
-}
-
-// Execute executes the request
-//
-//	@return Project
-func (a *ProjectsAPIService) ProjectsCreateExecute(r ApiProjectsCreateRequest) (*Project, *http.Response, error) {
-	var (
-		localVarHTTPMethod  = http.MethodPost
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *Project
-	)
-
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsCreate")
-	if err != nil {
-		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
-	}
-
-	localVarPath := localBasePath + "/projects"
-
-	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := url.Values{}
-	localVarFormParams := url.Values{}
-
-	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{"application/json"}
-
-	// set Content-Type header
-	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
-	if localVarHTTPContentType != "" {
-		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
-	}
-
-	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
-
-	// set Accept header
-	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
-	if localVarHTTPHeaderAccept != "" {
-		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
-	}
-	// body params
-	localVarPostBody = r.createProjectRequest
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
-	if err != nil {
-		return localVarReturnValue, nil, err
-	}
-
-	localVarHTTPResponse, err := a.client.callAPI(req)
-	if err != nil || localVarHTTPResponse == nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
-	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
-	if err != nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
-		}
-		if localVarHTTPResponse.StatusCode == 409 {
-			var v ApiErrorResponse
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-			newErr.model = v
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-	if err != nil {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	return localVarReturnValue, localVarHTTPResponse, nil
-}
-
-type ApiProjectsListRequest struct {
+type ApiProjectsRetrieveRequest struct {
 	ctx        context.Context
 	ApiService *ProjectsAPIService
-	xStackId   *string
-	orderby    *[]string
-	filter     *string
-	top        *int32
-	skip       *int32
-	count      *bool
+	xStackId   *int32
+	id         int32
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r ApiProjectsListRequest) XStackId(xStackId string) ApiProjectsListRequest {
+func (r ApiProjectsRetrieveRequest) XStackId(xStackId int32) ApiProjectsRetrieveRequest {
 	r.xStackId = &xStackId
 	return r
 }
 
-// Comma separated list of fields to use when ordering the results. Use &#x60;field_name desc&#x60; for descending ordering.
-func (r ApiProjectsListRequest) Orderby(orderby []string) ApiProjectsListRequest {
-	r.orderby = &orderby
-	return r
-}
-
-// Filter items by property values.
-func (r ApiProjectsListRequest) Filter(filter string) ApiProjectsListRequest {
-	r.filter = &filter
-	return r
-}
-
-// Limit number of returned records.
-func (r ApiProjectsListRequest) Top(top int32) ApiProjectsListRequest {
-	r.top = &top
-	return r
-}
-
-// Skip (offset) specified number of records before returning result.
-func (r ApiProjectsListRequest) Skip(skip int32) ApiProjectsListRequest {
-	r.skip = &skip
-	return r
-}
-
-// Return count of items after applying any filtering.
-func (r ApiProjectsListRequest) Count(count bool) ApiProjectsListRequest {
-	r.count = &count
-	return r
-}
-
-func (r ApiProjectsListRequest) Execute() (*ProjectsList200Response, *http.Response, error) {
-	return r.ApiService.ProjectsListExecute(r)
+func (r ApiProjectsRetrieveRequest) Execute() (*ProjectApiModel, *http.Response, error) {
+	return r.ApiService.ProjectsRetrieveExecute(r)
 }
 
 /*
-ProjectsList Method for ProjectsList
+ProjectsRetrieve Get a project by ID.
 
-List projects.
+Retrieve a single project.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiProjectsListRequest
+	@param id ID of the project.
+	@return ApiProjectsRetrieveRequest
 */
-func (a *ProjectsAPIService) ProjectsList(ctx context.Context) ApiProjectsListRequest {
-	return ApiProjectsListRequest{
+func (a *ProjectsAPIService) ProjectsRetrieve(ctx context.Context, id int32) ApiProjectsRetrieveRequest {
+	return ApiProjectsRetrieveRequest{
 		ApiService: a,
 		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
 //
-//	@return ProjectsList200Response
-func (a *ProjectsAPIService) ProjectsListExecute(r ApiProjectsListRequest) (*ProjectsList200Response, *http.Response, error) {
+//	@return ProjectApiModel
+func (a *ProjectsAPIService) ProjectsRetrieveExecute(r ApiProjectsRetrieveRequest) (*ProjectApiModel, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
 		localVarPostBody    interface{}
 		formFiles           []formFile
-		localVarReturnValue *ProjectsList200Response
+		localVarReturnValue *ProjectApiModel
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsList")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsRetrieve")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/projects"
+	localVarPath := localBasePath + "/cloud/v6/projects/{id}"
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -912,21 +1095,6 @@ func (a *ProjectsAPIService) ProjectsListExecute(r ApiProjectsListRequest) (*Pro
 		return localVarReturnValue, nil, reportError("xStackId is required and must be specified")
 	}
 
-	if r.orderby != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "$orderby", r.orderby, "form", "csv")
-	}
-	if r.filter != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "$filter", r.filter, "form", "")
-	}
-	if r.top != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "$top", r.top, "form", "")
-	}
-	if r.skip != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "$skip", r.skip, "form", "")
-	}
-	if r.count != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "$count", r.count, "form", "")
-	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
 
@@ -967,179 +1135,8 @@ func (a *ProjectsAPIService) ProjectsListExecute(r ApiProjectsListRequest) (*Pro
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
-		if localVarHTTPResponse.StatusCode == 400 {
-			var v ApiErrorResponse
-			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-			if err != nil {
-				newErr.error = err.Error()
-				return localVarReturnValue, localVarHTTPResponse, newErr
-			}
-			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-			newErr.model = v
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-	if err != nil {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	return localVarReturnValue, localVarHTTPResponse, nil
-}
-
-type ApiProjectsLoadTestsCreateRequest struct {
-	ctx        context.Context
-	ApiService *ProjectsAPIService
-	xStackId   *string
-	id         int32
-	name       *string
-	script     *os.File
-}
-
-// Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r ApiProjectsLoadTestsCreateRequest) XStackId(xStackId string) ApiProjectsLoadTestsCreateRequest {
-	r.xStackId = &xStackId
-	return r
-}
-
-// Unique name of the test within the project
-func (r ApiProjectsLoadTestsCreateRequest) Name(name string) ApiProjectsLoadTestsCreateRequest {
-	r.name = &name
-	return r
-}
-
-// k6 script file that is executed when the test is started
-func (r ApiProjectsLoadTestsCreateRequest) Script(script *os.File) ApiProjectsLoadTestsCreateRequest {
-	r.script = script
-	return r
-}
-
-func (r ApiProjectsLoadTestsCreateRequest) Execute() (*LoadTest, *http.Response, error) {
-	return r.ApiService.ProjectsLoadTestsCreateExecute(r)
-}
-
-/*
-ProjectsLoadTestsCreate Method for ProjectsLoadTestsCreate
-
-Create a new test in the project.
-
-The script can be either in the form of a single javascript file or a k6 .tar archive -
-the type is auto-detected by the API. Any received payload that is not a .tar archive
-is assumed to be a javascript file.
-
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id Id of the project
-	@return ApiProjectsLoadTestsCreateRequest
-*/
-func (a *ProjectsAPIService) ProjectsLoadTestsCreate(ctx context.Context, id int32) ApiProjectsLoadTestsCreateRequest {
-	return ApiProjectsLoadTestsCreateRequest{
-		ApiService: a,
-		ctx:        ctx,
-		id:         id,
-	}
-}
-
-// Execute executes the request
-//
-//	@return LoadTest
-func (a *ProjectsAPIService) ProjectsLoadTestsCreateExecute(r ApiProjectsLoadTestsCreateRequest) (*LoadTest, *http.Response, error) {
-	var (
-		localVarHTTPMethod  = http.MethodPost
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *LoadTest
-	)
-
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsLoadTestsCreate")
-	if err != nil {
-		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
-	}
-
-	localVarPath := localBasePath + "/projects/{id}/load_tests"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
-
-	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := url.Values{}
-	localVarFormParams := url.Values{}
-	if r.xStackId == nil {
-		return localVarReturnValue, nil, reportError("xStackId is required and must be specified")
-	}
-	if r.name == nil {
-		return localVarReturnValue, nil, reportError("name is required and must be specified")
-	}
-	if strlen(*r.name) < 1 {
-		return localVarReturnValue, nil, reportError("name must have at least 1 elements")
-	}
-	if strlen(*r.name) > 300 {
-		return localVarReturnValue, nil, reportError("name must have less than 300 elements")
-	}
-	if r.script == nil {
-		return localVarReturnValue, nil, reportError("script is required and must be specified")
-	}
-
-	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{"multipart/form-data"}
-
-	// set Content-Type header
-	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
-	if localVarHTTPContentType != "" {
-		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
-	}
-
-	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
-
-	// set Accept header
-	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
-	if localVarHTTPHeaderAccept != "" {
-		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
-	}
-	parameterAddToHeaderOrQuery(localVarHeaderParams, "X-Stack-Id", r.xStackId, "simple", "")
-	parameterAddToHeaderOrQuery(localVarFormParams, "name", r.name, "", "")
-	var scriptLocalVarFormFileName string
-	var scriptLocalVarFileName string
-	var scriptLocalVarFileBytes []byte
-
-	scriptLocalVarFormFileName = "script"
-	scriptLocalVarFile := r.script
-
-	if scriptLocalVarFile != nil {
-		fbs, _ := io.ReadAll(scriptLocalVarFile)
-
-		scriptLocalVarFileBytes = fbs
-		scriptLocalVarFileName = scriptLocalVarFile.Name()
-		scriptLocalVarFile.Close()
-		formFiles = append(formFiles, formFile{fileBytes: scriptLocalVarFileBytes, fileName: scriptLocalVarFileName, formFileName: scriptLocalVarFormFileName})
-	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
-	if err != nil {
-		return localVarReturnValue, nil, err
-	}
-
-	localVarHTTPResponse, err := a.client.callAPI(req)
-	if err != nil || localVarHTTPResponse == nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
-	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
-	if err != nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
-		}
-		if localVarHTTPResponse.StatusCode == 400 {
-			var v ApiErrorResponse
+		if localVarHTTPResponse.StatusCode == 401 {
+			var v ErrorResponseApiModel
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -1149,8 +1146,30 @@ func (a *ProjectsAPIService) ProjectsLoadTestsCreateExecute(r ApiProjectsLoadTes
 			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
-		if localVarHTTPResponse.StatusCode == 409 {
-			var v ApiErrorResponse
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v ErrorResponseApiModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 404 {
+			var v ErrorResponseApiModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 500 {
+			var v ErrorResponseApiModel
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()

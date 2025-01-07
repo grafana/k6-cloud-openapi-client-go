@@ -21,11 +21,11 @@ var _ MappedNullable = &TestRunStatusExtra{}
 // TestRunStatusExtra Extra information specific to the test run status.
 type TestRunStatusExtra struct {
 	// The user that set the status if applicable.
-	ByUser *int32 `json:"by_user,omitempty"`
+	ByUser NullableInt32 `json:"by_user,omitempty"`
 	// Human-readable string describing the error if applicable.
-	Message *string `json:"message,omitempty"`
+	Message NullableString `json:"message,omitempty"`
 	// Service-defined error code if applicable.
-	Code                 *string `json:"code,omitempty"`
+	Code                 NullableString `json:"code,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -48,100 +48,133 @@ func NewTestRunStatusExtraWithDefaults() *TestRunStatusExtra {
 	return &this
 }
 
-// GetByUser returns the ByUser field value if set, zero value otherwise.
+// GetByUser returns the ByUser field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *TestRunStatusExtra) GetByUser() int32 {
-	if o == nil || IsNil(o.ByUser) {
+	if o == nil || IsNil(o.ByUser.Get()) {
 		var ret int32
 		return ret
 	}
-	return *o.ByUser
+	return *o.ByUser.Get()
 }
 
 // GetByUserOk returns a tuple with the ByUser field value if set, nil otherwise
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *TestRunStatusExtra) GetByUserOk() (*int32, bool) {
-	if o == nil || IsNil(o.ByUser) {
+	if o == nil {
 		return nil, false
 	}
-	return o.ByUser, true
+	return o.ByUser.Get(), o.ByUser.IsSet()
 }
 
 // HasByUser returns a boolean if a field has been set.
 func (o *TestRunStatusExtra) HasByUser() bool {
-	if o != nil && !IsNil(o.ByUser) {
+	if o != nil && o.ByUser.IsSet() {
 		return true
 	}
 
 	return false
 }
 
-// SetByUser gets a reference to the given int32 and assigns it to the ByUser field.
+// SetByUser gets a reference to the given NullableInt32 and assigns it to the ByUser field.
 func (o *TestRunStatusExtra) SetByUser(v int32) {
-	o.ByUser = &v
+	o.ByUser.Set(&v)
 }
 
-// GetMessage returns the Message field value if set, zero value otherwise.
+// SetByUserNil sets the value for ByUser to be an explicit nil
+func (o *TestRunStatusExtra) SetByUserNil() {
+	o.ByUser.Set(nil)
+}
+
+// UnsetByUser ensures that no value is present for ByUser, not even an explicit nil
+func (o *TestRunStatusExtra) UnsetByUser() {
+	o.ByUser.Unset()
+}
+
+// GetMessage returns the Message field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *TestRunStatusExtra) GetMessage() string {
-	if o == nil || IsNil(o.Message) {
+	if o == nil || IsNil(o.Message.Get()) {
 		var ret string
 		return ret
 	}
-	return *o.Message
+	return *o.Message.Get()
 }
 
 // GetMessageOk returns a tuple with the Message field value if set, nil otherwise
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *TestRunStatusExtra) GetMessageOk() (*string, bool) {
-	if o == nil || IsNil(o.Message) {
+	if o == nil {
 		return nil, false
 	}
-	return o.Message, true
+	return o.Message.Get(), o.Message.IsSet()
 }
 
 // HasMessage returns a boolean if a field has been set.
 func (o *TestRunStatusExtra) HasMessage() bool {
-	if o != nil && !IsNil(o.Message) {
+	if o != nil && o.Message.IsSet() {
 		return true
 	}
 
 	return false
 }
 
-// SetMessage gets a reference to the given string and assigns it to the Message field.
+// SetMessage gets a reference to the given NullableString and assigns it to the Message field.
 func (o *TestRunStatusExtra) SetMessage(v string) {
-	o.Message = &v
+	o.Message.Set(&v)
 }
 
-// GetCode returns the Code field value if set, zero value otherwise.
+// SetMessageNil sets the value for Message to be an explicit nil
+func (o *TestRunStatusExtra) SetMessageNil() {
+	o.Message.Set(nil)
+}
+
+// UnsetMessage ensures that no value is present for Message, not even an explicit nil
+func (o *TestRunStatusExtra) UnsetMessage() {
+	o.Message.Unset()
+}
+
+// GetCode returns the Code field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *TestRunStatusExtra) GetCode() string {
-	if o == nil || IsNil(o.Code) {
+	if o == nil || IsNil(o.Code.Get()) {
 		var ret string
 		return ret
 	}
-	return *o.Code
+	return *o.Code.Get()
 }
 
 // GetCodeOk returns a tuple with the Code field value if set, nil otherwise
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *TestRunStatusExtra) GetCodeOk() (*string, bool) {
-	if o == nil || IsNil(o.Code) {
+	if o == nil {
 		return nil, false
 	}
-	return o.Code, true
+	return o.Code.Get(), o.Code.IsSet()
 }
 
 // HasCode returns a boolean if a field has been set.
 func (o *TestRunStatusExtra) HasCode() bool {
-	if o != nil && !IsNil(o.Code) {
+	if o != nil && o.Code.IsSet() {
 		return true
 	}
 
 	return false
 }
 
-// SetCode gets a reference to the given string and assigns it to the Code field.
+// SetCode gets a reference to the given NullableString and assigns it to the Code field.
 func (o *TestRunStatusExtra) SetCode(v string) {
-	o.Code = &v
+	o.Code.Set(&v)
+}
+
+// SetCodeNil sets the value for Code to be an explicit nil
+func (o *TestRunStatusExtra) SetCodeNil() {
+	o.Code.Set(nil)
+}
+
+// UnsetCode ensures that no value is present for Code, not even an explicit nil
+func (o *TestRunStatusExtra) UnsetCode() {
+	o.Code.Unset()
 }
 
 func (o TestRunStatusExtra) MarshalJSON() ([]byte, error) {
@@ -154,14 +187,14 @@ func (o TestRunStatusExtra) MarshalJSON() ([]byte, error) {
 
 func (o TestRunStatusExtra) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if !IsNil(o.ByUser) {
-		toSerialize["by_user"] = o.ByUser
+	if o.ByUser.IsSet() {
+		toSerialize["by_user"] = o.ByUser.Get()
 	}
-	if !IsNil(o.Message) {
-		toSerialize["message"] = o.Message
+	if o.Message.IsSet() {
+		toSerialize["message"] = o.Message.Get()
 	}
-	if !IsNil(o.Code) {
-		toSerialize["code"] = o.Code
+	if o.Code.IsSet() {
+		toSerialize["code"] = o.Code.Get()
 	}
 
 	for key, value := range o.AdditionalProperties {

@@ -24,7 +24,7 @@ type StaticIP struct {
 	// Id of the Static IP.
 	Id int32 `json:"id"`
 	// Acquired IP address or null if the IP is still in the `provisioning` status.
-	Ip *string `json:"ip,omitempty"`
+	Ip NullableString `json:"ip,omitempty"`
 	// The date and time the Static IP acquisition was requested.
 	Created time.Time `json:"created"`
 	// Provisioning status of the Static IP. Only the IPs with status `provisioned` areavailable in tests.  * `provisioning` - provisioning * `provisioned` - provisioned * `releasing` - releasing
@@ -81,36 +81,47 @@ func (o *StaticIP) SetId(v int32) {
 	o.Id = v
 }
 
-// GetIp returns the Ip field value if set, zero value otherwise.
+// GetIp returns the Ip field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *StaticIP) GetIp() string {
-	if o == nil || IsNil(o.Ip) {
+	if o == nil || IsNil(o.Ip.Get()) {
 		var ret string
 		return ret
 	}
-	return *o.Ip
+	return *o.Ip.Get()
 }
 
 // GetIpOk returns a tuple with the Ip field value if set, nil otherwise
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *StaticIP) GetIpOk() (*string, bool) {
-	if o == nil || IsNil(o.Ip) {
+	if o == nil {
 		return nil, false
 	}
-	return o.Ip, true
+	return o.Ip.Get(), o.Ip.IsSet()
 }
 
 // HasIp returns a boolean if a field has been set.
 func (o *StaticIP) HasIp() bool {
-	if o != nil && !IsNil(o.Ip) {
+	if o != nil && o.Ip.IsSet() {
 		return true
 	}
 
 	return false
 }
 
-// SetIp gets a reference to the given string and assigns it to the Ip field.
+// SetIp gets a reference to the given NullableString and assigns it to the Ip field.
 func (o *StaticIP) SetIp(v string) {
-	o.Ip = &v
+	o.Ip.Set(&v)
+}
+
+// SetIpNil sets the value for Ip to be an explicit nil
+func (o *StaticIP) SetIpNil() {
+	o.Ip.Set(nil)
+}
+
+// UnsetIp ensures that no value is present for Ip, not even an explicit nil
+func (o *StaticIP) UnsetIp() {
+	o.Ip.Unset()
 }
 
 // GetCreated returns the Created field value
@@ -196,8 +207,8 @@ func (o StaticIP) MarshalJSON() ([]byte, error) {
 func (o StaticIP) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["id"] = o.Id
-	if !IsNil(o.Ip) {
-		toSerialize["ip"] = o.Ip
+	if o.Ip.IsSet() {
+		toSerialize["ip"] = o.Ip.Get()
 	}
 	toSerialize["created"] = o.Created
 	toSerialize["provisioning_status"] = o.ProvisioningStatus

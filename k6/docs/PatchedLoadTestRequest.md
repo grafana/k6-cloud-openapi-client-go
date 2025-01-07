@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Name** | Pointer to **string** | Unique name of the test within the project | [optional] 
-**BaselineTestRunId** | Pointer to **int32** | Id of a baseline test run used for results comparison | [optional] 
+**BaselineTestRunId** | Pointer to **NullableInt32** | Id of a baseline test run used for results comparison | [optional] 
 
 ## Methods
 
@@ -76,6 +76,16 @@ SetBaselineTestRunId sets BaselineTestRunId field to given value.
 
 HasBaselineTestRunId returns a boolean if a field has been set.
 
+### SetBaselineTestRunIdNil
+
+`func (o *PatchedLoadTestRequest) SetBaselineTestRunIdNil(b bool)`
+
+ SetBaselineTestRunIdNil sets the value for BaselineTestRunId to be an explicit nil
+
+### UnsetBaselineTestRunId
+`func (o *PatchedLoadTestRequest) UnsetBaselineTestRunId()`
+
+UnsetBaselineTestRunId ensures that no value is present for BaselineTestRunId, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

@@ -13,76 +13,148 @@ package k6
 
 import (
 	"encoding/json"
-	"fmt"
-
-	"gopkg.in/validator.v2"
+	"time"
 )
 
-// ScheduleEnds - When given, determines when the schedule will end. Either `on_date` or `after_runs` must be provided but not both. If null, the schedule runs forever.
+// checks if the ScheduleEnds type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ScheduleEnds{}
+
+// ScheduleEnds struct for ScheduleEnds
 type ScheduleEnds struct {
-	ScheduleEnds *ScheduleEnds
+	// A datetime instance specifying the upper-bound limit of the recurrence.
+	OnDate *time.Time `json:"on_date,omitempty"`
+	// Determines how many times the schedule will start the test.
+	AfterRuns            *int32 `json:"after_runs,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
-// ScheduleEndsAsScheduleEnds is a convenience function that returns ScheduleEnds wrapped in ScheduleEnds
-func ScheduleEndsAsScheduleEnds(v *ScheduleEnds) ScheduleEnds {
-	return ScheduleEnds{
-		ScheduleEnds: v,
-	}
+type _ScheduleEnds ScheduleEnds
+
+// NewScheduleEnds instantiates a new ScheduleEnds object
+// This constructor will assign default values to properties that have it defined,
+// and makes sure properties required by API are set, but the set of arguments
+// will change when the set of required properties is changed
+func NewScheduleEnds() *ScheduleEnds {
+	this := ScheduleEnds{}
+	return &this
 }
 
-// Unmarshal JSON data into one of the pointers in the struct
-func (dst *ScheduleEnds) UnmarshalJSON(data []byte) error {
-	var err error
-	match := 0
-	// try to unmarshal data into ScheduleEnds
-	err = newStrictDecoder(data).Decode(&dst.ScheduleEnds)
-	if err == nil {
-		jsonScheduleEnds, _ := json.Marshal(dst.ScheduleEnds)
-		if string(jsonScheduleEnds) == "{}" { // empty struct
-			dst.ScheduleEnds = nil
-		} else {
-			if err = validator.Validate(dst.ScheduleEnds); err != nil {
-				dst.ScheduleEnds = nil
-			} else {
-				match++
-			}
-		}
-	} else {
-		dst.ScheduleEnds = nil
-	}
-
-	if match > 1 { // more than 1 match
-		// reset to nil
-		dst.ScheduleEnds = nil
-
-		return fmt.Errorf("data matches more than one schema in oneOf(ScheduleEnds)")
-	} else if match == 1 {
-		return nil // exactly one match
-	} else { // no match
-		return fmt.Errorf("data failed to match schemas in oneOf(ScheduleEnds)")
-	}
+// NewScheduleEndsWithDefaults instantiates a new ScheduleEnds object
+// This constructor will only assign default values to properties that have it defined,
+// but it doesn't guarantee that properties required by API are set
+func NewScheduleEndsWithDefaults() *ScheduleEnds {
+	this := ScheduleEnds{}
+	return &this
 }
 
-// Marshal data from the first non-nil pointers in the struct to JSON
-func (src ScheduleEnds) MarshalJSON() ([]byte, error) {
-	if src.ScheduleEnds != nil {
-		return json.Marshal(&src.ScheduleEnds)
+// GetOnDate returns the OnDate field value if set, zero value otherwise.
+func (o *ScheduleEnds) GetOnDate() time.Time {
+	if o == nil || IsNil(o.OnDate) {
+		var ret time.Time
+		return ret
 	}
-
-	return nil, nil // no data in oneOf schemas
+	return *o.OnDate
 }
 
-// Get the actual instance
-func (obj *ScheduleEnds) GetActualInstance() interface{} {
-	if obj == nil {
-		return nil
+// GetOnDateOk returns a tuple with the OnDate field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ScheduleEnds) GetOnDateOk() (*time.Time, bool) {
+	if o == nil || IsNil(o.OnDate) {
+		return nil, false
 	}
-	if obj.ScheduleEnds != nil {
-		return obj.ScheduleEnds
+	return o.OnDate, true
+}
+
+// HasOnDate returns a boolean if a field has been set.
+func (o *ScheduleEnds) HasOnDate() bool {
+	if o != nil && !IsNil(o.OnDate) {
+		return true
 	}
 
-	// all schemas are nil
-	return nil
+	return false
+}
+
+// SetOnDate gets a reference to the given time.Time and assigns it to the OnDate field.
+func (o *ScheduleEnds) SetOnDate(v time.Time) {
+	o.OnDate = &v
+}
+
+// GetAfterRuns returns the AfterRuns field value if set, zero value otherwise.
+func (o *ScheduleEnds) GetAfterRuns() int32 {
+	if o == nil || IsNil(o.AfterRuns) {
+		var ret int32
+		return ret
+	}
+	return *o.AfterRuns
+}
+
+// GetAfterRunsOk returns a tuple with the AfterRuns field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ScheduleEnds) GetAfterRunsOk() (*int32, bool) {
+	if o == nil || IsNil(o.AfterRuns) {
+		return nil, false
+	}
+	return o.AfterRuns, true
+}
+
+// HasAfterRuns returns a boolean if a field has been set.
+func (o *ScheduleEnds) HasAfterRuns() bool {
+	if o != nil && !IsNil(o.AfterRuns) {
+		return true
+	}
+
+	return false
+}
+
+// SetAfterRuns gets a reference to the given int32 and assigns it to the AfterRuns field.
+func (o *ScheduleEnds) SetAfterRuns(v int32) {
+	o.AfterRuns = &v
+}
+
+func (o ScheduleEnds) MarshalJSON() ([]byte, error) {
+	toSerialize, err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o ScheduleEnds) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.OnDate) {
+		toSerialize["on_date"] = o.OnDate
+	}
+	if !IsNil(o.AfterRuns) {
+		toSerialize["after_runs"] = o.AfterRuns
+	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
+	return toSerialize, nil
+}
+
+func (o *ScheduleEnds) UnmarshalJSON(data []byte) (err error) {
+	varScheduleEnds := _ScheduleEnds{}
+
+	err = json.Unmarshal(data, &varScheduleEnds)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ScheduleEnds(varScheduleEnds)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "on_date")
+		delete(additionalProperties, "after_runs")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableScheduleEnds struct {

@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Id** | **int32** | Id of the load zone. | [readonly] 
-**Name** | **string** | Unique load zone name used in k6 script. | [readonly] 
+**Name** | **NullableString** | Unique load zone name used in k6 script. | [readonly] 
 **Title** | **string** | Human readable load zone name. | [readonly] 
 **Private** | **bool** | If the load zone is a private load zone owned by the organization. | 
 **ProviderName** | **string** | Name of the load zone provider. Usually, &#x60;amazon&#x60; for public load zones and &#x60;k8s&#x60; for the private ones. | [readonly] 
@@ -15,7 +15,7 @@ Name | Type | Description | Notes
 
 ### NewLoadZone
 
-`func NewLoadZone(id int32, name string, title string, private bool, providerName string, providerDetails map[string]interface{}, ) *LoadZone`
+`func NewLoadZone(id int32, name NullableString, title string, private bool, providerName string, providerDetails map[string]interface{}, ) *LoadZone`
 
 NewLoadZone instantiates a new LoadZone object
 This constructor will assign default values to properties that have it defined,
@@ -70,6 +70,16 @@ and a boolean to check if the value has been set.
 SetName sets Name field to given value.
 
 
+### SetNameNil
+
+`func (o *LoadZone) SetNameNil(b bool)`
+
+ SetNameNil sets the value for Name to be an explicit nil
+
+### UnsetName
+`func (o *LoadZone) UnsetName()`
+
+UnsetName ensures that no value is present for Name, not even an explicit nil
 ### GetTitle
 
 `func (o *LoadZone) GetTitle() string`

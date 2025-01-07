@@ -24,9 +24,9 @@ type ScheduleCreateRequestRequest struct {
 	// Id of the test to run.
 	LoadTestId int32 `json:"load_test_id"`
 	// The date after which the schedule will start running the test.
-	Starts               time.Time                     `json:"starts"`
-	Repeats              PatchedScheduleRequestRepeats `json:"repeats"`
-	Ends                 PatchedScheduleRequestEnds    `json:"ends"`
+	Starts               NullableTime                   `json:"starts"`
+	Repeats              NullableScheduleRepeatsRequest `json:"repeats"`
+	Ends                 NullableScheduleEndsRequest    `json:"ends"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -36,7 +36,7 @@ type _ScheduleCreateRequestRequest ScheduleCreateRequestRequest
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewScheduleCreateRequestRequest(loadTestId int32, starts time.Time, repeats PatchedScheduleRequestRepeats, ends PatchedScheduleRequestEnds) *ScheduleCreateRequestRequest {
+func NewScheduleCreateRequestRequest(loadTestId int32, starts NullableTime, repeats NullableScheduleRepeatsRequest, ends NullableScheduleEndsRequest) *ScheduleCreateRequestRequest {
 	this := ScheduleCreateRequestRequest{}
 	this.LoadTestId = loadTestId
 	this.Starts = starts
@@ -78,75 +78,81 @@ func (o *ScheduleCreateRequestRequest) SetLoadTestId(v int32) {
 }
 
 // GetStarts returns the Starts field value
+// If the value is explicit nil, the zero value for time.Time will be returned
 func (o *ScheduleCreateRequestRequest) GetStarts() time.Time {
-	if o == nil {
+	if o == nil || o.Starts.Get() == nil {
 		var ret time.Time
 		return ret
 	}
 
-	return o.Starts
+	return *o.Starts.Get()
 }
 
 // GetStartsOk returns a tuple with the Starts field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *ScheduleCreateRequestRequest) GetStartsOk() (*time.Time, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Starts, true
+	return o.Starts.Get(), o.Starts.IsSet()
 }
 
 // SetStarts sets field value
 func (o *ScheduleCreateRequestRequest) SetStarts(v time.Time) {
-	o.Starts = v
+	o.Starts.Set(&v)
 }
 
 // GetRepeats returns the Repeats field value
-func (o *ScheduleCreateRequestRequest) GetRepeats() PatchedScheduleRequestRepeats {
-	if o == nil {
-		var ret PatchedScheduleRequestRepeats
+// If the value is explicit nil, the zero value for ScheduleRepeatsRequest will be returned
+func (o *ScheduleCreateRequestRequest) GetRepeats() ScheduleRepeatsRequest {
+	if o == nil || o.Repeats.Get() == nil {
+		var ret ScheduleRepeatsRequest
 		return ret
 	}
 
-	return o.Repeats
+	return *o.Repeats.Get()
 }
 
 // GetRepeatsOk returns a tuple with the Repeats field value
 // and a boolean to check if the value has been set.
-func (o *ScheduleCreateRequestRequest) GetRepeatsOk() (*PatchedScheduleRequestRepeats, bool) {
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *ScheduleCreateRequestRequest) GetRepeatsOk() (*ScheduleRepeatsRequest, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Repeats, true
+	return o.Repeats.Get(), o.Repeats.IsSet()
 }
 
 // SetRepeats sets field value
-func (o *ScheduleCreateRequestRequest) SetRepeats(v PatchedScheduleRequestRepeats) {
-	o.Repeats = v
+func (o *ScheduleCreateRequestRequest) SetRepeats(v ScheduleRepeatsRequest) {
+	o.Repeats.Set(&v)
 }
 
 // GetEnds returns the Ends field value
-func (o *ScheduleCreateRequestRequest) GetEnds() PatchedScheduleRequestEnds {
-	if o == nil {
-		var ret PatchedScheduleRequestEnds
+// If the value is explicit nil, the zero value for ScheduleEndsRequest will be returned
+func (o *ScheduleCreateRequestRequest) GetEnds() ScheduleEndsRequest {
+	if o == nil || o.Ends.Get() == nil {
+		var ret ScheduleEndsRequest
 		return ret
 	}
 
-	return o.Ends
+	return *o.Ends.Get()
 }
 
 // GetEndsOk returns a tuple with the Ends field value
 // and a boolean to check if the value has been set.
-func (o *ScheduleCreateRequestRequest) GetEndsOk() (*PatchedScheduleRequestEnds, bool) {
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *ScheduleCreateRequestRequest) GetEndsOk() (*ScheduleEndsRequest, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Ends, true
+	return o.Ends.Get(), o.Ends.IsSet()
 }
 
 // SetEnds sets field value
-func (o *ScheduleCreateRequestRequest) SetEnds(v PatchedScheduleRequestEnds) {
-	o.Ends = v
+func (o *ScheduleCreateRequestRequest) SetEnds(v ScheduleEndsRequest) {
+	o.Ends.Set(&v)
 }
 
 func (o ScheduleCreateRequestRequest) MarshalJSON() ([]byte, error) {
@@ -160,9 +166,9 @@ func (o ScheduleCreateRequestRequest) MarshalJSON() ([]byte, error) {
 func (o ScheduleCreateRequestRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["load_test_id"] = o.LoadTestId
-	toSerialize["starts"] = o.Starts
-	toSerialize["repeats"] = o.Repeats
-	toSerialize["ends"] = o.Ends
+	toSerialize["starts"] = o.Starts.Get()
+	toSerialize["repeats"] = o.Repeats.Get()
+	toSerialize["ends"] = o.Ends.Get()
 
 	for key, value := range o.AdditionalProperties {
 		toSerialize[key] = value

@@ -23,7 +23,7 @@ type LoadZone struct {
 	// Id of the load zone.
 	Id int32 `json:"id"`
 	// Unique load zone name used in k6 script.
-	Name string `json:"name"`
+	Name NullableString `json:"name"`
 	// Human readable load zone name.
 	Title string `json:"title"`
 	// If the load zone is a private load zone owned by the organization.
@@ -41,7 +41,7 @@ type _LoadZone LoadZone
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewLoadZone(id int32, name string, title string, private bool, providerName string, providerDetails map[string]interface{}) *LoadZone {
+func NewLoadZone(id int32, name NullableString, title string, private bool, providerName string, providerDetails map[string]interface{}) *LoadZone {
 	this := LoadZone{}
 	this.Id = id
 	this.Name = name
@@ -85,27 +85,29 @@ func (o *LoadZone) SetId(v int32) {
 }
 
 // GetName returns the Name field value
+// If the value is explicit nil, the zero value for string will be returned
 func (o *LoadZone) GetName() string {
-	if o == nil {
+	if o == nil || o.Name.Get() == nil {
 		var ret string
 		return ret
 	}
 
-	return o.Name
+	return *o.Name.Get()
 }
 
 // GetNameOk returns a tuple with the Name field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *LoadZone) GetNameOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Name, true
+	return o.Name.Get(), o.Name.IsSet()
 }
 
 // SetName sets field value
 func (o *LoadZone) SetName(v string) {
-	o.Name = v
+	o.Name.Set(&v)
 }
 
 // GetTitle returns the Title field value
@@ -215,7 +217,7 @@ func (o LoadZone) MarshalJSON() ([]byte, error) {
 func (o LoadZone) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["id"] = o.Id
-	toSerialize["name"] = o.Name
+	toSerialize["name"] = o.Name.Get()
 	toSerialize["title"] = o.Title
 	toSerialize["private"] = o.Private
 	toSerialize["provider_name"] = o.ProviderName

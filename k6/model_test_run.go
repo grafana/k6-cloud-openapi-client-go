@@ -26,18 +26,18 @@ type TestRun struct {
 	// Id of the parent test.
 	TestId int32 `json:"test_id"`
 	// Id of the parent project.
-	ProjectId int32 `json:"project_id"`
+	ProjectId NullableInt32 `json:"project_id"`
 	// Id of the user who started the test if started with a user token.
-	StartedBy int32 `json:"started_by"`
+	StartedBy NullableInt32 `json:"started_by"`
 	// Date and time when the test run was started.
 	Created time.Time `json:"created"`
 	// Date and time when the test run ended. Unset if the test is still running.
-	Ended time.Time `json:"ended"`
+	Ended NullableTime `json:"ended"`
 	// User-defined note for the test run.
 	Note string `json:"note"`
 	// The expiry date of test run results retention beyond which the data is automatically deleted if the test tun is not saved, otherwise - null.
-	RetentionExpiry time.Time   `json:"retention_expiry"`
-	Cost            TestRunCost `json:"cost"`
+	RetentionExpiry NullableTime     `json:"retention_expiry"`
+	Cost            NullableTestCost `json:"cost"`
 	// Current test run status.
 	Status string `json:"status"`
 	// Details of the current test run status.
@@ -45,7 +45,7 @@ type TestRun struct {
 	// List of test run status objects sorted by enter time representing the status history.
 	StatusHistory []TestRunStatus `json:"status_history"`
 	// Test run result. If thresholds are defined and have been tainted, the result is `'passed'`, otherwise - `'failed'`. If the execution had not completed successfully, the result is `'error'`. The result is available only after the test is no longer running, otherwise it is `null`.
-	Result string `json:"result"`
+	Result NullableString `json:"result"`
 	// Test run result details.
 	ResultDetails map[string]interface{} `json:"result_details"`
 	// List the load zones the test runs in and the corresponding load distribution percent.
@@ -61,7 +61,7 @@ type _TestRun TestRun
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewTestRun(id int32, testId int32, projectId int32, startedBy int32, created time.Time, ended time.Time, note string, retentionExpiry time.Time, cost TestRunCost, status string, statusDetails TestRunStatus, statusHistory []TestRunStatus, result string, resultDetails map[string]interface{}, distribution []TestRunDistribution, options map[string]interface{}) *TestRun {
+func NewTestRun(id int32, testId int32, projectId NullableInt32, startedBy NullableInt32, created time.Time, ended NullableTime, note string, retentionExpiry NullableTime, cost NullableTestCost, status string, statusDetails TestRunStatus, statusHistory []TestRunStatus, result NullableString, resultDetails map[string]interface{}, distribution []TestRunDistribution, options map[string]interface{}) *TestRun {
 	this := TestRun{}
 	this.Id = id
 	this.TestId = testId
@@ -139,51 +139,55 @@ func (o *TestRun) SetTestId(v int32) {
 }
 
 // GetProjectId returns the ProjectId field value
+// If the value is explicit nil, the zero value for int32 will be returned
 func (o *TestRun) GetProjectId() int32 {
-	if o == nil {
+	if o == nil || o.ProjectId.Get() == nil {
 		var ret int32
 		return ret
 	}
 
-	return o.ProjectId
+	return *o.ProjectId.Get()
 }
 
 // GetProjectIdOk returns a tuple with the ProjectId field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *TestRun) GetProjectIdOk() (*int32, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.ProjectId, true
+	return o.ProjectId.Get(), o.ProjectId.IsSet()
 }
 
 // SetProjectId sets field value
 func (o *TestRun) SetProjectId(v int32) {
-	o.ProjectId = v
+	o.ProjectId.Set(&v)
 }
 
 // GetStartedBy returns the StartedBy field value
+// If the value is explicit nil, the zero value for int32 will be returned
 func (o *TestRun) GetStartedBy() int32 {
-	if o == nil {
+	if o == nil || o.StartedBy.Get() == nil {
 		var ret int32
 		return ret
 	}
 
-	return o.StartedBy
+	return *o.StartedBy.Get()
 }
 
 // GetStartedByOk returns a tuple with the StartedBy field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *TestRun) GetStartedByOk() (*int32, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.StartedBy, true
+	return o.StartedBy.Get(), o.StartedBy.IsSet()
 }
 
 // SetStartedBy sets field value
 func (o *TestRun) SetStartedBy(v int32) {
-	o.StartedBy = v
+	o.StartedBy.Set(&v)
 }
 
 // GetCreated returns the Created field value
@@ -211,27 +215,29 @@ func (o *TestRun) SetCreated(v time.Time) {
 }
 
 // GetEnded returns the Ended field value
+// If the value is explicit nil, the zero value for time.Time will be returned
 func (o *TestRun) GetEnded() time.Time {
-	if o == nil {
+	if o == nil || o.Ended.Get() == nil {
 		var ret time.Time
 		return ret
 	}
 
-	return o.Ended
+	return *o.Ended.Get()
 }
 
 // GetEndedOk returns a tuple with the Ended field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *TestRun) GetEndedOk() (*time.Time, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Ended, true
+	return o.Ended.Get(), o.Ended.IsSet()
 }
 
 // SetEnded sets field value
 func (o *TestRun) SetEnded(v time.Time) {
-	o.Ended = v
+	o.Ended.Set(&v)
 }
 
 // GetNote returns the Note field value
@@ -259,51 +265,55 @@ func (o *TestRun) SetNote(v string) {
 }
 
 // GetRetentionExpiry returns the RetentionExpiry field value
+// If the value is explicit nil, the zero value for time.Time will be returned
 func (o *TestRun) GetRetentionExpiry() time.Time {
-	if o == nil {
+	if o == nil || o.RetentionExpiry.Get() == nil {
 		var ret time.Time
 		return ret
 	}
 
-	return o.RetentionExpiry
+	return *o.RetentionExpiry.Get()
 }
 
 // GetRetentionExpiryOk returns a tuple with the RetentionExpiry field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *TestRun) GetRetentionExpiryOk() (*time.Time, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.RetentionExpiry, true
+	return o.RetentionExpiry.Get(), o.RetentionExpiry.IsSet()
 }
 
 // SetRetentionExpiry sets field value
 func (o *TestRun) SetRetentionExpiry(v time.Time) {
-	o.RetentionExpiry = v
+	o.RetentionExpiry.Set(&v)
 }
 
 // GetCost returns the Cost field value
-func (o *TestRun) GetCost() TestRunCost {
-	if o == nil {
-		var ret TestRunCost
+// If the value is explicit nil, the zero value for TestCost will be returned
+func (o *TestRun) GetCost() TestCost {
+	if o == nil || o.Cost.Get() == nil {
+		var ret TestCost
 		return ret
 	}
 
-	return o.Cost
+	return *o.Cost.Get()
 }
 
 // GetCostOk returns a tuple with the Cost field value
 // and a boolean to check if the value has been set.
-func (o *TestRun) GetCostOk() (*TestRunCost, bool) {
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *TestRun) GetCostOk() (*TestCost, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Cost, true
+	return o.Cost.Get(), o.Cost.IsSet()
 }
 
 // SetCost sets field value
-func (o *TestRun) SetCost(v TestRunCost) {
-	o.Cost = v
+func (o *TestRun) SetCost(v TestCost) {
+	o.Cost.Set(&v)
 }
 
 // GetStatus returns the Status field value
@@ -379,27 +389,29 @@ func (o *TestRun) SetStatusHistory(v []TestRunStatus) {
 }
 
 // GetResult returns the Result field value
+// If the value is explicit nil, the zero value for string will be returned
 func (o *TestRun) GetResult() string {
-	if o == nil {
+	if o == nil || o.Result.Get() == nil {
 		var ret string
 		return ret
 	}
 
-	return o.Result
+	return *o.Result.Get()
 }
 
 // GetResultOk returns a tuple with the Result field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *TestRun) GetResultOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Result, true
+	return o.Result.Get(), o.Result.IsSet()
 }
 
 // SetResult sets field value
 func (o *TestRun) SetResult(v string) {
-	o.Result = v
+	o.Result.Set(&v)
 }
 
 // GetResultDetails returns the ResultDetails field value
@@ -427,6 +439,7 @@ func (o *TestRun) SetResultDetails(v map[string]interface{}) {
 }
 
 // GetDistribution returns the Distribution field value
+// If the value is explicit nil, the zero value for []TestRunDistribution will be returned
 func (o *TestRun) GetDistribution() []TestRunDistribution {
 	if o == nil {
 		var ret []TestRunDistribution
@@ -438,8 +451,9 @@ func (o *TestRun) GetDistribution() []TestRunDistribution {
 
 // GetDistributionOk returns a tuple with the Distribution field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *TestRun) GetDistributionOk() ([]TestRunDistribution, bool) {
-	if o == nil {
+	if o == nil || IsNil(o.Distribution) {
 		return nil, false
 	}
 	return o.Distribution, true
@@ -486,19 +500,21 @@ func (o TestRun) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["id"] = o.Id
 	toSerialize["test_id"] = o.TestId
-	toSerialize["project_id"] = o.ProjectId
-	toSerialize["started_by"] = o.StartedBy
+	toSerialize["project_id"] = o.ProjectId.Get()
+	toSerialize["started_by"] = o.StartedBy.Get()
 	toSerialize["created"] = o.Created
-	toSerialize["ended"] = o.Ended
+	toSerialize["ended"] = o.Ended.Get()
 	toSerialize["note"] = o.Note
-	toSerialize["retention_expiry"] = o.RetentionExpiry
-	toSerialize["cost"] = o.Cost
+	toSerialize["retention_expiry"] = o.RetentionExpiry.Get()
+	toSerialize["cost"] = o.Cost.Get()
 	toSerialize["status"] = o.Status
 	toSerialize["status_details"] = o.StatusDetails
 	toSerialize["status_history"] = o.StatusHistory
-	toSerialize["result"] = o.Result
+	toSerialize["result"] = o.Result.Get()
 	toSerialize["result_details"] = o.ResultDetails
-	toSerialize["distribution"] = o.Distribution
+	if o.Distribution != nil {
+		toSerialize["distribution"] = o.Distribution
+	}
 	toSerialize["options"] = o.Options
 
 	for key, value := range o.AdditionalProperties {

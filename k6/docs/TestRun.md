@@ -6,17 +6,17 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Id** | **int32** | Id of the test run. | [readonly] 
 **TestId** | **int32** | Id of the parent test. | [readonly] 
-**ProjectId** | **int32** | Id of the parent project. | [readonly] 
-**StartedBy** | **int32** | Id of the user who started the test if started with a user token. | [readonly] 
+**ProjectId** | **NullableInt32** | Id of the parent project. | [readonly] 
+**StartedBy** | **NullableInt32** | Id of the user who started the test if started with a user token. | [readonly] 
 **Created** | **time.Time** | Date and time when the test run was started. | [readonly] 
-**Ended** | **time.Time** | Date and time when the test run ended. Unset if the test is still running. | [readonly] 
+**Ended** | **NullableTime** | Date and time when the test run ended. Unset if the test is still running. | [readonly] 
 **Note** | **string** | User-defined note for the test run. | [readonly] 
-**RetentionExpiry** | **time.Time** | The expiry date of test run results retention beyond which the data is automatically deleted if the test tun is not saved, otherwise - null. | [readonly] 
-**Cost** | [**TestRunCost**](TestRunCost.md) |  | 
+**RetentionExpiry** | **NullableTime** | The expiry date of test run results retention beyond which the data is automatically deleted if the test tun is not saved, otherwise - null. | [readonly] 
+**Cost** | [**NullableTestCost**](TestCost.md) |  | 
 **Status** | **string** | Current test run status. | 
 **StatusDetails** | [**TestRunStatus**](TestRunStatus.md) | Details of the current test run status. | 
 **StatusHistory** | [**[]TestRunStatus**](TestRunStatus.md) | List of test run status objects sorted by enter time representing the status history. | 
-**Result** | **string** | Test run result. If thresholds are defined and have been tainted, the result is &#x60;&#39;passed&#39;&#x60;, otherwise - &#x60;&#39;failed&#39;&#x60;. If the execution had not completed successfully, the result is &#x60;&#39;error&#39;&#x60;. The result is available only after the test is no longer running, otherwise it is &#x60;null&#x60;. | 
+**Result** | **NullableString** | Test run result. If thresholds are defined and have been tainted, the result is &#x60;&#39;passed&#39;&#x60;, otherwise - &#x60;&#39;failed&#39;&#x60;. If the execution had not completed successfully, the result is &#x60;&#39;error&#39;&#x60;. The result is available only after the test is no longer running, otherwise it is &#x60;null&#x60;. | 
 **ResultDetails** | **map[string]interface{}** | Test run result details. | 
 **Distribution** | [**[]TestRunDistribution**](TestRunDistribution.md) | List the load zones the test runs in and the corresponding load distribution percent. | 
 **Options** | **map[string]interface{}** | The original options object if available. | 
@@ -25,7 +25,7 @@ Name | Type | Description | Notes
 
 ### NewTestRun
 
-`func NewTestRun(id int32, testId int32, projectId int32, startedBy int32, created time.Time, ended time.Time, note string, retentionExpiry time.Time, cost TestRunCost, status string, statusDetails TestRunStatus, statusHistory []TestRunStatus, result string, resultDetails map[string]interface{}, distribution []TestRunDistribution, options map[string]interface{}, ) *TestRun`
+`func NewTestRun(id int32, testId int32, projectId NullableInt32, startedBy NullableInt32, created time.Time, ended NullableTime, note string, retentionExpiry NullableTime, cost NullableTestCost, status string, statusDetails TestRunStatus, statusHistory []TestRunStatus, result NullableString, resultDetails map[string]interface{}, distribution []TestRunDistribution, options map[string]interface{}, ) *TestRun`
 
 NewTestRun instantiates a new TestRun object
 This constructor will assign default values to properties that have it defined,
@@ -100,6 +100,16 @@ and a boolean to check if the value has been set.
 SetProjectId sets ProjectId field to given value.
 
 
+### SetProjectIdNil
+
+`func (o *TestRun) SetProjectIdNil(b bool)`
+
+ SetProjectIdNil sets the value for ProjectId to be an explicit nil
+
+### UnsetProjectId
+`func (o *TestRun) UnsetProjectId()`
+
+UnsetProjectId ensures that no value is present for ProjectId, not even an explicit nil
 ### GetStartedBy
 
 `func (o *TestRun) GetStartedBy() int32`
@@ -120,6 +130,16 @@ and a boolean to check if the value has been set.
 SetStartedBy sets StartedBy field to given value.
 
 
+### SetStartedByNil
+
+`func (o *TestRun) SetStartedByNil(b bool)`
+
+ SetStartedByNil sets the value for StartedBy to be an explicit nil
+
+### UnsetStartedBy
+`func (o *TestRun) UnsetStartedBy()`
+
+UnsetStartedBy ensures that no value is present for StartedBy, not even an explicit nil
 ### GetCreated
 
 `func (o *TestRun) GetCreated() time.Time`
@@ -160,6 +180,16 @@ and a boolean to check if the value has been set.
 SetEnded sets Ended field to given value.
 
 
+### SetEndedNil
+
+`func (o *TestRun) SetEndedNil(b bool)`
+
+ SetEndedNil sets the value for Ended to be an explicit nil
+
+### UnsetEnded
+`func (o *TestRun) UnsetEnded()`
+
+UnsetEnded ensures that no value is present for Ended, not even an explicit nil
 ### GetNote
 
 `func (o *TestRun) GetNote() string`
@@ -200,26 +230,46 @@ and a boolean to check if the value has been set.
 SetRetentionExpiry sets RetentionExpiry field to given value.
 
 
+### SetRetentionExpiryNil
+
+`func (o *TestRun) SetRetentionExpiryNil(b bool)`
+
+ SetRetentionExpiryNil sets the value for RetentionExpiry to be an explicit nil
+
+### UnsetRetentionExpiry
+`func (o *TestRun) UnsetRetentionExpiry()`
+
+UnsetRetentionExpiry ensures that no value is present for RetentionExpiry, not even an explicit nil
 ### GetCost
 
-`func (o *TestRun) GetCost() TestRunCost`
+`func (o *TestRun) GetCost() TestCost`
 
 GetCost returns the Cost field if non-nil, zero value otherwise.
 
 ### GetCostOk
 
-`func (o *TestRun) GetCostOk() (*TestRunCost, bool)`
+`func (o *TestRun) GetCostOk() (*TestCost, bool)`
 
 GetCostOk returns a tuple with the Cost field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetCost
 
-`func (o *TestRun) SetCost(v TestRunCost)`
+`func (o *TestRun) SetCost(v TestCost)`
 
 SetCost sets Cost field to given value.
 
 
+### SetCostNil
+
+`func (o *TestRun) SetCostNil(b bool)`
+
+ SetCostNil sets the value for Cost to be an explicit nil
+
+### UnsetCost
+`func (o *TestRun) UnsetCost()`
+
+UnsetCost ensures that no value is present for Cost, not even an explicit nil
 ### GetStatus
 
 `func (o *TestRun) GetStatus() string`
@@ -300,6 +350,16 @@ and a boolean to check if the value has been set.
 SetResult sets Result field to given value.
 
 
+### SetResultNil
+
+`func (o *TestRun) SetResultNil(b bool)`
+
+ SetResultNil sets the value for Result to be an explicit nil
+
+### UnsetResult
+`func (o *TestRun) UnsetResult()`
+
+UnsetResult ensures that no value is present for Result, not even an explicit nil
 ### GetResultDetails
 
 `func (o *TestRun) GetResultDetails() map[string]interface{}`
@@ -340,6 +400,16 @@ and a boolean to check if the value has been set.
 SetDistribution sets Distribution field to given value.
 
 
+### SetDistributionNil
+
+`func (o *TestRun) SetDistributionNil(b bool)`
+
+ SetDistributionNil sets the value for Distribution to be an explicit nil
+
+### UnsetDistribution
+`func (o *TestRun) UnsetDistribution()`
+
+UnsetDistribution ensures that no value is present for Distribution, not even an explicit nil
 ### GetOptions
 
 `func (o *TestRun) GetOptions() map[string]interface{}`

@@ -1,9 +1,9 @@
 /*
+Grafana Cloud k6
 
+HTTP API for interacting with Grafana Cloud k6.
 
-HTTP API for interacting with k6 Cloud.
-
-API version: 0.0.0
+API version: 1.0.0
 Contact: info@grafana.com
 */
 
@@ -20,9 +20,9 @@ var _ MappedNullable = &ValidateOptionsRequest{}
 
 // ValidateOptionsRequest struct for ValidateOptionsRequest
 type ValidateOptionsRequest struct {
-	// Id of a project where the test belongs
-	ProjectId *int32 `json:"project_id,omitempty"`
-	// k6 script options object to validate
+	// ID of a project where the test belongs.
+	ProjectId NullableInt32 `json:"project_id,omitempty"`
+	// k6 script options object to validate.
 	Options              map[string]interface{} `json:"options"`
 	AdditionalProperties map[string]interface{}
 }
@@ -47,36 +47,47 @@ func NewValidateOptionsRequestWithDefaults() *ValidateOptionsRequest {
 	return &this
 }
 
-// GetProjectId returns the ProjectId field value if set, zero value otherwise.
+// GetProjectId returns the ProjectId field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *ValidateOptionsRequest) GetProjectId() int32 {
-	if o == nil || IsNil(o.ProjectId) {
+	if o == nil || IsNil(o.ProjectId.Get()) {
 		var ret int32
 		return ret
 	}
-	return *o.ProjectId
+	return *o.ProjectId.Get()
 }
 
 // GetProjectIdOk returns a tuple with the ProjectId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *ValidateOptionsRequest) GetProjectIdOk() (*int32, bool) {
-	if o == nil || IsNil(o.ProjectId) {
+	if o == nil {
 		return nil, false
 	}
-	return o.ProjectId, true
+	return o.ProjectId.Get(), o.ProjectId.IsSet()
 }
 
 // HasProjectId returns a boolean if a field has been set.
 func (o *ValidateOptionsRequest) HasProjectId() bool {
-	if o != nil && !IsNil(o.ProjectId) {
+	if o != nil && o.ProjectId.IsSet() {
 		return true
 	}
 
 	return false
 }
 
-// SetProjectId gets a reference to the given int32 and assigns it to the ProjectId field.
+// SetProjectId gets a reference to the given NullableInt32 and assigns it to the ProjectId field.
 func (o *ValidateOptionsRequest) SetProjectId(v int32) {
-	o.ProjectId = &v
+	o.ProjectId.Set(&v)
+}
+
+// SetProjectIdNil sets the value for ProjectId to be an explicit nil
+func (o *ValidateOptionsRequest) SetProjectIdNil() {
+	o.ProjectId.Set(nil)
+}
+
+// UnsetProjectId ensures that no value is present for ProjectId, not even an explicit nil
+func (o *ValidateOptionsRequest) UnsetProjectId() {
+	o.ProjectId.Unset()
 }
 
 // GetOptions returns the Options field value
@@ -113,8 +124,8 @@ func (o ValidateOptionsRequest) MarshalJSON() ([]byte, error) {
 
 func (o ValidateOptionsRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if !IsNil(o.ProjectId) {
-		toSerialize["project_id"] = o.ProjectId
+	if o.ProjectId.IsSet() {
+		toSerialize["project_id"] = o.ProjectId.Get()
 	}
 	toSerialize["options"] = o.Options
 

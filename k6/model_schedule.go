@@ -28,11 +28,11 @@ type Schedule struct {
 	// Id of the schedule.
 	Active bool `json:"active"`
 	// The date after which the schedule will start running the test.
-	Starts  time.Time       `json:"starts"`
-	Repeats ScheduleRepeats `json:"repeats"`
-	Ends    ScheduleEnds    `json:"ends"`
+	Starts  NullableTime            `json:"starts"`
+	Repeats NullableScheduleRepeats `json:"repeats"`
+	Ends    NullableScheduleEnds    `json:"ends"`
 	// The date of the next scheduled test run. If the schedule is inactive or past the end date or all runs have been used up, the value is null.
-	NextRun              time.Time `json:"next_run"`
+	NextRun              NullableTime `json:"next_run"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -42,7 +42,7 @@ type _Schedule Schedule
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewSchedule(id int32, loadTestId int32, active bool, starts time.Time, repeats ScheduleRepeats, ends ScheduleEnds, nextRun time.Time) *Schedule {
+func NewSchedule(id int32, loadTestId int32, active bool, starts NullableTime, repeats NullableScheduleRepeats, ends NullableScheduleEnds, nextRun NullableTime) *Schedule {
 	this := Schedule{}
 	this.Id = id
 	this.LoadTestId = loadTestId
@@ -135,99 +135,107 @@ func (o *Schedule) SetActive(v bool) {
 }
 
 // GetStarts returns the Starts field value
+// If the value is explicit nil, the zero value for time.Time will be returned
 func (o *Schedule) GetStarts() time.Time {
-	if o == nil {
+	if o == nil || o.Starts.Get() == nil {
 		var ret time.Time
 		return ret
 	}
 
-	return o.Starts
+	return *o.Starts.Get()
 }
 
 // GetStartsOk returns a tuple with the Starts field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *Schedule) GetStartsOk() (*time.Time, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Starts, true
+	return o.Starts.Get(), o.Starts.IsSet()
 }
 
 // SetStarts sets field value
 func (o *Schedule) SetStarts(v time.Time) {
-	o.Starts = v
+	o.Starts.Set(&v)
 }
 
 // GetRepeats returns the Repeats field value
+// If the value is explicit nil, the zero value for ScheduleRepeats will be returned
 func (o *Schedule) GetRepeats() ScheduleRepeats {
-	if o == nil {
+	if o == nil || o.Repeats.Get() == nil {
 		var ret ScheduleRepeats
 		return ret
 	}
 
-	return o.Repeats
+	return *o.Repeats.Get()
 }
 
 // GetRepeatsOk returns a tuple with the Repeats field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *Schedule) GetRepeatsOk() (*ScheduleRepeats, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Repeats, true
+	return o.Repeats.Get(), o.Repeats.IsSet()
 }
 
 // SetRepeats sets field value
 func (o *Schedule) SetRepeats(v ScheduleRepeats) {
-	o.Repeats = v
+	o.Repeats.Set(&v)
 }
 
 // GetEnds returns the Ends field value
+// If the value is explicit nil, the zero value for ScheduleEnds will be returned
 func (o *Schedule) GetEnds() ScheduleEnds {
-	if o == nil {
+	if o == nil || o.Ends.Get() == nil {
 		var ret ScheduleEnds
 		return ret
 	}
 
-	return o.Ends
+	return *o.Ends.Get()
 }
 
 // GetEndsOk returns a tuple with the Ends field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *Schedule) GetEndsOk() (*ScheduleEnds, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Ends, true
+	return o.Ends.Get(), o.Ends.IsSet()
 }
 
 // SetEnds sets field value
 func (o *Schedule) SetEnds(v ScheduleEnds) {
-	o.Ends = v
+	o.Ends.Set(&v)
 }
 
 // GetNextRun returns the NextRun field value
+// If the value is explicit nil, the zero value for time.Time will be returned
 func (o *Schedule) GetNextRun() time.Time {
-	if o == nil {
+	if o == nil || o.NextRun.Get() == nil {
 		var ret time.Time
 		return ret
 	}
 
-	return o.NextRun
+	return *o.NextRun.Get()
 }
 
 // GetNextRunOk returns a tuple with the NextRun field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *Schedule) GetNextRunOk() (*time.Time, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.NextRun, true
+	return o.NextRun.Get(), o.NextRun.IsSet()
 }
 
 // SetNextRun sets field value
 func (o *Schedule) SetNextRun(v time.Time) {
-	o.NextRun = v
+	o.NextRun.Set(&v)
 }
 
 func (o Schedule) MarshalJSON() ([]byte, error) {
@@ -243,10 +251,10 @@ func (o Schedule) ToMap() (map[string]interface{}, error) {
 	toSerialize["id"] = o.Id
 	toSerialize["load_test_id"] = o.LoadTestId
 	toSerialize["active"] = o.Active
-	toSerialize["starts"] = o.Starts
-	toSerialize["repeats"] = o.Repeats
-	toSerialize["ends"] = o.Ends
-	toSerialize["next_run"] = o.NextRun
+	toSerialize["starts"] = o.Starts.Get()
+	toSerialize["repeats"] = o.Repeats.Get()
+	toSerialize["ends"] = o.Ends.Get()
+	toSerialize["next_run"] = o.NextRun.Get()
 
 	for key, value := range o.AdditionalProperties {
 		toSerialize[key] = value

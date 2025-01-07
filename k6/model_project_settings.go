@@ -21,13 +21,13 @@ var _ MappedNullable = &ProjectSettings{}
 // ProjectSettings struct for ProjectSettings
 type ProjectSettings struct {
 	// Max amount of virtual user hours (VUh) used per one calendar month.
-	VuhMaxPerMonth int32 `json:"vuh_max_per_month"`
+	VuhMaxPerMonth NullableInt32 `json:"vuh_max_per_month"`
 	// Max number of concurrent virtual users (VUs) used in one test.
-	VuMaxPerTest int32 `json:"vu_max_per_test"`
+	VuMaxPerTest NullableInt32 `json:"vu_max_per_test"`
 	// Max number of concurrent browser virtual users (VUs) used in one test.
-	VuBrowserMaxPerTest int32 `json:"vu_browser_max_per_test"`
+	VuBrowserMaxPerTest NullableInt32 `json:"vu_browser_max_per_test"`
 	// Max duration of a test in seconds.
-	DurationMaxPerTest   int32 `json:"duration_max_per_test"`
+	DurationMaxPerTest   NullableInt32 `json:"duration_max_per_test"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -37,7 +37,7 @@ type _ProjectSettings ProjectSettings
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewProjectSettings(vuhMaxPerMonth int32, vuMaxPerTest int32, vuBrowserMaxPerTest int32, durationMaxPerTest int32) *ProjectSettings {
+func NewProjectSettings(vuhMaxPerMonth NullableInt32, vuMaxPerTest NullableInt32, vuBrowserMaxPerTest NullableInt32, durationMaxPerTest NullableInt32) *ProjectSettings {
 	this := ProjectSettings{}
 	this.VuhMaxPerMonth = vuhMaxPerMonth
 	this.VuMaxPerTest = vuMaxPerTest
@@ -55,99 +55,107 @@ func NewProjectSettingsWithDefaults() *ProjectSettings {
 }
 
 // GetVuhMaxPerMonth returns the VuhMaxPerMonth field value
+// If the value is explicit nil, the zero value for int32 will be returned
 func (o *ProjectSettings) GetVuhMaxPerMonth() int32 {
-	if o == nil {
+	if o == nil || o.VuhMaxPerMonth.Get() == nil {
 		var ret int32
 		return ret
 	}
 
-	return o.VuhMaxPerMonth
+	return *o.VuhMaxPerMonth.Get()
 }
 
 // GetVuhMaxPerMonthOk returns a tuple with the VuhMaxPerMonth field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *ProjectSettings) GetVuhMaxPerMonthOk() (*int32, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.VuhMaxPerMonth, true
+	return o.VuhMaxPerMonth.Get(), o.VuhMaxPerMonth.IsSet()
 }
 
 // SetVuhMaxPerMonth sets field value
 func (o *ProjectSettings) SetVuhMaxPerMonth(v int32) {
-	o.VuhMaxPerMonth = v
+	o.VuhMaxPerMonth.Set(&v)
 }
 
 // GetVuMaxPerTest returns the VuMaxPerTest field value
+// If the value is explicit nil, the zero value for int32 will be returned
 func (o *ProjectSettings) GetVuMaxPerTest() int32 {
-	if o == nil {
+	if o == nil || o.VuMaxPerTest.Get() == nil {
 		var ret int32
 		return ret
 	}
 
-	return o.VuMaxPerTest
+	return *o.VuMaxPerTest.Get()
 }
 
 // GetVuMaxPerTestOk returns a tuple with the VuMaxPerTest field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *ProjectSettings) GetVuMaxPerTestOk() (*int32, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.VuMaxPerTest, true
+	return o.VuMaxPerTest.Get(), o.VuMaxPerTest.IsSet()
 }
 
 // SetVuMaxPerTest sets field value
 func (o *ProjectSettings) SetVuMaxPerTest(v int32) {
-	o.VuMaxPerTest = v
+	o.VuMaxPerTest.Set(&v)
 }
 
 // GetVuBrowserMaxPerTest returns the VuBrowserMaxPerTest field value
+// If the value is explicit nil, the zero value for int32 will be returned
 func (o *ProjectSettings) GetVuBrowserMaxPerTest() int32 {
-	if o == nil {
+	if o == nil || o.VuBrowserMaxPerTest.Get() == nil {
 		var ret int32
 		return ret
 	}
 
-	return o.VuBrowserMaxPerTest
+	return *o.VuBrowserMaxPerTest.Get()
 }
 
 // GetVuBrowserMaxPerTestOk returns a tuple with the VuBrowserMaxPerTest field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *ProjectSettings) GetVuBrowserMaxPerTestOk() (*int32, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.VuBrowserMaxPerTest, true
+	return o.VuBrowserMaxPerTest.Get(), o.VuBrowserMaxPerTest.IsSet()
 }
 
 // SetVuBrowserMaxPerTest sets field value
 func (o *ProjectSettings) SetVuBrowserMaxPerTest(v int32) {
-	o.VuBrowserMaxPerTest = v
+	o.VuBrowserMaxPerTest.Set(&v)
 }
 
 // GetDurationMaxPerTest returns the DurationMaxPerTest field value
+// If the value is explicit nil, the zero value for int32 will be returned
 func (o *ProjectSettings) GetDurationMaxPerTest() int32 {
-	if o == nil {
+	if o == nil || o.DurationMaxPerTest.Get() == nil {
 		var ret int32
 		return ret
 	}
 
-	return o.DurationMaxPerTest
+	return *o.DurationMaxPerTest.Get()
 }
 
 // GetDurationMaxPerTestOk returns a tuple with the DurationMaxPerTest field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *ProjectSettings) GetDurationMaxPerTestOk() (*int32, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.DurationMaxPerTest, true
+	return o.DurationMaxPerTest.Get(), o.DurationMaxPerTest.IsSet()
 }
 
 // SetDurationMaxPerTest sets field value
 func (o *ProjectSettings) SetDurationMaxPerTest(v int32) {
-	o.DurationMaxPerTest = v
+	o.DurationMaxPerTest.Set(&v)
 }
 
 func (o ProjectSettings) MarshalJSON() ([]byte, error) {
@@ -160,10 +168,10 @@ func (o ProjectSettings) MarshalJSON() ([]byte, error) {
 
 func (o ProjectSettings) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["vuh_max_per_month"] = o.VuhMaxPerMonth
-	toSerialize["vu_max_per_test"] = o.VuMaxPerTest
-	toSerialize["vu_browser_max_per_test"] = o.VuBrowserMaxPerTest
-	toSerialize["duration_max_per_test"] = o.DurationMaxPerTest
+	toSerialize["vuh_max_per_month"] = o.VuhMaxPerMonth.Get()
+	toSerialize["vu_max_per_test"] = o.VuMaxPerTest.Get()
+	toSerialize["vu_browser_max_per_test"] = o.VuBrowserMaxPerTest.Get()
+	toSerialize["duration_max_per_test"] = o.DurationMaxPerTest.Get()
 
 	for key, value := range o.AdditionalProperties {
 		toSerialize[key] = value

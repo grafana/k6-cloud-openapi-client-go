@@ -7,7 +7,7 @@ Name | Type | Description | Notes
 **Id** | **int32** | Id of the variable. | [readonly] 
 **Name** | **string** | Name of the variable. | 
 **Value** | **string** | Variable value. | 
-**Description** | Pointer to **string** | Description of the variable. | [optional] 
+**Description** | Pointer to **NullableString** | Description of the variable. | [optional] 
 **Created** | **time.Time** | The date when the variable was created. | [readonly] 
 **Updated** | **time.Time** | The date when the variable was last time updated. | [readonly] 
 
@@ -115,6 +115,16 @@ SetDescription sets Description field to given value.
 
 HasDescription returns a boolean if a field has been set.
 
+### SetDescriptionNil
+
+`func (o *StackEnvVar) SetDescriptionNil(b bool)`
+
+ SetDescriptionNil sets the value for Description to be an explicit nil
+
+### UnsetDescription
+`func (o *StackEnvVar) UnsetDescription()`
+
+UnsetDescription ensures that no value is present for Description, not even an explicit nil
 ### GetCreated
 
 `func (o *StackEnvVar) GetCreated() time.Time`

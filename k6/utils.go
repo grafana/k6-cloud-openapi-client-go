@@ -1,9 +1,9 @@
 /*
+Grafana Cloud k6
 
+HTTP API for interacting with Grafana Cloud k6.
 
-HTTP API for interacting with k6 Cloud.
-
-API version: 0.0.0
+API version: 1.0.0
 Contact: info@grafana.com
 */
 

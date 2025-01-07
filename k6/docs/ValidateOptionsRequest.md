@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ProjectId** | Pointer to **int32** | Id of a project where the test belongs | [optional] 
-**Options** | **map[string]interface{}** | k6 script options object to validate | 
+**ProjectId** | Pointer to **NullableInt32** | ID of a project where the test belongs. | [optional] 
+**Options** | **map[string]interface{}** | k6 script options object to validate. | 
 
 ## Methods
 
@@ -51,6 +51,16 @@ SetProjectId sets ProjectId field to given value.
 
 HasProjectId returns a boolean if a field has been set.
 
+### SetProjectIdNil
+
+`func (o *ValidateOptionsRequest) SetProjectIdNil(b bool)`
+
+ SetProjectIdNil sets the value for ProjectId to be an explicit nil
+
+### UnsetProjectId
+`func (o *ValidateOptionsRequest) UnsetProjectId()`
+
+UnsetProjectId ensures that no value is present for ProjectId, not even an explicit nil
 ### GetOptions
 
 `func (o *ValidateOptionsRequest) GetOptions() map[string]interface{}`

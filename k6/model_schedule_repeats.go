@@ -13,76 +13,188 @@ package k6
 
 import (
 	"encoding/json"
-	"fmt"
-
-	"gopkg.in/validator.v2"
 )
 
-// ScheduleRepeats - Schedule recurrence settings. If null, the test will run only once on the `starts` date.
+// checks if the ScheduleRepeats type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ScheduleRepeats{}
+
+// ScheduleRepeats struct for ScheduleRepeats
 type ScheduleRepeats struct {
-	ScheduleRepeats *ScheduleRepeats
+	// The unit type of the recurrence interval.  * `hourly` - hourly * `daily` - daily * `weekly` - weekly * `monthly` - monthly * `yearly` - yearly
+	Frequency string `json:"frequency"`
+	// The interval between each freq iteration. An interval of 2 with 'hourly' frequency means once every 2 hours.
+	Interval *int32 `json:"interval,omitempty"`
+	// When given, define the days of the week where the recurrence will be applied. The default is every day of the week.
+	Days                 []string `json:"days,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
-// ScheduleRepeatsAsScheduleRepeats is a convenience function that returns ScheduleRepeats wrapped in ScheduleRepeats
-func ScheduleRepeatsAsScheduleRepeats(v *ScheduleRepeats) ScheduleRepeats {
-	return ScheduleRepeats{
-		ScheduleRepeats: v,
-	}
+type _ScheduleRepeats ScheduleRepeats
+
+// NewScheduleRepeats instantiates a new ScheduleRepeats object
+// This constructor will assign default values to properties that have it defined,
+// and makes sure properties required by API are set, but the set of arguments
+// will change when the set of required properties is changed
+func NewScheduleRepeats(frequency string) *ScheduleRepeats {
+	this := ScheduleRepeats{}
+	this.Frequency = frequency
+	var interval int32 = 1
+	this.Interval = &interval
+	return &this
 }
 
-// Unmarshal JSON data into one of the pointers in the struct
-func (dst *ScheduleRepeats) UnmarshalJSON(data []byte) error {
-	var err error
-	match := 0
-	// try to unmarshal data into ScheduleRepeats
-	err = newStrictDecoder(data).Decode(&dst.ScheduleRepeats)
-	if err == nil {
-		jsonScheduleRepeats, _ := json.Marshal(dst.ScheduleRepeats)
-		if string(jsonScheduleRepeats) == "{}" { // empty struct
-			dst.ScheduleRepeats = nil
-		} else {
-			if err = validator.Validate(dst.ScheduleRepeats); err != nil {
-				dst.ScheduleRepeats = nil
-			} else {
-				match++
-			}
-		}
-	} else {
-		dst.ScheduleRepeats = nil
-	}
-
-	if match > 1 { // more than 1 match
-		// reset to nil
-		dst.ScheduleRepeats = nil
-
-		return fmt.Errorf("data matches more than one schema in oneOf(ScheduleRepeats)")
-	} else if match == 1 {
-		return nil // exactly one match
-	} else { // no match
-		return fmt.Errorf("data failed to match schemas in oneOf(ScheduleRepeats)")
-	}
+// NewScheduleRepeatsWithDefaults instantiates a new ScheduleRepeats object
+// This constructor will only assign default values to properties that have it defined,
+// but it doesn't guarantee that properties required by API are set
+func NewScheduleRepeatsWithDefaults() *ScheduleRepeats {
+	this := ScheduleRepeats{}
+	var interval int32 = 1
+	this.Interval = &interval
+	return &this
 }
 
-// Marshal data from the first non-nil pointers in the struct to JSON
-func (src ScheduleRepeats) MarshalJSON() ([]byte, error) {
-	if src.ScheduleRepeats != nil {
-		return json.Marshal(&src.ScheduleRepeats)
+// GetFrequency returns the Frequency field value
+func (o *ScheduleRepeats) GetFrequency() string {
+	if o == nil {
+		var ret string
+		return ret
 	}
 
-	return nil, nil // no data in oneOf schemas
+	return o.Frequency
 }
 
-// Get the actual instance
-func (obj *ScheduleRepeats) GetActualInstance() interface{} {
-	if obj == nil {
-		return nil
+// GetFrequencyOk returns a tuple with the Frequency field value
+// and a boolean to check if the value has been set.
+func (o *ScheduleRepeats) GetFrequencyOk() (*string, bool) {
+	if o == nil {
+		return nil, false
 	}
-	if obj.ScheduleRepeats != nil {
-		return obj.ScheduleRepeats
+	return &o.Frequency, true
+}
+
+// SetFrequency sets field value
+func (o *ScheduleRepeats) SetFrequency(v string) {
+	o.Frequency = v
+}
+
+// GetInterval returns the Interval field value if set, zero value otherwise.
+func (o *ScheduleRepeats) GetInterval() int32 {
+	if o == nil || IsNil(o.Interval) {
+		var ret int32
+		return ret
+	}
+	return *o.Interval
+}
+
+// GetIntervalOk returns a tuple with the Interval field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ScheduleRepeats) GetIntervalOk() (*int32, bool) {
+	if o == nil || IsNil(o.Interval) {
+		return nil, false
+	}
+	return o.Interval, true
+}
+
+// HasInterval returns a boolean if a field has been set.
+func (o *ScheduleRepeats) HasInterval() bool {
+	if o != nil && !IsNil(o.Interval) {
+		return true
 	}
 
-	// all schemas are nil
-	return nil
+	return false
+}
+
+// SetInterval gets a reference to the given int32 and assigns it to the Interval field.
+func (o *ScheduleRepeats) SetInterval(v int32) {
+	o.Interval = &v
+}
+
+// GetDays returns the Days field value if set, zero value otherwise.
+func (o *ScheduleRepeats) GetDays() []string {
+	if o == nil || IsNil(o.Days) {
+		var ret []string
+		return ret
+	}
+	return o.Days
+}
+
+// GetDaysOk returns a tuple with the Days field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ScheduleRepeats) GetDaysOk() ([]string, bool) {
+	if o == nil || IsNil(o.Days) {
+		return nil, false
+	}
+	return o.Days, true
+}
+
+// HasDays returns a boolean if a field has been set.
+func (o *ScheduleRepeats) HasDays() bool {
+	if o != nil && !IsNil(o.Days) {
+		return true
+	}
+
+	return false
+}
+
+// SetDays gets a reference to the given []string and assigns it to the Days field.
+func (o *ScheduleRepeats) SetDays(v []string) {
+	o.Days = v
+}
+
+func (o ScheduleRepeats) MarshalJSON() ([]byte, error) {
+	toSerialize, err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o ScheduleRepeats) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["frequency"] = o.Frequency
+	if !IsNil(o.Interval) {
+		toSerialize["interval"] = o.Interval
+	}
+	if !IsNil(o.Days) {
+		toSerialize["days"] = o.Days
+	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
+	return toSerialize, nil
+}
+
+func (o *ScheduleRepeats) UnmarshalJSON(data []byte) (err error) {
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err
+	}
+
+	varScheduleRepeats := _ScheduleRepeats{}
+
+	err = json.Unmarshal(data, &varScheduleRepeats)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ScheduleRepeats(varScheduleRepeats)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "frequency")
+		delete(additionalProperties, "interval")
+		delete(additionalProperties, "days")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableScheduleRepeats struct {

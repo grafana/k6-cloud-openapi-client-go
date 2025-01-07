@@ -22,9 +22,9 @@ var _ MappedNullable = &PatchedScheduleRequest{}
 // PatchedScheduleRequest struct for PatchedScheduleRequest
 type PatchedScheduleRequest struct {
 	// The date after which the schedule will start running the test.
-	Starts               *time.Time                     `json:"starts,omitempty"`
-	Repeats              *PatchedScheduleRequestRepeats `json:"repeats,omitempty"`
-	Ends                 *PatchedScheduleRequestEnds    `json:"ends,omitempty"`
+	Starts               NullableTime                   `json:"starts,omitempty"`
+	Repeats              NullableScheduleRepeatsRequest `json:"repeats,omitempty"`
+	Ends                 NullableScheduleEndsRequest    `json:"ends,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -47,100 +47,133 @@ func NewPatchedScheduleRequestWithDefaults() *PatchedScheduleRequest {
 	return &this
 }
 
-// GetStarts returns the Starts field value if set, zero value otherwise.
+// GetStarts returns the Starts field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *PatchedScheduleRequest) GetStarts() time.Time {
-	if o == nil || IsNil(o.Starts) {
+	if o == nil || IsNil(o.Starts.Get()) {
 		var ret time.Time
 		return ret
 	}
-	return *o.Starts
+	return *o.Starts.Get()
 }
 
 // GetStartsOk returns a tuple with the Starts field value if set, nil otherwise
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *PatchedScheduleRequest) GetStartsOk() (*time.Time, bool) {
-	if o == nil || IsNil(o.Starts) {
+	if o == nil {
 		return nil, false
 	}
-	return o.Starts, true
+	return o.Starts.Get(), o.Starts.IsSet()
 }
 
 // HasStarts returns a boolean if a field has been set.
 func (o *PatchedScheduleRequest) HasStarts() bool {
-	if o != nil && !IsNil(o.Starts) {
+	if o != nil && o.Starts.IsSet() {
 		return true
 	}
 
 	return false
 }
 
-// SetStarts gets a reference to the given time.Time and assigns it to the Starts field.
+// SetStarts gets a reference to the given NullableTime and assigns it to the Starts field.
 func (o *PatchedScheduleRequest) SetStarts(v time.Time) {
-	o.Starts = &v
+	o.Starts.Set(&v)
 }
 
-// GetRepeats returns the Repeats field value if set, zero value otherwise.
-func (o *PatchedScheduleRequest) GetRepeats() PatchedScheduleRequestRepeats {
-	if o == nil || IsNil(o.Repeats) {
-		var ret PatchedScheduleRequestRepeats
+// SetStartsNil sets the value for Starts to be an explicit nil
+func (o *PatchedScheduleRequest) SetStartsNil() {
+	o.Starts.Set(nil)
+}
+
+// UnsetStarts ensures that no value is present for Starts, not even an explicit nil
+func (o *PatchedScheduleRequest) UnsetStarts() {
+	o.Starts.Unset()
+}
+
+// GetRepeats returns the Repeats field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *PatchedScheduleRequest) GetRepeats() ScheduleRepeatsRequest {
+	if o == nil || IsNil(o.Repeats.Get()) {
+		var ret ScheduleRepeatsRequest
 		return ret
 	}
-	return *o.Repeats
+	return *o.Repeats.Get()
 }
 
 // GetRepeatsOk returns a tuple with the Repeats field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PatchedScheduleRequest) GetRepeatsOk() (*PatchedScheduleRequestRepeats, bool) {
-	if o == nil || IsNil(o.Repeats) {
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *PatchedScheduleRequest) GetRepeatsOk() (*ScheduleRepeatsRequest, bool) {
+	if o == nil {
 		return nil, false
 	}
-	return o.Repeats, true
+	return o.Repeats.Get(), o.Repeats.IsSet()
 }
 
 // HasRepeats returns a boolean if a field has been set.
 func (o *PatchedScheduleRequest) HasRepeats() bool {
-	if o != nil && !IsNil(o.Repeats) {
+	if o != nil && o.Repeats.IsSet() {
 		return true
 	}
 
 	return false
 }
 
-// SetRepeats gets a reference to the given PatchedScheduleRequestRepeats and assigns it to the Repeats field.
-func (o *PatchedScheduleRequest) SetRepeats(v PatchedScheduleRequestRepeats) {
-	o.Repeats = &v
+// SetRepeats gets a reference to the given NullableScheduleRepeatsRequest and assigns it to the Repeats field.
+func (o *PatchedScheduleRequest) SetRepeats(v ScheduleRepeatsRequest) {
+	o.Repeats.Set(&v)
 }
 
-// GetEnds returns the Ends field value if set, zero value otherwise.
-func (o *PatchedScheduleRequest) GetEnds() PatchedScheduleRequestEnds {
-	if o == nil || IsNil(o.Ends) {
-		var ret PatchedScheduleRequestEnds
+// SetRepeatsNil sets the value for Repeats to be an explicit nil
+func (o *PatchedScheduleRequest) SetRepeatsNil() {
+	o.Repeats.Set(nil)
+}
+
+// UnsetRepeats ensures that no value is present for Repeats, not even an explicit nil
+func (o *PatchedScheduleRequest) UnsetRepeats() {
+	o.Repeats.Unset()
+}
+
+// GetEnds returns the Ends field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *PatchedScheduleRequest) GetEnds() ScheduleEndsRequest {
+	if o == nil || IsNil(o.Ends.Get()) {
+		var ret ScheduleEndsRequest
 		return ret
 	}
-	return *o.Ends
+	return *o.Ends.Get()
 }
 
 // GetEndsOk returns a tuple with the Ends field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PatchedScheduleRequest) GetEndsOk() (*PatchedScheduleRequestEnds, bool) {
-	if o == nil || IsNil(o.Ends) {
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *PatchedScheduleRequest) GetEndsOk() (*ScheduleEndsRequest, bool) {
+	if o == nil {
 		return nil, false
 	}
-	return o.Ends, true
+	return o.Ends.Get(), o.Ends.IsSet()
 }
 
 // HasEnds returns a boolean if a field has been set.
 func (o *PatchedScheduleRequest) HasEnds() bool {
-	if o != nil && !IsNil(o.Ends) {
+	if o != nil && o.Ends.IsSet() {
 		return true
 	}
 
 	return false
 }
 
-// SetEnds gets a reference to the given PatchedScheduleRequestEnds and assigns it to the Ends field.
-func (o *PatchedScheduleRequest) SetEnds(v PatchedScheduleRequestEnds) {
-	o.Ends = &v
+// SetEnds gets a reference to the given NullableScheduleEndsRequest and assigns it to the Ends field.
+func (o *PatchedScheduleRequest) SetEnds(v ScheduleEndsRequest) {
+	o.Ends.Set(&v)
+}
+
+// SetEndsNil sets the value for Ends to be an explicit nil
+func (o *PatchedScheduleRequest) SetEndsNil() {
+	o.Ends.Set(nil)
+}
+
+// UnsetEnds ensures that no value is present for Ends, not even an explicit nil
+func (o *PatchedScheduleRequest) UnsetEnds() {
+	o.Ends.Unset()
 }
 
 func (o PatchedScheduleRequest) MarshalJSON() ([]byte, error) {
@@ -153,14 +186,14 @@ func (o PatchedScheduleRequest) MarshalJSON() ([]byte, error) {
 
 func (o PatchedScheduleRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if !IsNil(o.Starts) {
-		toSerialize["starts"] = o.Starts
+	if o.Starts.IsSet() {
+		toSerialize["starts"] = o.Starts.Get()
 	}
-	if !IsNil(o.Repeats) {
-		toSerialize["repeats"] = o.Repeats
+	if o.Repeats.IsSet() {
+		toSerialize["repeats"] = o.Repeats.Get()
 	}
-	if !IsNil(o.Ends) {
-		toSerialize["ends"] = o.Ends
+	if o.Ends.IsSet() {
+		toSerialize["ends"] = o.Ends.Get()
 	}
 
 	for key, value := range o.AdditionalProperties {

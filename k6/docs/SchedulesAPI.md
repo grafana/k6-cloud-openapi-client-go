@@ -106,7 +106,7 @@ import (
 )
 
 func main() {
-	scheduleCreateRequestRequest := *openapiclient.NewScheduleCreateRequestRequest(int32(123), time.Now(), openapiclient.PatchedScheduleRequest_repeats{ScheduleRepeatsRequest: openapiclient.NewScheduleRepeatsRequest("Frequency_example")}, openapiclient.PatchedScheduleRequest_ends{ScheduleEndsRequest: openapiclient.NewScheduleEndsRequest()}) // ScheduleCreateRequestRequest | 
+	scheduleCreateRequestRequest := *openapiclient.NewScheduleCreateRequestRequest(int32(123), time.Now(), "TODO", "TODO") // ScheduleCreateRequestRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)

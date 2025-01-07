@@ -5,15 +5,15 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **LoadTestId** | **int32** | Id of the test to run. | 
-**Starts** | **time.Time** | The date after which the schedule will start running the test. | 
-**Repeats** | [**PatchedScheduleRequestRepeats**](PatchedScheduleRequestRepeats.md) |  | 
-**Ends** | [**PatchedScheduleRequestEnds**](PatchedScheduleRequestEnds.md) |  | 
+**Starts** | **NullableTime** | The date after which the schedule will start running the test. | 
+**Repeats** | [**NullableScheduleRepeatsRequest**](ScheduleRepeatsRequest.md) |  | 
+**Ends** | [**NullableScheduleEndsRequest**](ScheduleEndsRequest.md) |  | 
 
 ## Methods
 
 ### NewScheduleCreateRequestRequest
 
-`func NewScheduleCreateRequestRequest(loadTestId int32, starts time.Time, repeats PatchedScheduleRequestRepeats, ends PatchedScheduleRequestEnds, ) *ScheduleCreateRequestRequest`
+`func NewScheduleCreateRequestRequest(loadTestId int32, starts NullableTime, repeats NullableScheduleRepeatsRequest, ends NullableScheduleEndsRequest, ) *ScheduleCreateRequestRequest`
 
 NewScheduleCreateRequestRequest instantiates a new ScheduleCreateRequestRequest object
 This constructor will assign default values to properties that have it defined,
@@ -68,46 +68,76 @@ and a boolean to check if the value has been set.
 SetStarts sets Starts field to given value.
 
 
+### SetStartsNil
+
+`func (o *ScheduleCreateRequestRequest) SetStartsNil(b bool)`
+
+ SetStartsNil sets the value for Starts to be an explicit nil
+
+### UnsetStarts
+`func (o *ScheduleCreateRequestRequest) UnsetStarts()`
+
+UnsetStarts ensures that no value is present for Starts, not even an explicit nil
 ### GetRepeats
 
-`func (o *ScheduleCreateRequestRequest) GetRepeats() PatchedScheduleRequestRepeats`
+`func (o *ScheduleCreateRequestRequest) GetRepeats() ScheduleRepeatsRequest`
 
 GetRepeats returns the Repeats field if non-nil, zero value otherwise.
 
 ### GetRepeatsOk
 
-`func (o *ScheduleCreateRequestRequest) GetRepeatsOk() (*PatchedScheduleRequestRepeats, bool)`
+`func (o *ScheduleCreateRequestRequest) GetRepeatsOk() (*ScheduleRepeatsRequest, bool)`
 
 GetRepeatsOk returns a tuple with the Repeats field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetRepeats
 
-`func (o *ScheduleCreateRequestRequest) SetRepeats(v PatchedScheduleRequestRepeats)`
+`func (o *ScheduleCreateRequestRequest) SetRepeats(v ScheduleRepeatsRequest)`
 
 SetRepeats sets Repeats field to given value.
 
 
+### SetRepeatsNil
+
+`func (o *ScheduleCreateRequestRequest) SetRepeatsNil(b bool)`
+
+ SetRepeatsNil sets the value for Repeats to be an explicit nil
+
+### UnsetRepeats
+`func (o *ScheduleCreateRequestRequest) UnsetRepeats()`
+
+UnsetRepeats ensures that no value is present for Repeats, not even an explicit nil
 ### GetEnds
 
-`func (o *ScheduleCreateRequestRequest) GetEnds() PatchedScheduleRequestEnds`
+`func (o *ScheduleCreateRequestRequest) GetEnds() ScheduleEndsRequest`
 
 GetEnds returns the Ends field if non-nil, zero value otherwise.
 
 ### GetEndsOk
 
-`func (o *ScheduleCreateRequestRequest) GetEndsOk() (*PatchedScheduleRequestEnds, bool)`
+`func (o *ScheduleCreateRequestRequest) GetEndsOk() (*ScheduleEndsRequest, bool)`
 
 GetEndsOk returns a tuple with the Ends field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetEnds
 
-`func (o *ScheduleCreateRequestRequest) SetEnds(v PatchedScheduleRequestEnds)`
+`func (o *ScheduleCreateRequestRequest) SetEnds(v ScheduleEndsRequest)`
 
 SetEnds sets Ends field to given value.
 
 
+### SetEndsNil
+
+`func (o *ScheduleCreateRequestRequest) SetEndsNil(b bool)`
+
+ SetEndsNil sets the value for Ends to be an explicit nil
+
+### UnsetEnds
+`func (o *ScheduleCreateRequestRequest) UnsetEnds()`
+
+UnsetEnds ensures that no value is present for Ends, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 
