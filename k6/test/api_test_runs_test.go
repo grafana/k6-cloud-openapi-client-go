@@ -1,5 +1,5 @@
 /*
-
+Grafana Cloud k6
 
 Testing TestRunsAPIService
 
@@ -22,6 +22,20 @@ func Test_k6_TestRunsAPIService(t *testing.T) {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
+
+	t.Run("Test TestRunsAPIService LoadTestsTestRunsRetrieve", func(t *testing.T) {
+
+		t.Skip("skip test") // remove to run test
+
+		var id int32
+
+		resp, httpRes, err := apiClient.TestRunsAPI.LoadTestsTestRunsRetrieve(context.Background(), id).Execute()
+
+		require.Nil(t, err)
+		require.NotNil(t, resp)
+		assert.Equal(t, 200, httpRes.StatusCode)
+
+	})
 
 	t.Run("Test TestRunsAPIService TestRunsAbort", func(t *testing.T) {
 
@@ -61,13 +75,13 @@ func Test_k6_TestRunsAPIService(t *testing.T) {
 
 	})
 
-	t.Run("Test TestRunsAPIService TestRunsNoteUpdate", func(t *testing.T) {
+	t.Run("Test TestRunsAPIService TestRunsPartialUpdate", func(t *testing.T) {
 
 		t.Skip("skip test") // remove to run test
 
 		var id int32
 
-		httpRes, err := apiClient.TestRunsAPI.TestRunsNoteUpdate(context.Background(), id).Execute()
+		httpRes, err := apiClient.TestRunsAPI.TestRunsPartialUpdate(context.Background(), id).Execute()
 
 		require.Nil(t, err)
 		assert.Equal(t, 200, httpRes.StatusCode)

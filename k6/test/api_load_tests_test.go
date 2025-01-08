@@ -1,5 +1,5 @@
 /*
-
+Grafana Cloud k6
 
 Testing LoadTestsAPIService
 
@@ -36,6 +36,18 @@ func Test_k6_LoadTestsAPIService(t *testing.T) {
 
 	})
 
+	t.Run("Test LoadTestsAPIService LoadTestsList", func(t *testing.T) {
+
+		t.Skip("skip test") // remove to run test
+
+		resp, httpRes, err := apiClient.LoadTestsAPI.LoadTestsList(context.Background()).Execute()
+
+		require.Nil(t, err)
+		require.NotNil(t, resp)
+		assert.Equal(t, 200, httpRes.StatusCode)
+
+	})
+
 	t.Run("Test LoadTestsAPIService LoadTestsPartialUpdate", func(t *testing.T) {
 
 		t.Skip("skip test") // remove to run test
@@ -56,20 +68,6 @@ func Test_k6_LoadTestsAPIService(t *testing.T) {
 		var id int32
 
 		resp, httpRes, err := apiClient.LoadTestsAPI.LoadTestsRetrieve(context.Background(), id).Execute()
-
-		require.Nil(t, err)
-		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
-
-	})
-
-	t.Run("Test LoadTestsAPIService LoadTestsSchedulesRetrieve", func(t *testing.T) {
-
-		t.Skip("skip test") // remove to run test
-
-		var id int32
-
-		resp, httpRes, err := apiClient.LoadTestsAPI.LoadTestsSchedulesRetrieve(context.Background(), id).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -118,13 +116,13 @@ func Test_k6_LoadTestsAPIService(t *testing.T) {
 
 	})
 
-	t.Run("Test LoadTestsAPIService LoadTestsTestRunsList", func(t *testing.T) {
+	t.Run("Test LoadTestsAPIService ProjectsLoadTestsCreate", func(t *testing.T) {
 
 		t.Skip("skip test") // remove to run test
 
 		var id int32
 
-		resp, httpRes, err := apiClient.LoadTestsAPI.LoadTestsTestRunsList(context.Background(), id).Execute()
+		resp, httpRes, err := apiClient.LoadTestsAPI.ProjectsLoadTestsCreate(context.Background(), id).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -132,11 +130,13 @@ func Test_k6_LoadTestsAPIService(t *testing.T) {
 
 	})
 
-	t.Run("Test LoadTestsAPIService ProjectsLoadTestsList", func(t *testing.T) {
+	t.Run("Test LoadTestsAPIService ProjectsLoadTestsRetrieve", func(t *testing.T) {
 
 		t.Skip("skip test") // remove to run test
 
-		resp, httpRes, err := apiClient.LoadTestsAPI.ProjectsLoadTestsList(context.Background()).Execute()
+		var id int32
+
+		resp, httpRes, err := apiClient.LoadTestsAPI.ProjectsLoadTestsRetrieve(context.Background(), id).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)

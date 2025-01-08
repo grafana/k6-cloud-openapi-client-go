@@ -1,23 +1,38 @@
 # k6-cloud-openapi-client examples
 
-Here you can find a working example of how to use the `k6-cloud-openapi-client`.
+Here there are some working examples that show how to use the `k6-cloud-openapi-client` in the form of
+[Go Testable Examples](https://go.dev/blog/examples).
 
 ## Instructions
 
-The [`main.go`](./main.go) file contains a simple `main` function where the client is initialized and used to list all
-the load tests (*`GET /load_tests`*), the results are printed through the standard output.
+### Requirements
 
-### How to run the example
+To run these examples, the following environment variables must be defined:
 
-> [!IMPORTANT]  
-> This example assumes you have the service forwarded to a local port.
-> You can do that with `kubectl --context=dev-us-east-0 --namespace k6-cloud port-forward service/general-api 8080:80`.
-> Otherwise, you'll need to adjust the `URL` specified in the `main.go` file.
+- `K6_CLOUD_TOKEN`: Personal API token or a Grafana Stack API token, to authenticate with the GCk6 API.
+- `K6_CLOUD_STACK_ID`: The Grafana stack instance ID.
+- _(Optional)_ `K6_CLOUD_URL`: The root URL for the Grafana Cloud k6 REST API. *Default is `https://api.k6.io`.*
 
-This example tries to read the _token_ and the _stack id_, which are required, from environment variables.
+_(Further details can be found
+[here](https://grafana.com/docs/grafana-cloud/testing/k6/reference/cloud-rest-api/v6/#authentication-and-authorization))_
 
-So, you can run it with:
+### How to run the examples
 
-```bash
-K6_CLOUD_TOKEN=<your-token> K6_CLOUD_STACK_ID=<stack-or-instance-id> go run main.go
+> [!IMPORTANT]
+> Some examples provided here are not generic operations over collections, such as listing all projects for a given
+> set of credentials and stack. Instead, they are operations on specific resources, like destroying (deleting) a
+> project.
+> These operations require you to specify the resource id in the request.
+>
+> The examples include placeholder values for demonstration purposes, but you must replace these with the actual
+> resource ids from your account. If you do not, the examples will fail, returning errors like: `404 Not Found`.
+
+You can run one of the examples, given its name (e.g. `ExampleProjectsAPI_ProjectsList`), by executing the
+`go test` command as follows:
+
+```sh
+K6_CLOUD_TOKEN=<your-token> K6_CLOUD_STACK_ID=<stack-or-instance-id> go test ./examples/... -run ExampleProjectsAPI_ProjectsList -v
 ```
+
+_Note the use of `-v` to display the output of the example, which contains some information retrieved from the API_
+
