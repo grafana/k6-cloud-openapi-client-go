@@ -37,7 +37,7 @@ func ExampleProjectsAPI_ProjectsList() {
 
 	log.Println("The list of available projects is:")
 	for _, p := range projectsRes.Value {
-		log.Printf("%s\n", p.Name)
+		log.Printf("%s\n", p.GetName())
 	}
 
 	// Output:
@@ -65,7 +65,7 @@ func ExampleProjectsAPI_ProjectsCreate() {
 	}
 
 	log.Printf("Status code: %d", httpRes.StatusCode)
-	log.Printf("The project '%s' has been created with the id: %d", createdRes.Name, createdRes.Id)
+	log.Printf("The project '%s' has been created with the id: %d", createdRes.GetName(), createdRes.GetId())
 
 	// Output:
 
