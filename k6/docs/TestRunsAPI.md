@@ -33,7 +33,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "github.com/grafana/k6-cloud-openapi-client-go/k6"
+	openapiclient "github.com/grafana/k6-cloud-openapi-client/k6"
 )
 
 func main() {
@@ -111,7 +111,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "github.com/grafana/k6-cloud-openapi-client-go/k6"
+	openapiclient "github.com/grafana/k6-cloud-openapi-client/k6"
 )
 
 func main() {
@@ -181,7 +181,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "github.com/grafana/k6-cloud-openapi-client-go/k6"
+	openapiclient "github.com/grafana/k6-cloud-openapi-client/k6"
 )
 
 func main() {
@@ -251,7 +251,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "github.com/grafana/k6-cloud-openapi-client-go/k6"
+	openapiclient "github.com/grafana/k6-cloud-openapi-client/k6"
 )
 
 func main() {
@@ -323,7 +323,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "github.com/grafana/k6-cloud-openapi-client-go/k6"
+	openapiclient "github.com/grafana/k6-cloud-openapi-client/k6"
 )
 
 func main() {
@@ -395,7 +395,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "github.com/grafana/k6-cloud-openapi-client-go/k6"
+	openapiclient "github.com/grafana/k6-cloud-openapi-client/k6"
 )
 
 func main() {
@@ -467,7 +467,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "github.com/grafana/k6-cloud-openapi-client-go/k6"
+	openapiclient "github.com/grafana/k6-cloud-openapi-client/k6"
 )
 
 func main() {
@@ -537,7 +537,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "github.com/grafana/k6-cloud-openapi-client-go/k6"
+	openapiclient "github.com/grafana/k6-cloud-openapi-client/k6"
 )
 
 func main() {
@@ -609,7 +609,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "github.com/grafana/k6-cloud-openapi-client-go/k6"
+	openapiclient "github.com/grafana/k6-cloud-openapi-client/k6"
 )
 
 func main() {

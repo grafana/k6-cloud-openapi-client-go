@@ -1,6 +1,5 @@
 .gitignore
 README.md
-api/openapi.yaml
 api_load_tests.go
 api_projects.go
 api_test_runs.go
