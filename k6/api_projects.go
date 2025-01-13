@@ -31,17 +31,17 @@ type ApiProjectsCreateRequest struct {
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r ApiProjectsCreateRequest) XStackId(xStackId int32) ApiProjectsCreateRequest {
+func (r *ApiProjectsCreateRequest) XStackId(xStackId int32) *ApiProjectsCreateRequest {
 	r.xStackId = &xStackId
 	return r
 }
 
-func (r ApiProjectsCreateRequest) CreateProjectApiModel(createProjectApiModel CreateProjectApiModel) ApiProjectsCreateRequest {
-	r.createProjectApiModel = &createProjectApiModel
+func (r *ApiProjectsCreateRequest) CreateProjectApiModel(createProjectApiModel *CreateProjectApiModel) *ApiProjectsCreateRequest {
+	r.createProjectApiModel = createProjectApiModel
 	return r
 }
 
-func (r ApiProjectsCreateRequest) Execute() (*ProjectApiModel, *http.Response, error) {
+func (r *ApiProjectsCreateRequest) Execute() (*ProjectApiModel, *http.Response, error) {
 	return r.ApiService.ProjectsCreateExecute(r)
 }
 
@@ -51,10 +51,10 @@ ProjectsCreate Create a project.
 Create a new project.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiProjectsCreateRequest
+	@return *ApiProjectsCreateRequest
 */
-func (a *ProjectsAPIService) ProjectsCreate(ctx context.Context) ApiProjectsCreateRequest {
-	return ApiProjectsCreateRequest{
+func (a *ProjectsAPIService) ProjectsCreate(ctx context.Context) *ApiProjectsCreateRequest {
+	return &ApiProjectsCreateRequest{
 		ApiService: a,
 		ctx:        ctx,
 	}
@@ -63,7 +63,7 @@ func (a *ProjectsAPIService) ProjectsCreate(ctx context.Context) ApiProjectsCrea
 // Execute executes the request
 //
 //	@return ProjectApiModel
-func (a *ProjectsAPIService) ProjectsCreateExecute(r ApiProjectsCreateRequest) (*ProjectApiModel, *http.Response, error) {
+func (a *ProjectsAPIService) ProjectsCreateExecute(r *ApiProjectsCreateRequest) (*ProjectApiModel, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPost
 		localVarPostBody    interface{}
@@ -196,12 +196,12 @@ type ApiProjectsDestroyRequest struct {
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r ApiProjectsDestroyRequest) XStackId(xStackId int32) ApiProjectsDestroyRequest {
+func (r *ApiProjectsDestroyRequest) XStackId(xStackId int32) *ApiProjectsDestroyRequest {
 	r.xStackId = &xStackId
 	return r
 }
 
-func (r ApiProjectsDestroyRequest) Execute() (*http.Response, error) {
+func (r *ApiProjectsDestroyRequest) Execute() (*http.Response, error) {
 	return r.ApiService.ProjectsDestroyExecute(r)
 }
 
@@ -212,10 +212,10 @@ Delete a project.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@param id ID of the project.
-	@return ApiProjectsDestroyRequest
+	@return *ApiProjectsDestroyRequest
 */
-func (a *ProjectsAPIService) ProjectsDestroy(ctx context.Context, id int32) ApiProjectsDestroyRequest {
-	return ApiProjectsDestroyRequest{
+func (a *ProjectsAPIService) ProjectsDestroy(ctx context.Context, id int32) *ApiProjectsDestroyRequest {
+	return &ApiProjectsDestroyRequest{
 		ApiService: a,
 		ctx:        ctx,
 		id:         id,
@@ -223,7 +223,7 @@ func (a *ProjectsAPIService) ProjectsDestroy(ctx context.Context, id int32) ApiP
 }
 
 // Execute executes the request
-func (a *ProjectsAPIService) ProjectsDestroyExecute(r ApiProjectsDestroyRequest) (*http.Response, error) {
+func (a *ProjectsAPIService) ProjectsDestroyExecute(r *ApiProjectsDestroyRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod = http.MethodDelete
 		localVarPostBody   interface{}
@@ -354,17 +354,17 @@ type ApiProjectsLimitsPartialUpdateRequest struct {
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r ApiProjectsLimitsPartialUpdateRequest) XStackId(xStackId int32) ApiProjectsLimitsPartialUpdateRequest {
+func (r *ApiProjectsLimitsPartialUpdateRequest) XStackId(xStackId int32) *ApiProjectsLimitsPartialUpdateRequest {
 	r.xStackId = &xStackId
 	return r
 }
 
-func (r ApiProjectsLimitsPartialUpdateRequest) PatchProjectLimitsRequest(patchProjectLimitsRequest PatchProjectLimitsRequest) ApiProjectsLimitsPartialUpdateRequest {
-	r.patchProjectLimitsRequest = &patchProjectLimitsRequest
+func (r *ApiProjectsLimitsPartialUpdateRequest) PatchProjectLimitsRequest(patchProjectLimitsRequest *PatchProjectLimitsRequest) *ApiProjectsLimitsPartialUpdateRequest {
+	r.patchProjectLimitsRequest = patchProjectLimitsRequest
 	return r
 }
 
-func (r ApiProjectsLimitsPartialUpdateRequest) Execute() (*http.Response, error) {
+func (r *ApiProjectsLimitsPartialUpdateRequest) Execute() (*http.Response, error) {
 	return r.ApiService.ProjectsLimitsPartialUpdateExecute(r)
 }
 
@@ -377,10 +377,10 @@ Set a limit to `null` to remove it.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@param id ID of the project.
-	@return ApiProjectsLimitsPartialUpdateRequest
+	@return *ApiProjectsLimitsPartialUpdateRequest
 */
-func (a *ProjectsAPIService) ProjectsLimitsPartialUpdate(ctx context.Context, id int32) ApiProjectsLimitsPartialUpdateRequest {
-	return ApiProjectsLimitsPartialUpdateRequest{
+func (a *ProjectsAPIService) ProjectsLimitsPartialUpdate(ctx context.Context, id int32) *ApiProjectsLimitsPartialUpdateRequest {
+	return &ApiProjectsLimitsPartialUpdateRequest{
 		ApiService: a,
 		ctx:        ctx,
 		id:         id,
@@ -388,7 +388,7 @@ func (a *ProjectsAPIService) ProjectsLimitsPartialUpdate(ctx context.Context, id
 }
 
 // Execute executes the request
-func (a *ProjectsAPIService) ProjectsLimitsPartialUpdateExecute(r ApiProjectsLimitsPartialUpdateRequest) (*http.Response, error) {
+func (a *ProjectsAPIService) ProjectsLimitsPartialUpdateExecute(r *ApiProjectsLimitsPartialUpdateRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod = http.MethodPatch
 		localVarPostBody   interface{}
@@ -520,12 +520,12 @@ type ApiProjectsLimitsRetrieveRequest struct {
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r ApiProjectsLimitsRetrieveRequest) XStackId(xStackId int32) ApiProjectsLimitsRetrieveRequest {
+func (r *ApiProjectsLimitsRetrieveRequest) XStackId(xStackId int32) *ApiProjectsLimitsRetrieveRequest {
 	r.xStackId = &xStackId
 	return r
 }
 
-func (r ApiProjectsLimitsRetrieveRequest) Execute() (*ProjectLimitsApiModel, *http.Response, error) {
+func (r *ApiProjectsLimitsRetrieveRequest) Execute() (*ProjectLimitsApiModel, *http.Response, error) {
 	return r.ApiService.ProjectsLimitsRetrieveExecute(r)
 }
 
@@ -536,10 +536,10 @@ Fetch limits for a project.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@param id ID of the project.
-	@return ApiProjectsLimitsRetrieveRequest
+	@return *ApiProjectsLimitsRetrieveRequest
 */
-func (a *ProjectsAPIService) ProjectsLimitsRetrieve(ctx context.Context, id int32) ApiProjectsLimitsRetrieveRequest {
-	return ApiProjectsLimitsRetrieveRequest{
+func (a *ProjectsAPIService) ProjectsLimitsRetrieve(ctx context.Context, id int32) *ApiProjectsLimitsRetrieveRequest {
+	return &ApiProjectsLimitsRetrieveRequest{
 		ApiService: a,
 		ctx:        ctx,
 		id:         id,
@@ -549,7 +549,7 @@ func (a *ProjectsAPIService) ProjectsLimitsRetrieve(ctx context.Context, id int3
 // Execute executes the request
 //
 //	@return ProjectLimitsApiModel
-func (a *ProjectsAPIService) ProjectsLimitsRetrieveExecute(r ApiProjectsLimitsRetrieveRequest) (*ProjectLimitsApiModel, *http.Response, error) {
+func (a *ProjectsAPIService) ProjectsLimitsRetrieveExecute(r *ApiProjectsLimitsRetrieveRequest) (*ProjectLimitsApiModel, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
 		localVarPostBody    interface{}
@@ -681,36 +681,36 @@ type ApiProjectsListRequest struct {
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r ApiProjectsListRequest) XStackId(xStackId int32) ApiProjectsListRequest {
+func (r *ApiProjectsListRequest) XStackId(xStackId int32) *ApiProjectsListRequest {
 	r.xStackId = &xStackId
 	return r
 }
 
 // Include collection length in the response object as &#x60;@count&#x60;.
-func (r ApiProjectsListRequest) Count(count bool) ApiProjectsListRequest {
+func (r *ApiProjectsListRequest) Count(count bool) *ApiProjectsListRequest {
 	r.count = &count
 	return r
 }
 
 // Comma-separated list of fields to use when ordering the results. Available fields: - created  The default ascending order can be reversed by appending the &#x60;desc&#x60; specifier.
-func (r ApiProjectsListRequest) Orderby(orderby string) ApiProjectsListRequest {
+func (r *ApiProjectsListRequest) Orderby(orderby string) *ApiProjectsListRequest {
 	r.orderby = &orderby
 	return r
 }
 
 // The initial index from which to return the results.
-func (r ApiProjectsListRequest) Skip(skip int32) ApiProjectsListRequest {
+func (r *ApiProjectsListRequest) Skip(skip int32) *ApiProjectsListRequest {
 	r.skip = &skip
 	return r
 }
 
 // Number of results to return per page.
-func (r ApiProjectsListRequest) Top(top int32) ApiProjectsListRequest {
+func (r *ApiProjectsListRequest) Top(top int32) *ApiProjectsListRequest {
 	r.top = &top
 	return r
 }
 
-func (r ApiProjectsListRequest) Execute() (*ProjectListResponse, *http.Response, error) {
+func (r *ApiProjectsListRequest) Execute() (*ProjectListResponse, *http.Response, error) {
 	return r.ApiService.ProjectsListExecute(r)
 }
 
@@ -720,10 +720,10 @@ ProjectsList List all projects.
 List all available projects.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiProjectsListRequest
+	@return *ApiProjectsListRequest
 */
-func (a *ProjectsAPIService) ProjectsList(ctx context.Context) ApiProjectsListRequest {
-	return ApiProjectsListRequest{
+func (a *ProjectsAPIService) ProjectsList(ctx context.Context) *ApiProjectsListRequest {
+	return &ApiProjectsListRequest{
 		ApiService: a,
 		ctx:        ctx,
 	}
@@ -732,7 +732,7 @@ func (a *ProjectsAPIService) ProjectsList(ctx context.Context) ApiProjectsListRe
 // Execute executes the request
 //
 //	@return ProjectListResponse
-func (a *ProjectsAPIService) ProjectsListExecute(r ApiProjectsListRequest) (*ProjectListResponse, *http.Response, error) {
+func (a *ProjectsAPIService) ProjectsListExecute(r *ApiProjectsListRequest) (*ProjectListResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
 		localVarPostBody    interface{}
@@ -876,17 +876,17 @@ type ApiProjectsPartialUpdateRequest struct {
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r ApiProjectsPartialUpdateRequest) XStackId(xStackId int32) ApiProjectsPartialUpdateRequest {
+func (r *ApiProjectsPartialUpdateRequest) XStackId(xStackId int32) *ApiProjectsPartialUpdateRequest {
 	r.xStackId = &xStackId
 	return r
 }
 
-func (r ApiProjectsPartialUpdateRequest) PatchProjectApiModel(patchProjectApiModel PatchProjectApiModel) ApiProjectsPartialUpdateRequest {
-	r.patchProjectApiModel = &patchProjectApiModel
+func (r *ApiProjectsPartialUpdateRequest) PatchProjectApiModel(patchProjectApiModel *PatchProjectApiModel) *ApiProjectsPartialUpdateRequest {
+	r.patchProjectApiModel = patchProjectApiModel
 	return r
 }
 
-func (r ApiProjectsPartialUpdateRequest) Execute() (*http.Response, error) {
+func (r *ApiProjectsPartialUpdateRequest) Execute() (*http.Response, error) {
 	return r.ApiService.ProjectsPartialUpdateExecute(r)
 }
 
@@ -897,10 +897,10 @@ Update a project.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@param id ID of the project.
-	@return ApiProjectsPartialUpdateRequest
+	@return *ApiProjectsPartialUpdateRequest
 */
-func (a *ProjectsAPIService) ProjectsPartialUpdate(ctx context.Context, id int32) ApiProjectsPartialUpdateRequest {
-	return ApiProjectsPartialUpdateRequest{
+func (a *ProjectsAPIService) ProjectsPartialUpdate(ctx context.Context, id int32) *ApiProjectsPartialUpdateRequest {
+	return &ApiProjectsPartialUpdateRequest{
 		ApiService: a,
 		ctx:        ctx,
 		id:         id,
@@ -908,7 +908,7 @@ func (a *ProjectsAPIService) ProjectsPartialUpdate(ctx context.Context, id int32
 }
 
 // Execute executes the request
-func (a *ProjectsAPIService) ProjectsPartialUpdateExecute(r ApiProjectsPartialUpdateRequest) (*http.Response, error) {
+func (a *ProjectsAPIService) ProjectsPartialUpdateExecute(r *ApiProjectsPartialUpdateRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod = http.MethodPatch
 		localVarPostBody   interface{}
@@ -1043,12 +1043,12 @@ type ApiProjectsRetrieveRequest struct {
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r ApiProjectsRetrieveRequest) XStackId(xStackId int32) ApiProjectsRetrieveRequest {
+func (r *ApiProjectsRetrieveRequest) XStackId(xStackId int32) *ApiProjectsRetrieveRequest {
 	r.xStackId = &xStackId
 	return r
 }
 
-func (r ApiProjectsRetrieveRequest) Execute() (*ProjectApiModel, *http.Response, error) {
+func (r *ApiProjectsRetrieveRequest) Execute() (*ProjectApiModel, *http.Response, error) {
 	return r.ApiService.ProjectsRetrieveExecute(r)
 }
 
@@ -1059,10 +1059,10 @@ Retrieve a single project.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@param id ID of the project.
-	@return ApiProjectsRetrieveRequest
+	@return *ApiProjectsRetrieveRequest
 */
-func (a *ProjectsAPIService) ProjectsRetrieve(ctx context.Context, id int32) ApiProjectsRetrieveRequest {
-	return ApiProjectsRetrieveRequest{
+func (a *ProjectsAPIService) ProjectsRetrieve(ctx context.Context, id int32) *ApiProjectsRetrieveRequest {
+	return &ApiProjectsRetrieveRequest{
 		ApiService: a,
 		ctx:        ctx,
 		id:         id,
@@ -1072,7 +1072,7 @@ func (a *ProjectsAPIService) ProjectsRetrieve(ctx context.Context, id int32) Api
 // Execute executes the request
 //
 //	@return ProjectApiModel
-func (a *ProjectsAPIService) ProjectsRetrieveExecute(r ApiProjectsRetrieveRequest) (*ProjectApiModel, *http.Response, error) {
+func (a *ProjectsAPIService) ProjectsRetrieveExecute(r *ApiProjectsRetrieveRequest) (*ProjectApiModel, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
 		localVarPostBody    interface{}

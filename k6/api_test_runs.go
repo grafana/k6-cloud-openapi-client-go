@@ -34,30 +34,30 @@ type ApiLoadTestsTestRunsRetrieveRequest struct {
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r ApiLoadTestsTestRunsRetrieveRequest) XStackId(xStackId int32) ApiLoadTestsTestRunsRetrieveRequest {
+func (r *ApiLoadTestsTestRunsRetrieveRequest) XStackId(xStackId int32) *ApiLoadTestsTestRunsRetrieveRequest {
 	r.xStackId = &xStackId
 	return r
 }
 
 // Include collection length in the response object as &#x60;@count&#x60;.
-func (r ApiLoadTestsTestRunsRetrieveRequest) Count(count bool) ApiLoadTestsTestRunsRetrieveRequest {
+func (r *ApiLoadTestsTestRunsRetrieveRequest) Count(count bool) *ApiLoadTestsTestRunsRetrieveRequest {
 	r.count = &count
 	return r
 }
 
 // The initial index from which to return the results.
-func (r ApiLoadTestsTestRunsRetrieveRequest) Skip(skip int32) ApiLoadTestsTestRunsRetrieveRequest {
+func (r *ApiLoadTestsTestRunsRetrieveRequest) Skip(skip int32) *ApiLoadTestsTestRunsRetrieveRequest {
 	r.skip = &skip
 	return r
 }
 
 // Number of results to return per page.
-func (r ApiLoadTestsTestRunsRetrieveRequest) Top(top int32) ApiLoadTestsTestRunsRetrieveRequest {
+func (r *ApiLoadTestsTestRunsRetrieveRequest) Top(top int32) *ApiLoadTestsTestRunsRetrieveRequest {
 	r.top = &top
 	return r
 }
 
-func (r ApiLoadTestsTestRunsRetrieveRequest) Execute() (*TestRunListResponse, *http.Response, error) {
+func (r *ApiLoadTestsTestRunsRetrieveRequest) Execute() (*TestRunListResponse, *http.Response, error) {
 	return r.ApiService.LoadTestsTestRunsRetrieveExecute(r)
 }
 
@@ -68,10 +68,10 @@ List all runs of a load test.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@param id ID of the load test.
-	@return ApiLoadTestsTestRunsRetrieveRequest
+	@return *ApiLoadTestsTestRunsRetrieveRequest
 */
-func (a *TestRunsAPIService) LoadTestsTestRunsRetrieve(ctx context.Context, id int32) ApiLoadTestsTestRunsRetrieveRequest {
-	return ApiLoadTestsTestRunsRetrieveRequest{
+func (a *TestRunsAPIService) LoadTestsTestRunsRetrieve(ctx context.Context, id int32) *ApiLoadTestsTestRunsRetrieveRequest {
+	return &ApiLoadTestsTestRunsRetrieveRequest{
 		ApiService: a,
 		ctx:        ctx,
 		id:         id,
@@ -81,7 +81,7 @@ func (a *TestRunsAPIService) LoadTestsTestRunsRetrieve(ctx context.Context, id i
 // Execute executes the request
 //
 //	@return TestRunListResponse
-func (a *TestRunsAPIService) LoadTestsTestRunsRetrieveExecute(r ApiLoadTestsTestRunsRetrieveRequest) (*TestRunListResponse, *http.Response, error) {
+func (a *TestRunsAPIService) LoadTestsTestRunsRetrieveExecute(r *ApiLoadTestsTestRunsRetrieveRequest) (*TestRunListResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
 		localVarPostBody    interface{}
@@ -233,12 +233,12 @@ type ApiTestRunsAbortRequest struct {
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r ApiTestRunsAbortRequest) XStackId(xStackId int32) ApiTestRunsAbortRequest {
+func (r *ApiTestRunsAbortRequest) XStackId(xStackId int32) *ApiTestRunsAbortRequest {
 	r.xStackId = &xStackId
 	return r
 }
 
-func (r ApiTestRunsAbortRequest) Execute() (*http.Response, error) {
+func (r *ApiTestRunsAbortRequest) Execute() (*http.Response, error) {
 	return r.ApiService.TestRunsAbortExecute(r)
 }
 
@@ -249,10 +249,10 @@ Abort a running test.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@param id ID of the load test run.
-	@return ApiTestRunsAbortRequest
+	@return *ApiTestRunsAbortRequest
 */
-func (a *TestRunsAPIService) TestRunsAbort(ctx context.Context, id int32) ApiTestRunsAbortRequest {
-	return ApiTestRunsAbortRequest{
+func (a *TestRunsAPIService) TestRunsAbort(ctx context.Context, id int32) *ApiTestRunsAbortRequest {
+	return &ApiTestRunsAbortRequest{
 		ApiService: a,
 		ctx:        ctx,
 		id:         id,
@@ -260,7 +260,7 @@ func (a *TestRunsAPIService) TestRunsAbort(ctx context.Context, id int32) ApiTes
 }
 
 // Execute executes the request
-func (a *TestRunsAPIService) TestRunsAbortExecute(r ApiTestRunsAbortRequest) (*http.Response, error) {
+func (a *TestRunsAPIService) TestRunsAbortExecute(r *ApiTestRunsAbortRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod = http.MethodPost
 		localVarPostBody   interface{}
@@ -390,12 +390,12 @@ type ApiTestRunsDestroyRequest struct {
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r ApiTestRunsDestroyRequest) XStackId(xStackId int32) ApiTestRunsDestroyRequest {
+func (r *ApiTestRunsDestroyRequest) XStackId(xStackId int32) *ApiTestRunsDestroyRequest {
 	r.xStackId = &xStackId
 	return r
 }
 
-func (r ApiTestRunsDestroyRequest) Execute() (*http.Response, error) {
+func (r *ApiTestRunsDestroyRequest) Execute() (*http.Response, error) {
 	return r.ApiService.TestRunsDestroyExecute(r)
 }
 
@@ -406,10 +406,10 @@ Delete a test run.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@param id ID of the load test run.
-	@return ApiTestRunsDestroyRequest
+	@return *ApiTestRunsDestroyRequest
 */
-func (a *TestRunsAPIService) TestRunsDestroy(ctx context.Context, id int32) ApiTestRunsDestroyRequest {
-	return ApiTestRunsDestroyRequest{
+func (a *TestRunsAPIService) TestRunsDestroy(ctx context.Context, id int32) *ApiTestRunsDestroyRequest {
+	return &ApiTestRunsDestroyRequest{
 		ApiService: a,
 		ctx:        ctx,
 		id:         id,
@@ -417,7 +417,7 @@ func (a *TestRunsAPIService) TestRunsDestroy(ctx context.Context, id int32) ApiT
 }
 
 // Execute executes the request
-func (a *TestRunsAPIService) TestRunsDestroyExecute(r ApiTestRunsDestroyRequest) (*http.Response, error) {
+func (a *TestRunsAPIService) TestRunsDestroyExecute(r *ApiTestRunsDestroyRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod = http.MethodDelete
 		localVarPostBody   interface{}
@@ -549,30 +549,30 @@ type ApiTestRunsListRequest struct {
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r ApiTestRunsListRequest) XStackId(xStackId int32) ApiTestRunsListRequest {
+func (r *ApiTestRunsListRequest) XStackId(xStackId int32) *ApiTestRunsListRequest {
 	r.xStackId = &xStackId
 	return r
 }
 
 // Include collection length in the response object as &#x60;@count&#x60;.
-func (r ApiTestRunsListRequest) Count(count bool) ApiTestRunsListRequest {
+func (r *ApiTestRunsListRequest) Count(count bool) *ApiTestRunsListRequest {
 	r.count = &count
 	return r
 }
 
 // The initial index from which to return the results.
-func (r ApiTestRunsListRequest) Skip(skip int32) ApiTestRunsListRequest {
+func (r *ApiTestRunsListRequest) Skip(skip int32) *ApiTestRunsListRequest {
 	r.skip = &skip
 	return r
 }
 
 // Number of results to return per page.
-func (r ApiTestRunsListRequest) Top(top int32) ApiTestRunsListRequest {
+func (r *ApiTestRunsListRequest) Top(top int32) *ApiTestRunsListRequest {
 	r.top = &top
 	return r
 }
 
-func (r ApiTestRunsListRequest) Execute() (*TestRunListResponse, *http.Response, error) {
+func (r *ApiTestRunsListRequest) Execute() (*TestRunListResponse, *http.Response, error) {
 	return r.ApiService.TestRunsListExecute(r)
 }
 
@@ -582,10 +582,10 @@ TestRunsList List all test runs.
 List all available test runs.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiTestRunsListRequest
+	@return *ApiTestRunsListRequest
 */
-func (a *TestRunsAPIService) TestRunsList(ctx context.Context) ApiTestRunsListRequest {
-	return ApiTestRunsListRequest{
+func (a *TestRunsAPIService) TestRunsList(ctx context.Context) *ApiTestRunsListRequest {
+	return &ApiTestRunsListRequest{
 		ApiService: a,
 		ctx:        ctx,
 	}
@@ -594,7 +594,7 @@ func (a *TestRunsAPIService) TestRunsList(ctx context.Context) ApiTestRunsListRe
 // Execute executes the request
 //
 //	@return TestRunListResponse
-func (a *TestRunsAPIService) TestRunsListExecute(r ApiTestRunsListRequest) (*TestRunListResponse, *http.Response, error) {
+func (a *TestRunsAPIService) TestRunsListExecute(r *ApiTestRunsListRequest) (*TestRunListResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
 		localVarPostBody    interface{}
@@ -735,17 +735,17 @@ type ApiTestRunsPartialUpdateRequest struct {
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r ApiTestRunsPartialUpdateRequest) XStackId(xStackId int32) ApiTestRunsPartialUpdateRequest {
+func (r *ApiTestRunsPartialUpdateRequest) XStackId(xStackId int32) *ApiTestRunsPartialUpdateRequest {
 	r.xStackId = &xStackId
 	return r
 }
 
-func (r ApiTestRunsPartialUpdateRequest) PatchTestRunApiModel(patchTestRunApiModel PatchTestRunApiModel) ApiTestRunsPartialUpdateRequest {
-	r.patchTestRunApiModel = &patchTestRunApiModel
+func (r *ApiTestRunsPartialUpdateRequest) PatchTestRunApiModel(patchTestRunApiModel *PatchTestRunApiModel) *ApiTestRunsPartialUpdateRequest {
+	r.patchTestRunApiModel = patchTestRunApiModel
 	return r
 }
 
-func (r ApiTestRunsPartialUpdateRequest) Execute() (*http.Response, error) {
+func (r *ApiTestRunsPartialUpdateRequest) Execute() (*http.Response, error) {
 	return r.ApiService.TestRunsPartialUpdateExecute(r)
 }
 
@@ -756,10 +756,10 @@ Update a test run.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@param id ID of the load test run.
-	@return ApiTestRunsPartialUpdateRequest
+	@return *ApiTestRunsPartialUpdateRequest
 */
-func (a *TestRunsAPIService) TestRunsPartialUpdate(ctx context.Context, id int32) ApiTestRunsPartialUpdateRequest {
-	return ApiTestRunsPartialUpdateRequest{
+func (a *TestRunsAPIService) TestRunsPartialUpdate(ctx context.Context, id int32) *ApiTestRunsPartialUpdateRequest {
+	return &ApiTestRunsPartialUpdateRequest{
 		ApiService: a,
 		ctx:        ctx,
 		id:         id,
@@ -767,7 +767,7 @@ func (a *TestRunsAPIService) TestRunsPartialUpdate(ctx context.Context, id int32
 }
 
 // Execute executes the request
-func (a *TestRunsAPIService) TestRunsPartialUpdateExecute(r ApiTestRunsPartialUpdateRequest) (*http.Response, error) {
+func (a *TestRunsAPIService) TestRunsPartialUpdateExecute(r *ApiTestRunsPartialUpdateRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod = http.MethodPatch
 		localVarPostBody   interface{}
@@ -902,12 +902,12 @@ type ApiTestRunsRetrieveRequest struct {
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r ApiTestRunsRetrieveRequest) XStackId(xStackId int32) ApiTestRunsRetrieveRequest {
+func (r *ApiTestRunsRetrieveRequest) XStackId(xStackId int32) *ApiTestRunsRetrieveRequest {
 	r.xStackId = &xStackId
 	return r
 }
 
-func (r ApiTestRunsRetrieveRequest) Execute() (*TestRunApiModel, *http.Response, error) {
+func (r *ApiTestRunsRetrieveRequest) Execute() (*TestRunApiModel, *http.Response, error) {
 	return r.ApiService.TestRunsRetrieveExecute(r)
 }
 
@@ -918,10 +918,10 @@ Fetch a single test run.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@param id ID of the load test run.
-	@return ApiTestRunsRetrieveRequest
+	@return *ApiTestRunsRetrieveRequest
 */
-func (a *TestRunsAPIService) TestRunsRetrieve(ctx context.Context, id int32) ApiTestRunsRetrieveRequest {
-	return ApiTestRunsRetrieveRequest{
+func (a *TestRunsAPIService) TestRunsRetrieve(ctx context.Context, id int32) *ApiTestRunsRetrieveRequest {
+	return &ApiTestRunsRetrieveRequest{
 		ApiService: a,
 		ctx:        ctx,
 		id:         id,
@@ -931,7 +931,7 @@ func (a *TestRunsAPIService) TestRunsRetrieve(ctx context.Context, id int32) Api
 // Execute executes the request
 //
 //	@return TestRunApiModel
-func (a *TestRunsAPIService) TestRunsRetrieveExecute(r ApiTestRunsRetrieveRequest) (*TestRunApiModel, *http.Response, error) {
+func (a *TestRunsAPIService) TestRunsRetrieveExecute(r *ApiTestRunsRetrieveRequest) (*TestRunApiModel, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
 		localVarPostBody    interface{}
@@ -1060,12 +1060,12 @@ type ApiTestRunsSaveRequest struct {
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r ApiTestRunsSaveRequest) XStackId(xStackId int32) ApiTestRunsSaveRequest {
+func (r *ApiTestRunsSaveRequest) XStackId(xStackId int32) *ApiTestRunsSaveRequest {
 	r.xStackId = &xStackId
 	return r
 }
 
-func (r ApiTestRunsSaveRequest) Execute() (*http.Response, error) {
+func (r *ApiTestRunsSaveRequest) Execute() (*http.Response, error) {
 	return r.ApiService.TestRunsSaveExecute(r)
 }
 
@@ -1076,10 +1076,10 @@ Persist test run results to keep them past the data-retention period.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@param id ID of the load test run.
-	@return ApiTestRunsSaveRequest
+	@return *ApiTestRunsSaveRequest
 */
-func (a *TestRunsAPIService) TestRunsSave(ctx context.Context, id int32) ApiTestRunsSaveRequest {
-	return ApiTestRunsSaveRequest{
+func (a *TestRunsAPIService) TestRunsSave(ctx context.Context, id int32) *ApiTestRunsSaveRequest {
+	return &ApiTestRunsSaveRequest{
 		ApiService: a,
 		ctx:        ctx,
 		id:         id,
@@ -1087,7 +1087,7 @@ func (a *TestRunsAPIService) TestRunsSave(ctx context.Context, id int32) ApiTest
 }
 
 // Execute executes the request
-func (a *TestRunsAPIService) TestRunsSaveExecute(r ApiTestRunsSaveRequest) (*http.Response, error) {
+func (a *TestRunsAPIService) TestRunsSaveExecute(r *ApiTestRunsSaveRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod = http.MethodPost
 		localVarPostBody   interface{}
@@ -1217,12 +1217,12 @@ type ApiTestRunsScriptRetrieveRequest struct {
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r ApiTestRunsScriptRetrieveRequest) XStackId(xStackId int32) ApiTestRunsScriptRetrieveRequest {
+func (r *ApiTestRunsScriptRetrieveRequest) XStackId(xStackId int32) *ApiTestRunsScriptRetrieveRequest {
 	r.xStackId = &xStackId
 	return r
 }
 
-func (r ApiTestRunsScriptRetrieveRequest) Execute() (string, *http.Response, error) {
+func (r *ApiTestRunsScriptRetrieveRequest) Execute() (string, *http.Response, error) {
 	return r.ApiService.TestRunsScriptRetrieveExecute(r)
 }
 
@@ -1233,10 +1233,10 @@ Download the test run script.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@param id ID of the load test run.
-	@return ApiTestRunsScriptRetrieveRequest
+	@return *ApiTestRunsScriptRetrieveRequest
 */
-func (a *TestRunsAPIService) TestRunsScriptRetrieve(ctx context.Context, id int32) ApiTestRunsScriptRetrieveRequest {
-	return ApiTestRunsScriptRetrieveRequest{
+func (a *TestRunsAPIService) TestRunsScriptRetrieve(ctx context.Context, id int32) *ApiTestRunsScriptRetrieveRequest {
+	return &ApiTestRunsScriptRetrieveRequest{
 		ApiService: a,
 		ctx:        ctx,
 		id:         id,
@@ -1246,7 +1246,7 @@ func (a *TestRunsAPIService) TestRunsScriptRetrieve(ctx context.Context, id int3
 // Execute executes the request
 //
 //	@return string
-func (a *TestRunsAPIService) TestRunsScriptRetrieveExecute(r ApiTestRunsScriptRetrieveRequest) (string, *http.Response, error) {
+func (a *TestRunsAPIService) TestRunsScriptRetrieveExecute(r *ApiTestRunsScriptRetrieveRequest) (string, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
 		localVarPostBody    interface{}
@@ -1375,12 +1375,12 @@ type ApiTestRunsUnsaveRequest struct {
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r ApiTestRunsUnsaveRequest) XStackId(xStackId int32) ApiTestRunsUnsaveRequest {
+func (r *ApiTestRunsUnsaveRequest) XStackId(xStackId int32) *ApiTestRunsUnsaveRequest {
 	r.xStackId = &xStackId
 	return r
 }
 
-func (r ApiTestRunsUnsaveRequest) Execute() (*http.Response, error) {
+func (r *ApiTestRunsUnsaveRequest) Execute() (*http.Response, error) {
 	return r.ApiService.TestRunsUnsaveExecute(r)
 }
 
@@ -1393,10 +1393,10 @@ The data will be automatically deleted at the end of the retention period.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@param id ID of the load test run.
-	@return ApiTestRunsUnsaveRequest
+	@return *ApiTestRunsUnsaveRequest
 */
-func (a *TestRunsAPIService) TestRunsUnsave(ctx context.Context, id int32) ApiTestRunsUnsaveRequest {
-	return ApiTestRunsUnsaveRequest{
+func (a *TestRunsAPIService) TestRunsUnsave(ctx context.Context, id int32) *ApiTestRunsUnsaveRequest {
+	return &ApiTestRunsUnsaveRequest{
 		ApiService: a,
 		ctx:        ctx,
 		id:         id,
@@ -1404,7 +1404,7 @@ func (a *TestRunsAPIService) TestRunsUnsave(ctx context.Context, id int32) ApiTe
 }
 
 // Execute executes the request
-func (a *TestRunsAPIService) TestRunsUnsaveExecute(r ApiTestRunsUnsaveRequest) (*http.Response, error) {
+func (a *TestRunsAPIService) TestRunsUnsaveExecute(r *ApiTestRunsUnsaveRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod = http.MethodPost
 		localVarPostBody   interface{}

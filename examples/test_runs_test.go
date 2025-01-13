@@ -8,18 +8,15 @@ func ExampleTestRunsAPI_TestRunsList() {
 	// The following example assumes that there is a k6 client initialized and ready to use.
 	// Have a look at the `shared.go` file to see how to initialize the client.
 
-	// First we initialize the base request.
-	req := client.TestRunsAPI.TestRunsList(ctx)
-
-	// We specify what Stack id we want to make the request for.
-	req = req.XStackId(stackID)
-
-	// Then, we specify some optional parameters, like requesting the total amount of
-	// projects to be present in the response.
-	req = req.Count(true)
-
-	// To handle pagination, we could skip some rows:
-	// req = req.Skip(100)
+	// First we initialize the base request:
+	req := client.TestRunsAPI.TestRunsList(ctx).
+		// We specify what stack id we want to make the request for:
+		XStackId(stackID).
+		// And we specify some optional parameters, like requesting the total amount of
+		// projects to be present in the response:
+		Count(true)
+	// To handle pagination, we could skip some rows (e.g. 100) with:
+	// .Skip(100)
 
 	// Finally, we execute the request.
 	testRunsRes, httpRes, err := req.Execute()
@@ -45,11 +42,10 @@ func ExampleTestRunsAPI_TestRunsRetrieve() {
 	// The following example assumes that there is a k6 client initialized and ready to use.
 	// Have a look at the `shared.go` file to see how to initialize the client.
 
-	// First we initialize the base request.
-	req := client.TestRunsAPI.TestRunsRetrieve(ctx, 2065460)
-
-	// We specify what Stack id we want to make the request for.
-	req = req.XStackId(stackID)
+	// First we initialize the base request:
+	req := client.TestRunsAPI.TestRunsRetrieve(ctx, 3763757).
+		// And we specify what stack id we want to make the request for:
+		XStackId(stackID)
 
 	// Finally, we execute the request.
 	testRunRes, httpRes, err := req.Execute()
@@ -62,7 +58,7 @@ func ExampleTestRunsAPI_TestRunsRetrieve() {
 	log.Printf("Test run status: %s", testRunRes.GetStatus())
 	log.Printf("Test run result: %s", testRunRes.GetResult())
 	log.Printf("Test run started at: %s", testRunRes.GetCreated().Format("Monday, January 2, 2006 at 3:04 PM"))
-	if endedAt, hasEnded := testRunRes.GetEndedOk(); hasEnded {
+	if endedAt := testRunRes.GetEnded(); !endedAt.IsZero() {
 		log.Printf("Test run ended at: %s", endedAt.Format("Monday, January 2, 2006 at 3:04 PM"))
 	}
 
@@ -74,11 +70,10 @@ func ExampleTestRunsAPI_TestRunsAbort() {
 	// The following example assumes that there is a k6 client initialized and ready to use.
 	// Have a look at the `shared.go` file to see how to initialize the client.
 
-	// First we initialize the base request.
-	req := client.TestRunsAPI.TestRunsAbort(ctx, 2065455)
-
-	// We specify what Stack id we want to make the request for.
-	req = req.XStackId(stackID)
+	// First we initialize the base request:
+	req := client.TestRunsAPI.TestRunsAbort(ctx, 2065455).
+		// And we specify what stack id we want to make the request for:
+		XStackId(stackID)
 
 	// Finally, we execute the request.
 	httpRes, err := req.Execute()
@@ -96,11 +91,10 @@ func ExampleTestRunsAPI_TestRunsDestroy() {
 	// The following example assumes that there is a k6 client initialized and ready to use.
 	// Have a look at the `shared.go` file to see how to initialize the client.
 
-	// First we initialize the base request.
-	req := client.TestRunsAPI.TestRunsDestroy(ctx, 2065455)
-
-	// We specify what Stack id we want to make the request for.
-	req = req.XStackId(stackID)
+	// First we initialize the base request:
+	req := client.TestRunsAPI.TestRunsDestroy(ctx, 2065455).
+		// And we specify what stack id we want to make the request for:
+		XStackId(stackID)
 
 	// Finally, we execute the request.
 	httpRes, err := req.Execute()

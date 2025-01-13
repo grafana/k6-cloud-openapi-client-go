@@ -10,19 +10,16 @@ func ExampleProjectsAPI_ProjectsList() {
 	// The following example assumes that there is a k6 client initialized and ready to use.
 	// Have a look at the `shared.go` file to see how to initialize the client.
 
-	// First we initialize the base request.
-	req := client.ProjectsAPI.ProjectsList(ctx)
-
-	// We specify what Stack id we want to make the request for.
-	req = req.XStackId(stackID)
-
-	// Then, we specify some optional parameters, like sorting by creation date
-	// and requesting the total amount of projects to be present in the response.
-	req = req.Orderby("created")
-	req = req.Count(true)
-
-	// To handle pagination, we could skip some rows:
-	// req = req.Skip(100)
+	// First we initialize the base request:
+	req := client.ProjectsAPI.ProjectsList(ctx).
+		// We specify what stack id we want to make the request for:
+		XStackId(stackID).
+		// Then, we specify some optional parameters, like sorting by creation date:
+		Orderby("created").
+		// And requesting the total amount of projects to be present in the response:
+		Count(true)
+	// To handle pagination, we could skip some rows (e.g. 100) with:
+	// .Skip(100)
 
 	// Finally, we execute the request.
 	projectsRes, httpRes, err := req.Execute()
@@ -51,12 +48,12 @@ func ExampleProjectsAPI_ProjectsCreate() {
 	// First we initialize the project model.
 	toCreate := k6.NewCreateProjectApiModel("Example GCk6 project")
 
-	// Then, we create the base request, and set the model.
-	req := client.ProjectsAPI.ProjectsCreate(ctx)
-	req = req.CreateProjectApiModel(*toCreate)
-
-	// We specify what Stack id we want to make the request for.
-	req = req.XStackId(stackID)
+	// Then, we create the base request:
+	req := client.ProjectsAPI.ProjectsCreate(ctx).
+		// We set the model:
+		CreateProjectApiModel(toCreate).
+		// And we specify what stack id we want to make the request for:
+		XStackId(stackID)
 
 	// Finally, we execute the request.
 	createdRes, httpRes, err := req.Execute()
@@ -78,12 +75,12 @@ func ExampleProjectsAPI_ProjectsPartialUpdate() {
 	// First we initialize the model.
 	toUpdate := k6.NewPatchProjectApiModel("Example GCk6 project (Public API)")
 
-	// Then, we create the base request, and set the model.
-	req := client.ProjectsAPI.ProjectsPartialUpdate(ctx, 3736248)
-	req = req.PatchProjectApiModel(*toUpdate)
-
-	// We specify what Stack id we want to make the request for.
-	req = req.XStackId(stackID)
+	// Then, we create the base request:
+	req := client.ProjectsAPI.ProjectsPartialUpdate(ctx, 3737039).
+		// We set the model:
+		PatchProjectApiModel(toUpdate).
+		// And we specify what stack id we want to make the request for:
+		XStackId(stackID)
 
 	// Finally, we execute the request.
 	httpRes, err := req.Execute()
@@ -101,11 +98,10 @@ func ExampleProjectsAPI_ProjectsLimitsRetrieve() {
 	// The following example assumes that there is a k6 client initialized and ready to use.
 	// Have a look at the `shared.go` file to see how to initialize the client.
 
-	// First we initialize the base request.
-	req := client.ProjectsAPI.ProjectsLimitsRetrieve(ctx, 3736248)
-
-	// We specify what Stack id we want to make the request for.
-	req = req.XStackId(stackID)
+	// First we initialize the base request:
+	req := client.ProjectsAPI.ProjectsLimitsRetrieve(ctx, 3737039).
+		// And we specify what stack id we want to make the request for:
+		XStackId(stackID)
 
 	// Finally, we execute the request.
 	limitsRes, httpRes, err := req.Execute()
@@ -132,12 +128,12 @@ func ExampleProjectsAPI_ProjectsLimitsPartialUpdate() {
 	toUpdate := k6.NewPatchProjectLimitsRequest()
 	toUpdate.SetDurationMaxPerTest(7200)
 
-	// Then, we create the base request, and set the model.
-	req := client.ProjectsAPI.ProjectsLimitsPartialUpdate(ctx, 3736248)
-	req = req.PatchProjectLimitsRequest(*toUpdate)
-
-	// We specify what Stack id we want to make the request for.
-	req = req.XStackId(stackID)
+	// Then, we create the base request:
+	req := client.ProjectsAPI.ProjectsLimitsPartialUpdate(ctx, 3737039).
+		// We set the model:
+		PatchProjectLimitsRequest(toUpdate).
+		// And we specify what stack id we want to make the request for:
+		XStackId(stackID)
 
 	// Finally, we execute the request.
 	httpRes, err := req.Execute()
@@ -155,11 +151,10 @@ func ExampleProjectsAPI_ProjectsDestroy() {
 	// The following example assumes that there is a k6 client initialized and ready to use.
 	// Have a look at the `shared.go` file to see how to initialize the client.
 
-	// First we initialize the base request.
-	req := client.ProjectsAPI.ProjectsDestroy(ctx, 3736246)
-
-	// We specify what Stack id we want to make the request for.
-	req = req.XStackId(stackID)
+	// First we initialize the base request:
+	req := client.ProjectsAPI.ProjectsDestroy(ctx, 3737039).
+		// And we specify what stack id we want to make the request for:
+		XStackId(stackID)
 
 	// Finally, we execute the request.
 	httpRes, err := req.Execute()

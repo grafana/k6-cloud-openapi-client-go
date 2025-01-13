@@ -1,29 +1,25 @@
 package k6
 
 import (
-	"fmt"
+	"bytes"
 	"io"
 	"log"
-	"os"
 )
 
 func ExampleLoadTestsAPI_LoadTestsList() {
 	// The following example assumes that there is a k6 client initialized and ready to use.
 	// Have a look at the `shared.go` file to see how to initialize the client.
 
-	// First we initialize the base request.
-	req := client.LoadTestsAPI.LoadTestsList(ctx)
-
-	// We specify what Stack id we want to make the request for.
-	req = req.XStackId(stackID)
-
-	// Then, we specify some optional parameters, like sorting by creation date
-	// and requesting the total amount of projects to be present in the response.
-	req = req.Orderby("created")
-	req = req.Count(true)
-
-	// To handle pagination, we could skip some rows:
-	// req = req.Skip(100)
+	// First we initialize the base request:
+	req := client.LoadTestsAPI.LoadTestsList(ctx).
+		// We specify what stack id we want to make the request for:
+		XStackId(stackID).
+		// Then, we specify some optional parameters, like sorting by creation date:
+		Orderby("created").
+		// And requesting the total amount of projects to be present in the response:
+		Count(true)
+	// To handle pagination, we could skip some rows (e.g. 100) with:
+	// .Skip(100)
 
 	// Finally, we execute the request.
 	loadTestsRes, httpRes, err := req.Execute()
@@ -49,34 +45,24 @@ func ExampleLoadTestsAPI_ProjectsLoadTestsCreate() {
 	// The following example assumes that there is a k6 client initialized and ready to use.
 	// Have a look at the `shared.go` file to see how to initialize the client.
 
-	// First we create the load test script file and write some contents to it.
-	f, err := os.CreateTemp("", "*.js")
-	if err != nil {
-		log.Fatalf("Could not create a test script file: %s", err.Error())
-	}
-
-	_, err = fmt.Fprintf(f, `
+	// First we prepare an [io.ReadCloser] with the load test script contents.
+	// We define it inline for simplicity, but we could also use an [*os.File] here.
+	f := io.NopCloser(bytes.NewReader([]byte(`
 import http from 'k6/http';
 
 export default function() {
 	http.get('https://test.k6.io');
 }
-`)
-	if err != nil {
-		log.Fatalf("Could not write to the test script file: %s", err.Error())
-	}
+`)))
 
-	if _, err := f.Seek(0, io.SeekStart); err != nil {
-		log.Fatalf("Could not set the test script file ready for use: %s", err.Error())
-	}
-
-	// Then, we create the base request, and set the model.
-	req := client.LoadTestsAPI.ProjectsLoadTestsCreate(ctx, 3736248)
-	req = req.Name("Example GCk6 load test")
-	req = req.Script(f)
-
-	// We specify what Stack id we want to make the request for.
-	req = req.XStackId(stackID)
+	// Then, we create the base request:
+	req := client.LoadTestsAPI.ProjectsLoadTestsCreate(ctx, 3737039).
+		// We set the load test name:
+		Name("Example GCk6 load test").
+		// We set the script:
+		Script(f).
+		// And we specify what stack id we want to make the request for:
+		XStackId(stackID)
 
 	// Finally, we execute the request.
 	loadTestRes, httpRes, err := req.Execute()
@@ -95,11 +81,10 @@ func ExampleLoadTestsAPI_LoadTestsScriptRetrieve() {
 	// The following example assumes that there is a k6 client initialized and ready to use.
 	// Have a look at the `shared.go` file to see how to initialize the client.
 
-	// First we initialize the base request.
-	req := client.LoadTestsAPI.LoadTestsScriptRetrieve(ctx, 960271)
-
-	// We specify what Stack id we want to make the request for.
-	req = req.XStackId(stackID)
+	// First we initialize the base request:
+	req := client.LoadTestsAPI.LoadTestsScriptRetrieve(ctx, 960826).
+		// And we specify what stack id we want to make the request for:
+		XStackId(stackID)
 
 	// Finally, we execute the request.
 	ltsRes, httpRes, err := req.Execute()
@@ -118,33 +103,22 @@ func ExampleLoadTestsAPI_LoadTestsScriptUpdate() {
 	// The following example assumes that there is a k6 client initialized and ready to use.
 	// Have a look at the `shared.go` file to see how to initialize the client.
 
-	// First we create the load test script file and write some contents to it.
-	f, err := os.CreateTemp("", "*.js")
-	if err != nil {
-		log.Fatalf("Could not create a test script file: %s", err.Error())
-	}
-
-	_, err = fmt.Fprintf(f, `
+	// First we prepare an [io.ReadCloser] with the load test script contents.
+	// We define it inline for simplicity, but we could also use an [*os.File] here.
+	f := io.NopCloser(bytes.NewReader([]byte(`
 import http from 'k6/http';
 
 export default function() {
 	http.get('https://test.k6.io/news.php');
 }
-`)
-	if err != nil {
-		log.Fatalf("Could not write to the test script file: %s", err.Error())
-	}
+`)))
 
-	if _, err := f.Seek(0, io.SeekStart); err != nil {
-		log.Fatalf("Could not set the test script file ready for use: %s", err.Error())
-	}
-
-	// First we initialize the base request.
-	req := client.LoadTestsAPI.LoadTestsScriptUpdate(ctx, 960271)
-	req = req.Body(f)
-
-	// We specify what Stack id we want to make the request for.
-	req = req.XStackId(stackID)
+	// Then, we initialize the base request:
+	req := client.LoadTestsAPI.LoadTestsScriptUpdate(ctx, 960826).
+		// We set the script:
+		Body(f).
+		// And we specify what stack id we want to make the request for:
+		XStackId(stackID)
 
 	// Finally, we execute the request.
 	httpRes, err := req.Execute()
@@ -162,11 +136,10 @@ func ExampleLoadTestsAPI_LoadTestsStart() {
 	// The following example assumes that there is a k6 client initialized and ready to use.
 	// Have a look at the `shared.go` file to see how to initialize the client.
 
-	// First we initialize the base request.
-	req := client.LoadTestsAPI.LoadTestsStart(ctx, 960271)
-
-	// We specify what Stack id we want to make the request for.
-	req = req.XStackId(stackID)
+	// First we initialize the base request:
+	req := client.LoadTestsAPI.LoadTestsStart(ctx, 960826).
+		// And we specify what stack id we want to make the request for:
+		XStackId(stackID)
 
 	// Finally, we execute the request.
 	testRunRes, httpRes, err := req.Execute()
@@ -185,11 +158,10 @@ func ExampleLoadTestsAPI_LoadTestsDestroy() {
 	// The following example assumes that there is a k6 client initialized and ready to use.
 	// Have a look at the `shared.go` file to see how to initialize the client.
 
-	// First we initialize the base request.
-	req := client.LoadTestsAPI.LoadTestsDestroy(ctx, 960257)
-
-	// We specify what Stack id we want to make the request for.
-	req = req.XStackId(stackID)
+	// First we initialize the base request:
+	req := client.LoadTestsAPI.LoadTestsDestroy(ctx, 960257).
+		// And we specify what stack id we want to make the request for:
+		XStackId(stackID)
 
 	// Finally, we execute the request.
 	httpRes, err := req.Execute()

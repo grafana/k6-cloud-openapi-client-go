@@ -13,6 +13,7 @@ package k6
 
 import (
 	"encoding/json"
+	"fmt"
 	"time"
 )
 
@@ -531,12 +532,40 @@ func (o TestRunApiModel) ToMap() (map[string]interface{}, error) {
 }
 
 func (o *TestRunApiModel) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"id",
+		"test_id",
+		"project_id",
+		"started_by",
+		"created",
+		"ended",
+		"note",
+		"retention_expiry",
+		"cost",
+		"status",
+		"status_details",
+		"status_history",
+		"distribution",
+		"result",
+		"result_details",
+		"options",
+	}
+
 	allProperties := make(map[string]interface{})
 
 	err = json.Unmarshal(data, &allProperties)
 
 	if err != nil {
 		return err
+	}
+
+	for _, requiredProperty := range requiredProperties {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
 	}
 
 	varTestRunApiModel := _TestRunApiModel{}
