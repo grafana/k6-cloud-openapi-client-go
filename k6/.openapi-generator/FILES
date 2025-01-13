@@ -1,5 +1,4 @@
 .gitignore
-.travis.yml
 README.md
 api/openapi.yaml
 api_load_tests.go
@@ -35,7 +34,6 @@ docs/TestRunsAPI.md
 docs/TotalVuh.md
 docs/ValidateOptionsRequest.md
 docs/ValidateOptionsResponse.md
-git_push.sh
 model_browser_vuh.go
 model_create_project_api_model.go
 model_distribution_zone_api_model.go

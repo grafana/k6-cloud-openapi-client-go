@@ -7,7 +7,7 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/grafana/k6-cloud-openapi-client/k6"
+	"github.com/grafana/k6-cloud-openapi-client-go/k6"
 )
 
 const (

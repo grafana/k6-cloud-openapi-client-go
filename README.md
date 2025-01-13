@@ -1,4 +1,4 @@
-# k6-cloud-openapi-client
+# k6-cloud-openapi-client-go
 
 **Code generated Go client for the [Grafana Cloud k6 REST API v6](https://grafana.com/docs/grafana-cloud/testing/k6/reference/cloud-rest-api/v6/).**
 
@@ -35,7 +35,7 @@ You can download it from: https://api.k6.io/cloud/v6/openapi.
 As of now, the client is generated with the following command:
 
 ```bash
-openapi-generator-cli generate -i schema.yaml -g go -o ./k6 --git-user-id grafana --git-repo-id k6-cloud-openapi-client --package-name k6 -p isGoSubmodule=true -p disallowAdditionalPropertiesIfNotPresent=false -p withGoMod=false -t ./templates/go
+openapi-generator-cli generate -i schema.yaml -g go -o ./k6 --git-user-id grafana --git-repo-id k6-cloud-openapi-client --package-name k6 -p isGoSubmodule=true -p disallowAdditionalPropertiesIfNotPresent=false -p withGoMod=false -t ./templates
 ```
 
 Once the client is generated, you need to run `goimports`, cause the code generated isn't correctly formatted, 

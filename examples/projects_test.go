@@ -3,7 +3,7 @@ package k6
 import (
 	"log"
 
-	"github.com/grafana/k6-cloud-openapi-client/k6"
+	"github.com/grafana/k6-cloud-openapi-client-go/k6"
 )
 
 func ExampleProjectsAPI_ProjectsList() {

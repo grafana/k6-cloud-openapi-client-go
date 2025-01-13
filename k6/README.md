@@ -23,7 +23,7 @@ go get golang.org/x/net/context
 Put the package under your project folder and add the following in import:
 
 ```go
-import k6 "github.com/grafana/k6-cloud-openapi-client/k6"
+import k6 "github.com/grafana/k6-cloud-openapi-client-go/k6"
 ```
 
 To use a proxy, set the environment variable `HTTP_PROXY`:
