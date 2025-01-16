@@ -71,22 +71,6 @@ Class | Method | HTTP request | Description
  - [ValidateOptionsResponse](docs/ValidateOptionsResponse.md)
 
 
-## Documentation For Authorization
-
-
-Authentication schemes defined for the API:
-### k6ApiToken
-
-- **Type**: HTTP Bearer token authentication
-
-Example
-
-```go
-auth := context.WithValue(context.Background(), k6.ContextAccessToken, "BEARER_TOKEN_STRING")
-r, err := client.Service.Operation(auth, args)
-```
-
-
 ## Documentation for Utility Methods
 
 Due to the fact that model structure members are all pointers, this package contains

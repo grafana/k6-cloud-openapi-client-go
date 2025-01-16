@@ -28,7 +28,7 @@ import k6 "github.com/grafana/k6-cloud-openapi-client-go/k6"
 
 Default configuration comes with `Servers` field that contains server objects as defined in the OpenAPI specification.
 
-Alternatively, can define your own server:
+Alternatively, you can define your own server list with:
 
 ```go
 cfg := k6.NewConfiguration()
@@ -42,37 +42,68 @@ cfg.Servers = []k6.ServerConfiguration{
 Once you have a configuration, you can initialize the client:
 
 ```go
-c := k6.NewAPIClient(cfg)
+client := k6.NewAPIClient(cfg)
+```
+
+#### Authentication
+
+The authentication schema used by the API is HTTP Bearer token authentication and the way to provide the token
+in the client is by using the `k6.ContextAccessToken` context key, as follows:
+
+
+```go
+// You may want to use `context.Background()` if your application doesn't have a context yet.
+ctx = context.WithValue(ctx, k6.ContextAccessToken, "<your-token>")
 ```
 
 #### Using the client's APIs
 
-Below, you can see an example of how to use the client to get a list of all the projects:
+Below, you can see a **full example** of how to use the client to get the list of all the projects:
 
 ```go
-// First we initialize the base request:
-req := client.ProjectsAPI.ProjectsList(ctx).
-    // We specify what stack id we want to make the request for:
-    XStackId(stackID).
-    // We specify some optional parameters, like sorting by creation date:
-    Orderby("created").
-    // We request the total amount of projects to be present in the response:
-    Count(true)
+package main
 
-// Then, we execute the request:
-projectsRes, httpRes, err := req.Execute()
-if err != nil {
-    log.Fatalf("ProjectsList request failed: %s", err.Error())
-}
+import (
+	"context"
+	"fmt"
 
-log.Printf("Status code: %d", httpRes.StatusCode)
-if projectsRes.HasCount() {
-    log.Printf("Total amount of projects: %d", *projectsRes.Count)
-}
+	"github.com/grafana/k6-cloud-openapi-client-go/k6"
+)
 
-log.Println("The list of available projects is:")
-for _, p := range projectsRes.Value {
-    log.Printf("%s\n", p.GetName())
+func main() {
+	// First, we initialize the configuration and the client:
+	cfg := k6.NewConfiguration()
+	client := k6.NewAPIClient(cfg)
+
+	// Then, we prepare the context with the Bearer token:
+	ctx := context.WithValue(context.Background(), k6.ContextAccessToken, "<your-token>")
+
+	// Now, we can build the base request:
+	req := client.ProjectsAPI.ProjectsList(ctx).
+		// Specify what stack id we want to make the request for:
+		XStackId(123 /*<your-stack-id>*/).
+		// Specify some optional parameters, like sorting by creation date:
+		Orderby("created").
+		// Request the total amount of projects to be present in the response:
+		Count(true)
+
+	// And finally, execute the request:
+	projectsRes, httpRes, err := req.Execute()
+	if err != nil {
+		log.Fatalf("ProjectsList request failed: %s", err.Error())
+	}
+
+	// We print the status code and the total amount of projects, if present,
+	// as well as the name of each project:
+	log.Printf("Status code: %d", httpRes.StatusCode)
+	if projectsRes.HasCount() {
+		log.Printf("Total amount of projects: %d", *projectsRes.Count)
+	}
+
+	log.Println("The list of available projects is:")
+	for _, p := range projectsRes.Value {
+		log.Printf("%s\n", p.GetName())
+	}
 }
 ```
 
