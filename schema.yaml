@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Grafana Cloud k6
-  version: 1.0.0
+  version: 1.1.0
   description: HTTP API for interacting with Grafana Cloud k6.
   contact:
     name: Grafana Support
@@ -134,6 +134,12 @@ paths:
                         breakdown:
                           protocol_vuh: 10.0
                           browser_vuh: 0.0
+                      k6_dependencies:
+                        k6: '>=v0.52'
+                        k6/x/faker: '>=0.4.0'
+                      k6_versions:
+                        k6: v0.56.0
+                        k6/x/faker: v0.4.1
                       note: User-defined note for the test run.
                       retention_expiry: '2024-07-01T19:30:30Z'
                       distribution:
@@ -288,6 +294,54 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponseApiModel'
           description: Cannot delete test while it's running.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /cloud/v6/load_tests/{id}/move:
+    put:
+      operationId: load_tests_move
+      description: |-
+        Move a load test to a different project of the same organization.
+        All respective test runs will be also moved to the new project.
+      summary: Move a test to another project.
+      parameters:
+      - $ref: '#/components/parameters/stackId'
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: ID of the load test.
+        required: true
+      tags:
+      - load_tests
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MoveLoadTestApiModel'
+            examples:
+              Move:
+                value:
+                  project_id: 123
+        required: true
+      security:
+      - k6ApiToken: []
+      responses:
+        '204':
+          description: OK.
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApiModel'
+          description: Test with the same name exists in the destination.
+        '400':
+          $ref: '#/components/responses/ValidationError'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -460,6 +514,12 @@ paths:
                     created: '2024-06-01T19:00:00Z'
                     ended: null
                     cost: null
+                    k6_dependencies:
+                      k6: '>=v0.52'
+                      k6/x/faker: '>=0.4.0'
+                    k6_versions:
+                      k6: v0.56.0
+                      k6/x/faker: v0.4.1
                     note: ''
                     retention_expiry: '2024-06-07T19:00:00Z'
                     distribution: null
@@ -535,6 +595,7 @@ paths:
                     - id: 123
                       name: My Project
                       is_default: false
+                      grafana_folder_uid: de0chath6zxfkb
                       created: '2024-12-04T19:57:46.339Z'
                       updated: '2024-12-04T19:57:46.339Z'
                     '@count': 123
@@ -578,6 +639,7 @@ paths:
                     id: 123
                     name: My Project
                     is_default: false
+                    grafana_folder_uid: de0chath6zxfkb
                     created: '2024-12-04T19:57:46.339Z'
                     updated: '2024-12-04T19:57:46.339Z'
           description: OK.
@@ -887,6 +949,7 @@ paths:
                     id: 123
                     name: My Project
                     is_default: false
+                    grafana_folder_uid: de0chath6zxfkb
                     created: '2024-12-04T19:57:46.339Z'
                     updated: '2024-12-04T19:57:46.339Z'
           description: OK.
@@ -1019,6 +1082,12 @@ paths:
                         breakdown:
                           protocol_vuh: 10.0
                           browser_vuh: 0.0
+                      k6_dependencies:
+                        k6: '>=v0.52'
+                        k6/x/faker: '>=0.4.0'
+                      k6_versions:
+                        k6: v0.56.0
+                        k6/x/faker: v0.4.1
                       note: User-defined note for the test run.
                       retention_expiry: '2024-07-01T19:30:30Z'
                       distribution:
@@ -1097,6 +1166,12 @@ paths:
                       breakdown:
                         protocol_vuh: 10.0
                         browser_vuh: 0.0
+                    k6_dependencies:
+                      k6: '>=v0.52'
+                      k6/x/faker: '>=0.4.0'
+                    k6_versions:
+                      k6: v0.56.0
+                      k6/x/faker: v0.4.1
                     note: User-defined note for the test run.
                     retention_expiry: '2024-07-01T19:30:30Z'
                     distribution:
@@ -1140,6 +1215,12 @@ paths:
                       breakdown:
                         protocol_vuh: 10.0
                         browser_vuh: 0.0
+                    k6_dependencies:
+                      k6: '>=v0.52'
+                      k6/x/faker: '>=0.4.0'
+                    k6_versions:
+                      k6: v0.56.0
+                      k6/x/faker: v0.4.1
                     note: User-defined note for the test run.
                     retention_expiry: '2024-07-01T19:30:30Z'
                     distribution:
@@ -1183,6 +1264,12 @@ paths:
                     created: '2024-06-01T19:00:00Z'
                     ended: '2024-06-01T19:00:10Z'
                     cost: null
+                    k6_dependencies:
+                      k6: '>=v0.52'
+                      k6/x/faker: '>=0.4.0'
+                    k6_versions:
+                      k6: v0.56.0
+                      k6/x/faker: v0.4.1
                     note: ''
                     retention_expiry: '2024-07-01T19:00:10Z'
                     distribution: null
@@ -1699,6 +1786,17 @@ components:
       - value
       title: LoadTestListResponse
       type: object
+    MoveLoadTestApiModel:
+      additionalProperties: false
+      properties:
+        project_id:
+          description: ID of the destination project.
+          title: Project Id
+          type: integer
+      required:
+      - project_id
+      title: MoveLoadTest
+      type: object
     PatchLoadTestApiModel:
       additionalProperties: false
       properties:
@@ -1792,6 +1890,12 @@ components:
             project ID is provided.
           title: Is Default
           type: boolean
+        grafana_folder_uid:
+          description: Grafana folder UID.
+          title: Grafana Folder Uid
+          type:
+          - string
+          - 'null'
         created:
           description: The date when the project was created.
           format: date-time
@@ -1806,6 +1910,7 @@ components:
       - id
       - name
       - is_default
+      - grafana_folder_uid
       - created
       - updated
       title: Project
@@ -2031,8 +2136,8 @@ components:
           $ref: '#/components/schemas/StatusApiModel'
           description: Details of the current test run status.
         status_history:
-          description: List of test run status objects sorted by the enter time representing
-            the status history.
+          description: List of test run status objects sorted by the status start
+            time. The list represents the test run status history.
           items:
             $ref: '#/components/schemas/StatusApiModel'
           title: Status History
@@ -2065,6 +2170,20 @@ components:
           type:
           - object
           - 'null'
+        k6_dependencies:
+          additionalProperties:
+            type: string
+          description: The requested version of k6 and extensions that was part of
+            the script/archive.
+          title: K6 Dependencies
+          type: object
+        k6_versions:
+          additionalProperties:
+            type: string
+          description: The computed version for k6 and extensions used to run the
+            test.
+          title: K6 Versions
+          type: object
       required:
       - id
       - test_id
@@ -2082,6 +2201,8 @@ components:
       - result
       - result_details
       - options
+      - k6_dependencies
+      - k6_versions
       title: TestRun
       type: object
     TestRunListResponse:
