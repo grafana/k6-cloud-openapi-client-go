@@ -3,7 +3,7 @@ Grafana Cloud k6
 
 HTTP API for interacting with Grafana Cloud k6.
 
-API version: 1.0.0
+API version: 1.1.0
 Contact: info@grafana.com
 */
 
@@ -28,6 +28,8 @@ type ProjectApiModel struct {
 	Name string `json:"name"`
 	// Use this project as default for running tests when no explicit project ID is provided.
 	IsDefault bool `json:"is_default"`
+	// Grafana folder UID.
+	GrafanaFolderUid NullableString `json:"grafana_folder_uid"`
 	// The date when the project was created.
 	Created time.Time `json:"created"`
 	// The date when the project was last updated.
@@ -41,11 +43,12 @@ type _ProjectApiModel ProjectApiModel
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewProjectApiModel(id int32, name string, isDefault bool, created time.Time, updated time.Time) *ProjectApiModel {
+func NewProjectApiModel(id int32, name string, isDefault bool, grafanaFolderUid NullableString, created time.Time, updated time.Time) *ProjectApiModel {
 	this := ProjectApiModel{}
 	this.Id = id
 	this.Name = name
 	this.IsDefault = isDefault
+	this.GrafanaFolderUid = grafanaFolderUid
 	this.Created = created
 	this.Updated = updated
 	return &this
@@ -131,6 +134,32 @@ func (o *ProjectApiModel) SetIsDefault(v bool) {
 	o.IsDefault = v
 }
 
+// GetGrafanaFolderUid returns the GrafanaFolderUid field value
+// If the value is explicit nil, the zero value for string will be returned
+func (o *ProjectApiModel) GetGrafanaFolderUid() string {
+	if o == nil || o.GrafanaFolderUid.Get() == nil {
+		var ret string
+		return ret
+	}
+
+	return *o.GrafanaFolderUid.Get()
+}
+
+// GetGrafanaFolderUidOk returns a tuple with the GrafanaFolderUid field value
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *ProjectApiModel) GetGrafanaFolderUidOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.GrafanaFolderUid.Get(), o.GrafanaFolderUid.IsSet()
+}
+
+// SetGrafanaFolderUid sets field value
+func (o *ProjectApiModel) SetGrafanaFolderUid(v string) {
+	o.GrafanaFolderUid.Set(&v)
+}
+
 // GetCreated returns the Created field value
 func (o *ProjectApiModel) GetCreated() time.Time {
 	if o == nil {
@@ -192,6 +221,7 @@ func (o ProjectApiModel) ToMap() (map[string]interface{}, error) {
 	toSerialize["id"] = o.Id
 	toSerialize["name"] = o.Name
 	toSerialize["is_default"] = o.IsDefault
+	toSerialize["grafana_folder_uid"] = o.GrafanaFolderUid.Get()
 	toSerialize["created"] = o.Created
 	toSerialize["updated"] = o.Updated
 
@@ -210,6 +240,7 @@ func (o *ProjectApiModel) UnmarshalJSON(data []byte) (err error) {
 		"id",
 		"name",
 		"is_default",
+		"grafana_folder_uid",
 		"created",
 		"updated",
 	}
@@ -244,6 +275,7 @@ func (o *ProjectApiModel) UnmarshalJSON(data []byte) (err error) {
 		delete(additionalProperties, "id")
 		delete(additionalProperties, "name")
 		delete(additionalProperties, "is_default")
+		delete(additionalProperties, "grafana_folder_uid")
 		delete(additionalProperties, "created")
 		delete(additionalProperties, "updated")
 		o.AdditionalProperties = additionalProperties

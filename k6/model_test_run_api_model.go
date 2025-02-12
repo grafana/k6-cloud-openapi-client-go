@@ -3,7 +3,7 @@ Grafana Cloud k6
 
 HTTP API for interacting with Grafana Cloud k6.
 
-API version: 1.0.0
+API version: 1.1.0
 Contact: info@grafana.com
 */
 
@@ -43,7 +43,7 @@ type TestRunApiModel struct {
 	Status string `json:"status"`
 	// Details of the current test run status.
 	StatusDetails StatusApiModel `json:"status_details"`
-	// List of test run status objects sorted by the enter time representing the status history.
+	// List of test run status objects sorted by the status start time. The list represents the test run status history.
 	StatusHistory []StatusApiModel `json:"status_history"`
 	// List of the load zones configured for the test and the corresponding distribution percentages.
 	Distribution []DistributionZoneApiModel `json:"distribution"`
@@ -52,7 +52,11 @@ type TestRunApiModel struct {
 	// Additional information about the test run result.
 	ResultDetails map[string]interface{} `json:"result_details"`
 	// The original options object if available.
-	Options              map[string]interface{} `json:"options"`
+	Options map[string]interface{} `json:"options"`
+	// The requested version of k6 and extensions that was part of the script/archive.
+	K6Dependencies map[string]string `json:"k6_dependencies"`
+	// The computed version for k6 and extensions used to run the test.
+	K6Versions           map[string]string `json:"k6_versions"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -62,7 +66,7 @@ type _TestRunApiModel TestRunApiModel
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewTestRunApiModel(id int32, testId int32, projectId int32, startedBy NullableString, created time.Time, ended NullableTime, note string, retentionExpiry NullableTime, cost NullableTestCostApiModel, status string, statusDetails StatusApiModel, statusHistory []StatusApiModel, distribution []DistributionZoneApiModel, result NullableString, resultDetails map[string]interface{}, options map[string]interface{}) *TestRunApiModel {
+func NewTestRunApiModel(id int32, testId int32, projectId int32, startedBy NullableString, created time.Time, ended NullableTime, note string, retentionExpiry NullableTime, cost NullableTestCostApiModel, status string, statusDetails StatusApiModel, statusHistory []StatusApiModel, distribution []DistributionZoneApiModel, result NullableString, resultDetails map[string]interface{}, options map[string]interface{}, k6Dependencies map[string]string, k6Versions map[string]string) *TestRunApiModel {
 	this := TestRunApiModel{}
 	this.Id = id
 	this.TestId = testId
@@ -80,6 +84,8 @@ func NewTestRunApiModel(id int32, testId int32, projectId int32, startedBy Nulla
 	this.Result = result
 	this.ResultDetails = resultDetails
 	this.Options = options
+	this.K6Dependencies = k6Dependencies
+	this.K6Versions = k6Versions
 	return &this
 }
 
@@ -491,6 +497,54 @@ func (o *TestRunApiModel) SetOptions(v map[string]interface{}) {
 	o.Options = v
 }
 
+// GetK6Dependencies returns the K6Dependencies field value
+func (o *TestRunApiModel) GetK6Dependencies() map[string]string {
+	if o == nil {
+		var ret map[string]string
+		return ret
+	}
+
+	return o.K6Dependencies
+}
+
+// GetK6DependenciesOk returns a tuple with the K6Dependencies field value
+// and a boolean to check if the value has been set.
+func (o *TestRunApiModel) GetK6DependenciesOk() (map[string]string, bool) {
+	if o == nil {
+		return map[string]string{}, false
+	}
+	return o.K6Dependencies, true
+}
+
+// SetK6Dependencies sets field value
+func (o *TestRunApiModel) SetK6Dependencies(v map[string]string) {
+	o.K6Dependencies = v
+}
+
+// GetK6Versions returns the K6Versions field value
+func (o *TestRunApiModel) GetK6Versions() map[string]string {
+	if o == nil {
+		var ret map[string]string
+		return ret
+	}
+
+	return o.K6Versions
+}
+
+// GetK6VersionsOk returns a tuple with the K6Versions field value
+// and a boolean to check if the value has been set.
+func (o *TestRunApiModel) GetK6VersionsOk() (map[string]string, bool) {
+	if o == nil {
+		return map[string]string{}, false
+	}
+	return o.K6Versions, true
+}
+
+// SetK6Versions sets field value
+func (o *TestRunApiModel) SetK6Versions(v map[string]string) {
+	o.K6Versions = v
+}
+
 func (o TestRunApiModel) MarshalJSON() ([]byte, error) {
 	toSerialize, err := o.ToMap()
 	if err != nil {
@@ -523,6 +577,8 @@ func (o TestRunApiModel) ToMap() (map[string]interface{}, error) {
 	if o.Options != nil {
 		toSerialize["options"] = o.Options
 	}
+	toSerialize["k6_dependencies"] = o.K6Dependencies
+	toSerialize["k6_versions"] = o.K6Versions
 
 	for key, value := range o.AdditionalProperties {
 		toSerialize[key] = value
@@ -552,6 +608,8 @@ func (o *TestRunApiModel) UnmarshalJSON(data []byte) (err error) {
 		"result",
 		"result_details",
 		"options",
+		"k6_dependencies",
+		"k6_versions",
 	}
 
 	allProperties := make(map[string]interface{})
@@ -597,6 +655,8 @@ func (o *TestRunApiModel) UnmarshalJSON(data []byte) (err error) {
 		delete(additionalProperties, "result")
 		delete(additionalProperties, "result_details")
 		delete(additionalProperties, "options")
+		delete(additionalProperties, "k6_dependencies")
+		delete(additionalProperties, "k6_versions")
 		o.AdditionalProperties = additionalProperties
 	}
 
