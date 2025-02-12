@@ -2,7 +2,7 @@ MAKEFLAGS += --silent
 
 ## generate: Generates the client code.
 generate:
-	openapi-generator-cli generate -i schema.yaml -g go -o ./k6 --git-user-id grafana --git-repo-id k6-cloud-openapi-client --package-name k6 -p isGoSubmodule=true -p disallowAdditionalPropertiesIfNotPresent=false -p withGoMod=false -t ./templates
+	docker run --user 1000:1000 --rm -v ${PWD}:/local openapitools/openapi-generator-cli:v7.9.0 generate -i /local/schema.yaml -g go -o /local/k6 --git-user-id grafana --git-repo-id k6-cloud-openapi-client --package-name k6 -p isGoSubmodule=true -p disallowAdditionalPropertiesIfNotPresent=false -p withGoMod=false -t /local/templates
 	find k6 -name \*.go -exec goimports -w {} \;
 
 ## format: Applies Go formatting to code.
