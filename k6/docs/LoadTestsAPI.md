@@ -6,6 +6,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**LoadTestsDestroy**](LoadTestsAPI.md#LoadTestsDestroy) | **Delete** /cloud/v6/load_tests/{id} | Delete a load test.
 [**LoadTestsList**](LoadTestsAPI.md#LoadTestsList) | **Get** /cloud/v6/load_tests | List all tests.
+[**LoadTestsMove**](LoadTestsAPI.md#LoadTestsMove) | **Put** /cloud/v6/load_tests/{id}/move | Move a test to another project.
 [**LoadTestsPartialUpdate**](LoadTestsAPI.md#LoadTestsPartialUpdate) | **Patch** /cloud/v6/load_tests/{id} | Update a load test.
 [**LoadTestsRetrieve**](LoadTestsAPI.md#LoadTestsRetrieve) | **Get** /cloud/v6/load_tests/{id} | Get a load test by ID.
 [**LoadTestsScriptRetrieve**](LoadTestsAPI.md#LoadTestsScriptRetrieve) | **Get** /cloud/v6/load_tests/{id}/script | Download the test script.
@@ -154,6 +155,78 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
 - **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## LoadTestsMove
+
+> LoadTestsMove(ctx, id).XStackId(xStackId).MoveLoadTestApiModel(moveLoadTestApiModel).Execute()
+
+Move a test to another project.
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/grafana/k6-cloud-openapi-client/k6"
+)
+
+func main() {
+	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
+	id := int32(56) // int32 | ID of the load test.
+	moveLoadTestApiModel := *openapiclient.NewMoveLoadTestApiModel(int32(123)) // MoveLoadTestApiModel | 
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	r, err := apiClient.LoadTestsAPI.LoadTestsMove(context.Background(), id).XStackId(xStackId).MoveLoadTestApiModel(moveLoadTestApiModel).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `LoadTestsAPI.LoadTestsMove``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**id** | **int32** | ID of the load test. | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiLoadTestsMoveRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **xStackId** | **int32** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. | 
+
+ **moveLoadTestApiModel** | [**MoveLoadTestApiModel**](MoveLoadTestApiModel.md) |  | 
+
+### Return type
+
+ (empty response body)
+
+### Authorization
+
+[k6ApiToken](../README.md#k6ApiToken)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)

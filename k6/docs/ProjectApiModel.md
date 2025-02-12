@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 **Id** | **int32** | Project ID. | 
 **Name** | **string** | Project name. | 
 **IsDefault** | **bool** | Use this project as default for running tests when no explicit project ID is provided. | 
+**GrafanaFolderUid** | **NullableString** | Grafana folder UID. | 
 **Created** | **time.Time** | The date when the project was created. | 
 **Updated** | **time.Time** | The date when the project was last updated. | 
 
@@ -14,7 +15,7 @@ Name | Type | Description | Notes
 
 ### NewProjectApiModel
 
-`func NewProjectApiModel(id int32, name string, isDefault bool, created time.Time, updated time.Time, ) *ProjectApiModel`
+`func NewProjectApiModel(id int32, name string, isDefault bool, grafanaFolderUid NullableString, created time.Time, updated time.Time, ) *ProjectApiModel`
 
 NewProjectApiModel instantiates a new ProjectApiModel object
 This constructor will assign default values to properties that have it defined,
@@ -89,6 +90,36 @@ and a boolean to check if the value has been set.
 SetIsDefault sets IsDefault field to given value.
 
 
+### GetGrafanaFolderUid
+
+`func (o *ProjectApiModel) GetGrafanaFolderUid() string`
+
+GetGrafanaFolderUid returns the GrafanaFolderUid field if non-nil, zero value otherwise.
+
+### GetGrafanaFolderUidOk
+
+`func (o *ProjectApiModel) GetGrafanaFolderUidOk() (*string, bool)`
+
+GetGrafanaFolderUidOk returns a tuple with the GrafanaFolderUid field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetGrafanaFolderUid
+
+`func (o *ProjectApiModel) SetGrafanaFolderUid(v string)`
+
+SetGrafanaFolderUid sets GrafanaFolderUid field to given value.
+
+
+### SetGrafanaFolderUidNil
+
+`func (o *ProjectApiModel) SetGrafanaFolderUidNil(b bool)`
+
+ SetGrafanaFolderUidNil sets the value for GrafanaFolderUid to be an explicit nil
+
+### UnsetGrafanaFolderUid
+`func (o *ProjectApiModel) UnsetGrafanaFolderUid()`
+
+UnsetGrafanaFolderUid ensures that no value is present for GrafanaFolderUid, not even an explicit nil
 ### GetCreated
 
 `func (o *ProjectApiModel) GetCreated() time.Time`

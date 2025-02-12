@@ -15,17 +15,19 @@ Name | Type | Description | Notes
 **Cost** | [**NullableTestCostApiModel**](TestCostApiModel.md) |  | 
 **Status** | **string** | Current test run status. | 
 **StatusDetails** | [**StatusApiModel**](StatusApiModel.md) | Details of the current test run status. | 
-**StatusHistory** | [**[]StatusApiModel**](StatusApiModel.md) | List of test run status objects sorted by the enter time representing the status history. | 
+**StatusHistory** | [**[]StatusApiModel**](StatusApiModel.md) | List of test run status objects sorted by the status start time. The list represents the test run status history. | 
 **Distribution** | [**[]DistributionZoneApiModel**](DistributionZoneApiModel.md) | List of the load zones configured for the test and the corresponding distribution percentages. | 
 **Result** | **NullableString** | Test run result. &#x60;passed&#x60; if there were no issues, &#x60;failed&#x60; if thresholds were breached, &#x60;error&#x60; if the execution was not completed. | 
 **ResultDetails** | **map[string]interface{}** | Additional information about the test run result. | 
 **Options** | **map[string]interface{}** | The original options object if available. | 
+**K6Dependencies** | **map[string]string** | The requested version of k6 and extensions that was part of the script/archive. | 
+**K6Versions** | **map[string]string** | The computed version for k6 and extensions used to run the test. | 
 
 ## Methods
 
 ### NewTestRunApiModel
 
-`func NewTestRunApiModel(id int32, testId int32, projectId int32, startedBy NullableString, created time.Time, ended NullableTime, note string, retentionExpiry NullableTime, cost NullableTestCostApiModel, status string, statusDetails StatusApiModel, statusHistory []StatusApiModel, distribution []DistributionZoneApiModel, result NullableString, resultDetails map[string]interface{}, options map[string]interface{}, ) *TestRunApiModel`
+`func NewTestRunApiModel(id int32, testId int32, projectId int32, startedBy NullableString, created time.Time, ended NullableTime, note string, retentionExpiry NullableTime, cost NullableTestCostApiModel, status string, statusDetails StatusApiModel, statusHistory []StatusApiModel, distribution []DistributionZoneApiModel, result NullableString, resultDetails map[string]interface{}, options map[string]interface{}, k6Dependencies map[string]string, k6Versions map[string]string, ) *TestRunApiModel`
 
 NewTestRunApiModel instantiates a new TestRunApiModel object
 This constructor will assign default values to properties that have it defined,
@@ -440,6 +442,46 @@ SetOptions sets Options field to given value.
 `func (o *TestRunApiModel) UnsetOptions()`
 
 UnsetOptions ensures that no value is present for Options, not even an explicit nil
+### GetK6Dependencies
+
+`func (o *TestRunApiModel) GetK6Dependencies() map[string]string`
+
+GetK6Dependencies returns the K6Dependencies field if non-nil, zero value otherwise.
+
+### GetK6DependenciesOk
+
+`func (o *TestRunApiModel) GetK6DependenciesOk() (*map[string]string, bool)`
+
+GetK6DependenciesOk returns a tuple with the K6Dependencies field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetK6Dependencies
+
+`func (o *TestRunApiModel) SetK6Dependencies(v map[string]string)`
+
+SetK6Dependencies sets K6Dependencies field to given value.
+
+
+### GetK6Versions
+
+`func (o *TestRunApiModel) GetK6Versions() map[string]string`
+
+GetK6Versions returns the K6Versions field if non-nil, zero value otherwise.
+
+### GetK6VersionsOk
+
+`func (o *TestRunApiModel) GetK6VersionsOk() (*map[string]string, bool)`
+
+GetK6VersionsOk returns a tuple with the K6Versions field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetK6Versions
+
+`func (o *TestRunApiModel) SetK6Versions(v map[string]string)`
+
+SetK6Versions sets K6Versions field to given value.
+
+
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 
