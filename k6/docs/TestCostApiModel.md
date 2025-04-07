@@ -5,13 +5,13 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **TotalVuh** | [**TotalVuh**](TotalVuh.md) |  | 
-**Breakdown** | [**TestCostBreakdownApiModel**](TestCostBreakdownApiModel.md) |  | 
+**Breakdown** | [**CostBreakdownApiModel**](CostBreakdownApiModel.md) |  | 
 
 ## Methods
 
 ### NewTestCostApiModel
 
-`func NewTestCostApiModel(totalVuh TotalVuh, breakdown TestCostBreakdownApiModel, ) *TestCostApiModel`
+`func NewTestCostApiModel(totalVuh TotalVuh, breakdown CostBreakdownApiModel, ) *TestCostApiModel`
 
 NewTestCostApiModel instantiates a new TestCostApiModel object
 This constructor will assign default values to properties that have it defined,
@@ -48,20 +48,20 @@ SetTotalVuh sets TotalVuh field to given value.
 
 ### GetBreakdown
 
-`func (o *TestCostApiModel) GetBreakdown() TestCostBreakdownApiModel`
+`func (o *TestCostApiModel) GetBreakdown() CostBreakdownApiModel`
 
 GetBreakdown returns the Breakdown field if non-nil, zero value otherwise.
 
 ### GetBreakdownOk
 
-`func (o *TestCostApiModel) GetBreakdownOk() (*TestCostBreakdownApiModel, bool)`
+`func (o *TestCostApiModel) GetBreakdownOk() (*CostBreakdownApiModel, bool)`
 
 GetBreakdownOk returns a tuple with the Breakdown field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetBreakdown
 
-`func (o *TestCostApiModel) SetBreakdown(v TestCostBreakdownApiModel)`
+`func (o *TestCostApiModel) SetBreakdown(v CostBreakdownApiModel)`
 
 SetBreakdown sets Breakdown field to given value.
 

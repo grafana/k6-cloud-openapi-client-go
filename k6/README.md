@@ -45,7 +45,10 @@ Class | Method | HTTP request | Description
 
 ## Documentation For Models
 
+ - [BaseTotalVuh](docs/BaseTotalVuh.md)
  - [BrowserVuh](docs/BrowserVuh.md)
+ - [CloudOptions](docs/CloudOptions.md)
+ - [CostBreakdownApiModel](docs/CostBreakdownApiModel.md)
  - [CreateProjectApiModel](docs/CreateProjectApiModel.md)
  - [DistributionZoneApiModel](docs/DistributionZoneApiModel.md)
  - [ErrorApiModel](docs/ErrorApiModel.md)
@@ -54,6 +57,8 @@ Class | Method | HTTP request | Description
  - [LoadTestApiModel](docs/LoadTestApiModel.md)
  - [LoadTestListResponse](docs/LoadTestListResponse.md)
  - [MoveLoadTestApiModel](docs/MoveLoadTestApiModel.md)
+ - [Options](docs/Options.md)
+ - [OptionsCloud](docs/OptionsCloud.md)
  - [PatchLoadTestApiModel](docs/PatchLoadTestApiModel.md)
  - [PatchProjectApiModel](docs/PatchProjectApiModel.md)
  - [PatchProjectLimitsRequest](docs/PatchProjectLimitsRequest.md)
@@ -62,10 +67,11 @@ Class | Method | HTTP request | Description
  - [ProjectLimitsApiModel](docs/ProjectLimitsApiModel.md)
  - [ProjectListResponse](docs/ProjectListResponse.md)
  - [ProtocolVuh](docs/ProtocolVuh.md)
+ - [ReductionRate](docs/ReductionRate.md)
+ - [ReductionRateBreakdownValue](docs/ReductionRateBreakdownValue.md)
  - [StatusApiModel](docs/StatusApiModel.md)
  - [StatusExtraApiModel](docs/StatusExtraApiModel.md)
  - [TestCostApiModel](docs/TestCostApiModel.md)
- - [TestCostBreakdownApiModel](docs/TestCostBreakdownApiModel.md)
  - [TestRunApiModel](docs/TestRunApiModel.md)
  - [TestRunListResponse](docs/TestRunListResponse.md)
  - [TotalVuh](docs/TotalVuh.md)

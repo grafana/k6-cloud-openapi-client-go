@@ -16,7 +16,7 @@ import (
 	"fmt"
 )
 
-// BrowserVuh Number of VUH charged for the browser part of the test run.
+// BrowserVuh Number of billed VUH charged for the browser part of the test run.
 type BrowserVuh struct {
 	Float32 *float32
 	String  *string

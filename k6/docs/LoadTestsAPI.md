@@ -772,7 +772,7 @@ import (
 
 func main() {
 	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-	validateOptionsRequest := *openapiclient.NewValidateOptionsRequest(map[string]interface{}(123)) // ValidateOptionsRequest | 
+	validateOptionsRequest := *openapiclient.NewValidateOptionsRequest(*openapiclient.NewOptions()) // ValidateOptionsRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)

@@ -24,7 +24,7 @@ type ValidateOptionsRequest struct {
 	// ID of a project where the test belongs.
 	ProjectId NullableInt32 `json:"project_id,omitempty"`
 	// k6 script options object to validate.
-	Options              map[string]interface{} `json:"options"`
+	Options              Options `json:"options"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -34,7 +34,7 @@ type _ValidateOptionsRequest ValidateOptionsRequest
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewValidateOptionsRequest(options map[string]interface{}) *ValidateOptionsRequest {
+func NewValidateOptionsRequest(options Options) *ValidateOptionsRequest {
 	this := ValidateOptionsRequest{}
 	this.Options = options
 	return &this
@@ -92,9 +92,9 @@ func (o *ValidateOptionsRequest) UnsetProjectId() {
 }
 
 // GetOptions returns the Options field value
-func (o *ValidateOptionsRequest) GetOptions() map[string]interface{} {
+func (o *ValidateOptionsRequest) GetOptions() Options {
 	if o == nil {
-		var ret map[string]interface{}
+		var ret Options
 		return ret
 	}
 
@@ -103,15 +103,15 @@ func (o *ValidateOptionsRequest) GetOptions() map[string]interface{} {
 
 // GetOptionsOk returns a tuple with the Options field value
 // and a boolean to check if the value has been set.
-func (o *ValidateOptionsRequest) GetOptionsOk() (map[string]interface{}, bool) {
+func (o *ValidateOptionsRequest) GetOptionsOk() (*Options, bool) {
 	if o == nil {
-		return map[string]interface{}{}, false
+		return nil, false
 	}
-	return o.Options, true
+	return &o.Options, true
 }
 
 // SetOptions sets field value
-func (o *ValidateOptionsRequest) SetOptions(v map[string]interface{}) {
+func (o *ValidateOptionsRequest) SetOptions(v Options) {
 	o.Options = v
 }
 

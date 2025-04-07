@@ -16,7 +16,7 @@ import (
 	"fmt"
 )
 
-// TotalVuh Total number of VUH charged for the test run.
+// TotalVuh Total number of billed VUH charged for the test run.
 type TotalVuh struct {
 	Float32 *float32
 	String  *string

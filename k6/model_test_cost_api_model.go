@@ -21,8 +21,8 @@ var _ MappedNullable = &TestCostApiModel{}
 
 // TestCostApiModel struct for TestCostApiModel
 type TestCostApiModel struct {
-	TotalVuh             TotalVuh                  `json:"total_vuh"`
-	Breakdown            TestCostBreakdownApiModel `json:"breakdown"`
+	TotalVuh             TotalVuh              `json:"total_vuh"`
+	Breakdown            CostBreakdownApiModel `json:"breakdown"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -32,7 +32,7 @@ type _TestCostApiModel TestCostApiModel
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewTestCostApiModel(totalVuh TotalVuh, breakdown TestCostBreakdownApiModel) *TestCostApiModel {
+func NewTestCostApiModel(totalVuh TotalVuh, breakdown CostBreakdownApiModel) *TestCostApiModel {
 	this := TestCostApiModel{}
 	this.TotalVuh = totalVuh
 	this.Breakdown = breakdown
@@ -72,9 +72,9 @@ func (o *TestCostApiModel) SetTotalVuh(v TotalVuh) {
 }
 
 // GetBreakdown returns the Breakdown field value
-func (o *TestCostApiModel) GetBreakdown() TestCostBreakdownApiModel {
+func (o *TestCostApiModel) GetBreakdown() CostBreakdownApiModel {
 	if o == nil {
-		var ret TestCostBreakdownApiModel
+		var ret CostBreakdownApiModel
 		return ret
 	}
 
@@ -83,7 +83,7 @@ func (o *TestCostApiModel) GetBreakdown() TestCostBreakdownApiModel {
 
 // GetBreakdownOk returns a tuple with the Breakdown field value
 // and a boolean to check if the value has been set.
-func (o *TestCostApiModel) GetBreakdownOk() (*TestCostBreakdownApiModel, bool) {
+func (o *TestCostApiModel) GetBreakdownOk() (*CostBreakdownApiModel, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -91,7 +91,7 @@ func (o *TestCostApiModel) GetBreakdownOk() (*TestCostBreakdownApiModel, bool) {
 }
 
 // SetBreakdown sets field value
-func (o *TestCostApiModel) SetBreakdown(v TestCostBreakdownApiModel) {
+func (o *TestCostApiModel) SetBreakdown(v CostBreakdownApiModel) {
 	o.Breakdown = v
 }
 

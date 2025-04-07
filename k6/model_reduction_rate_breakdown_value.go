@@ -16,14 +16,14 @@ import (
 	"fmt"
 )
 
-// ProtocolVuh Number of billed VUH charged for the protocol part of the test run.
-type ProtocolVuh struct {
+// ReductionRateBreakdownValue struct for ReductionRateBreakdownValue
+type ReductionRateBreakdownValue struct {
 	Float32 *float32
 	String  *string
 }
 
 // Unmarshal JSON data into any of the pointers in the struct
-func (dst *ProtocolVuh) UnmarshalJSON(data []byte) error {
+func (dst *ReductionRateBreakdownValue) UnmarshalJSON(data []byte) error {
 	var err error
 	// try to unmarshal JSON data into Float32
 	err = json.Unmarshal(data, &dst.Float32)
@@ -51,11 +51,11 @@ func (dst *ProtocolVuh) UnmarshalJSON(data []byte) error {
 		dst.String = nil
 	}
 
-	return fmt.Errorf("data failed to match schemas in anyOf(ProtocolVuh)")
+	return fmt.Errorf("data failed to match schemas in anyOf(ReductionRateBreakdownValue)")
 }
 
 // Marshal data from the first non-nil pointers in the struct to JSON
-func (src *ProtocolVuh) MarshalJSON() ([]byte, error) {
+func (src *ReductionRateBreakdownValue) MarshalJSON() ([]byte, error) {
 	if src.Float32 != nil {
 		return json.Marshal(&src.Float32)
 	}
@@ -67,38 +67,38 @@ func (src *ProtocolVuh) MarshalJSON() ([]byte, error) {
 	return nil, nil // no data in anyOf schemas
 }
 
-type NullableProtocolVuh struct {
-	value *ProtocolVuh
+type NullableReductionRateBreakdownValue struct {
+	value *ReductionRateBreakdownValue
 	isSet bool
 }
 
-func (v NullableProtocolVuh) Get() *ProtocolVuh {
+func (v NullableReductionRateBreakdownValue) Get() *ReductionRateBreakdownValue {
 	return v.value
 }
 
-func (v *NullableProtocolVuh) Set(val *ProtocolVuh) {
+func (v *NullableReductionRateBreakdownValue) Set(val *ReductionRateBreakdownValue) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableProtocolVuh) IsSet() bool {
+func (v NullableReductionRateBreakdownValue) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableProtocolVuh) Unset() {
+func (v *NullableReductionRateBreakdownValue) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableProtocolVuh(val *ProtocolVuh) *NullableProtocolVuh {
-	return &NullableProtocolVuh{value: val, isSet: true}
+func NewNullableReductionRateBreakdownValue(val *ReductionRateBreakdownValue) *NullableReductionRateBreakdownValue {
+	return &NullableReductionRateBreakdownValue{value: val, isSet: true}
 }
 
-func (v NullableProtocolVuh) MarshalJSON() ([]byte, error) {
+func (v NullableReductionRateBreakdownValue) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableProtocolVuh) UnmarshalJSON(src []byte) error {
+func (v *NullableReductionRateBreakdownValue) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

@@ -5,13 +5,13 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **ProjectId** | Pointer to **NullableInt32** | ID of a project where the test belongs. | [optional] 
-**Options** | **map[string]interface{}** | k6 script options object to validate. | 
+**Options** | [**Options**](Options.md) | k6 script options object to validate. | 
 
 ## Methods
 
 ### NewValidateOptionsRequest
 
-`func NewValidateOptionsRequest(options map[string]interface{}, ) *ValidateOptionsRequest`
+`func NewValidateOptionsRequest(options Options, ) *ValidateOptionsRequest`
 
 NewValidateOptionsRequest instantiates a new ValidateOptionsRequest object
 This constructor will assign default values to properties that have it defined,
@@ -63,20 +63,20 @@ HasProjectId returns a boolean if a field has been set.
 UnsetProjectId ensures that no value is present for ProjectId, not even an explicit nil
 ### GetOptions
 
-`func (o *ValidateOptionsRequest) GetOptions() map[string]interface{}`
+`func (o *ValidateOptionsRequest) GetOptions() Options`
 
 GetOptions returns the Options field if non-nil, zero value otherwise.
 
 ### GetOptionsOk
 
-`func (o *ValidateOptionsRequest) GetOptionsOk() (*map[string]interface{}, bool)`
+`func (o *ValidateOptionsRequest) GetOptionsOk() (*Options, bool)`
 
 GetOptionsOk returns a tuple with the Options field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetOptions
 
-`func (o *ValidateOptionsRequest) SetOptions(v map[string]interface{})`
+`func (o *ValidateOptionsRequest) SetOptions(v Options)`
 
 SetOptions sets Options field to given value.
 
