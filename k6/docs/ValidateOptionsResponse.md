@@ -5,12 +5,13 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **VuhUsage** | **float32** | How many VUH will be charged for the test. | 
+**Breakdown** | [**CostBreakdownApiModel**](CostBreakdownApiModel.md) | Breakdown of the VUH usage. | 
 
 ## Methods
 
 ### NewValidateOptionsResponse
 
-`func NewValidateOptionsResponse(vuhUsage float32, ) *ValidateOptionsResponse`
+`func NewValidateOptionsResponse(vuhUsage float32, breakdown CostBreakdownApiModel, ) *ValidateOptionsResponse`
 
 NewValidateOptionsResponse instantiates a new ValidateOptionsResponse object
 This constructor will assign default values to properties that have it defined,
@@ -43,6 +44,26 @@ and a boolean to check if the value has been set.
 `func (o *ValidateOptionsResponse) SetVuhUsage(v float32)`
 
 SetVuhUsage sets VuhUsage field to given value.
+
+
+### GetBreakdown
+
+`func (o *ValidateOptionsResponse) GetBreakdown() CostBreakdownApiModel`
+
+GetBreakdown returns the Breakdown field if non-nil, zero value otherwise.
+
+### GetBreakdownOk
+
+`func (o *ValidateOptionsResponse) GetBreakdownOk() (*CostBreakdownApiModel, bool)`
+
+GetBreakdownOk returns a tuple with the Breakdown field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetBreakdown
+
+`func (o *ValidateOptionsResponse) SetBreakdown(v CostBreakdownApiModel)`
+
+SetBreakdown sets Breakdown field to given value.
 
 
 

@@ -3,7 +3,7 @@ Grafana Cloud k6
 
 HTTP API for interacting with Grafana Cloud k6.
 
-API version: 1.1.0
+API version: 1.2.0
 Contact: info@grafana.com
 */
 
@@ -678,6 +678,7 @@ type ApiProjectsListRequest struct {
 	orderby    *string
 	skip       *int32
 	top        *int32
+	name       *string
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
@@ -707,6 +708,12 @@ func (r *ApiProjectsListRequest) Skip(skip int32) *ApiProjectsListRequest {
 // Number of results to return per page.
 func (r *ApiProjectsListRequest) Top(top int32) *ApiProjectsListRequest {
 	r.top = &top
+	return r
+}
+
+// Filter results by project name (exact match).
+func (r *ApiProjectsListRequest) Name(name string) *ApiProjectsListRequest {
+	r.name = &name
 	return r
 }
 
@@ -768,6 +775,9 @@ func (a *ProjectsAPIService) ProjectsListExecute(r *ApiProjectsListRequest) (*Pr
 	} else {
 		var defaultValue int32 = 1000
 		r.top = &defaultValue
+	}
+	if r.name != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "name", r.name, "form", "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
