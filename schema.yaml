@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Grafana Cloud k6
-  version: 1.1.0
+  version: 1.2.0
   description: HTTP API for interacting with Grafana Cloud k6.
   contact:
     name: Grafana Support
@@ -48,6 +48,11 @@ paths:
           default: 1000
           maximum: 1000
         description: Number of results to return per page.
+      - in: query
+        name: name
+        schema:
+          type: string
+        description: Filter results by load test name (exact match).
       tags:
       - load_tests
       security:
@@ -130,10 +135,15 @@ paths:
                       created: '2024-06-01T19:00:00Z'
                       ended: null
                       cost:
-                        total_vuh: 10.0
+                        total_vuh: 6.75
                         breakdown:
-                          protocol_vuh: 10.0
+                          protocol_vuh: 6.75
                           browser_vuh: 0.0
+                          base_total_vuh: 10.0
+                          reduction_rate: 32.5
+                          reduction_rate_breakdown:
+                            volume: 10
+                            local_run: 25
                       k6_dependencies:
                         k6: '>=v0.52'
                         k6/x/faker: '>=0.4.0'
@@ -578,6 +588,11 @@ paths:
           default: 1000
           maximum: 1000
         description: Number of results to return per page.
+      - in: query
+        name: name
+        schema:
+          type: string
+        description: Filter results by project name (exact match).
       tags:
       - projects
       security:
@@ -1078,10 +1093,15 @@ paths:
                       created: '2024-06-01T19:00:00Z'
                       ended: null
                       cost:
-                        total_vuh: 10.0
+                        total_vuh: 6.75
                         breakdown:
-                          protocol_vuh: 10.0
+                          protocol_vuh: 6.75
                           browser_vuh: 0.0
+                          base_total_vuh: 10.0
+                          reduction_rate: 32.5
+                          reduction_rate_breakdown:
+                            volume: 10
+                            local_run: 25
                       k6_dependencies:
                         k6: '>=v0.52'
                         k6/x/faker: '>=0.4.0'
@@ -1162,10 +1182,15 @@ paths:
                     created: '2024-06-01T19:00:00Z'
                     ended: null
                     cost:
-                      total_vuh: 10.0
+                      total_vuh: 6.75
                       breakdown:
-                        protocol_vuh: 10.0
+                        protocol_vuh: 6.75
                         browser_vuh: 0.0
+                        base_total_vuh: 10.0
+                        reduction_rate: 32.5
+                        reduction_rate_breakdown:
+                          volume: 10
+                          local_run: 25
                     k6_dependencies:
                       k6: '>=v0.52'
                       k6/x/faker: '>=0.4.0'
@@ -1211,10 +1236,15 @@ paths:
                     created: '2024-06-01T19:00:00Z'
                     ended: '2024-06-01T19:30:30Z'
                     cost:
-                      total_vuh: 10.0
+                      total_vuh: 6.75
                       breakdown:
-                        protocol_vuh: 10.0
+                        protocol_vuh: 6.75
                         browser_vuh: 0.0
+                        base_total_vuh: 10.0
+                        reduction_rate: 32.5
+                        reduction_rate_breakdown:
+                          volume: 10
+                          local_run: 25
                     k6_dependencies:
                       k6: '>=v0.52'
                       k6/x/faker: '>=0.4.0'
@@ -1593,7 +1623,15 @@ paths:
               examples:
                 OK:
                   value:
-                    vuh_usage: 1.5
+                    vuh_usage: 6.75
+                    breakdown:
+                      protocol_vuh: 6.75
+                      browser_vuh: 0.0
+                      base_total_vuh: 10.0
+                      reduction_rate: 32.5
+                      reduction_rate_breakdown:
+                        volume: 10
+                        local_run: 25
           description: OK.
         '400':
           $ref: '#/components/responses/ValidationError'
@@ -1607,6 +1645,66 @@ paths:
       - $ref: '#/components/parameters/stackId'
 components:
   schemas:
+    CloudOptions:
+      additionalProperties: true
+      properties:
+        projectID:
+          default: null
+          description: ID of a project where the test belongs.
+          title: Projectid
+          type:
+          - integer
+          - 'null'
+      title: CloudOptions
+      type: object
+    CostBreakdownApiModel:
+      description: Breakdown details of the test cost.
+      properties:
+        protocol_vuh:
+          anyOf:
+          - type: number
+          - type: string
+          description: Number of billed VUH charged for the protocol part of the test
+            run.
+          title: Protocol Vuh
+        browser_vuh:
+          anyOf:
+          - type: number
+          - type: string
+          description: Number of billed VUH charged for the browser part of the test
+            run.
+          title: Browser Vuh
+        base_total_vuh:
+          anyOf:
+          - type: number
+          - type: string
+          description: VUH usage before applying the effective reduction.
+          title: Base Total Vuh
+        reduction_rate:
+          anyOf:
+          - type: number
+          - type: string
+          description: The effective reduction rate after applying all individual
+            reductions to the base VUH usage.
+          title: Reduction Rate
+        reduction_rate_breakdown:
+          additionalProperties:
+            anyOf:
+            - type: number
+            - type: string
+          description: The individual reduction rates applied to the base VUH usage.
+          title: Reduction Rate Breakdown
+          type:
+          - object
+          - 'null'
+      required:
+      - protocol_vuh
+      - browser_vuh
+      - base_total_vuh
+      - reduction_rate
+      - reduction_rate_breakdown
+      title: CostBreakdownApiModel
+      type: object
     CreateLoadTestApiModel:
       additionalProperties: false
       properties:
@@ -1791,11 +1889,22 @@ components:
       properties:
         project_id:
           description: ID of the destination project.
-          title: Project Id
+          title: Project ID
           type: integer
       required:
       - project_id
       title: MoveLoadTest
+      type: object
+    Options:
+      additionalProperties: true
+      properties:
+        cloud:
+          default: null
+          description: Cloud-specific k6 options.
+          oneOf:
+          - $ref: '#/components/schemas/CloudOptions'
+          - type: 'null'
+      title: Options
       type: object
     PatchLoadTestApiModel:
       additionalProperties: false
@@ -1892,7 +2001,7 @@ components:
           type: boolean
         grafana_folder_uid:
           description: Grafana folder UID.
-          title: Grafana Folder Uid
+          title: Grafana Folder UID
           type:
           - string
           - 'null'
@@ -2042,34 +2151,14 @@ components:
           anyOf:
           - type: number
           - type: string
-          description: Total number of VUH charged for the test run.
+          description: Total number of billed VUH charged for the test run.
           title: Total Vuh
         breakdown:
-          $ref: '#/components/schemas/TestCostBreakdownApiModel'
+          $ref: '#/components/schemas/CostBreakdownApiModel'
       required:
       - total_vuh
       - breakdown
       title: TestCost
-      type: object
-    TestCostBreakdownApiModel:
-      description: Breakdown details of the test cost.
-      properties:
-        protocol_vuh:
-          anyOf:
-          - type: number
-          - type: string
-          description: Number of VUH charged for the protocol part of the test run.
-          title: Protocol Vuh
-        browser_vuh:
-          anyOf:
-          - type: number
-          - type: string
-          description: Number of VUH charged for the browser part of the test run.
-          title: Browser Vuh
-      required:
-      - protocol_vuh
-      - browser_vuh
-      title: TestCostBreakdown
       type: object
     TestRunApiModel:
       description: The API model for a test run.
@@ -2175,14 +2264,14 @@ components:
             type: string
           description: The requested version of k6 and extensions that was part of
             the script/archive.
-          title: K6 Dependencies
+          title: k6 Dependencies
           type: object
         k6_versions:
           additionalProperties:
             type: string
           description: The computed version for k6 and extensions used to run the
             test.
-          title: K6 Versions
+          title: k6 Versions
           type: object
       required:
       - id
@@ -2241,9 +2330,8 @@ components:
           - integer
           - 'null'
         options:
+          $ref: '#/components/schemas/Options'
           description: k6 script options object to validate.
-          title: Options
-          type: object
       required:
       - options
       title: ValidateOptionsRequest
@@ -2254,8 +2342,12 @@ components:
           description: How many VUH will be charged for the test.
           title: Vuh Usage
           type: number
+        breakdown:
+          $ref: '#/components/schemas/CostBreakdownApiModel'
+          description: Breakdown of the VUH usage.
       required:
       - vuh_usage
+      - breakdown
       title: ValidateOptionsResponse
       type: object
   securitySchemes:

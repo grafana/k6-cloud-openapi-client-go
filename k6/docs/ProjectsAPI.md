@@ -298,7 +298,7 @@ Name | Type | Description  | Notes
 
 ## ProjectsList
 
-> ProjectListResponse ProjectsList(ctx).XStackId(xStackId).Count(count).Orderby(orderby).Skip(skip).Top(top).Execute()
+> ProjectListResponse ProjectsList(ctx).XStackId(xStackId).Count(count).Orderby(orderby).Skip(skip).Top(top).Name(name).Execute()
 
 List all projects.
 
@@ -322,10 +322,11 @@ func main() {
 	orderby := "created desc" // string | Comma-separated list of fields to use when ordering the results. Available fields: - created  The default ascending order can be reversed by appending the `desc` specifier. (optional)
 	skip := int32(56) // int32 | The initial index from which to return the results. (optional)
 	top := int32(56) // int32 | Number of results to return per page. (optional) (default to 1000)
+	name := "name_example" // string | Filter results by project name (exact match). (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.ProjectsAPI.ProjectsList(context.Background()).XStackId(xStackId).Count(count).Orderby(orderby).Skip(skip).Top(top).Execute()
+	resp, r, err := apiClient.ProjectsAPI.ProjectsList(context.Background()).XStackId(xStackId).Count(count).Orderby(orderby).Skip(skip).Top(top).Name(name).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `ProjectsAPI.ProjectsList``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -351,6 +352,7 @@ Name | Type | Description  | Notes
  **orderby** | **string** | Comma-separated list of fields to use when ordering the results. Available fields: - created  The default ascending order can be reversed by appending the &#x60;desc&#x60; specifier. | 
  **skip** | **int32** | The initial index from which to return the results. | 
  **top** | **int32** | Number of results to return per page. | [default to 1000]
+ **name** | **string** | Filter results by project name (exact match). | 
 
 ### Return type
 

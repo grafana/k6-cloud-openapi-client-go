@@ -77,6 +77,30 @@ export default function() {
 
 }
 
+func ExampleLoadTestsAPI_ProjectsLoadTestsRetrieve() {
+	// The following example assumes that there is a k6 client initialized and ready to use.
+	// Have a look at the `shared.go` file to see how to initialize the client.
+
+	// First we prepare an [io.ReadCloser] with the load test script contents.
+	// We define it inline for simplicity, but we could also use an [*os.File] here.
+
+	// Then, we create the base request:
+	req := client.LoadTestsAPI.ProjectsLoadTestsRetrieve(ctx, 3760801).
+		XStackId(stackID)
+
+	// Finally, we execute the request.
+	loadTestsRes, httpRes, err := req.Execute()
+	if err != nil {
+		log.Fatalf("ProjectsLoadTestsRetrieve request failed: %s", err.Error())
+	}
+
+	log.Printf("Status code: %d", httpRes.StatusCode)
+	log.Printf("Total amount of load tests: %d", len(loadTestsRes.Value))
+
+	// Output:
+
+}
+
 func ExampleLoadTestsAPI_LoadTestsScriptRetrieve() {
 	// The following example assumes that there is a k6 client initialized and ready to use.
 	// Have a look at the `shared.go` file to see how to initialize the client.

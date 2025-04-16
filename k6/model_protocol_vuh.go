@@ -3,7 +3,7 @@ Grafana Cloud k6
 
 HTTP API for interacting with Grafana Cloud k6.
 
-API version: 1.1.0
+API version: 1.2.0
 Contact: info@grafana.com
 */
 
@@ -16,7 +16,7 @@ import (
 	"fmt"
 )
 
-// ProtocolVuh Number of VUH charged for the protocol part of the test run.
+// ProtocolVuh Number of billed VUH charged for the protocol part of the test run.
 type ProtocolVuh struct {
 	Float32 *float32
 	String  *string

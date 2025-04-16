@@ -3,7 +3,7 @@ Grafana Cloud k6
 
 HTTP API for interacting with Grafana Cloud k6.
 
-API version: 1.1.0
+API version: 1.2.0
 Contact: info@grafana.com
 */
 
@@ -22,7 +22,9 @@ var _ MappedNullable = &ValidateOptionsResponse{}
 // ValidateOptionsResponse struct for ValidateOptionsResponse
 type ValidateOptionsResponse struct {
 	// How many VUH will be charged for the test.
-	VuhUsage             float32 `json:"vuh_usage"`
+	VuhUsage float32 `json:"vuh_usage"`
+	// Breakdown of the VUH usage.
+	Breakdown            CostBreakdownApiModel `json:"breakdown"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -32,9 +34,10 @@ type _ValidateOptionsResponse ValidateOptionsResponse
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewValidateOptionsResponse(vuhUsage float32) *ValidateOptionsResponse {
+func NewValidateOptionsResponse(vuhUsage float32, breakdown CostBreakdownApiModel) *ValidateOptionsResponse {
 	this := ValidateOptionsResponse{}
 	this.VuhUsage = vuhUsage
+	this.Breakdown = breakdown
 	return &this
 }
 
@@ -70,6 +73,30 @@ func (o *ValidateOptionsResponse) SetVuhUsage(v float32) {
 	o.VuhUsage = v
 }
 
+// GetBreakdown returns the Breakdown field value
+func (o *ValidateOptionsResponse) GetBreakdown() CostBreakdownApiModel {
+	if o == nil {
+		var ret CostBreakdownApiModel
+		return ret
+	}
+
+	return o.Breakdown
+}
+
+// GetBreakdownOk returns a tuple with the Breakdown field value
+// and a boolean to check if the value has been set.
+func (o *ValidateOptionsResponse) GetBreakdownOk() (*CostBreakdownApiModel, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.Breakdown, true
+}
+
+// SetBreakdown sets field value
+func (o *ValidateOptionsResponse) SetBreakdown(v CostBreakdownApiModel) {
+	o.Breakdown = v
+}
+
 func (o ValidateOptionsResponse) MarshalJSON() ([]byte, error) {
 	toSerialize, err := o.ToMap()
 	if err != nil {
@@ -81,6 +108,7 @@ func (o ValidateOptionsResponse) MarshalJSON() ([]byte, error) {
 func (o ValidateOptionsResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["vuh_usage"] = o.VuhUsage
+	toSerialize["breakdown"] = o.Breakdown
 
 	for key, value := range o.AdditionalProperties {
 		toSerialize[key] = value
@@ -95,6 +123,7 @@ func (o *ValidateOptionsResponse) UnmarshalJSON(data []byte) (err error) {
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
 		"vuh_usage",
+		"breakdown",
 	}
 
 	allProperties := make(map[string]interface{})
@@ -125,6 +154,7 @@ func (o *ValidateOptionsResponse) UnmarshalJSON(data []byte) (err error) {
 
 	if err = json.Unmarshal(data, &additionalProperties); err == nil {
 		delete(additionalProperties, "vuh_usage")
+		delete(additionalProperties, "breakdown")
 		o.AdditionalProperties = additionalProperties
 	}
 

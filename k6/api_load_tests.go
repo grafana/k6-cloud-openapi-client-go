@@ -3,7 +3,7 @@ Grafana Cloud k6
 
 HTTP API for interacting with Grafana Cloud k6.
 
-API version: 1.1.0
+API version: 1.2.0
 Contact: info@grafana.com
 */
 
@@ -189,6 +189,7 @@ type ApiLoadTestsListRequest struct {
 	orderby    *string
 	skip       *int32
 	top        *int32
+	name       *string
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
@@ -218,6 +219,12 @@ func (r *ApiLoadTestsListRequest) Skip(skip int32) *ApiLoadTestsListRequest {
 // Number of results to return per page.
 func (r *ApiLoadTestsListRequest) Top(top int32) *ApiLoadTestsListRequest {
 	r.top = &top
+	return r
+}
+
+// Filter results by load test name (exact match).
+func (r *ApiLoadTestsListRequest) Name(name string) *ApiLoadTestsListRequest {
+	r.name = &name
 	return r
 }
 
@@ -279,6 +286,9 @@ func (a *LoadTestsAPIService) LoadTestsListExecute(r *ApiLoadTestsListRequest) (
 	} else {
 		var defaultValue int32 = 1000
 		r.top = &defaultValue
+	}
+	if r.name != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "name", r.name, "form", "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
