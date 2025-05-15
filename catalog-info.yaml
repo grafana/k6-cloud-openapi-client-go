@@ -6,7 +6,6 @@ metadata:
   description: |
     Go client for the Grafana Cloud k6 REST API v6.
   annotations:
-    backstage.io/techdocs-ref: dir:.
     github.com/project-slug: grafana/k6-cloud-openapi-client-go
 spec:
   type: library
