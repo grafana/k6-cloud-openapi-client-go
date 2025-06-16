@@ -1,0 +1,13 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: k6-cloud-openapi-client-go
+  title: k6-cloud-openapi-client-go
+  description: |
+    Go client for the Grafana Cloud k6 REST API v6.
+  annotations:
+    github.com/project-slug: grafana/k6-cloud-openapi-client-go
+spec:
+  type: library
+  owner: group:default/k6-cloud-provisioning
+  lifecycle: production
