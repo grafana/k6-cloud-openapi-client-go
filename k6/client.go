@@ -3,7 +3,7 @@ Grafana Cloud k6
 
 HTTP API for interacting with Grafana Cloud k6.
 
-API version: 1.2.0
+API version: 1.4.0
 Contact: info@grafana.com
 */
 
@@ -41,7 +41,7 @@ var (
 	queryDescape    = strings.NewReplacer("%5B", "[", "%5D", "]")
 )
 
-// APIClient manages communication with the Grafana Cloud k6 API v1.2.0
+// APIClient manages communication with the Grafana Cloud k6 API v1.4.0
 // In most cases there should be only one, shared, APIClient.
 type APIClient struct {
 	cfg    *Configuration
@@ -51,7 +51,11 @@ type APIClient struct {
 
 	LoadTestsAPI *LoadTestsAPIService
 
+	LoadZonesAPI *LoadZonesAPIService
+
 	ProjectsAPI *ProjectsAPIService
+
+	SchedulesAPI *SchedulesAPIService
 
 	TestRunsAPI *TestRunsAPIService
 }
@@ -73,7 +77,9 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 
 	// API Services
 	c.LoadTestsAPI = (*LoadTestsAPIService)(&c.common)
+	c.LoadZonesAPI = (*LoadZonesAPIService)(&c.common)
 	c.ProjectsAPI = (*ProjectsAPIService)(&c.common)
+	c.SchedulesAPI = (*SchedulesAPIService)(&c.common)
 	c.TestRunsAPI = (*TestRunsAPIService)(&c.common)
 
 	return c

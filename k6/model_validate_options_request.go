@@ -3,7 +3,7 @@ Grafana Cloud k6
 
 HTTP API for interacting with Grafana Cloud k6.
 
-API version: 1.2.0
+API version: 1.4.0
 Contact: info@grafana.com
 */
 
@@ -24,7 +24,9 @@ type ValidateOptionsRequest struct {
 	// ID of a project where the test belongs.
 	ProjectId NullableInt32 `json:"project_id,omitempty"`
 	// k6 script options object to validate.
-	Options              Options `json:"options"`
+	Options Options `json:"options"`
+	// Version of k6 and extensions to validate, as a map of dependency name to dependency version constraint.
+	K6Dependencies       map[string]string `json:"k6_dependencies,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -115,6 +117,38 @@ func (o *ValidateOptionsRequest) SetOptions(v Options) {
 	o.Options = v
 }
 
+// GetK6Dependencies returns the K6Dependencies field value if set, zero value otherwise.
+func (o *ValidateOptionsRequest) GetK6Dependencies() map[string]string {
+	if o == nil || IsNil(o.K6Dependencies) {
+		var ret map[string]string
+		return ret
+	}
+	return o.K6Dependencies
+}
+
+// GetK6DependenciesOk returns a tuple with the K6Dependencies field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ValidateOptionsRequest) GetK6DependenciesOk() (map[string]string, bool) {
+	if o == nil || IsNil(o.K6Dependencies) {
+		return map[string]string{}, false
+	}
+	return o.K6Dependencies, true
+}
+
+// HasK6Dependencies returns a boolean if a field has been set.
+func (o *ValidateOptionsRequest) HasK6Dependencies() bool {
+	if o != nil && !IsNil(o.K6Dependencies) {
+		return true
+	}
+
+	return false
+}
+
+// SetK6Dependencies gets a reference to the given map[string]string and assigns it to the K6Dependencies field.
+func (o *ValidateOptionsRequest) SetK6Dependencies(v map[string]string) {
+	o.K6Dependencies = v
+}
+
 func (o ValidateOptionsRequest) MarshalJSON() ([]byte, error) {
 	toSerialize, err := o.ToMap()
 	if err != nil {
@@ -129,6 +163,9 @@ func (o ValidateOptionsRequest) ToMap() (map[string]interface{}, error) {
 		toSerialize["project_id"] = o.ProjectId.Get()
 	}
 	toSerialize["options"] = o.Options
+	if !IsNil(o.K6Dependencies) {
+		toSerialize["k6_dependencies"] = o.K6Dependencies
+	}
 
 	for key, value := range o.AdditionalProperties {
 		toSerialize[key] = value
@@ -174,6 +211,7 @@ func (o *ValidateOptionsRequest) UnmarshalJSON(data []byte) (err error) {
 	if err = json.Unmarshal(data, &additionalProperties); err == nil {
 		delete(additionalProperties, "project_id")
 		delete(additionalProperties, "options")
+		delete(additionalProperties, "k6_dependencies")
 		o.AdditionalProperties = additionalProperties
 	}
 
