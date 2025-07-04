@@ -4,6 +4,7 @@ All URIs are relative to *https://api.k6.io*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**ProjectLimitsRetrieve**](ProjectsAPI.md#ProjectLimitsRetrieve) | **Get** /cloud/v6/project-limits | List limits for all projects.
 [**ProjectsCreate**](ProjectsAPI.md#ProjectsCreate) | **Post** /cloud/v6/projects | Create a project.
 [**ProjectsDestroy**](ProjectsAPI.md#ProjectsDestroy) | **Delete** /cloud/v6/projects/{id} | Delete a project.
 [**ProjectsLimitsPartialUpdate**](ProjectsAPI.md#ProjectsLimitsPartialUpdate) | **Patch** /cloud/v6/projects/{id}/limits | Update project limits.
@@ -12,6 +13,78 @@ Method | HTTP request | Description
 [**ProjectsPartialUpdate**](ProjectsAPI.md#ProjectsPartialUpdate) | **Patch** /cloud/v6/projects/{id} | Update a project.
 [**ProjectsRetrieve**](ProjectsAPI.md#ProjectsRetrieve) | **Get** /cloud/v6/projects/{id} | Get a project by ID.
 
+
+
+## ProjectLimitsRetrieve
+
+> ProjectLimitsListResponse ProjectLimitsRetrieve(ctx).XStackId(xStackId).Count(count).Skip(skip).Top(top).Execute()
+
+List limits for all projects.
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/grafana/k6-cloud-openapi-client/k6"
+)
+
+func main() {
+	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
+	count := true // bool | Include collection length in the response object as `@count`. (optional)
+	skip := int32(56) // int32 | The initial index from which to return the results. (optional)
+	top := int32(56) // int32 | Number of results to return per page. (optional) (default to 1000)
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.ProjectsAPI.ProjectLimitsRetrieve(context.Background()).XStackId(xStackId).Count(count).Skip(skip).Top(top).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `ProjectsAPI.ProjectLimitsRetrieve``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `ProjectLimitsRetrieve`: ProjectLimitsListResponse
+	fmt.Fprintf(os.Stdout, "Response from `ProjectsAPI.ProjectLimitsRetrieve`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiProjectLimitsRetrieveRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **xStackId** | **int32** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. | 
+ **count** | **bool** | Include collection length in the response object as &#x60;@count&#x60;. | 
+ **skip** | **int32** | The initial index from which to return the results. | 
+ **top** | **int32** | Number of results to return per page. | [default to 1000]
+
+### Return type
+
+[**ProjectLimitsListResponse**](ProjectLimitsListResponse.md)
+
+### Authorization
+
+[k6ApiToken](../README.md#k6ApiToken)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
 
 
 ## ProjectsCreate

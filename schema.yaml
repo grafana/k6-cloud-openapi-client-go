@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Grafana Cloud k6
-  version: 1.2.0
+  version: 1.4.0
   description: HTTP API for interacting with Grafana Cloud k6.
   contact:
     name: Grafana Support
@@ -82,6 +82,209 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/PermissionDenied'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /cloud/v6/load_tests/{id}/schedule:
+    get:
+      operationId: load_tests_schedule_retrieve
+      description: Get the load test schedule.
+      summary: Get the load test schedule.
+      parameters:
+      - $ref: '#/components/parameters/stackId'
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: ID of the load test.
+        required: true
+      tags:
+      - schedules
+      security:
+      - k6ApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScheduleApiModel'
+              examples:
+                EveryTwoHours:
+                  value:
+                    id: 123
+                    load_test_id: 234
+                    deactivated: false
+                    starts: '2024-07-16T08:46:04.021Z'
+                    recurrence_rule:
+                      frequency: HOURLY
+                      interval: 2
+                      byday: null
+                      until: null
+                      count: null
+                    next_run: '2024-07-20T01:46:04.021Z'
+                    created_by: user@example.com
+                WeeklyOnWeekendsStopsAfter10Runs:
+                  value:
+                    id: 123
+                    load_test_id: 234
+                    deactivated: false
+                    starts: '2024-07-16T08:46:04.021Z'
+                    recurrence_rule:
+                      frequency: WEEKLY
+                      interval: 1
+                      byday:
+                      - SA
+                      - SU
+                      until: null
+                      count: 10
+                    next_run: '2024-07-17T08:46:04.021Z'
+                    created_by: null
+                TriggeredOnceInThePast:
+                  value:
+                    id: 123
+                    load_test_id: 234
+                    deactivated: false
+                    starts: '2023-08-01T12:00:00.000Z'
+                    recurrence_rule: null
+                    next_run: null
+                    created_by: user@example.com
+                Deactivated:
+                  value:
+                    id: 123
+                    load_test_id: 234
+                    deactivated: true
+                    starts: '2024-07-16T08:46:04.021Z'
+                    recurrence_rule:
+                      frequency: HOURLY
+                      interval: 2
+                      days: []
+                      ends: null
+                    next_run: '2024-07-20T01:46:04.021Z'
+                    created_by: user@example.com
+          description: OK.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+    post:
+      operationId: load_tests_schedule_create
+      description: |-
+        Set a schedule for the load test.
+
+        This operation overwrites any existing test schedule.
+
+        Monthly schedules running on days 29-31 are adjusted to run on the last day of the month
+        if the target day doesn't exist in a given month (for example, March 31 -> April 30).
+      summary: Set a schedule for the load test.
+      parameters:
+      - $ref: '#/components/parameters/stackId'
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: ID of the load test.
+        required: true
+      tags:
+      - schedules
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateScheduleRequest'
+            examples:
+              EveryTwoHours:
+                value:
+                  starts: '2024-07-16T08:46:04.021Z'
+                  recurrence_rule:
+                    frequency: HOURLY
+                    interval: 2
+              WeeklyOnWeekendsStopsAfter10Runs:
+                value:
+                  starts: '2024-07-16T08:46:04.021Z'
+                  recurrence_rule:
+                    frequency: WEEKLY
+                    byday:
+                    - SA
+                    - SU
+                    count: 10
+              TriggeredOnce:
+                value:
+                  starts: '2028-08-01T12:00:00.000Z'
+                  recurrence_rule: null
+        required: true
+      security:
+      - k6ApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScheduleApiModel'
+              examples:
+                EveryTwoHours:
+                  value:
+                    id: 123
+                    load_test_id: 234
+                    deactivated: false
+                    starts: '2024-07-16T08:46:04.021Z'
+                    recurrence_rule:
+                      frequency: HOURLY
+                      interval: 2
+                      byday: null
+                      until: null
+                      count: null
+                    next_run: '2024-07-20T01:46:04.021Z'
+                    created_by: user@example.com
+                WeeklyOnWeekendsStopsAfter10Runs:
+                  value:
+                    id: 123
+                    load_test_id: 234
+                    deactivated: false
+                    starts: '2024-07-16T08:46:04.021Z'
+                    recurrence_rule:
+                      frequency: WEEKLY
+                      interval: 1
+                      byday:
+                      - SA
+                      - SU
+                      until: null
+                      count: 10
+                    next_run: '2024-07-17T08:46:04.021Z'
+                    created_by: null
+                TriggeredOnceInThePast:
+                  value:
+                    id: 123
+                    load_test_id: 234
+                    deactivated: false
+                    starts: '2023-08-01T12:00:00.000Z'
+                    recurrence_rule: null
+                    next_run: null
+                    created_by: user@example.com
+                Deactivated:
+                  value:
+                    id: 123
+                    load_test_id: 234
+                    deactivated: true
+                    starts: '2024-07-16T08:46:04.021Z'
+                    recurrence_rule:
+                      frequency: HOURLY
+                      interval: 2
+                      days: []
+                      ends: null
+                    next_run: '2024-07-20T01:46:04.021Z'
+                    created_by: user@example.com
+          description: OK.
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '404':
+          $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/UnexpectedError'
   /cloud/v6/load_tests/{id}/test_runs:
@@ -552,6 +755,158 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/UnexpectedError'
+  /cloud/v6/load_zones/{id}/allowed_projects:
+    get:
+      operationId: load_zones_allowed_projects_retrieve
+      description: List projects allowed to use a given load zone.
+      summary: List projects allowed to use a given load zone.
+      parameters:
+      - $ref: '#/components/parameters/stackId'
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: ID of the load zone.
+        required: true
+      tags:
+      - load_zones
+      security:
+      - k6ApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllowedProjectsListApiModel'
+              examples:
+                OK:
+                  value:
+                    value:
+                    - id: 139
+                      name: My sample project
+                    - id: 328
+                      name: Platform load tests
+                    - id: 6789
+                      name: Ops playground
+          description: OK.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+    put:
+      operationId: load_zones_allowed_projects_update
+      description: Update the list of projects allowed to use a given load zone.
+      summary: Update the list of projects allowed to use a given load zone.
+      parameters:
+      - $ref: '#/components/parameters/stackId'
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: ID of the load zone.
+        required: true
+      tags:
+      - load_zones
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateAllowedProjectsListApiModel'
+            examples:
+              Update:
+                value:
+                  value:
+                  - id: 7284
+                  - id: 8768
+                  - id: 348
+        required: true
+      security:
+      - k6ApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllowedProjectsListApiModel'
+              examples:
+                OK:
+                  value:
+                    value:
+                    - id: 139
+                      name: My sample project
+                    - id: 328
+                      name: Platform load tests
+                    - id: 6789
+                      name: Ops playground
+          description: OK.
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /cloud/v6/project-limits:
+    get:
+      operationId: project_limits_retrieve
+      description: List limits for all projects.
+      summary: List limits for all projects.
+      parameters:
+      - $ref: '#/components/parameters/stackId'
+      - in: query
+        name: $count
+        schema:
+          type: boolean
+        description: Include collection length in the response object as `@count`.
+      - in: query
+        name: $skip
+        schema:
+          type: integer
+        description: The initial index from which to return the results.
+      - in: query
+        name: $top
+        schema:
+          type: integer
+          default: 1000
+          maximum: 1000
+        description: Number of results to return per page.
+      tags:
+      - projects
+      security:
+      - k6ApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectLimitsListResponse'
+              examples:
+                OK:
+                  value:
+                    value:
+                    - project_id: 123
+                      vuh_max_per_month: 50
+                      vu_max_per_test: null
+                      vu_browser_max_per_test: 5
+                      duration_max_per_test: 600
+                    '@count': 123
+                    '@nextLink': https://api.k6.io/cloud/v6/project-limits?$skip=50&$top=20
+          description: OK.
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
   /cloud/v6/projects:
     get:
       operationId: projects_list
@@ -658,6 +1013,13 @@ paths:
                     created: '2024-12-04T19:57:46.339Z'
                     updated: '2024-12-04T19:57:46.339Z'
           description: OK.
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApiModel'
+          description: Project name is already in use or maximum number of projects
+            (1000) reached.
         '400':
           $ref: '#/components/responses/ValidationError'
         '401':
@@ -668,6 +1030,104 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
       parameters:
       - $ref: '#/components/parameters/stackId'
+  /cloud/v6/projects/{id}/allowed_load_zones:
+    get:
+      operationId: projects_allowed_load_zones_retrieve
+      description: List load zones that can be used by a given project.
+      summary: List load zones that can be used by a given project.
+      parameters:
+      - $ref: '#/components/parameters/stackId'
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: ID of the project.
+        required: true
+      tags:
+      - load_zones
+      security:
+      - k6ApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllowedLoadZonesListApiModel'
+              examples:
+                OK:
+                  value:
+                    value:
+                    - id: 24
+                      name: EU region load zone
+                    - id: 173
+                      name: US region load zone
+                    - id: 8345
+                      name: Ops playground load zone
+          description: OK.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+    put:
+      operationId: projects_allowed_load_zones_update
+      description: Update the list of load zones that can be used by a given project.
+      summary: Update the list of load zones that can be used by a given project.
+      parameters:
+      - $ref: '#/components/parameters/stackId'
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: ID of the project.
+        required: true
+      tags:
+      - load_zones
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateAllowedLoadZonesListApiModel'
+            examples:
+              Update:
+                value:
+                  value:
+                  - id: 11
+                  - id: 871
+                  - id: 17
+        required: true
+      security:
+      - k6ApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllowedLoadZonesListApiModel'
+              examples:
+                OK:
+                  value:
+                    value:
+                    - id: 24
+                      name: EU region load zone
+                    - id: 173
+                      name: US region load zone
+                    - id: 8345
+                      name: Ops playground load zone
+          description: OK.
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
   /cloud/v6/projects/{id}/limits:
     get:
       operationId: projects_limits_retrieve
@@ -1005,6 +1465,12 @@ paths:
       responses:
         '204':
           description: OK.
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApiModel'
+          description: Project name is already in use.
         '400':
           $ref: '#/components/responses/ValidationError'
         '401':
@@ -1040,6 +1506,251 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponseApiModel'
           description: Cannot delete project with a running test.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /cloud/v6/schedules:
+    get:
+      operationId: schedules_list
+      description: List all schedules.
+      summary: List all schedules.
+      parameters:
+      - $ref: '#/components/parameters/stackId'
+      - in: query
+        name: $count
+        schema:
+          type: boolean
+        description: Include collection length in the response object as `@count`.
+      - in: query
+        name: $skip
+        schema:
+          type: integer
+        description: The initial index from which to return the results.
+      - in: query
+        name: $top
+        schema:
+          type: integer
+          default: 1000
+          maximum: 1000
+        description: Number of results to return per page.
+      tags:
+      - schedules
+      security:
+      - k6ApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScheduleListResponse'
+              examples:
+                OK:
+                  value:
+                    value:
+                    - id: 123
+                      load_test_id: 234
+                      deactivated: false
+                      starts: '2024-07-16T08:46:04.021Z'
+                      recurrence_rule:
+                        frequency: HOURLY
+                        interval: 2
+                        byday: null
+                        until: null
+                        count: null
+                      next_run: '2024-07-20T01:46:04.021Z'
+                      created_by: user@example.com
+                    '@count': 12
+                    '@nextLink': https://api.k6.io/cloud/v6/schedules?$skip=50&$top=20
+          description: OK.
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /cloud/v6/schedules/{id}:
+    get:
+      operationId: schedules_retrieve
+      description: Get a schedule by ID.
+      summary: Get a schedule by ID.
+      parameters:
+      - $ref: '#/components/parameters/stackId'
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: ID of the schedule.
+        required: true
+      tags:
+      - schedules
+      security:
+      - k6ApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScheduleApiModel'
+              examples:
+                EveryTwoHours:
+                  value:
+                    id: 123
+                    load_test_id: 234
+                    deactivated: false
+                    starts: '2024-07-16T08:46:04.021Z'
+                    recurrence_rule:
+                      frequency: HOURLY
+                      interval: 2
+                      byday: null
+                      until: null
+                      count: null
+                    next_run: '2024-07-20T01:46:04.021Z'
+                    created_by: user@example.com
+                WeeklyOnWeekendsStopsAfter10Runs:
+                  value:
+                    id: 123
+                    load_test_id: 234
+                    deactivated: false
+                    starts: '2024-07-16T08:46:04.021Z'
+                    recurrence_rule:
+                      frequency: WEEKLY
+                      interval: 1
+                      byday:
+                      - SA
+                      - SU
+                      until: null
+                      count: 10
+                    next_run: '2024-07-17T08:46:04.021Z'
+                    created_by: null
+                TriggeredOnceInThePast:
+                  value:
+                    id: 123
+                    load_test_id: 234
+                    deactivated: false
+                    starts: '2023-08-01T12:00:00.000Z'
+                    recurrence_rule: null
+                    next_run: null
+                    created_by: user@example.com
+                Deactivated:
+                  value:
+                    id: 123
+                    load_test_id: 234
+                    deactivated: true
+                    starts: '2024-07-16T08:46:04.021Z'
+                    recurrence_rule:
+                      frequency: HOURLY
+                      interval: 2
+                      days: []
+                      ends: null
+                    next_run: '2024-07-20T01:46:04.021Z'
+                    created_by: user@example.com
+          description: OK.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+    delete:
+      operationId: schedules_destroy
+      description: Delete a schedule.
+      summary: Delete a schedule.
+      parameters:
+      - $ref: '#/components/parameters/stackId'
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: ID of the schedule.
+        required: true
+      tags:
+      - schedules
+      security:
+      - k6ApiToken: []
+      responses:
+        '204':
+          description: OK.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /cloud/v6/schedules/{id}/activate:
+    post:
+      operationId: schedule_activate
+      description: |-
+        Re-activate a deactivated schedule.
+
+        A deactivated schedule can be re-activated only if it still has at least one future
+        recurrence.
+      summary: Re-activate deactivated schedule.
+      parameters:
+      - $ref: '#/components/parameters/stackId'
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: ID of the schedule.
+        required: true
+      tags:
+      - schedules
+      security:
+      - k6ApiToken: []
+      responses:
+        '204':
+          description: OK.
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApiModel'
+          description: Cannot re-activate an expired schedule.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /cloud/v6/schedules/{id}/deactivate:
+    post:
+      operationId: schedule_deactivate
+      description: |-
+        Deactivate a schedule.
+
+        A deactivated schedule will not trigger new test runs. Disabling a schedule does not affect
+        the schedule recurrence rule and does not delay its expiration.
+
+        The operation has no effect if the schedule is expired.
+      summary: Deactivate a schedule.
+      parameters:
+      - $ref: '#/components/parameters/stackId'
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: ID of the schedule.
+        required: true
+      tags:
+      - schedules
+      security:
+      - k6ApiToken: []
+      responses:
+        '204':
+          description: OK.
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -1595,7 +2306,7 @@ paths:
             schema:
               $ref: '#/components/schemas/ValidateOptionsRequest'
             examples:
-              ProjectIdInOptions:
+              ProjectIdInOptionsNoDependencies:
                 value:
                   options:
                     stages:
@@ -1611,6 +2322,44 @@ paths:
                           loadZone: amazon:us:ashburn
                           percent: 100
                       projectID: 123456
+              ProjectIdInOptionsExtensionsWithoutVersioning:
+                value:
+                  options:
+                    stages:
+                    - duration: 1m
+                      target: 20
+                    - duration: 3m
+                      target: 20
+                    - duration: 30s
+                      target: 0
+                    cloud:
+                      distribution:
+                        amazon:us:ashburn:
+                          loadZone: amazon:us:ashburn
+                          percent: 100
+                      projectID: 123456
+                  k6_dependencies:
+                    k6: '*'
+                    k6/x/faker: '*'
+              ProjectIdInOptionsExtensionsWithVersioning:
+                value:
+                  options:
+                    stages:
+                    - duration: 1m
+                      target: 20
+                    - duration: 3m
+                      target: 20
+                    - duration: 30s
+                      target: 0
+                    cloud:
+                      distribution:
+                        amazon:us:ashburn:
+                          loadZone: amazon:us:ashburn
+                          percent: 100
+                      projectID: 123456
+                  k6_dependencies:
+                    k6: '>=v0.52'
+                    k6/x/faker: '>=0.4.0'
         required: true
       security:
       - k6ApiToken: []
@@ -1645,6 +2394,80 @@ paths:
       - $ref: '#/components/parameters/stackId'
 components:
   schemas:
+    AllowedLoadZoneApiModel:
+      properties:
+        id:
+          description: ID of the load zone.
+          title: Load zone ID
+          type: integer
+        name:
+          description: Name of the load zone.
+          title: Load zone name
+          type: string
+      required:
+      - id
+      - name
+      title: AllowedLoadZone
+      type: object
+    AllowedLoadZoneToUpdateApiModel:
+      properties:
+        id:
+          description: ID of the load zone.
+          title: Load zone ID
+          type: integer
+      required:
+      - id
+      title: AllowedLoadZoneToUpdate
+      type: object
+    AllowedLoadZonesListApiModel:
+      properties:
+        value:
+          description: List of the load zones that project is allowed to use.
+          items:
+            $ref: '#/components/schemas/AllowedLoadZoneApiModel'
+          title: Value
+          type: array
+      required:
+      - value
+      title: AllowedLoadZonesList
+      type: object
+    AllowedProjectApiModel:
+      properties:
+        id:
+          description: ID of the project.
+          title: Project ID
+          type: integer
+        name:
+          description: Name of the project.
+          title: Project name
+          type: string
+      required:
+      - id
+      - name
+      title: AllowedProject
+      type: object
+    AllowedProjectToUpdateApiModel:
+      properties:
+        id:
+          description: ID of the project.
+          title: Project ID
+          type: integer
+      required:
+      - id
+      title: AllowedProjectToUpdate
+      type: object
+    AllowedProjectsListApiModel:
+      properties:
+        value:
+          description: List of the projects allowed to use particular load zone.
+          items:
+            $ref: '#/components/schemas/AllowedProjectApiModel'
+          title: Value
+          type: array
+      required:
+      - value
+      title: AllowedProjectsList
+      type: object
     CloudOptions:
       additionalProperties: true
       properties:
@@ -1737,6 +2560,25 @@ components:
       - name
       title: CreateProject
       type: object
+    CreateScheduleRequest:
+      properties:
+        starts:
+          description: The timezone-aware date on which the schedule will start running
+            the test.
+          format: date-time
+          title: Starts
+          type: string
+        recurrence_rule:
+          description: The schedule recurrence settings. If null, the test will run
+            only once on the `starts` date.
+          oneOf:
+          - $ref: '#/components/schemas/ScheduleRecurrenceRule'
+          - type: 'null'
+      required:
+      - starts
+      - recurrence_rule
+      title: CreateScheduleRequest
+      type: object
     DistributionZoneApiModel:
       properties:
         load_zone:
@@ -1817,6 +2659,16 @@ components:
       - error
       title: ErrorResponse
       type: object
+    Frequency:
+      description: The unit type of the recurrence interval.
+      enum:
+      - HOURLY
+      - DAILY
+      - WEEKLY
+      - MONTHLY
+      - YEARLY
+      title: Frequency
+      type: string
     LoadTestApiModel:
       properties:
         id:
@@ -2068,6 +2920,32 @@ components:
       - duration_max_per_test
       title: ProjectLimits
       type: object
+    ProjectLimitsListResponse:
+      properties:
+        value:
+          description: List of the resulting values.
+          items:
+            $ref: '#/components/schemas/ProjectLimitsApiModel'
+          title: Value
+          type: array
+        '@count':
+          description: Object count in the collection.
+          examples:
+          - 123
+          title: '@Count'
+          type: integer
+        '@nextLink':
+          description: A reference to the next page of results. The property is included
+            until there are no more pages of results to retrieve.
+          examples:
+          - http://api.example.org/accounts/?%24skip=400&%24top=100
+          format: uri
+          title: '@Nextlink'
+          type: string
+      required:
+      - value
+      title: ProjectLimitsListResponse
+      type: object
     ProjectListResponse:
       properties:
         value:
@@ -2093,6 +2971,126 @@ components:
       required:
       - value
       title: ProjectListResponse
+      type: object
+    ScheduleApiModel:
+      properties:
+        id:
+          description: ID of the schedule.
+          title: Id
+          type: integer
+        load_test_id:
+          description: ID of the test to run.
+          title: Load Test Id
+          type: integer
+        starts:
+          description: The date on which the schedule will start running the test.
+          format: date-time
+          title: Starts
+          type: string
+        recurrence_rule:
+          description: The schedule recurrence settings. If null, the test will run
+            only once on the `starts` date.
+          oneOf:
+          - $ref: '#/components/schemas/ScheduleRecurrenceRule'
+          - type: 'null'
+        deactivated:
+          description: Whether the schedule is deactivated. A deactivated schedule
+            will not trigger new test runs, but the schedule recurrence rule and expiration
+            is not affected.
+          title: Deactivated
+          type: boolean
+        next_run:
+          description: The date of the next scheduled test run. The value is `null`
+            if the schedule is expired and no more occurrences are expected in the
+            future according to the recurrence rule.
+          format: date-time
+          title: Next Run
+          type:
+          - string
+          - 'null'
+        created_by:
+          description: The email of the user who created the schedule if applicable.
+          title: Created By
+          type:
+          - string
+          - 'null'
+      required:
+      - id
+      - load_test_id
+      - starts
+      - recurrence_rule
+      - deactivated
+      - next_run
+      - created_by
+      title: Schedule
+      type: object
+    ScheduleListResponse:
+      properties:
+        value:
+          description: List of the resulting values.
+          items:
+            $ref: '#/components/schemas/ScheduleApiModel'
+          title: Value
+          type: array
+        '@count':
+          description: Object count in the collection.
+          examples:
+          - 123
+          title: '@Count'
+          type: integer
+        '@nextLink':
+          description: A reference to the next page of results. The property is included
+            until there are no more pages of results to retrieve.
+          examples:
+          - http://api.example.org/accounts/?%24skip=400&%24top=100
+          format: uri
+          title: '@Nextlink'
+          type: string
+      required:
+      - value
+      title: ScheduleListResponse
+      type: object
+    ScheduleRecurrenceRule:
+      properties:
+        frequency:
+          $ref: '#/components/schemas/Frequency'
+        interval:
+          default: 1
+          description: The interval between each frequency iteration. An interval
+            of 2 with 'HOURLY' frequency makes the test run once every 2 hours.
+          minimum: 1
+          title: Interval
+          type: integer
+        byday:
+          default: null
+          description: The weekdays when the 'WEEKLY' recurrence will be applied.
+            Cannot be set for other frequencies.
+          items:
+            $ref: '#/components/schemas/Weekday'
+          title: Byday
+          type:
+          - array
+          - 'null'
+        until:
+          default: null
+          description: A datetime instance specifying the upper-bound time limit of
+            the recurrence.
+          format: date-time
+          title: Until
+          type:
+          - string
+          - 'null'
+        count:
+          default: null
+          description: Determines how many times the recurrence will repeat.
+          minimum: 1
+          title: Count
+          type:
+          - integer
+          - 'null'
+      required:
+      - frequency
+      title: ScheduleRecurrenceRule
       type: object
     StatusApiModel:
       description: Details of the test run status.
@@ -2248,12 +3246,14 @@ components:
           - string
           - 'null'
         result_details:
+          additionalProperties: true
           description: Additional information about the test run result.
           title: Result Details
           type:
           - object
           - 'null'
         options:
+          additionalProperties: true
           description: The original options object if available.
           title: Options
           type:
@@ -2320,6 +3320,33 @@ components:
       - value
       title: TestRunListResponse
       type: object
+    UpdateAllowedLoadZonesListApiModel:
+      properties:
+        value:
+          description: List of the load zones that the project will be allowed to
+            use.
+          items:
+            $ref: '#/components/schemas/AllowedLoadZoneToUpdateApiModel'
+          maxItems: 500
+          title: Value
+          type: array
+      required:
+      - value
+      title: UpdateAllowedLoadZonesList
+      type: object
+    UpdateAllowedProjectsListApiModel:
+      properties:
+        value:
+          description: List of the projects that will become allowed to use load zone.
+          items:
+            $ref: '#/components/schemas/AllowedProjectToUpdateApiModel'
+          maxItems: 500
+          title: Value
+          type: array
+      required:
+      - value
+      title: UpdateAllowedProjectsList
+      type: object
     ValidateOptionsRequest:
       properties:
         project_id:
@@ -2332,6 +3359,16 @@ components:
         options:
           $ref: '#/components/schemas/Options'
           description: k6 script options object to validate.
+        k6_dependencies:
+          additionalProperties:
+            type: string
+          default: null
+          description: Version of k6 and extensions to validate, as a map of dependency
+            name to dependency version constraint.
+          title: K6 Dependencies
+          type:
+          - object
+          - 'null'
       required:
       - options
       title: ValidateOptionsRequest
@@ -2350,6 +3387,17 @@ components:
       - breakdown
       title: ValidateOptionsResponse
       type: object
+    Weekday:
+      enum:
+      - MO
+      - TU
+      - WE
+      - TH
+      - FR
+      - SA
+      - SU
+      title: Weekday
+      type: string
   securitySchemes:
     k6ApiToken:
       type: http
@@ -2404,7 +3452,11 @@ servers:
 tags:
 - name: load_tests
   description: API endpoints for managing and starting tests.
+- name: load_zones
+  description: API endpoints for managing load zones.
 - name: projects
   description: API endpoints for managing projects.
+- name: schedules
+  description: API endpoints for managing test schedules.
 - name: test_runs
   description: API endpoints for managing test runs.

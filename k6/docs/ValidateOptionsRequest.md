@@ -6,6 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **ProjectId** | Pointer to **NullableInt32** | ID of a project where the test belongs. | [optional] 
 **Options** | [**Options**](Options.md) | k6 script options object to validate. | 
+**K6Dependencies** | Pointer to **map[string]string** | Version of k6 and extensions to validate, as a map of dependency name to dependency version constraint. | [optional] 
 
 ## Methods
 
@@ -80,6 +81,31 @@ and a boolean to check if the value has been set.
 
 SetOptions sets Options field to given value.
 
+
+### GetK6Dependencies
+
+`func (o *ValidateOptionsRequest) GetK6Dependencies() map[string]string`
+
+GetK6Dependencies returns the K6Dependencies field if non-nil, zero value otherwise.
+
+### GetK6DependenciesOk
+
+`func (o *ValidateOptionsRequest) GetK6DependenciesOk() (*map[string]string, bool)`
+
+GetK6DependenciesOk returns a tuple with the K6Dependencies field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetK6Dependencies
+
+`func (o *ValidateOptionsRequest) SetK6Dependencies(v map[string]string)`
+
+SetK6Dependencies sets K6Dependencies field to given value.
+
+### HasK6Dependencies
+
+`func (o *ValidateOptionsRequest) HasK6Dependencies() bool`
+
+HasK6Dependencies returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
