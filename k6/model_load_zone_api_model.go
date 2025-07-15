@@ -16,11 +16,11 @@ import (
 	"fmt"
 )
 
-// checks if the AllowedLoadZoneApiModel type satisfies the MappedNullable interface at compile time
-var _ MappedNullable = &AllowedLoadZoneApiModel{}
+// checks if the LoadZoneApiModel type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &LoadZoneApiModel{}
 
-// AllowedLoadZoneApiModel struct for AllowedLoadZoneApiModel
-type AllowedLoadZoneApiModel struct {
+// LoadZoneApiModel struct for LoadZoneApiModel
+type LoadZoneApiModel struct {
 	// ID of the load zone.
 	Id int32 `json:"id"`
 	// Name of the load zone.
@@ -30,30 +30,30 @@ type AllowedLoadZoneApiModel struct {
 	AdditionalProperties map[string]interface{}
 }
 
-type _AllowedLoadZoneApiModel AllowedLoadZoneApiModel
+type _LoadZoneApiModel LoadZoneApiModel
 
-// NewAllowedLoadZoneApiModel instantiates a new AllowedLoadZoneApiModel object
+// NewLoadZoneApiModel instantiates a new LoadZoneApiModel object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewAllowedLoadZoneApiModel(id int32, name string, k6LoadZoneId string) *AllowedLoadZoneApiModel {
-	this := AllowedLoadZoneApiModel{}
+func NewLoadZoneApiModel(id int32, name string, k6LoadZoneId string) *LoadZoneApiModel {
+	this := LoadZoneApiModel{}
 	this.Id = id
 	this.Name = name
 	this.K6LoadZoneId = k6LoadZoneId
 	return &this
 }
 
-// NewAllowedLoadZoneApiModelWithDefaults instantiates a new AllowedLoadZoneApiModel object
+// NewLoadZoneApiModelWithDefaults instantiates a new LoadZoneApiModel object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewAllowedLoadZoneApiModelWithDefaults() *AllowedLoadZoneApiModel {
-	this := AllowedLoadZoneApiModel{}
+func NewLoadZoneApiModelWithDefaults() *LoadZoneApiModel {
+	this := LoadZoneApiModel{}
 	return &this
 }
 
 // GetId returns the Id field value
-func (o *AllowedLoadZoneApiModel) GetId() int32 {
+func (o *LoadZoneApiModel) GetId() int32 {
 	if o == nil {
 		var ret int32
 		return ret
@@ -64,7 +64,7 @@ func (o *AllowedLoadZoneApiModel) GetId() int32 {
 
 // GetIdOk returns a tuple with the Id field value
 // and a boolean to check if the value has been set.
-func (o *AllowedLoadZoneApiModel) GetIdOk() (*int32, bool) {
+func (o *LoadZoneApiModel) GetIdOk() (*int32, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -72,12 +72,12 @@ func (o *AllowedLoadZoneApiModel) GetIdOk() (*int32, bool) {
 }
 
 // SetId sets field value
-func (o *AllowedLoadZoneApiModel) SetId(v int32) {
+func (o *LoadZoneApiModel) SetId(v int32) {
 	o.Id = v
 }
 
 // GetName returns the Name field value
-func (o *AllowedLoadZoneApiModel) GetName() string {
+func (o *LoadZoneApiModel) GetName() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -88,7 +88,7 @@ func (o *AllowedLoadZoneApiModel) GetName() string {
 
 // GetNameOk returns a tuple with the Name field value
 // and a boolean to check if the value has been set.
-func (o *AllowedLoadZoneApiModel) GetNameOk() (*string, bool) {
+func (o *LoadZoneApiModel) GetNameOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -96,12 +96,12 @@ func (o *AllowedLoadZoneApiModel) GetNameOk() (*string, bool) {
 }
 
 // SetName sets field value
-func (o *AllowedLoadZoneApiModel) SetName(v string) {
+func (o *LoadZoneApiModel) SetName(v string) {
 	o.Name = v
 }
 
 // GetK6LoadZoneId returns the K6LoadZoneId field value
-func (o *AllowedLoadZoneApiModel) GetK6LoadZoneId() string {
+func (o *LoadZoneApiModel) GetK6LoadZoneId() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -112,7 +112,7 @@ func (o *AllowedLoadZoneApiModel) GetK6LoadZoneId() string {
 
 // GetK6LoadZoneIdOk returns a tuple with the K6LoadZoneId field value
 // and a boolean to check if the value has been set.
-func (o *AllowedLoadZoneApiModel) GetK6LoadZoneIdOk() (*string, bool) {
+func (o *LoadZoneApiModel) GetK6LoadZoneIdOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -120,11 +120,11 @@ func (o *AllowedLoadZoneApiModel) GetK6LoadZoneIdOk() (*string, bool) {
 }
 
 // SetK6LoadZoneId sets field value
-func (o *AllowedLoadZoneApiModel) SetK6LoadZoneId(v string) {
+func (o *LoadZoneApiModel) SetK6LoadZoneId(v string) {
 	o.K6LoadZoneId = v
 }
 
-func (o AllowedLoadZoneApiModel) MarshalJSON() ([]byte, error) {
+func (o LoadZoneApiModel) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
@@ -132,7 +132,7 @@ func (o AllowedLoadZoneApiModel) MarshalJSON() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-func (o AllowedLoadZoneApiModel) ToMap() (map[string]interface{}, error) {
+func (o LoadZoneApiModel) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["id"] = o.Id
 	toSerialize["name"] = o.Name
@@ -145,7 +145,7 @@ func (o AllowedLoadZoneApiModel) ToMap() (map[string]interface{}, error) {
 	return toSerialize, nil
 }
 
-func (o *AllowedLoadZoneApiModel) UnmarshalJSON(data []byte) (err error) {
+func (o *LoadZoneApiModel) UnmarshalJSON(data []byte) (err error) {
 	// This validates that all required properties are included in the JSON object
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
@@ -169,15 +169,15 @@ func (o *AllowedLoadZoneApiModel) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varAllowedLoadZoneApiModel := _AllowedLoadZoneApiModel{}
+	varLoadZoneApiModel := _LoadZoneApiModel{}
 
-	err = json.Unmarshal(data, &varAllowedLoadZoneApiModel)
+	err = json.Unmarshal(data, &varLoadZoneApiModel)
 
 	if err != nil {
 		return err
 	}
 
-	*o = AllowedLoadZoneApiModel(varAllowedLoadZoneApiModel)
+	*o = LoadZoneApiModel(varLoadZoneApiModel)
 
 	additionalProperties := make(map[string]interface{})
 
@@ -191,38 +191,38 @@ func (o *AllowedLoadZoneApiModel) UnmarshalJSON(data []byte) (err error) {
 	return err
 }
 
-type NullableAllowedLoadZoneApiModel struct {
-	value *AllowedLoadZoneApiModel
+type NullableLoadZoneApiModel struct {
+	value *LoadZoneApiModel
 	isSet bool
 }
 
-func (v NullableAllowedLoadZoneApiModel) Get() *AllowedLoadZoneApiModel {
+func (v NullableLoadZoneApiModel) Get() *LoadZoneApiModel {
 	return v.value
 }
 
-func (v *NullableAllowedLoadZoneApiModel) Set(val *AllowedLoadZoneApiModel) {
+func (v *NullableLoadZoneApiModel) Set(val *LoadZoneApiModel) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableAllowedLoadZoneApiModel) IsSet() bool {
+func (v NullableLoadZoneApiModel) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableAllowedLoadZoneApiModel) Unset() {
+func (v *NullableLoadZoneApiModel) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableAllowedLoadZoneApiModel(val *AllowedLoadZoneApiModel) *NullableAllowedLoadZoneApiModel {
-	return &NullableAllowedLoadZoneApiModel{value: val, isSet: true}
+func NewNullableLoadZoneApiModel(val *LoadZoneApiModel) *NullableLoadZoneApiModel {
+	return &NullableLoadZoneApiModel{value: val, isSet: true}
 }
 
-func (v NullableAllowedLoadZoneApiModel) MarshalJSON() ([]byte, error) {
+func (v NullableLoadZoneApiModel) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableAllowedLoadZoneApiModel) UnmarshalJSON(src []byte) error {
+func (v *NullableLoadZoneApiModel) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

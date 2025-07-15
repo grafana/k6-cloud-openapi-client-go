@@ -3,7 +3,7 @@ Grafana Cloud k6
 
 HTTP API for interacting with Grafana Cloud k6.
 
-API version: 1.4.0
+API version: 1.5.0
 Contact: info@grafana.com
 */
 
@@ -20,7 +20,7 @@ var _ MappedNullable = &Options{}
 
 // Options struct for Options
 type Options struct {
-	Cloud                *OptionsCloud `json:"cloud,omitempty"`
+	Cloud *OptionsCloud `json:"cloud,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -76,7 +76,7 @@ func (o *Options) SetCloud(v OptionsCloud) {
 }
 
 func (o Options) MarshalJSON() ([]byte, error) {
-	toSerialize, err := o.ToMap()
+	toSerialize,err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -152,3 +152,5 @@ func (v *NullableOptions) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

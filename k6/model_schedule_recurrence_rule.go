@@ -3,7 +3,7 @@ Grafana Cloud k6
 
 HTTP API for interacting with Grafana Cloud k6.
 
-API version: 1.4.0
+API version: 1.5.0
 Contact: info@grafana.com
 */
 
@@ -13,8 +13,8 @@ package k6
 
 import (
 	"encoding/json"
-	"fmt"
 	"time"
+	"fmt"
 )
 
 // checks if the ScheduleRecurrenceRule type satisfies the MappedNullable interface at compile time
@@ -30,7 +30,7 @@ type ScheduleRecurrenceRule struct {
 	// A datetime instance specifying the upper-bound time limit of the recurrence.
 	Until NullableTime `json:"until,omitempty"`
 	// Determines how many times the recurrence will repeat.
-	Count                NullableInt32 `json:"count,omitempty"`
+	Count NullableInt32 `json:"count,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -179,7 +179,6 @@ func (o *ScheduleRecurrenceRule) HasUntil() bool {
 func (o *ScheduleRecurrenceRule) SetUntil(v time.Time) {
 	o.Until.Set(&v)
 }
-
 // SetUntilNil sets the value for Until to be an explicit nil
 func (o *ScheduleRecurrenceRule) SetUntilNil() {
 	o.Until.Set(nil)
@@ -222,7 +221,6 @@ func (o *ScheduleRecurrenceRule) HasCount() bool {
 func (o *ScheduleRecurrenceRule) SetCount(v int32) {
 	o.Count.Set(&v)
 }
-
 // SetCountNil sets the value for Count to be an explicit nil
 func (o *ScheduleRecurrenceRule) SetCountNil() {
 	o.Count.Set(nil)
@@ -234,7 +232,7 @@ func (o *ScheduleRecurrenceRule) UnsetCount() {
 }
 
 func (o ScheduleRecurrenceRule) MarshalJSON() ([]byte, error) {
-	toSerialize, err := o.ToMap()
+	toSerialize,err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -277,10 +275,10 @@ func (o *ScheduleRecurrenceRule) UnmarshalJSON(data []byte) (err error) {
 	err = json.Unmarshal(data, &allProperties)
 
 	if err != nil {
-		return err
+		return err;
 	}
 
-	for _, requiredProperty := range requiredProperties {
+	for _, requiredProperty := range(requiredProperties) {
 		if _, exists := allProperties[requiredProperty]; !exists {
 			return fmt.Errorf("no value given for required property %v", requiredProperty)
 		}
@@ -345,3 +343,5 @@ func (v *NullableScheduleRecurrenceRule) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

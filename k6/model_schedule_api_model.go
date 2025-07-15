@@ -3,7 +3,7 @@ Grafana Cloud k6
 
 HTTP API for interacting with Grafana Cloud k6.
 
-API version: 1.4.0
+API version: 1.5.0
 Contact: info@grafana.com
 */
 
@@ -13,8 +13,8 @@ package k6
 
 import (
 	"encoding/json"
-	"fmt"
 	"time"
+	"fmt"
 )
 
 // checks if the ScheduleApiModel type satisfies the MappedNullable interface at compile time
@@ -27,14 +27,14 @@ type ScheduleApiModel struct {
 	// ID of the test to run.
 	LoadTestId int32 `json:"load_test_id"`
 	// The date on which the schedule will start running the test.
-	Starts         time.Time                      `json:"starts"`
+	Starts time.Time `json:"starts"`
 	RecurrenceRule NullableScheduleRecurrenceRule `json:"recurrence_rule"`
 	// Whether the schedule is deactivated. A deactivated schedule will not trigger new test runs, but the schedule recurrence rule and expiration is not affected.
 	Deactivated bool `json:"deactivated"`
 	// The date of the next scheduled test run. The value is `null` if the schedule is expired and no more occurrences are expected in the future according to the recurrence rule.
 	NextRun NullableTime `json:"next_run"`
 	// The email of the user who created the schedule if applicable.
-	CreatedBy            NullableString `json:"created_by"`
+	CreatedBy NullableString `json:"created_by"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -239,7 +239,7 @@ func (o *ScheduleApiModel) SetCreatedBy(v string) {
 }
 
 func (o ScheduleApiModel) MarshalJSON() ([]byte, error) {
-	toSerialize, err := o.ToMap()
+	toSerialize,err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -282,10 +282,10 @@ func (o *ScheduleApiModel) UnmarshalJSON(data []byte) (err error) {
 	err = json.Unmarshal(data, &allProperties)
 
 	if err != nil {
-		return err
+		return err;
 	}
 
-	for _, requiredProperty := range requiredProperties {
+	for _, requiredProperty := range(requiredProperties) {
 		if _, exists := allProperties[requiredProperty]; !exists {
 			return fmt.Errorf("no value given for required property %v", requiredProperty)
 		}
@@ -352,3 +352,5 @@ func (v *NullableScheduleApiModel) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

@@ -3,7 +3,7 @@ Grafana Cloud k6
 
 HTTP API for interacting with Grafana Cloud k6.
 
-API version: 1.4.0
+API version: 1.5.0
 Contact: info@grafana.com
 */
 
@@ -20,14 +20,15 @@ import (
 	"strings"
 )
 
+
 // LoadZonesAPIService LoadZonesAPI service
 type LoadZonesAPIService service
 
 type ApiLoadZonesAllowedProjectsRetrieveRequest struct {
-	ctx        context.Context
+	ctx context.Context
 	ApiService *LoadZonesAPIService
-	xStackId   *int32
-	id         int32
+	xStackId *int32
+	id int32
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
@@ -45,27 +46,26 @@ LoadZonesAllowedProjectsRetrieve List projects allowed to use a given load zone.
 
 List projects allowed to use a given load zone.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id ID of the load zone.
-	@return *ApiLoadZonesAllowedProjectsRetrieveRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id ID of the load zone.
+ @return *ApiLoadZonesAllowedProjectsRetrieveRequest
 */
 func (a *LoadZonesAPIService) LoadZonesAllowedProjectsRetrieve(ctx context.Context, id int32) *ApiLoadZonesAllowedProjectsRetrieveRequest {
 	return &ApiLoadZonesAllowedProjectsRetrieveRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return AllowedProjectsListApiModel
+//  @return AllowedProjectsListApiModel
 func (a *LoadZonesAPIService) LoadZonesAllowedProjectsRetrieveExecute(r *ApiLoadZonesAllowedProjectsRetrieveRequest) (*AllowedProjectsListApiModel, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *AllowedProjectsListApiModel
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *AllowedProjectsListApiModel
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LoadZonesAPIService.LoadZonesAllowedProjectsRetrieve")
@@ -130,8 +130,8 @@ func (a *LoadZonesAPIService) LoadZonesAllowedProjectsRetrieveExecute(r *ApiLoad
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -141,8 +141,8 @@ func (a *LoadZonesAPIService) LoadZonesAllowedProjectsRetrieveExecute(r *ApiLoad
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -152,8 +152,8 @@ func (a *LoadZonesAPIService) LoadZonesAllowedProjectsRetrieveExecute(r *ApiLoad
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -163,8 +163,8 @@ func (a *LoadZonesAPIService) LoadZonesAllowedProjectsRetrieveExecute(r *ApiLoad
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -182,10 +182,10 @@ func (a *LoadZonesAPIService) LoadZonesAllowedProjectsRetrieveExecute(r *ApiLoad
 }
 
 type ApiLoadZonesAllowedProjectsUpdateRequest struct {
-	ctx                               context.Context
-	ApiService                        *LoadZonesAPIService
-	xStackId                          *int32
-	id                                int32
+	ctx context.Context
+	ApiService *LoadZonesAPIService
+	xStackId *int32
+	id int32
 	updateAllowedProjectsListApiModel *UpdateAllowedProjectsListApiModel
 }
 
@@ -209,27 +209,26 @@ LoadZonesAllowedProjectsUpdate Update the list of projects allowed to use a give
 
 Update the list of projects allowed to use a given load zone.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id ID of the load zone.
-	@return *ApiLoadZonesAllowedProjectsUpdateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id ID of the load zone.
+ @return *ApiLoadZonesAllowedProjectsUpdateRequest
 */
 func (a *LoadZonesAPIService) LoadZonesAllowedProjectsUpdate(ctx context.Context, id int32) *ApiLoadZonesAllowedProjectsUpdateRequest {
 	return &ApiLoadZonesAllowedProjectsUpdateRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return AllowedProjectsListApiModel
+//  @return AllowedProjectsListApiModel
 func (a *LoadZonesAPIService) LoadZonesAllowedProjectsUpdateExecute(r *ApiLoadZonesAllowedProjectsUpdateRequest) (*AllowedProjectsListApiModel, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPut
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *AllowedProjectsListApiModel
+		localVarHTTPMethod   = http.MethodPut
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *AllowedProjectsListApiModel
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LoadZonesAPIService.LoadZonesAllowedProjectsUpdate")
@@ -299,8 +298,8 @@ func (a *LoadZonesAPIService) LoadZonesAllowedProjectsUpdateExecute(r *ApiLoadZo
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
@@ -310,8 +309,8 @@ func (a *LoadZonesAPIService) LoadZonesAllowedProjectsUpdateExecute(r *ApiLoadZo
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -321,8 +320,8 @@ func (a *LoadZonesAPIService) LoadZonesAllowedProjectsUpdateExecute(r *ApiLoadZo
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -332,8 +331,8 @@ func (a *LoadZonesAPIService) LoadZonesAllowedProjectsUpdateExecute(r *ApiLoadZo
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -343,8 +342,171 @@ func (a *LoadZonesAPIService) LoadZonesAllowedProjectsUpdateExecute(r *ApiLoadZo
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiLoadZonesListRequest struct {
+	ctx context.Context
+	ApiService *LoadZonesAPIService
+	xStackId *int32
+	k6LoadZoneId *string
+}
+
+// Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
+func (r *ApiLoadZonesListRequest) XStackId(xStackId int32) *ApiLoadZonesListRequest {
+	r.xStackId = &xStackId
+	return r
+}
+
+// Filter results by k6 load zone ID (exact match).
+func (r *ApiLoadZonesListRequest) K6LoadZoneId(k6LoadZoneId string) *ApiLoadZonesListRequest {
+	r.k6LoadZoneId = &k6LoadZoneId
+	return r
+}
+
+func (r *ApiLoadZonesListRequest) Execute() (*LoadZonesListApiModel, *http.Response, error) {
+	return r.ApiService.LoadZonesListExecute(r)
+}
+
+/*
+LoadZonesList List all load zones.
+
+List all load zones.
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return *ApiLoadZonesListRequest
+*/
+func (a *LoadZonesAPIService) LoadZonesList(ctx context.Context) *ApiLoadZonesListRequest {
+	return &ApiLoadZonesListRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return LoadZonesListApiModel
+func (a *LoadZonesAPIService) LoadZonesListExecute(r *ApiLoadZonesListRequest) (*LoadZonesListApiModel, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *LoadZonesListApiModel
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LoadZonesAPIService.LoadZonesList")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/cloud/v6/load_zones"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.xStackId == nil {
+		return localVarReturnValue, nil, reportError("xStackId is required and must be specified")
+	}
+
+	if r.k6LoadZoneId != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "k6_load_zone_id", r.k6LoadZoneId, "form", "")
+	}
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	parameterAddToHeaderOrQuery(localVarHeaderParams, "X-Stack-Id", r.xStackId, "simple", "")
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 400 {
+			var v ErrorResponseApiModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 401 {
+			var v ErrorResponseApiModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v ErrorResponseApiModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 500 {
+			var v ErrorResponseApiModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -362,10 +524,10 @@ func (a *LoadZonesAPIService) LoadZonesAllowedProjectsUpdateExecute(r *ApiLoadZo
 }
 
 type ApiProjectsAllowedLoadZonesRetrieveRequest struct {
-	ctx        context.Context
+	ctx context.Context
 	ApiService *LoadZonesAPIService
-	xStackId   *int32
-	id         int32
+	xStackId *int32
+	id int32
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
@@ -383,27 +545,26 @@ ProjectsAllowedLoadZonesRetrieve List load zones that can be used by a given pro
 
 List load zones that can be used by a given project.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id ID of the project.
-	@return *ApiProjectsAllowedLoadZonesRetrieveRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id ID of the project.
+ @return *ApiProjectsAllowedLoadZonesRetrieveRequest
 */
 func (a *LoadZonesAPIService) ProjectsAllowedLoadZonesRetrieve(ctx context.Context, id int32) *ApiProjectsAllowedLoadZonesRetrieveRequest {
 	return &ApiProjectsAllowedLoadZonesRetrieveRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return AllowedLoadZonesListApiModel
+//  @return AllowedLoadZonesListApiModel
 func (a *LoadZonesAPIService) ProjectsAllowedLoadZonesRetrieveExecute(r *ApiProjectsAllowedLoadZonesRetrieveRequest) (*AllowedLoadZonesListApiModel, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *AllowedLoadZonesListApiModel
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *AllowedLoadZonesListApiModel
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LoadZonesAPIService.ProjectsAllowedLoadZonesRetrieve")
@@ -468,8 +629,8 @@ func (a *LoadZonesAPIService) ProjectsAllowedLoadZonesRetrieveExecute(r *ApiProj
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -479,8 +640,8 @@ func (a *LoadZonesAPIService) ProjectsAllowedLoadZonesRetrieveExecute(r *ApiProj
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -490,8 +651,8 @@ func (a *LoadZonesAPIService) ProjectsAllowedLoadZonesRetrieveExecute(r *ApiProj
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -501,8 +662,8 @@ func (a *LoadZonesAPIService) ProjectsAllowedLoadZonesRetrieveExecute(r *ApiProj
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -520,10 +681,10 @@ func (a *LoadZonesAPIService) ProjectsAllowedLoadZonesRetrieveExecute(r *ApiProj
 }
 
 type ApiProjectsAllowedLoadZonesUpdateRequest struct {
-	ctx                                context.Context
-	ApiService                         *LoadZonesAPIService
-	xStackId                           *int32
-	id                                 int32
+	ctx context.Context
+	ApiService *LoadZonesAPIService
+	xStackId *int32
+	id int32
 	updateAllowedLoadZonesListApiModel *UpdateAllowedLoadZonesListApiModel
 }
 
@@ -547,27 +708,26 @@ ProjectsAllowedLoadZonesUpdate Update the list of load zones that can be used by
 
 Update the list of load zones that can be used by a given project.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id ID of the project.
-	@return *ApiProjectsAllowedLoadZonesUpdateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id ID of the project.
+ @return *ApiProjectsAllowedLoadZonesUpdateRequest
 */
 func (a *LoadZonesAPIService) ProjectsAllowedLoadZonesUpdate(ctx context.Context, id int32) *ApiProjectsAllowedLoadZonesUpdateRequest {
 	return &ApiProjectsAllowedLoadZonesUpdateRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return AllowedLoadZonesListApiModel
+//  @return AllowedLoadZonesListApiModel
 func (a *LoadZonesAPIService) ProjectsAllowedLoadZonesUpdateExecute(r *ApiProjectsAllowedLoadZonesUpdateRequest) (*AllowedLoadZonesListApiModel, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPut
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *AllowedLoadZonesListApiModel
+		localVarHTTPMethod   = http.MethodPut
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *AllowedLoadZonesListApiModel
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LoadZonesAPIService.ProjectsAllowedLoadZonesUpdate")
@@ -637,8 +797,8 @@ func (a *LoadZonesAPIService) ProjectsAllowedLoadZonesUpdateExecute(r *ApiProjec
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
@@ -648,8 +808,8 @@ func (a *LoadZonesAPIService) ProjectsAllowedLoadZonesUpdateExecute(r *ApiProjec
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -659,8 +819,8 @@ func (a *LoadZonesAPIService) ProjectsAllowedLoadZonesUpdateExecute(r *ApiProjec
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -670,8 +830,8 @@ func (a *LoadZonesAPIService) ProjectsAllowedLoadZonesUpdateExecute(r *ApiProjec
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -681,8 +841,8 @@ func (a *LoadZonesAPIService) ProjectsAllowedLoadZonesUpdateExecute(r *ApiProjec
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}

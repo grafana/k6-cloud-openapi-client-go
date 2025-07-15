@@ -16,40 +16,40 @@ import (
 	"fmt"
 )
 
-// checks if the AllowedProjectsListApiModel type satisfies the MappedNullable interface at compile time
-var _ MappedNullable = &AllowedProjectsListApiModel{}
+// checks if the LoadZonesListApiModel type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &LoadZonesListApiModel{}
 
-// AllowedProjectsListApiModel struct for AllowedProjectsListApiModel
-type AllowedProjectsListApiModel struct {
+// LoadZonesListApiModel struct for LoadZonesListApiModel
+type LoadZonesListApiModel struct {
 	// List of the resulting values.
-	Value []AllowedProjectApiModel `json:"value"`
+	Value []LoadZoneApiModel `json:"value"`
 	AdditionalProperties map[string]interface{}
 }
 
-type _AllowedProjectsListApiModel AllowedProjectsListApiModel
+type _LoadZonesListApiModel LoadZonesListApiModel
 
-// NewAllowedProjectsListApiModel instantiates a new AllowedProjectsListApiModel object
+// NewLoadZonesListApiModel instantiates a new LoadZonesListApiModel object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewAllowedProjectsListApiModel(value []AllowedProjectApiModel) *AllowedProjectsListApiModel {
-	this := AllowedProjectsListApiModel{}
+func NewLoadZonesListApiModel(value []LoadZoneApiModel) *LoadZonesListApiModel {
+	this := LoadZonesListApiModel{}
 	this.Value = value
 	return &this
 }
 
-// NewAllowedProjectsListApiModelWithDefaults instantiates a new AllowedProjectsListApiModel object
+// NewLoadZonesListApiModelWithDefaults instantiates a new LoadZonesListApiModel object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewAllowedProjectsListApiModelWithDefaults() *AllowedProjectsListApiModel {
-	this := AllowedProjectsListApiModel{}
+func NewLoadZonesListApiModelWithDefaults() *LoadZonesListApiModel {
+	this := LoadZonesListApiModel{}
 	return &this
 }
 
 // GetValue returns the Value field value
-func (o *AllowedProjectsListApiModel) GetValue() []AllowedProjectApiModel {
+func (o *LoadZonesListApiModel) GetValue() []LoadZoneApiModel {
 	if o == nil {
-		var ret []AllowedProjectApiModel
+		var ret []LoadZoneApiModel
 		return ret
 	}
 
@@ -58,7 +58,7 @@ func (o *AllowedProjectsListApiModel) GetValue() []AllowedProjectApiModel {
 
 // GetValueOk returns a tuple with the Value field value
 // and a boolean to check if the value has been set.
-func (o *AllowedProjectsListApiModel) GetValueOk() ([]AllowedProjectApiModel, bool) {
+func (o *LoadZonesListApiModel) GetValueOk() ([]LoadZoneApiModel, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -66,11 +66,11 @@ func (o *AllowedProjectsListApiModel) GetValueOk() ([]AllowedProjectApiModel, bo
 }
 
 // SetValue sets field value
-func (o *AllowedProjectsListApiModel) SetValue(v []AllowedProjectApiModel) {
+func (o *LoadZonesListApiModel) SetValue(v []LoadZoneApiModel) {
 	o.Value = v
 }
 
-func (o AllowedProjectsListApiModel) MarshalJSON() ([]byte, error) {
+func (o LoadZonesListApiModel) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
@@ -78,7 +78,7 @@ func (o AllowedProjectsListApiModel) MarshalJSON() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-func (o AllowedProjectsListApiModel) ToMap() (map[string]interface{}, error) {
+func (o LoadZonesListApiModel) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["value"] = o.Value
 
@@ -89,7 +89,7 @@ func (o AllowedProjectsListApiModel) ToMap() (map[string]interface{}, error) {
 	return toSerialize, nil
 }
 
-func (o *AllowedProjectsListApiModel) UnmarshalJSON(data []byte) (err error) {
+func (o *LoadZonesListApiModel) UnmarshalJSON(data []byte) (err error) {
 	// This validates that all required properties are included in the JSON object
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
@@ -111,15 +111,15 @@ func (o *AllowedProjectsListApiModel) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varAllowedProjectsListApiModel := _AllowedProjectsListApiModel{}
+	varLoadZonesListApiModel := _LoadZonesListApiModel{}
 
-	err = json.Unmarshal(data, &varAllowedProjectsListApiModel)
+	err = json.Unmarshal(data, &varLoadZonesListApiModel)
 
 	if err != nil {
 		return err
 	}
 
-	*o = AllowedProjectsListApiModel(varAllowedProjectsListApiModel)
+	*o = LoadZonesListApiModel(varLoadZonesListApiModel)
 
 	additionalProperties := make(map[string]interface{})
 
@@ -131,38 +131,38 @@ func (o *AllowedProjectsListApiModel) UnmarshalJSON(data []byte) (err error) {
 	return err
 }
 
-type NullableAllowedProjectsListApiModel struct {
-	value *AllowedProjectsListApiModel
+type NullableLoadZonesListApiModel struct {
+	value *LoadZonesListApiModel
 	isSet bool
 }
 
-func (v NullableAllowedProjectsListApiModel) Get() *AllowedProjectsListApiModel {
+func (v NullableLoadZonesListApiModel) Get() *LoadZonesListApiModel {
 	return v.value
 }
 
-func (v *NullableAllowedProjectsListApiModel) Set(val *AllowedProjectsListApiModel) {
+func (v *NullableLoadZonesListApiModel) Set(val *LoadZonesListApiModel) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableAllowedProjectsListApiModel) IsSet() bool {
+func (v NullableLoadZonesListApiModel) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableAllowedProjectsListApiModel) Unset() {
+func (v *NullableLoadZonesListApiModel) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableAllowedProjectsListApiModel(val *AllowedProjectsListApiModel) *NullableAllowedProjectsListApiModel {
-	return &NullableAllowedProjectsListApiModel{value: val, isSet: true}
+func NewNullableLoadZonesListApiModel(val *LoadZonesListApiModel) *NullableLoadZonesListApiModel {
+	return &NullableLoadZonesListApiModel{value: val, isSet: true}
 }
 
-func (v NullableAllowedProjectsListApiModel) MarshalJSON() ([]byte, error) {
+func (v NullableLoadZonesListApiModel) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableAllowedProjectsListApiModel) UnmarshalJSON(src []byte) error {
+func (v *NullableLoadZonesListApiModel) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

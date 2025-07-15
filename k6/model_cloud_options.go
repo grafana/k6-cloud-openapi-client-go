@@ -3,7 +3,7 @@ Grafana Cloud k6
 
 HTTP API for interacting with Grafana Cloud k6.
 
-API version: 1.4.0
+API version: 1.5.0
 Contact: info@grafana.com
 */
 
@@ -21,7 +21,7 @@ var _ MappedNullable = &CloudOptions{}
 // CloudOptions struct for CloudOptions
 type CloudOptions struct {
 	// ID of a project where the test belongs.
-	ProjectID            *int32 `json:"projectID,omitempty"`
+	ProjectID *int32 `json:"projectID,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -77,7 +77,7 @@ func (o *CloudOptions) SetProjectID(v int32) {
 }
 
 func (o CloudOptions) MarshalJSON() ([]byte, error) {
-	toSerialize, err := o.ToMap()
+	toSerialize,err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -153,3 +153,5 @@ func (v *NullableCloudOptions) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+
