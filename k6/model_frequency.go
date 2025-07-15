@@ -3,7 +3,7 @@ Grafana Cloud k6
 
 HTTP API for interacting with Grafana Cloud k6.
 
-API version: 1.4.0
+API version: 1.5.0
 Contact: info@grafana.com
 */
 
@@ -21,11 +21,11 @@ type Frequency string
 
 // List of Frequency
 const (
-	HOURLY  Frequency = "HOURLY"
-	DAILY   Frequency = "DAILY"
-	WEEKLY  Frequency = "WEEKLY"
+	HOURLY Frequency = "HOURLY"
+	DAILY Frequency = "DAILY"
+	WEEKLY Frequency = "WEEKLY"
 	MONTHLY Frequency = "MONTHLY"
-	YEARLY  Frequency = "YEARLY"
+	YEARLY Frequency = "YEARLY"
 )
 
 // All allowed values of Frequency enum
@@ -115,3 +115,4 @@ func (v *NullableFrequency) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+

@@ -27,7 +27,9 @@ docs/Frequency.md
 docs/LoadTestApiModel.md
 docs/LoadTestListResponse.md
 docs/LoadTestsAPI.md
+docs/LoadZoneApiModel.md
 docs/LoadZonesAPI.md
+docs/LoadZonesListApiModel.md
 docs/MoveLoadTestApiModel.md
 docs/Options.md
 docs/OptionsCloud.md
@@ -78,6 +80,8 @@ model_error_response_api_model.go
 model_frequency.go
 model_load_test_api_model.go
 model_load_test_list_response.go
+model_load_zone_api_model.go
+model_load_zones_list_api_model.go
 model_move_load_test_api_model.go
 model_options.go
 model_options_cloud.go

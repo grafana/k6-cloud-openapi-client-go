@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Grafana Cloud k6
-  version: 1.4.0
+  version: 1.5.0
   description: HTTP API for interacting with Grafana Cloud k6.
   contact:
     name: Grafana Support
@@ -755,6 +755,50 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/UnexpectedError'
+  /cloud/v6/load_zones:
+    get:
+      operationId: load_zones_list
+      description: List all load zones.
+      summary: List all load zones.
+      parameters:
+      - $ref: '#/components/parameters/stackId'
+      - in: query
+        name: k6_load_zone_id
+        schema:
+          type: string
+        description: Filter results by k6 load zone ID (exact match).
+      tags:
+      - load_zones
+      security:
+      - k6ApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoadZonesListApiModel'
+              examples:
+                OK:
+                  value:
+                    value:
+                    - id: 1
+                      name: US East (N. Virginia)
+                      k6_load_zone_id: amazon:us:ashburn
+                    - id: 2
+                      name: Ops playground
+                      k6_load_zone_id: ops-playground-plz
+                    - id: 3
+                      name: Asia Pacific (Tokyo)
+                      k6_load_zone_id: amazon:jp:tokyo
+          description: OK.
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
   /cloud/v6/load_zones/{id}/allowed_projects:
     get:
       operationId: load_zones_allowed_projects_retrieve
@@ -784,10 +828,13 @@ paths:
                     value:
                     - id: 139
                       name: My sample project
+                      k6_load_zone_id: my-sample-project
                     - id: 328
                       name: Platform load tests
+                      k6_load_zone_id: platform-load-tests
                     - id: 6789
                       name: Ops playground
+                      k6_load_zone_id: ops-playground
           description: OK.
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -838,10 +885,13 @@ paths:
                     value:
                     - id: 139
                       name: My sample project
+                      k6_load_zone_id: my-sample-project
                     - id: 328
                       name: Platform load tests
+                      k6_load_zone_id: platform-load-tests
                     - id: 6789
                       name: Ops playground
+                      k6_load_zone_id: ops-playground
           description: OK.
         '400':
           $ref: '#/components/responses/ValidationError'
@@ -1059,10 +1109,13 @@ paths:
                     value:
                     - id: 24
                       name: EU region load zone
+                      k6_load_zone_id: eu-region-load-zone
                     - id: 173
                       name: US region load zone
+                      k6_load_zone_id: us-region-load-zone
                     - id: 8345
                       name: Ops playground load zone
+                      k6_load_zone_id: ops-playground-load-zone
           description: OK.
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -1113,10 +1166,13 @@ paths:
                     value:
                     - id: 24
                       name: EU region load zone
+                      k6_load_zone_id: eu-region-load-zone
                     - id: 173
                       name: US region load zone
+                      k6_load_zone_id: us-region-load-zone
                     - id: 8345
                       name: Ops playground load zone
+                      k6_load_zone_id: ops-playground-load-zone
           description: OK.
         '400':
           $ref: '#/components/responses/ValidationError'
@@ -2404,9 +2460,14 @@ components:
           description: Name of the load zone.
           title: Load zone name
           type: string
+        k6_load_zone_id:
+          description: ID used to identify the load zone in the k6 scripts.
+          title: K6 load zone ID
+          type: string
       required:
       - id
       - name
+      - k6_load_zone_id
       title: AllowedLoadZone
       type: object
     AllowedLoadZoneToUpdateApiModel:
@@ -2422,7 +2483,7 @@ components:
     AllowedLoadZonesListApiModel:
       properties:
         value:
-          description: List of the load zones that project is allowed to use.
+          description: List of the resulting values.
           items:
             $ref: '#/components/schemas/AllowedLoadZoneApiModel'
           title: Value
@@ -2459,7 +2520,7 @@ components:
     AllowedProjectsListApiModel:
       properties:
         value:
-          description: List of the projects allowed to use particular load zone.
+          description: List of the resulting values.
           items:
             $ref: '#/components/schemas/AllowedProjectApiModel'
           title: Value
@@ -2735,6 +2796,38 @@ components:
       required:
       - value
       title: LoadTestListResponse
+      type: object
+    LoadZoneApiModel:
+      properties:
+        id:
+          description: ID of the load zone.
+          title: Load zone ID
+          type: integer
+        name:
+          description: Name of the load zone.
+          title: Load zone name
+          type: string
+        k6_load_zone_id:
+          description: ID used to identify the load zone in the k6 scripts.
+          title: K6 load zone ID
+          type: string
+      required:
+      - id
+      - name
+      - k6_load_zone_id
+      title: LoadZone
+      type: object
+    LoadZonesListApiModel:
+      properties:
+        value:
+          description: List of the resulting values.
+          items:
+            $ref: '#/components/schemas/LoadZoneApiModel'
+          title: Value
+          type: array
+      required:
+      - value
+      title: LoadZonesList
       type: object
     MoveLoadTestApiModel:
       additionalProperties: false

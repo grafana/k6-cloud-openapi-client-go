@@ -6,6 +6,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**LoadZonesAllowedProjectsRetrieve**](LoadZonesAPI.md#LoadZonesAllowedProjectsRetrieve) | **Get** /cloud/v6/load_zones/{id}/allowed_projects | List projects allowed to use a given load zone.
 [**LoadZonesAllowedProjectsUpdate**](LoadZonesAPI.md#LoadZonesAllowedProjectsUpdate) | **Put** /cloud/v6/load_zones/{id}/allowed_projects | Update the list of projects allowed to use a given load zone.
+[**LoadZonesList**](LoadZonesAPI.md#LoadZonesList) | **Get** /cloud/v6/load_zones | List all load zones.
 [**ProjectsAllowedLoadZonesRetrieve**](LoadZonesAPI.md#ProjectsAllowedLoadZonesRetrieve) | **Get** /cloud/v6/projects/{id}/allowed_load_zones | List load zones that can be used by a given project.
 [**ProjectsAllowedLoadZonesUpdate**](LoadZonesAPI.md#ProjectsAllowedLoadZonesUpdate) | **Put** /cloud/v6/projects/{id}/allowed_load_zones | Update the list of load zones that can be used by a given project.
 
@@ -150,6 +151,74 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
 - **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## LoadZonesList
+
+> LoadZonesListApiModel LoadZonesList(ctx).XStackId(xStackId).K6LoadZoneId(k6LoadZoneId).Execute()
+
+List all load zones.
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/grafana/k6-cloud-openapi-client/k6"
+)
+
+func main() {
+	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
+	k6LoadZoneId := "k6LoadZoneId_example" // string | Filter results by k6 load zone ID (exact match). (optional)
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.LoadZonesAPI.LoadZonesList(context.Background()).XStackId(xStackId).K6LoadZoneId(k6LoadZoneId).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `LoadZonesAPI.LoadZonesList``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `LoadZonesList`: LoadZonesListApiModel
+	fmt.Fprintf(os.Stdout, "Response from `LoadZonesAPI.LoadZonesList`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiLoadZonesListRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **xStackId** | **int32** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. | 
+ **k6LoadZoneId** | **string** | Filter results by k6 load zone ID (exact match). | 
+
+### Return type
+
+[**LoadZonesListApiModel**](LoadZonesListApiModel.md)
+
+### Authorization
+
+[k6ApiToken](../README.md#k6ApiToken)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)

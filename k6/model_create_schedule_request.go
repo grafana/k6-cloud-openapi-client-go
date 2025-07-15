@@ -3,7 +3,7 @@ Grafana Cloud k6
 
 HTTP API for interacting with Grafana Cloud k6.
 
-API version: 1.4.0
+API version: 1.5.0
 Contact: info@grafana.com
 */
 
@@ -13,8 +13,8 @@ package k6
 
 import (
 	"encoding/json"
-	"fmt"
 	"time"
+	"fmt"
 )
 
 // checks if the CreateScheduleRequest type satisfies the MappedNullable interface at compile time
@@ -23,8 +23,8 @@ var _ MappedNullable = &CreateScheduleRequest{}
 // CreateScheduleRequest struct for CreateScheduleRequest
 type CreateScheduleRequest struct {
 	// The timezone-aware date on which the schedule will start running the test.
-	Starts               time.Time                      `json:"starts"`
-	RecurrenceRule       NullableScheduleRecurrenceRule `json:"recurrence_rule"`
+	Starts time.Time `json:"starts"`
+	RecurrenceRule NullableScheduleRecurrenceRule `json:"recurrence_rule"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -100,7 +100,7 @@ func (o *CreateScheduleRequest) SetRecurrenceRule(v ScheduleRecurrenceRule) {
 }
 
 func (o CreateScheduleRequest) MarshalJSON() ([]byte, error) {
-	toSerialize, err := o.ToMap()
+	toSerialize,err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -133,10 +133,10 @@ func (o *CreateScheduleRequest) UnmarshalJSON(data []byte) (err error) {
 	err = json.Unmarshal(data, &allProperties)
 
 	if err != nil {
-		return err
+		return err;
 	}
 
-	for _, requiredProperty := range requiredProperties {
+	for _, requiredProperty := range(requiredProperties) {
 		if _, exists := allProperties[requiredProperty]; !exists {
 			return fmt.Errorf("no value given for required property %v", requiredProperty)
 		}
@@ -198,3 +198,5 @@ func (v *NullableCreateScheduleRequest) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Value** | [**[]AllowedProjectApiModel**](AllowedProjectApiModel.md) | List of the projects allowed to use particular load zone. | 
+**Value** | [**[]AllowedProjectApiModel**](AllowedProjectApiModel.md) | List of the resulting values. | 
 
 ## Methods
 
