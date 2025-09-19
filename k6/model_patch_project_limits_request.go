@@ -3,7 +3,7 @@ Grafana Cloud k6
 
 HTTP API for interacting with Grafana Cloud k6.
 
-API version: 1.5.0
+API version: 1.6.0
 Contact: info@grafana.com
 */
 
@@ -27,7 +27,7 @@ type PatchProjectLimitsRequest struct {
 	// Max number of concurrent browser virtual users (VUs) used in one test.
 	VuBrowserMaxPerTest NullableInt32 `json:"vu_browser_max_per_test,omitempty"`
 	// Max duration of a test in seconds.
-	DurationMaxPerTest NullableInt32 `json:"duration_max_per_test,omitempty"`
+	DurationMaxPerTest   NullableInt32 `json:"duration_max_per_test,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -82,6 +82,7 @@ func (o *PatchProjectLimitsRequest) HasVuhMaxPerMonth() bool {
 func (o *PatchProjectLimitsRequest) SetVuhMaxPerMonth(v int32) {
 	o.VuhMaxPerMonth.Set(&v)
 }
+
 // SetVuhMaxPerMonthNil sets the value for VuhMaxPerMonth to be an explicit nil
 func (o *PatchProjectLimitsRequest) SetVuhMaxPerMonthNil() {
 	o.VuhMaxPerMonth.Set(nil)
@@ -124,6 +125,7 @@ func (o *PatchProjectLimitsRequest) HasVuMaxPerTest() bool {
 func (o *PatchProjectLimitsRequest) SetVuMaxPerTest(v int32) {
 	o.VuMaxPerTest.Set(&v)
 }
+
 // SetVuMaxPerTestNil sets the value for VuMaxPerTest to be an explicit nil
 func (o *PatchProjectLimitsRequest) SetVuMaxPerTestNil() {
 	o.VuMaxPerTest.Set(nil)
@@ -166,6 +168,7 @@ func (o *PatchProjectLimitsRequest) HasVuBrowserMaxPerTest() bool {
 func (o *PatchProjectLimitsRequest) SetVuBrowserMaxPerTest(v int32) {
 	o.VuBrowserMaxPerTest.Set(&v)
 }
+
 // SetVuBrowserMaxPerTestNil sets the value for VuBrowserMaxPerTest to be an explicit nil
 func (o *PatchProjectLimitsRequest) SetVuBrowserMaxPerTestNil() {
 	o.VuBrowserMaxPerTest.Set(nil)
@@ -208,6 +211,7 @@ func (o *PatchProjectLimitsRequest) HasDurationMaxPerTest() bool {
 func (o *PatchProjectLimitsRequest) SetDurationMaxPerTest(v int32) {
 	o.DurationMaxPerTest.Set(&v)
 }
+
 // SetDurationMaxPerTestNil sets the value for DurationMaxPerTest to be an explicit nil
 func (o *PatchProjectLimitsRequest) SetDurationMaxPerTestNil() {
 	o.DurationMaxPerTest.Set(nil)
@@ -219,7 +223,7 @@ func (o *PatchProjectLimitsRequest) UnsetDurationMaxPerTest() {
 }
 
 func (o PatchProjectLimitsRequest) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -307,5 +311,3 @@ func (v *NullablePatchProjectLimitsRequest) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

@@ -3,7 +3,7 @@ Grafana Cloud k6
 
 HTTP API for interacting with Grafana Cloud k6.
 
-API version: 1.5.0
+API version: 1.6.0
 Contact: info@grafana.com
 */
 
@@ -20,15 +20,14 @@ import (
 	"strings"
 )
 
-
 // SchedulesAPIService SchedulesAPI service
 type SchedulesAPIService service
 
 type ApiLoadTestsScheduleCreateRequest struct {
-	ctx context.Context
-	ApiService *SchedulesAPIService
-	xStackId *int32
-	id int32
+	ctx                   context.Context
+	ApiService            *SchedulesAPIService
+	xStackId              *int32
+	id                    int32
 	createScheduleRequest *CreateScheduleRequest
 }
 
@@ -57,26 +56,27 @@ This operation overwrites any existing test schedule.
 Monthly schedules running on days 29-31 are adjusted to run on the last day of the month
 if the target day doesn't exist in a given month (for example, March 31 -> April 30).
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id ID of the load test.
- @return *ApiLoadTestsScheduleCreateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id ID of the load test.
+	@return *ApiLoadTestsScheduleCreateRequest
 */
 func (a *SchedulesAPIService) LoadTestsScheduleCreate(ctx context.Context, id int32) *ApiLoadTestsScheduleCreateRequest {
 	return &ApiLoadTestsScheduleCreateRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return ScheduleApiModel
+//
+//	@return ScheduleApiModel
 func (a *SchedulesAPIService) LoadTestsScheduleCreateExecute(r *ApiLoadTestsScheduleCreateRequest) (*ScheduleApiModel, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ScheduleApiModel
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ScheduleApiModel
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SchedulesAPIService.LoadTestsScheduleCreate")
@@ -146,8 +146,8 @@ func (a *SchedulesAPIService) LoadTestsScheduleCreateExecute(r *ApiLoadTestsSche
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
@@ -157,8 +157,8 @@ func (a *SchedulesAPIService) LoadTestsScheduleCreateExecute(r *ApiLoadTestsSche
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -168,8 +168,8 @@ func (a *SchedulesAPIService) LoadTestsScheduleCreateExecute(r *ApiLoadTestsSche
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -179,8 +179,8 @@ func (a *SchedulesAPIService) LoadTestsScheduleCreateExecute(r *ApiLoadTestsSche
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -190,8 +190,8 @@ func (a *SchedulesAPIService) LoadTestsScheduleCreateExecute(r *ApiLoadTestsSche
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -209,10 +209,10 @@ func (a *SchedulesAPIService) LoadTestsScheduleCreateExecute(r *ApiLoadTestsSche
 }
 
 type ApiLoadTestsScheduleRetrieveRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *SchedulesAPIService
-	xStackId *int32
-	id int32
+	xStackId   *int32
+	id         int32
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
@@ -230,26 +230,27 @@ LoadTestsScheduleRetrieve Get the load test schedule.
 
 Get the load test schedule.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id ID of the load test.
- @return *ApiLoadTestsScheduleRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id ID of the load test.
+	@return *ApiLoadTestsScheduleRetrieveRequest
 */
 func (a *SchedulesAPIService) LoadTestsScheduleRetrieve(ctx context.Context, id int32) *ApiLoadTestsScheduleRetrieveRequest {
 	return &ApiLoadTestsScheduleRetrieveRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return ScheduleApiModel
+//
+//	@return ScheduleApiModel
 func (a *SchedulesAPIService) LoadTestsScheduleRetrieveExecute(r *ApiLoadTestsScheduleRetrieveRequest) (*ScheduleApiModel, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ScheduleApiModel
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ScheduleApiModel
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SchedulesAPIService.LoadTestsScheduleRetrieve")
@@ -314,8 +315,8 @@ func (a *SchedulesAPIService) LoadTestsScheduleRetrieveExecute(r *ApiLoadTestsSc
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -325,8 +326,8 @@ func (a *SchedulesAPIService) LoadTestsScheduleRetrieveExecute(r *ApiLoadTestsSc
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -336,8 +337,8 @@ func (a *SchedulesAPIService) LoadTestsScheduleRetrieveExecute(r *ApiLoadTestsSc
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -347,8 +348,8 @@ func (a *SchedulesAPIService) LoadTestsScheduleRetrieveExecute(r *ApiLoadTestsSc
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -366,10 +367,10 @@ func (a *SchedulesAPIService) LoadTestsScheduleRetrieveExecute(r *ApiLoadTestsSc
 }
 
 type ApiScheduleActivateRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *SchedulesAPIService
-	xStackId *int32
-	id int32
+	xStackId   *int32
+	id         int32
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
@@ -390,24 +391,24 @@ Re-activate a deactivated schedule.
 A deactivated schedule can be re-activated only if it still has at least one future
 recurrence.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id ID of the schedule.
- @return *ApiScheduleActivateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id ID of the schedule.
+	@return *ApiScheduleActivateRequest
 */
 func (a *SchedulesAPIService) ScheduleActivate(ctx context.Context, id int32) *ApiScheduleActivateRequest {
 	return &ApiScheduleActivateRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
 func (a *SchedulesAPIService) ScheduleActivateExecute(r *ApiScheduleActivateRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
+		localVarHTTPMethod = http.MethodPost
+		localVarPostBody   interface{}
+		formFiles          []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SchedulesAPIService.ScheduleActivate")
@@ -472,8 +473,8 @@ func (a *SchedulesAPIService) ScheduleActivateExecute(r *ApiScheduleActivateRequ
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
@@ -483,8 +484,8 @@ func (a *SchedulesAPIService) ScheduleActivateExecute(r *ApiScheduleActivateRequ
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -494,8 +495,8 @@ func (a *SchedulesAPIService) ScheduleActivateExecute(r *ApiScheduleActivateRequ
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -505,8 +506,8 @@ func (a *SchedulesAPIService) ScheduleActivateExecute(r *ApiScheduleActivateRequ
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -516,8 +517,8 @@ func (a *SchedulesAPIService) ScheduleActivateExecute(r *ApiScheduleActivateRequ
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarHTTPResponse, newErr
 	}
@@ -526,10 +527,10 @@ func (a *SchedulesAPIService) ScheduleActivateExecute(r *ApiScheduleActivateRequ
 }
 
 type ApiScheduleDeactivateRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *SchedulesAPIService
-	xStackId *int32
-	id int32
+	xStackId   *int32
+	id         int32
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
@@ -552,24 +553,24 @@ the schedule recurrence rule and does not delay its expiration.
 
 The operation has no effect if the schedule is expired.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id ID of the schedule.
- @return *ApiScheduleDeactivateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id ID of the schedule.
+	@return *ApiScheduleDeactivateRequest
 */
 func (a *SchedulesAPIService) ScheduleDeactivate(ctx context.Context, id int32) *ApiScheduleDeactivateRequest {
 	return &ApiScheduleDeactivateRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
 func (a *SchedulesAPIService) ScheduleDeactivateExecute(r *ApiScheduleDeactivateRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
+		localVarHTTPMethod = http.MethodPost
+		localVarPostBody   interface{}
+		formFiles          []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SchedulesAPIService.ScheduleDeactivate")
@@ -634,8 +635,8 @@ func (a *SchedulesAPIService) ScheduleDeactivateExecute(r *ApiScheduleDeactivate
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -645,8 +646,8 @@ func (a *SchedulesAPIService) ScheduleDeactivateExecute(r *ApiScheduleDeactivate
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -656,8 +657,8 @@ func (a *SchedulesAPIService) ScheduleDeactivateExecute(r *ApiScheduleDeactivate
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -667,8 +668,8 @@ func (a *SchedulesAPIService) ScheduleDeactivateExecute(r *ApiScheduleDeactivate
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarHTTPResponse, newErr
 	}
@@ -677,10 +678,10 @@ func (a *SchedulesAPIService) ScheduleDeactivateExecute(r *ApiScheduleDeactivate
 }
 
 type ApiSchedulesDestroyRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *SchedulesAPIService
-	xStackId *int32
-	id int32
+	xStackId   *int32
+	id         int32
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
@@ -698,24 +699,24 @@ SchedulesDestroy Delete a schedule.
 
 Delete a schedule.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id ID of the schedule.
- @return *ApiSchedulesDestroyRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id ID of the schedule.
+	@return *ApiSchedulesDestroyRequest
 */
 func (a *SchedulesAPIService) SchedulesDestroy(ctx context.Context, id int32) *ApiSchedulesDestroyRequest {
 	return &ApiSchedulesDestroyRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
 func (a *SchedulesAPIService) SchedulesDestroyExecute(r *ApiSchedulesDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
+		localVarHTTPMethod = http.MethodDelete
+		localVarPostBody   interface{}
+		formFiles          []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SchedulesAPIService.SchedulesDestroy")
@@ -780,8 +781,8 @@ func (a *SchedulesAPIService) SchedulesDestroyExecute(r *ApiSchedulesDestroyRequ
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -791,8 +792,8 @@ func (a *SchedulesAPIService) SchedulesDestroyExecute(r *ApiSchedulesDestroyRequ
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -802,8 +803,8 @@ func (a *SchedulesAPIService) SchedulesDestroyExecute(r *ApiSchedulesDestroyRequ
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -813,8 +814,8 @@ func (a *SchedulesAPIService) SchedulesDestroyExecute(r *ApiSchedulesDestroyRequ
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarHTTPResponse, newErr
 	}
@@ -823,12 +824,12 @@ func (a *SchedulesAPIService) SchedulesDestroyExecute(r *ApiSchedulesDestroyRequ
 }
 
 type ApiSchedulesListRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *SchedulesAPIService
-	xStackId *int32
-	count *bool
-	skip *int32
-	top *int32
+	xStackId   *int32
+	count      *bool
+	skip       *int32
+	top        *int32
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
@@ -864,24 +865,25 @@ SchedulesList List all schedules.
 
 List all schedules.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return *ApiSchedulesListRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return *ApiSchedulesListRequest
 */
 func (a *SchedulesAPIService) SchedulesList(ctx context.Context) *ApiSchedulesListRequest {
 	return &ApiSchedulesListRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return ScheduleListResponse
+//
+//	@return ScheduleListResponse
 func (a *SchedulesAPIService) SchedulesListExecute(r *ApiSchedulesListRequest) (*ScheduleListResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ScheduleListResponse
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ScheduleListResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SchedulesAPIService.SchedulesList")
@@ -957,8 +959,8 @@ func (a *SchedulesAPIService) SchedulesListExecute(r *ApiSchedulesListRequest) (
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
@@ -968,8 +970,8 @@ func (a *SchedulesAPIService) SchedulesListExecute(r *ApiSchedulesListRequest) (
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -979,8 +981,8 @@ func (a *SchedulesAPIService) SchedulesListExecute(r *ApiSchedulesListRequest) (
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -990,8 +992,8 @@ func (a *SchedulesAPIService) SchedulesListExecute(r *ApiSchedulesListRequest) (
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -1009,10 +1011,10 @@ func (a *SchedulesAPIService) SchedulesListExecute(r *ApiSchedulesListRequest) (
 }
 
 type ApiSchedulesRetrieveRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *SchedulesAPIService
-	xStackId *int32
-	id int32
+	xStackId   *int32
+	id         int32
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
@@ -1030,26 +1032,27 @@ SchedulesRetrieve Get a schedule by ID.
 
 Get a schedule by ID.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id ID of the schedule.
- @return *ApiSchedulesRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id ID of the schedule.
+	@return *ApiSchedulesRetrieveRequest
 */
 func (a *SchedulesAPIService) SchedulesRetrieve(ctx context.Context, id int32) *ApiSchedulesRetrieveRequest {
 	return &ApiSchedulesRetrieveRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return ScheduleApiModel
+//
+//	@return ScheduleApiModel
 func (a *SchedulesAPIService) SchedulesRetrieveExecute(r *ApiSchedulesRetrieveRequest) (*ScheduleApiModel, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ScheduleApiModel
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ScheduleApiModel
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SchedulesAPIService.SchedulesRetrieve")
@@ -1114,8 +1117,8 @@ func (a *SchedulesAPIService) SchedulesRetrieveExecute(r *ApiSchedulesRetrieveRe
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -1125,8 +1128,8 @@ func (a *SchedulesAPIService) SchedulesRetrieveExecute(r *ApiSchedulesRetrieveRe
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -1136,8 +1139,8 @@ func (a *SchedulesAPIService) SchedulesRetrieveExecute(r *ApiSchedulesRetrieveRe
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -1147,8 +1150,8 @@ func (a *SchedulesAPIService) SchedulesRetrieveExecute(r *ApiSchedulesRetrieveRe
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}

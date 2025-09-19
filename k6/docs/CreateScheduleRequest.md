@@ -5,13 +5,13 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Starts** | **time.Time** | The timezone-aware date on which the schedule will start running the test. | 
-**RecurrenceRule** | [**NullableScheduleRecurrenceRule**](ScheduleRecurrenceRule.md) |  | 
+**RecurrenceRule** | Pointer to [**NullableScheduleRecurrenceRule**](ScheduleRecurrenceRule.md) |  | [optional] 
 
 ## Methods
 
 ### NewCreateScheduleRequest
 
-`func NewCreateScheduleRequest(starts time.Time, recurrenceRule NullableScheduleRecurrenceRule, ) *CreateScheduleRequest`
+`func NewCreateScheduleRequest(starts time.Time, ) *CreateScheduleRequest`
 
 NewCreateScheduleRequest instantiates a new CreateScheduleRequest object
 This constructor will assign default values to properties that have it defined,
@@ -65,6 +65,11 @@ and a boolean to check if the value has been set.
 
 SetRecurrenceRule sets RecurrenceRule field to given value.
 
+### HasRecurrenceRule
+
+`func (o *CreateScheduleRequest) HasRecurrenceRule() bool`
+
+HasRecurrenceRule returns a boolean if a field has been set.
 
 ### SetRecurrenceRuleNil
 

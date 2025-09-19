@@ -3,7 +3,7 @@ Grafana Cloud k6
 
 HTTP API for interacting with Grafana Cloud k6.
 
-API version: 1.5.0
+API version: 1.6.0
 Contact: info@grafana.com
 */
 
@@ -26,7 +26,7 @@ type ErrorDetailsApiModel struct {
 	// Service-defined error code.
 	Code string `json:"code"`
 	// A string indicating the target of the error. For example, the name of the property in error.
-	Target NullableString `json:"target,omitempty"`
+	Target               NullableString `json:"target,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -131,6 +131,7 @@ func (o *ErrorDetailsApiModel) HasTarget() bool {
 func (o *ErrorDetailsApiModel) SetTarget(v string) {
 	o.Target.Set(&v)
 }
+
 // SetTargetNil sets the value for Target to be an explicit nil
 func (o *ErrorDetailsApiModel) SetTargetNil() {
 	o.Target.Set(nil)
@@ -142,7 +143,7 @@ func (o *ErrorDetailsApiModel) UnsetTarget() {
 }
 
 func (o ErrorDetailsApiModel) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -178,10 +179,10 @@ func (o *ErrorDetailsApiModel) UnmarshalJSON(data []byte) (err error) {
 	err = json.Unmarshal(data, &allProperties)
 
 	if err != nil {
-		return err;
+		return err
 	}
 
-	for _, requiredProperty := range(requiredProperties) {
+	for _, requiredProperty := range requiredProperties {
 		if _, exists := allProperties[requiredProperty]; !exists {
 			return fmt.Errorf("no value given for required property %v", requiredProperty)
 		}
@@ -244,5 +245,3 @@ func (v *NullableErrorDetailsApiModel) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

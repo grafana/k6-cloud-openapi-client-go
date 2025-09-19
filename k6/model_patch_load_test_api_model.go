@@ -3,7 +3,7 @@ Grafana Cloud k6
 
 HTTP API for interacting with Grafana Cloud k6.
 
-API version: 1.5.0
+API version: 1.6.0
 Contact: info@grafana.com
 */
 
@@ -23,7 +23,7 @@ type PatchLoadTestApiModel struct {
 	// Unique name of the test within the project.
 	Name *string `json:"name,omitempty"`
 	// ID of a baseline test run used for results comparison.
-	BaselineTestRunId NullableInt32 `json:"baseline_test_run_id,omitempty"`
+	BaselineTestRunId    NullableInt32 `json:"baseline_test_run_id,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -110,6 +110,7 @@ func (o *PatchLoadTestApiModel) HasBaselineTestRunId() bool {
 func (o *PatchLoadTestApiModel) SetBaselineTestRunId(v int32) {
 	o.BaselineTestRunId.Set(&v)
 }
+
 // SetBaselineTestRunIdNil sets the value for BaselineTestRunId to be an explicit nil
 func (o *PatchLoadTestApiModel) SetBaselineTestRunIdNil() {
 	o.BaselineTestRunId.Set(nil)
@@ -121,7 +122,7 @@ func (o *PatchLoadTestApiModel) UnsetBaselineTestRunId() {
 }
 
 func (o PatchLoadTestApiModel) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -201,5 +202,3 @@ func (v *NullablePatchLoadTestApiModel) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

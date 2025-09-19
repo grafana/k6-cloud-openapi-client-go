@@ -3,7 +3,7 @@ Grafana Cloud k6
 
 HTTP API for interacting with Grafana Cloud k6.
 
-API version: 1.5.0
+API version: 1.6.0
 Contact: info@grafana.com
 */
 
@@ -13,8 +13,8 @@ package k6
 
 import (
 	"encoding/json"
-	"time"
 	"fmt"
+	"time"
 )
 
 // checks if the ProjectApiModel type satisfies the MappedNullable interface at compile time
@@ -33,7 +33,7 @@ type ProjectApiModel struct {
 	// The date when the project was created.
 	Created time.Time `json:"created"`
 	// The date when the project was last updated.
-	Updated time.Time `json:"updated"`
+	Updated              time.Time `json:"updated"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -209,7 +209,7 @@ func (o *ProjectApiModel) SetUpdated(v time.Time) {
 }
 
 func (o ProjectApiModel) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -250,10 +250,10 @@ func (o *ProjectApiModel) UnmarshalJSON(data []byte) (err error) {
 	err = json.Unmarshal(data, &allProperties)
 
 	if err != nil {
-		return err;
+		return err
 	}
 
-	for _, requiredProperty := range(requiredProperties) {
+	for _, requiredProperty := range requiredProperties {
 		if _, exists := allProperties[requiredProperty]; !exists {
 			return fmt.Errorf("no value given for required property %v", requiredProperty)
 		}
@@ -319,5 +319,3 @@ func (v *NullableProjectApiModel) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-
