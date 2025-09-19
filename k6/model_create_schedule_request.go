@@ -3,7 +3,7 @@ Grafana Cloud k6
 
 HTTP API for interacting with Grafana Cloud k6.
 
-API version: 1.5.0
+API version: 1.6.0
 Contact: info@grafana.com
 */
 
@@ -13,8 +13,8 @@ package k6
 
 import (
 	"encoding/json"
-	"time"
 	"fmt"
+	"time"
 )
 
 // checks if the CreateScheduleRequest type satisfies the MappedNullable interface at compile time
@@ -23,8 +23,8 @@ var _ MappedNullable = &CreateScheduleRequest{}
 // CreateScheduleRequest struct for CreateScheduleRequest
 type CreateScheduleRequest struct {
 	// The timezone-aware date on which the schedule will start running the test.
-	Starts time.Time `json:"starts"`
-	RecurrenceRule NullableScheduleRecurrenceRule `json:"recurrence_rule"`
+	Starts               time.Time                      `json:"starts"`
+	RecurrenceRule       NullableScheduleRecurrenceRule `json:"recurrence_rule,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -34,10 +34,9 @@ type _CreateScheduleRequest CreateScheduleRequest
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCreateScheduleRequest(starts time.Time, recurrenceRule NullableScheduleRecurrenceRule) *CreateScheduleRequest {
+func NewCreateScheduleRequest(starts time.Time) *CreateScheduleRequest {
 	this := CreateScheduleRequest{}
 	this.Starts = starts
-	this.RecurrenceRule = recurrenceRule
 	return &this
 }
 
@@ -73,18 +72,16 @@ func (o *CreateScheduleRequest) SetStarts(v time.Time) {
 	o.Starts = v
 }
 
-// GetRecurrenceRule returns the RecurrenceRule field value
-// If the value is explicit nil, the zero value for ScheduleRecurrenceRule will be returned
+// GetRecurrenceRule returns the RecurrenceRule field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *CreateScheduleRequest) GetRecurrenceRule() ScheduleRecurrenceRule {
-	if o == nil || o.RecurrenceRule.Get() == nil {
+	if o == nil || IsNil(o.RecurrenceRule.Get()) {
 		var ret ScheduleRecurrenceRule
 		return ret
 	}
-
 	return *o.RecurrenceRule.Get()
 }
 
-// GetRecurrenceRuleOk returns a tuple with the RecurrenceRule field value
+// GetRecurrenceRuleOk returns a tuple with the RecurrenceRule field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *CreateScheduleRequest) GetRecurrenceRuleOk() (*ScheduleRecurrenceRule, bool) {
@@ -94,13 +91,32 @@ func (o *CreateScheduleRequest) GetRecurrenceRuleOk() (*ScheduleRecurrenceRule, 
 	return o.RecurrenceRule.Get(), o.RecurrenceRule.IsSet()
 }
 
-// SetRecurrenceRule sets field value
+// HasRecurrenceRule returns a boolean if a field has been set.
+func (o *CreateScheduleRequest) HasRecurrenceRule() bool {
+	if o != nil && o.RecurrenceRule.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetRecurrenceRule gets a reference to the given NullableScheduleRecurrenceRule and assigns it to the RecurrenceRule field.
 func (o *CreateScheduleRequest) SetRecurrenceRule(v ScheduleRecurrenceRule) {
 	o.RecurrenceRule.Set(&v)
 }
 
+// SetRecurrenceRuleNil sets the value for RecurrenceRule to be an explicit nil
+func (o *CreateScheduleRequest) SetRecurrenceRuleNil() {
+	o.RecurrenceRule.Set(nil)
+}
+
+// UnsetRecurrenceRule ensures that no value is present for RecurrenceRule, not even an explicit nil
+func (o *CreateScheduleRequest) UnsetRecurrenceRule() {
+	o.RecurrenceRule.Unset()
+}
+
 func (o CreateScheduleRequest) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -110,7 +126,9 @@ func (o CreateScheduleRequest) MarshalJSON() ([]byte, error) {
 func (o CreateScheduleRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["starts"] = o.Starts
-	toSerialize["recurrence_rule"] = o.RecurrenceRule.Get()
+	if o.RecurrenceRule.IsSet() {
+		toSerialize["recurrence_rule"] = o.RecurrenceRule.Get()
+	}
 
 	for key, value := range o.AdditionalProperties {
 		toSerialize[key] = value
@@ -125,7 +143,6 @@ func (o *CreateScheduleRequest) UnmarshalJSON(data []byte) (err error) {
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
 		"starts",
-		"recurrence_rule",
 	}
 
 	allProperties := make(map[string]interface{})
@@ -133,10 +150,10 @@ func (o *CreateScheduleRequest) UnmarshalJSON(data []byte) (err error) {
 	err = json.Unmarshal(data, &allProperties)
 
 	if err != nil {
-		return err;
+		return err
 	}
 
-	for _, requiredProperty := range(requiredProperties) {
+	for _, requiredProperty := range requiredProperties {
 		if _, exists := allProperties[requiredProperty]; !exists {
 			return fmt.Errorf("no value given for required property %v", requiredProperty)
 		}
@@ -198,5 +215,3 @@ func (v *NullableCreateScheduleRequest) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

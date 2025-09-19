@@ -3,7 +3,7 @@ Grafana Cloud k6
 
 HTTP API for interacting with Grafana Cloud k6.
 
-API version: 1.5.0
+API version: 1.6.0
 Contact: info@grafana.com
 */
 
@@ -26,7 +26,7 @@ type LoadZoneApiModel struct {
 	// Name of the load zone.
 	Name string `json:"name"`
 	// ID used to identify the load zone in the k6 scripts.
-	K6LoadZoneId string `json:"k6_load_zone_id"`
+	K6LoadZoneId         string `json:"k6_load_zone_id"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -125,7 +125,7 @@ func (o *LoadZoneApiModel) SetK6LoadZoneId(v string) {
 }
 
 func (o LoadZoneApiModel) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -160,10 +160,10 @@ func (o *LoadZoneApiModel) UnmarshalJSON(data []byte) (err error) {
 	err = json.Unmarshal(data, &allProperties)
 
 	if err != nil {
-		return err;
+		return err
 	}
 
-	for _, requiredProperty := range(requiredProperties) {
+	for _, requiredProperty := range requiredProperties {
 		if _, exists := allProperties[requiredProperty]; !exists {
 			return fmt.Errorf("no value given for required property %v", requiredProperty)
 		}
@@ -226,5 +226,3 @@ func (v *NullableLoadZoneApiModel) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

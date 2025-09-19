@@ -1,13 +1,48 @@
 openapi: 3.1.0
 info:
   title: Grafana Cloud k6
-  version: 1.5.0
+  version: 1.6.0
   description: HTTP API for interacting with Grafana Cloud k6.
   contact:
     name: Grafana Support
     url: https://grafana.com/help/
     email: info@grafana.com
 paths:
+  /cloud/v6/auth:
+    get:
+      operationId: auth
+      description: Validate Personal k6 Cloud API token or Stack k6 Cloud API token
+        and access to the stack.
+      summary: Validate k6 Cloud API token and access to the stack.
+      parameters:
+      - in: header
+        name: X-Stack-Url
+        schema:
+          type: string
+        description: The URL of the Grafana stack to authenticate to.
+        required: true
+      tags:
+      - authorization
+      security:
+      - k6ApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticationResponse'
+              examples:
+                OK:
+                  value:
+                    stack_id: 12345
+                    default_project_id: 67890
+          description: OK.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
   /cloud/v6/load_tests:
     get:
       operationId: load_tests_list
@@ -311,6 +346,26 @@ paths:
           default: 1000
           maximum: 1000
         description: Number of results to return per page.
+      - in: query
+        name: created_after
+        schema:
+          type: string
+          format: date-time
+          minLength: 1
+        description: Filter test runs created on or after this date and time (inclusive).
+        examples:
+          UTC:
+            value: '2025-08-01T12:00:00+00:00'
+      - in: query
+        name: created_before
+        schema:
+          type: string
+          format: date-time
+          minLength: 1
+        description: Filter test runs created before this date and time (non-inclusive).
+        examples:
+          UTC:
+            value: '2025-08-31T12:00:00+00:00'
       - in: path
         name: id
         schema:
@@ -621,6 +676,13 @@ paths:
                   value: (.tar data)
                   summary: K6 Archive Script
           description: OK.
+        '406':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApiModel'
+          description: The current script type can not satisfy the request Accept
+            header.
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -1839,6 +1901,26 @@ paths:
           default: 1000
           maximum: 1000
         description: Number of results to return per page.
+      - in: query
+        name: created_after
+        schema:
+          type: string
+          format: date-time
+          minLength: 1
+        description: Filter test runs created on or after this date and time (inclusive).
+        examples:
+          UTC:
+            value: '2025-08-01T12:00:00+00:00'
+      - in: query
+        name: created_before
+        schema:
+          type: string
+          format: date-time
+          minLength: 1
+        description: Filter test runs created before this date and time (non-inclusive).
+        examples:
+          UTC:
+            value: '2025-08-31T12:00:00+00:00'
       tags:
       - test_runs
       security:
@@ -2206,6 +2288,60 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/UnexpectedError'
+  /cloud/v6/test_runs/{id}/distribution:
+    get:
+      operationId: test_runs_distribution_retrieve
+      description: Get test run distribution data.
+      summary: Get test run distribution.
+      parameters:
+      - $ref: '#/components/parameters/stackId'
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: ID of the load test run.
+        required: true
+      tags:
+      - test_runs
+      security:
+      - k6ApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestRunDistributionApiModel'
+              examples:
+                DistributionData:
+                  value:
+                    distribution:
+                      amazon:us:ashburn:
+                        percentage: 60
+                        nodes:
+                        - size: m5.large
+                          public_ip: 3.82.149.214
+                      amazon:eu:dublin:
+                        percentage: 40
+                        nodes:
+                        - size: m5.large
+                          public_ip: 3.82.149.215
+                        - size: m5.large
+                          public_ip: 3.82.149.216
+                  summary: Distribution Data
+          description: OK.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApiModel'
+          description: Resource matching query does not exist or no distribution data
+            available for the given test run.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
   /cloud/v6/test_runs/{id}/save:
     post:
       operationId: test_runs_save
@@ -2529,6 +2665,21 @@ components:
       - value
       title: AllowedProjectsList
       type: object
+    AuthenticationResponse:
+      properties:
+        stack_id:
+          description: The ID of the Grafana stack matching the provided URL.
+          title: Stack Id
+          type: integer
+        default_project_id:
+          description: The ID of the default project in the stack.
+          title: Default Project Id
+          type: integer
+      required:
+      - stack_id
+      - default_project_id
+      title: AuthenticationResponse
+      type: object
     CloudOptions:
       additionalProperties: true
       properties:
@@ -2630,6 +2781,7 @@ components:
           title: Starts
           type: string
         recurrence_rule:
+          default: null
           description: The schedule recurrence settings. If null, the test will run
             only once on the `starts` date.
           oneOf:
@@ -2637,7 +2789,6 @@ components:
           - type: 'null'
       required:
       - starts
-      - recurrence_rule
       title: CreateScheduleRequest
       type: object
     DistributionZoneApiModel:
@@ -2817,6 +2968,24 @@ components:
       - k6_load_zone_id
       title: LoadZone
       type: object
+    LoadZoneDistributionApiModel:
+      description: Distribution details for a specific load zone.
+      properties:
+        percentage:
+          description: Percentage of the total load handled by this load zone.
+          title: Percentage
+          type: integer
+        nodes:
+          description: List of nodes allocated to this load zone.
+          items:
+            $ref: '#/components/schemas/NodeApiModel'
+          title: Nodes
+          type: array
+      required:
+      - percentage
+      - nodes
+      title: LoadZoneDistribution
+      type: object
     LoadZonesListApiModel:
       properties:
         value:
@@ -2839,6 +3008,22 @@ components:
       required:
       - project_id
       title: MoveLoadTest
+      type: object
+    NodeApiModel:
+      description: Details of a single node in the test run distribution.
+      properties:
+        size:
+          description: Size/type of the node (e.g., 'm5.large').
+          title: Size
+          type: string
+        public_ip:
+          description: Public IP address of the node.
+          title: Public Ip
+          type: string
+      required:
+      - size
+      - public_ip
+      title: Node
       type: object
     Options:
       additionalProperties: true
@@ -3387,6 +3572,19 @@ components:
       - k6_versions
       title: TestRun
       type: object
+    TestRunDistributionApiModel:
+      properties:
+        distribution:
+          additionalProperties:
+            $ref: '#/components/schemas/LoadZoneDistributionApiModel'
+          description: Distribution of nodes across the load generators for the test
+            run.
+          title: Distribution
+          type: object
+      required:
+      - distribution
+      title: TestRunDistribution
+      type: object
     TestRunListResponse:
       properties:
         value:
@@ -3543,6 +3741,8 @@ servers:
 - url: https://api.k6.io
   description: Global k6 Cloud API.
 tags:
+- name: authorization
+  description: API endpoints for validating tokens.
 - name: load_tests
   description: API endpoints for managing and starting tests.
 - name: load_zones

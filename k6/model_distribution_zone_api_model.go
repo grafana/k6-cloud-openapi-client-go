@@ -3,7 +3,7 @@ Grafana Cloud k6
 
 HTTP API for interacting with Grafana Cloud k6.
 
-API version: 1.5.0
+API version: 1.6.0
 Contact: info@grafana.com
 */
 
@@ -24,7 +24,7 @@ type DistributionZoneApiModel struct {
 	// Name of the load zone.
 	LoadZone string `json:"load_zone"`
 	// Percentage of the load that runs from the load zone.
-	Percent int32 `json:"percent"`
+	Percent              int32 `json:"percent"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -98,7 +98,7 @@ func (o *DistributionZoneApiModel) SetPercent(v int32) {
 }
 
 func (o DistributionZoneApiModel) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -131,10 +131,10 @@ func (o *DistributionZoneApiModel) UnmarshalJSON(data []byte) (err error) {
 	err = json.Unmarshal(data, &allProperties)
 
 	if err != nil {
-		return err;
+		return err
 	}
 
-	for _, requiredProperty := range(requiredProperties) {
+	for _, requiredProperty := range requiredProperties {
 		if _, exists := allProperties[requiredProperty]; !exists {
 			return fmt.Errorf("no value given for required property %v", requiredProperty)
 		}
@@ -196,5 +196,3 @@ func (v *NullableDistributionZoneApiModel) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

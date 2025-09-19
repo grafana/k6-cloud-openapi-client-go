@@ -7,6 +7,7 @@ Method | HTTP request | Description
 [**LoadTestsTestRunsRetrieve**](TestRunsAPI.md#LoadTestsTestRunsRetrieve) | **Get** /cloud/v6/load_tests/{id}/test_runs | List all runs of a load test.
 [**TestRunsAbort**](TestRunsAPI.md#TestRunsAbort) | **Post** /cloud/v6/test_runs/{id}/abort | Abort a running test.
 [**TestRunsDestroy**](TestRunsAPI.md#TestRunsDestroy) | **Delete** /cloud/v6/test_runs/{id} | Delete a test run.
+[**TestRunsDistributionRetrieve**](TestRunsAPI.md#TestRunsDistributionRetrieve) | **Get** /cloud/v6/test_runs/{id}/distribution | Get test run distribution.
 [**TestRunsList**](TestRunsAPI.md#TestRunsList) | **Get** /cloud/v6/test_runs | List all test runs.
 [**TestRunsPartialUpdate**](TestRunsAPI.md#TestRunsPartialUpdate) | **Patch** /cloud/v6/test_runs/{id} | Update a test run.
 [**TestRunsRetrieve**](TestRunsAPI.md#TestRunsRetrieve) | **Get** /cloud/v6/test_runs/{id} | Get a test run by ID.
@@ -18,7 +19,7 @@ Method | HTTP request | Description
 
 ## LoadTestsTestRunsRetrieve
 
-> TestRunListResponse LoadTestsTestRunsRetrieve(ctx, id).XStackId(xStackId).Count(count).Skip(skip).Top(top).Execute()
+> TestRunListResponse LoadTestsTestRunsRetrieve(ctx, id).XStackId(xStackId).Count(count).Skip(skip).Top(top).CreatedAfter(createdAfter).CreatedBefore(createdBefore).Execute()
 
 List all runs of a load test.
 
@@ -33,6 +34,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+    "time"
 	openapiclient "github.com/grafana/k6-cloud-openapi-client/k6"
 )
 
@@ -42,10 +44,12 @@ func main() {
 	count := true // bool | Include collection length in the response object as `@count`. (optional)
 	skip := int32(56) // int32 | The initial index from which to return the results. (optional)
 	top := int32(56) // int32 | Number of results to return per page. (optional) (default to 1000)
+	createdAfter := time.Now() // time.Time | Filter test runs created on or after this date and time (inclusive). (optional)
+	createdBefore := time.Now() // time.Time | Filter test runs created before this date and time (non-inclusive). (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.TestRunsAPI.LoadTestsTestRunsRetrieve(context.Background(), id).XStackId(xStackId).Count(count).Skip(skip).Top(top).Execute()
+	resp, r, err := apiClient.TestRunsAPI.LoadTestsTestRunsRetrieve(context.Background(), id).XStackId(xStackId).Count(count).Skip(skip).Top(top).CreatedAfter(createdAfter).CreatedBefore(createdBefore).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `TestRunsAPI.LoadTestsTestRunsRetrieve``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -75,6 +79,8 @@ Name | Type | Description  | Notes
  **count** | **bool** | Include collection length in the response object as &#x60;@count&#x60;. | 
  **skip** | **int32** | The initial index from which to return the results. | 
  **top** | **int32** | Number of results to return per page. | [default to 1000]
+ **createdAfter** | **time.Time** | Filter test runs created on or after this date and time (inclusive). | 
+ **createdBefore** | **time.Time** | Filter test runs created before this date and time (non-inclusive). | 
 
 ### Return type
 
@@ -234,11 +240,11 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
-## TestRunsList
+## TestRunsDistributionRetrieve
 
-> TestRunListResponse TestRunsList(ctx).XStackId(xStackId).Count(count).Skip(skip).Top(top).Execute()
+> TestRunDistributionApiModel TestRunsDistributionRetrieve(ctx, id).XStackId(xStackId).Execute()
 
-List all test runs.
+Get test run distribution.
 
 
 
@@ -256,13 +262,88 @@ import (
 
 func main() {
 	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-	count := true // bool | Include collection length in the response object as `@count`. (optional)
-	skip := int32(56) // int32 | The initial index from which to return the results. (optional)
-	top := int32(56) // int32 | Number of results to return per page. (optional) (default to 1000)
+	id := int32(56) // int32 | ID of the load test run.
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.TestRunsAPI.TestRunsList(context.Background()).XStackId(xStackId).Count(count).Skip(skip).Top(top).Execute()
+	resp, r, err := apiClient.TestRunsAPI.TestRunsDistributionRetrieve(context.Background(), id).XStackId(xStackId).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `TestRunsAPI.TestRunsDistributionRetrieve``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `TestRunsDistributionRetrieve`: TestRunDistributionApiModel
+	fmt.Fprintf(os.Stdout, "Response from `TestRunsAPI.TestRunsDistributionRetrieve`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**id** | **int32** | ID of the load test run. | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiTestRunsDistributionRetrieveRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **xStackId** | **int32** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. | 
+
+
+### Return type
+
+[**TestRunDistributionApiModel**](TestRunDistributionApiModel.md)
+
+### Authorization
+
+[k6ApiToken](../README.md#k6ApiToken)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## TestRunsList
+
+> TestRunListResponse TestRunsList(ctx).XStackId(xStackId).Count(count).Skip(skip).Top(top).CreatedAfter(createdAfter).CreatedBefore(createdBefore).Execute()
+
+List all test runs.
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+    "time"
+	openapiclient "github.com/grafana/k6-cloud-openapi-client/k6"
+)
+
+func main() {
+	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
+	count := true // bool | Include collection length in the response object as `@count`. (optional)
+	skip := int32(56) // int32 | The initial index from which to return the results. (optional)
+	top := int32(56) // int32 | Number of results to return per page. (optional) (default to 1000)
+	createdAfter := time.Now() // time.Time | Filter test runs created on or after this date and time (inclusive). (optional)
+	createdBefore := time.Now() // time.Time | Filter test runs created before this date and time (non-inclusive). (optional)
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.TestRunsAPI.TestRunsList(context.Background()).XStackId(xStackId).Count(count).Skip(skip).Top(top).CreatedAfter(createdAfter).CreatedBefore(createdBefore).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `TestRunsAPI.TestRunsList``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -287,6 +368,8 @@ Name | Type | Description  | Notes
  **count** | **bool** | Include collection length in the response object as &#x60;@count&#x60;. | 
  **skip** | **int32** | The initial index from which to return the results. | 
  **top** | **int32** | Number of results to return per page. | [default to 1000]
+ **createdAfter** | **time.Time** | Filter test runs created on or after this date and time (inclusive). | 
+ **createdBefore** | **time.Time** | Filter test runs created before this date and time (non-inclusive). | 
 
 ### Return type
 

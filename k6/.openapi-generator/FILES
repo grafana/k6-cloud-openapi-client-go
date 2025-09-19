@@ -1,5 +1,6 @@
 .gitignore
 README.md
+api_authorization.go
 api_load_tests.go
 api_load_zones.go
 api_projects.go
@@ -13,6 +14,8 @@ docs/AllowedLoadZonesListApiModel.md
 docs/AllowedProjectApiModel.md
 docs/AllowedProjectToUpdateApiModel.md
 docs/AllowedProjectsListApiModel.md
+docs/AuthenticationResponse.md
+docs/AuthorizationAPI.md
 docs/BaseTotalVuh.md
 docs/BrowserVuh.md
 docs/CloudOptions.md
@@ -28,9 +31,11 @@ docs/LoadTestApiModel.md
 docs/LoadTestListResponse.md
 docs/LoadTestsAPI.md
 docs/LoadZoneApiModel.md
+docs/LoadZoneDistributionApiModel.md
 docs/LoadZonesAPI.md
 docs/LoadZonesListApiModel.md
 docs/MoveLoadTestApiModel.md
+docs/NodeApiModel.md
 docs/Options.md
 docs/OptionsCloud.md
 docs/PatchLoadTestApiModel.md
@@ -53,6 +58,7 @@ docs/StatusApiModel.md
 docs/StatusExtraApiModel.md
 docs/TestCostApiModel.md
 docs/TestRunApiModel.md
+docs/TestRunDistributionApiModel.md
 docs/TestRunListResponse.md
 docs/TestRunsAPI.md
 docs/TotalVuh.md
@@ -67,6 +73,7 @@ model_allowed_load_zones_list_api_model.go
 model_allowed_project_api_model.go
 model_allowed_project_to_update_api_model.go
 model_allowed_projects_list_api_model.go
+model_authentication_response.go
 model_base_total_vuh.go
 model_browser_vuh.go
 model_cloud_options.go
@@ -81,8 +88,10 @@ model_frequency.go
 model_load_test_api_model.go
 model_load_test_list_response.go
 model_load_zone_api_model.go
+model_load_zone_distribution_api_model.go
 model_load_zones_list_api_model.go
 model_move_load_test_api_model.go
+model_node_api_model.go
 model_options.go
 model_options_cloud.go
 model_patch_load_test_api_model.go
@@ -103,6 +112,7 @@ model_status_api_model.go
 model_status_extra_api_model.go
 model_test_cost_api_model.go
 model_test_run_api_model.go
+model_test_run_distribution_api_model.go
 model_test_run_list_response.go
 model_total_vuh.go
 model_update_allowed_load_zones_list_api_model.go

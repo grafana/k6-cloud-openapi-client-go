@@ -3,7 +3,7 @@ Grafana Cloud k6
 
 HTTP API for interacting with Grafana Cloud k6.
 
-API version: 1.5.0
+API version: 1.6.0
 Contact: info@grafana.com
 */
 
@@ -13,8 +13,8 @@ package k6
 
 import (
 	"encoding/json"
-	"time"
 	"fmt"
+	"time"
 )
 
 // checks if the StatusApiModel type satisfies the MappedNullable interface at compile time
@@ -25,8 +25,8 @@ type StatusApiModel struct {
 	// Type of simple test run status: `created`, `queued`, `initializing`, `running`, `processing_metrics`, `completed` or `aborted`.
 	Type string `json:"type"`
 	// Date and time when the test run entered the status.
-	Entered time.Time `json:"entered"`
-	Extra NullableStatusExtraApiModel `json:"extra,omitempty"`
+	Entered              time.Time                   `json:"entered"`
+	Extra                NullableStatusExtraApiModel `json:"extra,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -131,6 +131,7 @@ func (o *StatusApiModel) HasExtra() bool {
 func (o *StatusApiModel) SetExtra(v StatusExtraApiModel) {
 	o.Extra.Set(&v)
 }
+
 // SetExtraNil sets the value for Extra to be an explicit nil
 func (o *StatusApiModel) SetExtraNil() {
 	o.Extra.Set(nil)
@@ -142,7 +143,7 @@ func (o *StatusApiModel) UnsetExtra() {
 }
 
 func (o StatusApiModel) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -178,10 +179,10 @@ func (o *StatusApiModel) UnmarshalJSON(data []byte) (err error) {
 	err = json.Unmarshal(data, &allProperties)
 
 	if err != nil {
-		return err;
+		return err
 	}
 
-	for _, requiredProperty := range(requiredProperties) {
+	for _, requiredProperty := range requiredProperties {
 		if _, exists := allProperties[requiredProperty]; !exists {
 			return fmt.Errorf("no value given for required property %v", requiredProperty)
 		}
@@ -244,5 +245,3 @@ func (v *NullableStatusApiModel) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

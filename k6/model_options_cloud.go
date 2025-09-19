@@ -3,7 +3,7 @@ Grafana Cloud k6
 
 HTTP API for interacting with Grafana Cloud k6.
 
-API version: 1.5.0
+API version: 1.6.0
 Contact: info@grafana.com
 */
 
@@ -13,8 +13,9 @@ package k6
 
 import (
 	"encoding/json"
-	"gopkg.in/validator.v2"
 	"fmt"
+
+	"gopkg.in/validator.v2"
 )
 
 // OptionsCloud - Cloud-specific k6 options.
@@ -28,7 +29,6 @@ func CloudOptionsAsOptionsCloud(v *CloudOptions) OptionsCloud {
 		CloudOptions: v,
 	}
 }
-
 
 // Unmarshal JSON data into one of the pointers in the struct
 func (dst *OptionsCloud) UnmarshalJSON(data []byte) error {
@@ -78,7 +78,7 @@ func (src OptionsCloud) MarshalJSON() ([]byte, error) {
 }
 
 // Get the actual instance
-func (obj *OptionsCloud) GetActualInstance() (interface{}) {
+func (obj *OptionsCloud) GetActualInstance() interface{} {
 	if obj == nil {
 		return nil
 	}
@@ -125,5 +125,3 @@ func (v *NullableOptionsCloud) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

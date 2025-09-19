@@ -3,7 +3,7 @@ Grafana Cloud k6
 
 HTTP API for interacting with Grafana Cloud k6.
 
-API version: 1.5.0
+API version: 1.6.0
 Contact: info@grafana.com
 */
 
@@ -18,20 +18,22 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"time"
 )
-
 
 // TestRunsAPIService TestRunsAPI service
 type TestRunsAPIService service
 
 type ApiLoadTestsTestRunsRetrieveRequest struct {
-	ctx context.Context
-	ApiService *TestRunsAPIService
-	xStackId *int32
-	id int32
-	count *bool
-	skip *int32
-	top *int32
+	ctx           context.Context
+	ApiService    *TestRunsAPIService
+	xStackId      *int32
+	id            int32
+	count         *bool
+	skip          *int32
+	top           *int32
+	createdAfter  *time.Time
+	createdBefore *time.Time
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
@@ -58,6 +60,18 @@ func (r *ApiLoadTestsTestRunsRetrieveRequest) Top(top int32) *ApiLoadTestsTestRu
 	return r
 }
 
+// Filter test runs created on or after this date and time (inclusive).
+func (r *ApiLoadTestsTestRunsRetrieveRequest) CreatedAfter(createdAfter time.Time) *ApiLoadTestsTestRunsRetrieveRequest {
+	r.createdAfter = &createdAfter
+	return r
+}
+
+// Filter test runs created before this date and time (non-inclusive).
+func (r *ApiLoadTestsTestRunsRetrieveRequest) CreatedBefore(createdBefore time.Time) *ApiLoadTestsTestRunsRetrieveRequest {
+	r.createdBefore = &createdBefore
+	return r
+}
+
 func (r *ApiLoadTestsTestRunsRetrieveRequest) Execute() (*TestRunListResponse, *http.Response, error) {
 	return r.ApiService.LoadTestsTestRunsRetrieveExecute(r)
 }
@@ -67,26 +81,27 @@ LoadTestsTestRunsRetrieve List all runs of a load test.
 
 List all runs of a load test.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id ID of the load test.
- @return *ApiLoadTestsTestRunsRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id ID of the load test.
+	@return *ApiLoadTestsTestRunsRetrieveRequest
 */
 func (a *TestRunsAPIService) LoadTestsTestRunsRetrieve(ctx context.Context, id int32) *ApiLoadTestsTestRunsRetrieveRequest {
 	return &ApiLoadTestsTestRunsRetrieveRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return TestRunListResponse
+//
+//	@return TestRunListResponse
 func (a *TestRunsAPIService) LoadTestsTestRunsRetrieveExecute(r *ApiLoadTestsTestRunsRetrieveRequest) (*TestRunListResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *TestRunListResponse
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *TestRunListResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TestRunsAPIService.LoadTestsTestRunsRetrieve")
@@ -115,6 +130,12 @@ func (a *TestRunsAPIService) LoadTestsTestRunsRetrieveExecute(r *ApiLoadTestsTes
 	} else {
 		var defaultValue int32 = 1000
 		r.top = &defaultValue
+	}
+	if r.createdAfter != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "created_after", r.createdAfter, "form", "")
+	}
+	if r.createdBefore != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "created_before", r.createdBefore, "form", "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -163,8 +184,8 @@ func (a *TestRunsAPIService) LoadTestsTestRunsRetrieveExecute(r *ApiLoadTestsTes
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
@@ -174,8 +195,8 @@ func (a *TestRunsAPIService) LoadTestsTestRunsRetrieveExecute(r *ApiLoadTestsTes
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -185,8 +206,8 @@ func (a *TestRunsAPIService) LoadTestsTestRunsRetrieveExecute(r *ApiLoadTestsTes
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -196,8 +217,8 @@ func (a *TestRunsAPIService) LoadTestsTestRunsRetrieveExecute(r *ApiLoadTestsTes
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -207,8 +228,8 @@ func (a *TestRunsAPIService) LoadTestsTestRunsRetrieveExecute(r *ApiLoadTestsTes
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -226,10 +247,10 @@ func (a *TestRunsAPIService) LoadTestsTestRunsRetrieveExecute(r *ApiLoadTestsTes
 }
 
 type ApiTestRunsAbortRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *TestRunsAPIService
-	xStackId *int32
-	id int32
+	xStackId   *int32
+	id         int32
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
@@ -247,24 +268,24 @@ TestRunsAbort Abort a running test.
 
 Abort a running test.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id ID of the load test run.
- @return *ApiTestRunsAbortRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id ID of the load test run.
+	@return *ApiTestRunsAbortRequest
 */
 func (a *TestRunsAPIService) TestRunsAbort(ctx context.Context, id int32) *ApiTestRunsAbortRequest {
 	return &ApiTestRunsAbortRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
 func (a *TestRunsAPIService) TestRunsAbortExecute(r *ApiTestRunsAbortRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
+		localVarHTTPMethod = http.MethodPost
+		localVarPostBody   interface{}
+		formFiles          []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TestRunsAPIService.TestRunsAbort")
@@ -329,8 +350,8 @@ func (a *TestRunsAPIService) TestRunsAbortExecute(r *ApiTestRunsAbortRequest) (*
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
@@ -340,8 +361,8 @@ func (a *TestRunsAPIService) TestRunsAbortExecute(r *ApiTestRunsAbortRequest) (*
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -351,8 +372,8 @@ func (a *TestRunsAPIService) TestRunsAbortExecute(r *ApiTestRunsAbortRequest) (*
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -362,8 +383,8 @@ func (a *TestRunsAPIService) TestRunsAbortExecute(r *ApiTestRunsAbortRequest) (*
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -373,8 +394,8 @@ func (a *TestRunsAPIService) TestRunsAbortExecute(r *ApiTestRunsAbortRequest) (*
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarHTTPResponse, newErr
 	}
@@ -383,10 +404,10 @@ func (a *TestRunsAPIService) TestRunsAbortExecute(r *ApiTestRunsAbortRequest) (*
 }
 
 type ApiTestRunsDestroyRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *TestRunsAPIService
-	xStackId *int32
-	id int32
+	xStackId   *int32
+	id         int32
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
@@ -404,24 +425,24 @@ TestRunsDestroy Delete a test run.
 
 Delete a test run.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id ID of the load test run.
- @return *ApiTestRunsDestroyRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id ID of the load test run.
+	@return *ApiTestRunsDestroyRequest
 */
 func (a *TestRunsAPIService) TestRunsDestroy(ctx context.Context, id int32) *ApiTestRunsDestroyRequest {
 	return &ApiTestRunsDestroyRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
 func (a *TestRunsAPIService) TestRunsDestroyExecute(r *ApiTestRunsDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
+		localVarHTTPMethod = http.MethodDelete
+		localVarPostBody   interface{}
+		formFiles          []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TestRunsAPIService.TestRunsDestroy")
@@ -486,8 +507,8 @@ func (a *TestRunsAPIService) TestRunsDestroyExecute(r *ApiTestRunsDestroyRequest
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
@@ -497,8 +518,8 @@ func (a *TestRunsAPIService) TestRunsDestroyExecute(r *ApiTestRunsDestroyRequest
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -508,8 +529,8 @@ func (a *TestRunsAPIService) TestRunsDestroyExecute(r *ApiTestRunsDestroyRequest
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -519,8 +540,8 @@ func (a *TestRunsAPIService) TestRunsDestroyExecute(r *ApiTestRunsDestroyRequest
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -530,8 +551,8 @@ func (a *TestRunsAPIService) TestRunsDestroyExecute(r *ApiTestRunsDestroyRequest
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarHTTPResponse, newErr
 	}
@@ -539,13 +560,173 @@ func (a *TestRunsAPIService) TestRunsDestroyExecute(r *ApiTestRunsDestroyRequest
 	return localVarHTTPResponse, nil
 }
 
-type ApiTestRunsListRequest struct {
-	ctx context.Context
+type ApiTestRunsDistributionRetrieveRequest struct {
+	ctx        context.Context
 	ApiService *TestRunsAPIService
-	xStackId *int32
-	count *bool
-	skip *int32
-	top *int32
+	xStackId   *int32
+	id         int32
+}
+
+// Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
+func (r *ApiTestRunsDistributionRetrieveRequest) XStackId(xStackId int32) *ApiTestRunsDistributionRetrieveRequest {
+	r.xStackId = &xStackId
+	return r
+}
+
+func (r *ApiTestRunsDistributionRetrieveRequest) Execute() (*TestRunDistributionApiModel, *http.Response, error) {
+	return r.ApiService.TestRunsDistributionRetrieveExecute(r)
+}
+
+/*
+TestRunsDistributionRetrieve Get test run distribution.
+
+Get test run distribution data.
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id ID of the load test run.
+	@return *ApiTestRunsDistributionRetrieveRequest
+*/
+func (a *TestRunsAPIService) TestRunsDistributionRetrieve(ctx context.Context, id int32) *ApiTestRunsDistributionRetrieveRequest {
+	return &ApiTestRunsDistributionRetrieveRequest{
+		ApiService: a,
+		ctx:        ctx,
+		id:         id,
+	}
+}
+
+// Execute executes the request
+//
+//	@return TestRunDistributionApiModel
+func (a *TestRunsAPIService) TestRunsDistributionRetrieveExecute(r *ApiTestRunsDistributionRetrieveRequest) (*TestRunDistributionApiModel, *http.Response, error) {
+	var (
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *TestRunDistributionApiModel
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TestRunsAPIService.TestRunsDistributionRetrieve")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/cloud/v6/test_runs/{id}/distribution"
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.xStackId == nil {
+		return localVarReturnValue, nil, reportError("xStackId is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	parameterAddToHeaderOrQuery(localVarHeaderParams, "X-Stack-Id", r.xStackId, "simple", "")
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 404 {
+			var v ErrorResponseApiModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 401 {
+			var v ErrorResponseApiModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v ErrorResponseApiModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 500 {
+			var v ErrorResponseApiModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiTestRunsListRequest struct {
+	ctx           context.Context
+	ApiService    *TestRunsAPIService
+	xStackId      *int32
+	count         *bool
+	skip          *int32
+	top           *int32
+	createdAfter  *time.Time
+	createdBefore *time.Time
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
@@ -572,6 +753,18 @@ func (r *ApiTestRunsListRequest) Top(top int32) *ApiTestRunsListRequest {
 	return r
 }
 
+// Filter test runs created on or after this date and time (inclusive).
+func (r *ApiTestRunsListRequest) CreatedAfter(createdAfter time.Time) *ApiTestRunsListRequest {
+	r.createdAfter = &createdAfter
+	return r
+}
+
+// Filter test runs created before this date and time (non-inclusive).
+func (r *ApiTestRunsListRequest) CreatedBefore(createdBefore time.Time) *ApiTestRunsListRequest {
+	r.createdBefore = &createdBefore
+	return r
+}
+
 func (r *ApiTestRunsListRequest) Execute() (*TestRunListResponse, *http.Response, error) {
 	return r.ApiService.TestRunsListExecute(r)
 }
@@ -581,24 +774,25 @@ TestRunsList List all test runs.
 
 List all available test runs.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return *ApiTestRunsListRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return *ApiTestRunsListRequest
 */
 func (a *TestRunsAPIService) TestRunsList(ctx context.Context) *ApiTestRunsListRequest {
 	return &ApiTestRunsListRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return TestRunListResponse
+//
+//	@return TestRunListResponse
 func (a *TestRunsAPIService) TestRunsListExecute(r *ApiTestRunsListRequest) (*TestRunListResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *TestRunListResponse
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *TestRunListResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TestRunsAPIService.TestRunsList")
@@ -626,6 +820,12 @@ func (a *TestRunsAPIService) TestRunsListExecute(r *ApiTestRunsListRequest) (*Te
 	} else {
 		var defaultValue int32 = 1000
 		r.top = &defaultValue
+	}
+	if r.createdAfter != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "created_after", r.createdAfter, "form", "")
+	}
+	if r.createdBefore != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "created_before", r.createdBefore, "form", "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -674,8 +874,8 @@ func (a *TestRunsAPIService) TestRunsListExecute(r *ApiTestRunsListRequest) (*Te
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
@@ -685,8 +885,8 @@ func (a *TestRunsAPIService) TestRunsListExecute(r *ApiTestRunsListRequest) (*Te
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -696,8 +896,8 @@ func (a *TestRunsAPIService) TestRunsListExecute(r *ApiTestRunsListRequest) (*Te
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -707,8 +907,8 @@ func (a *TestRunsAPIService) TestRunsListExecute(r *ApiTestRunsListRequest) (*Te
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -726,10 +926,10 @@ func (a *TestRunsAPIService) TestRunsListExecute(r *ApiTestRunsListRequest) (*Te
 }
 
 type ApiTestRunsPartialUpdateRequest struct {
-	ctx context.Context
-	ApiService *TestRunsAPIService
-	xStackId *int32
-	id int32
+	ctx                  context.Context
+	ApiService           *TestRunsAPIService
+	xStackId             *int32
+	id                   int32
 	patchTestRunApiModel *PatchTestRunApiModel
 }
 
@@ -753,24 +953,24 @@ TestRunsPartialUpdate Update a test run.
 
 Update a test run.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id ID of the load test run.
- @return *ApiTestRunsPartialUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id ID of the load test run.
+	@return *ApiTestRunsPartialUpdateRequest
 */
 func (a *TestRunsAPIService) TestRunsPartialUpdate(ctx context.Context, id int32) *ApiTestRunsPartialUpdateRequest {
 	return &ApiTestRunsPartialUpdateRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
 func (a *TestRunsAPIService) TestRunsPartialUpdateExecute(r *ApiTestRunsPartialUpdateRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPatch
-		localVarPostBody     interface{}
-		formFiles            []formFile
+		localVarHTTPMethod = http.MethodPatch
+		localVarPostBody   interface{}
+		formFiles          []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TestRunsAPIService.TestRunsPartialUpdate")
@@ -840,8 +1040,8 @@ func (a *TestRunsAPIService) TestRunsPartialUpdateExecute(r *ApiTestRunsPartialU
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
@@ -851,8 +1051,8 @@ func (a *TestRunsAPIService) TestRunsPartialUpdateExecute(r *ApiTestRunsPartialU
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -862,8 +1062,8 @@ func (a *TestRunsAPIService) TestRunsPartialUpdateExecute(r *ApiTestRunsPartialU
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -873,8 +1073,8 @@ func (a *TestRunsAPIService) TestRunsPartialUpdateExecute(r *ApiTestRunsPartialU
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -884,8 +1084,8 @@ func (a *TestRunsAPIService) TestRunsPartialUpdateExecute(r *ApiTestRunsPartialU
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarHTTPResponse, newErr
 	}
@@ -894,10 +1094,10 @@ func (a *TestRunsAPIService) TestRunsPartialUpdateExecute(r *ApiTestRunsPartialU
 }
 
 type ApiTestRunsRetrieveRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *TestRunsAPIService
-	xStackId *int32
-	id int32
+	xStackId   *int32
+	id         int32
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
@@ -915,26 +1115,27 @@ TestRunsRetrieve Get a test run by ID.
 
 Fetch a single test run.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id ID of the load test run.
- @return *ApiTestRunsRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id ID of the load test run.
+	@return *ApiTestRunsRetrieveRequest
 */
 func (a *TestRunsAPIService) TestRunsRetrieve(ctx context.Context, id int32) *ApiTestRunsRetrieveRequest {
 	return &ApiTestRunsRetrieveRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return TestRunApiModel
+//
+//	@return TestRunApiModel
 func (a *TestRunsAPIService) TestRunsRetrieveExecute(r *ApiTestRunsRetrieveRequest) (*TestRunApiModel, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *TestRunApiModel
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *TestRunApiModel
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TestRunsAPIService.TestRunsRetrieve")
@@ -999,8 +1200,8 @@ func (a *TestRunsAPIService) TestRunsRetrieveExecute(r *ApiTestRunsRetrieveReque
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -1010,8 +1211,8 @@ func (a *TestRunsAPIService) TestRunsRetrieveExecute(r *ApiTestRunsRetrieveReque
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -1021,8 +1222,8 @@ func (a *TestRunsAPIService) TestRunsRetrieveExecute(r *ApiTestRunsRetrieveReque
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -1032,8 +1233,8 @@ func (a *TestRunsAPIService) TestRunsRetrieveExecute(r *ApiTestRunsRetrieveReque
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -1051,10 +1252,10 @@ func (a *TestRunsAPIService) TestRunsRetrieveExecute(r *ApiTestRunsRetrieveReque
 }
 
 type ApiTestRunsSaveRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *TestRunsAPIService
-	xStackId *int32
-	id int32
+	xStackId   *int32
+	id         int32
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
@@ -1072,24 +1273,24 @@ TestRunsSave Save test run results.
 
 Persist test run results to keep them past the data-retention period.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id ID of the load test run.
- @return *ApiTestRunsSaveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id ID of the load test run.
+	@return *ApiTestRunsSaveRequest
 */
 func (a *TestRunsAPIService) TestRunsSave(ctx context.Context, id int32) *ApiTestRunsSaveRequest {
 	return &ApiTestRunsSaveRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
 func (a *TestRunsAPIService) TestRunsSaveExecute(r *ApiTestRunsSaveRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
+		localVarHTTPMethod = http.MethodPost
+		localVarPostBody   interface{}
+		formFiles          []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TestRunsAPIService.TestRunsSave")
@@ -1154,8 +1355,8 @@ func (a *TestRunsAPIService) TestRunsSaveExecute(r *ApiTestRunsSaveRequest) (*ht
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
@@ -1165,8 +1366,8 @@ func (a *TestRunsAPIService) TestRunsSaveExecute(r *ApiTestRunsSaveRequest) (*ht
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -1176,8 +1377,8 @@ func (a *TestRunsAPIService) TestRunsSaveExecute(r *ApiTestRunsSaveRequest) (*ht
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -1187,8 +1388,8 @@ func (a *TestRunsAPIService) TestRunsSaveExecute(r *ApiTestRunsSaveRequest) (*ht
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -1198,8 +1399,8 @@ func (a *TestRunsAPIService) TestRunsSaveExecute(r *ApiTestRunsSaveRequest) (*ht
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarHTTPResponse, newErr
 	}
@@ -1208,10 +1409,10 @@ func (a *TestRunsAPIService) TestRunsSaveExecute(r *ApiTestRunsSaveRequest) (*ht
 }
 
 type ApiTestRunsScriptRetrieveRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *TestRunsAPIService
-	xStackId *int32
-	id int32
+	xStackId   *int32
+	id         int32
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
@@ -1229,26 +1430,27 @@ TestRunsScriptRetrieve Download the test run script.
 
 Download the test run script.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id ID of the load test run.
- @return *ApiTestRunsScriptRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id ID of the load test run.
+	@return *ApiTestRunsScriptRetrieveRequest
 */
 func (a *TestRunsAPIService) TestRunsScriptRetrieve(ctx context.Context, id int32) *ApiTestRunsScriptRetrieveRequest {
 	return &ApiTestRunsScriptRetrieveRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return string
+//
+//	@return string
 func (a *TestRunsAPIService) TestRunsScriptRetrieveExecute(r *ApiTestRunsScriptRetrieveRequest) (string, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  string
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue string
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TestRunsAPIService.TestRunsScriptRetrieve")
@@ -1313,8 +1515,8 @@ func (a *TestRunsAPIService) TestRunsScriptRetrieveExecute(r *ApiTestRunsScriptR
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -1324,8 +1526,8 @@ func (a *TestRunsAPIService) TestRunsScriptRetrieveExecute(r *ApiTestRunsScriptR
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -1335,8 +1537,8 @@ func (a *TestRunsAPIService) TestRunsScriptRetrieveExecute(r *ApiTestRunsScriptR
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -1346,8 +1548,8 @@ func (a *TestRunsAPIService) TestRunsScriptRetrieveExecute(r *ApiTestRunsScriptR
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -1365,10 +1567,10 @@ func (a *TestRunsAPIService) TestRunsScriptRetrieveExecute(r *ApiTestRunsScriptR
 }
 
 type ApiTestRunsUnsaveRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *TestRunsAPIService
-	xStackId *int32
-	id int32
+	xStackId   *int32
+	id         int32
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
@@ -1388,24 +1590,24 @@ Disable persistence of the test run results past the data-retention period.
 
 The data will be automatically deleted at the end of the retention period.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id ID of the load test run.
- @return *ApiTestRunsUnsaveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id ID of the load test run.
+	@return *ApiTestRunsUnsaveRequest
 */
 func (a *TestRunsAPIService) TestRunsUnsave(ctx context.Context, id int32) *ApiTestRunsUnsaveRequest {
 	return &ApiTestRunsUnsaveRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
 func (a *TestRunsAPIService) TestRunsUnsaveExecute(r *ApiTestRunsUnsaveRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
+		localVarHTTPMethod = http.MethodPost
+		localVarPostBody   interface{}
+		formFiles          []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TestRunsAPIService.TestRunsUnsave")
@@ -1470,8 +1672,8 @@ func (a *TestRunsAPIService) TestRunsUnsaveExecute(r *ApiTestRunsUnsaveRequest) 
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -1481,8 +1683,8 @@ func (a *TestRunsAPIService) TestRunsUnsaveExecute(r *ApiTestRunsUnsaveRequest) 
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -1492,8 +1694,8 @@ func (a *TestRunsAPIService) TestRunsUnsaveExecute(r *ApiTestRunsUnsaveRequest) 
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -1503,8 +1705,8 @@ func (a *TestRunsAPIService) TestRunsUnsaveExecute(r *ApiTestRunsUnsaveRequest) 
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarHTTPResponse, newErr
 	}

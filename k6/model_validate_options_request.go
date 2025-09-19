@@ -3,7 +3,7 @@ Grafana Cloud k6
 
 HTTP API for interacting with Grafana Cloud k6.
 
-API version: 1.5.0
+API version: 1.6.0
 Contact: info@grafana.com
 */
 
@@ -26,7 +26,7 @@ type ValidateOptionsRequest struct {
 	// k6 script options object to validate.
 	Options Options `json:"options"`
 	// Version of k6 and extensions to validate, as a map of dependency name to dependency version constraint.
-	K6Dependencies map[string]string `json:"k6_dependencies,omitempty"`
+	K6Dependencies       map[string]string `json:"k6_dependencies,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -82,6 +82,7 @@ func (o *ValidateOptionsRequest) HasProjectId() bool {
 func (o *ValidateOptionsRequest) SetProjectId(v int32) {
 	o.ProjectId.Set(&v)
 }
+
 // SetProjectIdNil sets the value for ProjectId to be an explicit nil
 func (o *ValidateOptionsRequest) SetProjectIdNil() {
 	o.ProjectId.Set(nil)
@@ -149,7 +150,7 @@ func (o *ValidateOptionsRequest) SetK6Dependencies(v map[string]string) {
 }
 
 func (o ValidateOptionsRequest) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -186,10 +187,10 @@ func (o *ValidateOptionsRequest) UnmarshalJSON(data []byte) (err error) {
 	err = json.Unmarshal(data, &allProperties)
 
 	if err != nil {
-		return err;
+		return err
 	}
 
-	for _, requiredProperty := range(requiredProperties) {
+	for _, requiredProperty := range requiredProperties {
 		if _, exists := allProperties[requiredProperty]; !exists {
 			return fmt.Errorf("no value given for required property %v", requiredProperty)
 		}
@@ -252,5 +253,3 @@ func (v *NullableValidateOptionsRequest) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

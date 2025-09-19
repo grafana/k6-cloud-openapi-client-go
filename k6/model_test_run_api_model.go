@@ -3,7 +3,7 @@ Grafana Cloud k6
 
 HTTP API for interacting with Grafana Cloud k6.
 
-API version: 1.5.0
+API version: 1.6.0
 Contact: info@grafana.com
 */
 
@@ -13,8 +13,8 @@ package k6
 
 import (
 	"encoding/json"
-	"time"
 	"fmt"
+	"time"
 )
 
 // checks if the TestRunApiModel type satisfies the MappedNullable interface at compile time
@@ -37,8 +37,8 @@ type TestRunApiModel struct {
 	// User-defined note for the test run.
 	Note string `json:"note"`
 	// Timestamp after which the test run results are deleted or null if the test run is saved.
-	RetentionExpiry NullableTime `json:"retention_expiry"`
-	Cost NullableTestCostApiModel `json:"cost"`
+	RetentionExpiry NullableTime             `json:"retention_expiry"`
+	Cost            NullableTestCostApiModel `json:"cost"`
 	// Current test run status.
 	Status string `json:"status"`
 	// Details of the current test run status.
@@ -56,7 +56,7 @@ type TestRunApiModel struct {
 	// The requested version of k6 and extensions that was part of the script/archive.
 	K6Dependencies map[string]string `json:"k6_dependencies"`
 	// The computed version for k6 and extensions used to run the test.
-	K6Versions map[string]string `json:"k6_versions"`
+	K6Versions           map[string]string `json:"k6_versions"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -546,7 +546,7 @@ func (o *TestRunApiModel) SetK6Versions(v map[string]string) {
 }
 
 func (o TestRunApiModel) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -617,10 +617,10 @@ func (o *TestRunApiModel) UnmarshalJSON(data []byte) (err error) {
 	err = json.Unmarshal(data, &allProperties)
 
 	if err != nil {
-		return err;
+		return err
 	}
 
-	for _, requiredProperty := range(requiredProperties) {
+	for _, requiredProperty := range requiredProperties {
 		if _, exists := allProperties[requiredProperty]; !exists {
 			return fmt.Errorf("no value given for required property %v", requiredProperty)
 		}
@@ -698,5 +698,3 @@ func (v *NullableTestRunApiModel) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-
