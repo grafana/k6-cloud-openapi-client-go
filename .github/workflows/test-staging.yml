@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 env:
-  MIN_COVERAGE_PERCENT: 95
+  MIN_COVERAGE_PERCENT: 99
 
 jobs:
   test:
