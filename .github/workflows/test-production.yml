@@ -1,0 +1,48 @@
+name: E2E Tests - Production
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+env:
+  MIN_COVERAGE_PERCENT: 95
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.23'
+
+      - name: Install dependencies
+        run: go mod download
+
+      - uses: grafana/shared-workflows/actions/get-vault-secrets@a37de51f3d713a30a9e4b21bcdfbd38170020593 # get-vault-secrets/v1.3.0
+        with:
+          # Secrets placed in the ci/repo/grafana/<repo>/<path> path in Vault
+          # Since vault is write only, generated data can be found in 1Password as "k6 Cloud CI/CD Secrets" under the key "k6-go-openapi-client"
+          repo_secrets: |
+            K6_PROD_TOKEN=k6-cloud:K6_PROD_TOKEN
+            K6_PROD_STACK_ID=k6-cloud:K6_PROD_STACK_ID
+            K6_PROD_STACK_TOKEN=k6-cloud:K6_PROD_STACK_TOKEN
+            K6_PROD_STACK_URL=k6-cloud:K6_PROD_STACK_URL
+
+      - name: Run E2E Tests
+        id: tests
+        env:
+          K6_CLOUD_URL: "https://api.k6.io"
+          K6_STACK_URL: ${{ env.K6_PROD_STACK_URL }}
+          K6_CLOUD_TOKEN: ${{ env.K6_PROD_TOKEN }}
+          K6_CLOUD_STACK_ID: ${{ env.K6_PROD_STACK_ID }}
+          K6_CLOUD_STACK_TOKEN: ${{ env.K6_PROD_STACK_TOKEN }}
+        run: |
+          make e2e-test
+
+      - name: Check API Coverage
+        run: |
+          make e2e-coverage MIN_COVERAGE=${{ env.MIN_COVERAGE_PERCENT }}
