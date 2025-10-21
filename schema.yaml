@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Grafana Cloud k6
-  version: 1.6.0
+  version: 1.7.0
   description: HTTP API for interacting with Grafana Cloud k6.
   contact:
     name: Grafana Support
@@ -143,6 +143,30 @@ paths:
               schema:
                 $ref: '#/components/schemas/ScheduleApiModel'
               examples:
+                Hourly:
+                  value:
+                    id: 123
+                    load_test_id: 234
+                    deactivated: false
+                    starts: '2024-07-16T08:46:04.021Z'
+                    recurrence_rule: null
+                    cron:
+                      schedule: 0 0 * * *
+                      time_zone: UTC
+                    next_run: '2024-07-17T00:00:00Z'
+                    created_by: user@example.com
+                7amOnMonday:
+                  value:
+                    id: 123
+                    load_test_id: 234
+                    deactivated: false
+                    starts: '2024-07-16T08:46:04.021Z'
+                    recurrence_rule: null
+                    cron:
+                      schedule: 0 7 * * 1
+                      time_zone: UTC
+                    next_run: '2024-07-22T07:00:00Z'
+                    created_by: user@example.com
                 EveryTwoHours:
                   value:
                     id: 123
@@ -155,6 +179,7 @@ paths:
                       byday: null
                       until: null
                       count: null
+                    cron: null
                     next_run: '2024-07-20T01:46:04.021Z'
                     created_by: user@example.com
                 WeeklyOnWeekendsStopsAfter10Runs:
@@ -171,6 +196,7 @@ paths:
                       - SU
                       until: null
                       count: 10
+                    cron: null
                     next_run: '2024-07-17T08:46:04.021Z'
                     created_by: null
                 TriggeredOnceInThePast:
@@ -180,6 +206,7 @@ paths:
                     deactivated: false
                     starts: '2023-08-01T12:00:00.000Z'
                     recurrence_rule: null
+                    cron: null
                     next_run: null
                     created_by: user@example.com
                 Deactivated:
@@ -193,6 +220,7 @@ paths:
                       interval: 2
                       days: []
                       ends: null
+                    cron: null
                     next_run: '2024-07-20T01:46:04.021Z'
                     created_by: user@example.com
           description: OK.
@@ -259,6 +287,30 @@ paths:
               schema:
                 $ref: '#/components/schemas/ScheduleApiModel'
               examples:
+                Hourly:
+                  value:
+                    id: 123
+                    load_test_id: 234
+                    deactivated: false
+                    starts: '2024-07-16T08:46:04.021Z'
+                    recurrence_rule: null
+                    cron:
+                      schedule: 0 0 * * *
+                      time_zone: UTC
+                    next_run: '2024-07-17T00:00:00Z'
+                    created_by: user@example.com
+                7amOnMonday:
+                  value:
+                    id: 123
+                    load_test_id: 234
+                    deactivated: false
+                    starts: '2024-07-16T08:46:04.021Z'
+                    recurrence_rule: null
+                    cron:
+                      schedule: 0 7 * * 1
+                      time_zone: UTC
+                    next_run: '2024-07-22T07:00:00Z'
+                    created_by: user@example.com
                 EveryTwoHours:
                   value:
                     id: 123
@@ -271,6 +323,7 @@ paths:
                       byday: null
                       until: null
                       count: null
+                    cron: null
                     next_run: '2024-07-20T01:46:04.021Z'
                     created_by: user@example.com
                 WeeklyOnWeekendsStopsAfter10Runs:
@@ -287,6 +340,7 @@ paths:
                       - SU
                       until: null
                       count: 10
+                    cron: null
                     next_run: '2024-07-17T08:46:04.021Z'
                     created_by: null
                 TriggeredOnceInThePast:
@@ -296,6 +350,7 @@ paths:
                     deactivated: false
                     starts: '2023-08-01T12:00:00.000Z'
                     recurrence_rule: null
+                    cron: null
                     next_run: null
                     created_by: user@example.com
                 Deactivated:
@@ -309,6 +364,7 @@ paths:
                       interval: 2
                       days: []
                       ends: null
+                    cron: null
                     next_run: '2024-07-20T01:46:04.021Z'
                     created_by: user@example.com
           description: OK.
@@ -864,8 +920,8 @@ paths:
   /cloud/v6/load_zones/{id}/allowed_projects:
     get:
       operationId: load_zones_allowed_projects_retrieve
-      description: List projects allowed to use a given load zone.
-      summary: List projects allowed to use a given load zone.
+      description: List projects allowed to use a given private load zone.
+      summary: List projects allowed to use a given private load zone.
       parameters:
       - $ref: '#/components/parameters/stackId'
       - in: path
@@ -908,8 +964,9 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
     put:
       operationId: load_zones_allowed_projects_update
-      description: Update the list of projects allowed to use a given load zone.
-      summary: Update the list of projects allowed to use a given load zone.
+      description: Update the list of projects allowed to use a given private load
+        zone.
+      summary: Update the list of projects allowed to use a given private load zone.
       parameters:
       - $ref: '#/components/parameters/stackId'
       - in: path
@@ -1145,8 +1202,8 @@ paths:
   /cloud/v6/projects/{id}/allowed_load_zones:
     get:
       operationId: projects_allowed_load_zones_retrieve
-      description: List load zones that can be used by a given project.
-      summary: List load zones that can be used by a given project.
+      description: List private load zones that can be used by a given project.
+      summary: List private load zones that can be used by a given project.
       parameters:
       - $ref: '#/components/parameters/stackId'
       - in: path
@@ -1189,8 +1246,9 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
     put:
       operationId: projects_allowed_load_zones_update
-      description: Update the list of load zones that can be used by a given project.
-      summary: Update the list of load zones that can be used by a given project.
+      description: Update the list of private load zones that can be used by a given
+        project.
+      summary: Update the list of private load zones that can be used by a given project.
       parameters:
       - $ref: '#/components/parameters/stackId'
       - in: path
@@ -1674,13 +1732,11 @@ paths:
                       load_test_id: 234
                       deactivated: false
                       starts: '2024-07-16T08:46:04.021Z'
-                      recurrence_rule:
-                        frequency: HOURLY
-                        interval: 2
-                        byday: null
-                        until: null
-                        count: null
-                      next_run: '2024-07-20T01:46:04.021Z'
+                      recurrence_rule: null
+                      cron:
+                        schedule: 0 0 * * *
+                        time_zone: UTC
+                      next_run: '2024-07-17T00:00:00Z'
                       created_by: user@example.com
                     '@count': 12
                     '@nextLink': https://api.k6.io/cloud/v6/schedules?$skip=50&$top=20
@@ -1717,6 +1773,30 @@ paths:
               schema:
                 $ref: '#/components/schemas/ScheduleApiModel'
               examples:
+                Hourly:
+                  value:
+                    id: 123
+                    load_test_id: 234
+                    deactivated: false
+                    starts: '2024-07-16T08:46:04.021Z'
+                    recurrence_rule: null
+                    cron:
+                      schedule: 0 0 * * *
+                      time_zone: UTC
+                    next_run: '2024-07-17T00:00:00Z'
+                    created_by: user@example.com
+                7amOnMonday:
+                  value:
+                    id: 123
+                    load_test_id: 234
+                    deactivated: false
+                    starts: '2024-07-16T08:46:04.021Z'
+                    recurrence_rule: null
+                    cron:
+                      schedule: 0 7 * * 1
+                      time_zone: UTC
+                    next_run: '2024-07-22T07:00:00Z'
+                    created_by: user@example.com
                 EveryTwoHours:
                   value:
                     id: 123
@@ -1729,6 +1809,7 @@ paths:
                       byday: null
                       until: null
                       count: null
+                    cron: null
                     next_run: '2024-07-20T01:46:04.021Z'
                     created_by: user@example.com
                 WeeklyOnWeekendsStopsAfter10Runs:
@@ -1745,6 +1826,7 @@ paths:
                       - SU
                       until: null
                       count: 10
+                    cron: null
                     next_run: '2024-07-17T08:46:04.021Z'
                     created_by: null
                 TriggeredOnceInThePast:
@@ -1754,6 +1836,7 @@ paths:
                     deactivated: false
                     starts: '2023-08-01T12:00:00.000Z'
                     recurrence_rule: null
+                    cron: null
                     next_run: null
                     created_by: user@example.com
                 Deactivated:
@@ -1767,6 +1850,7 @@ paths:
                       interval: 2
                       days: []
                       ends: null
+                    cron: null
                     next_run: '2024-07-20T01:46:04.021Z'
                     created_by: user@example.com
           description: OK.
@@ -2783,9 +2867,18 @@ components:
         recurrence_rule:
           default: null
           description: The schedule recurrence settings. If null, the test will run
-            only once on the `starts` date.
+            only once on the `starts` date. Only one of `recurrence_rule` and `cron`
+            can be set.
           oneOf:
           - $ref: '#/components/schemas/ScheduleRecurrenceRule'
+          - type: 'null'
+        cron:
+          default: null
+          description: The cron schedule to trigger the test periodically. If null,
+            the test runs only once on the `starts` date. Only one of `recurrence_rule`
+            and `cron` can be set.
+          oneOf:
+          - $ref: '#/components/schemas/ScheduleCron'
           - type: 'null'
       required:
       - starts
@@ -3267,9 +3360,17 @@ components:
           type: string
         recurrence_rule:
           description: The schedule recurrence settings. If null, the test will run
-            only once on the `starts` date.
+            only once on the `starts` date. Only one of `recurrence_rule` and `cron`
+            can be set.
           oneOf:
           - $ref: '#/components/schemas/ScheduleRecurrenceRule'
+          - type: 'null'
+        cron:
+          description: The cron schedule to trigger the test periodically. If null,
+            the test runs only once on the `starts` date. Only one of `recurrence_rule`
+            and `cron` can be set.
+          oneOf:
+          - $ref: '#/components/schemas/ScheduleCron'
           - type: 'null'
         deactivated:
           description: Whether the schedule is deactivated. A deactivated schedule
@@ -3297,10 +3398,29 @@ components:
       - load_test_id
       - starts
       - recurrence_rule
+      - cron
       - deactivated
       - next_run
       - created_by
       title: Schedule
+      type: object
+    ScheduleCron:
+      properties:
+        schedule:
+          description: 'A cron expression with exactly 5 entries, or an alias. The
+            allowed aliases are: @yearly, @annually, @monthly, @weekly, @daily, @hourly.'
+          maxLength: 256
+          title: Schedule
+          type: string
+        time_zone:
+          description: The timezone of the cron expression.
+          maxLength: 128
+          title: Time Zone
+          type: string
+      required:
+      - schedule
+      - time_zone
+      title: ScheduleCron
       type: object
     ScheduleListResponse:
       properties:

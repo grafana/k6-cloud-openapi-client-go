@@ -3,7 +3,7 @@ Grafana Cloud k6
 
 HTTP API for interacting with Grafana Cloud k6.
 
-API version: 1.6.0
+API version: 1.7.0
 Contact: info@grafana.com
 */
 
@@ -41,9 +41,9 @@ func (r *ApiLoadZonesAllowedProjectsRetrieveRequest) Execute() (*AllowedProjects
 }
 
 /*
-LoadZonesAllowedProjectsRetrieve List projects allowed to use a given load zone.
+LoadZonesAllowedProjectsRetrieve List projects allowed to use a given private load zone.
 
-List projects allowed to use a given load zone.
+List projects allowed to use a given private load zone.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@param id ID of the load zone.
@@ -205,9 +205,9 @@ func (r *ApiLoadZonesAllowedProjectsUpdateRequest) Execute() (*AllowedProjectsLi
 }
 
 /*
-LoadZonesAllowedProjectsUpdate Update the list of projects allowed to use a given load zone.
+LoadZonesAllowedProjectsUpdate Update the list of projects allowed to use a given private load zone.
 
-Update the list of projects allowed to use a given load zone.
+Update the list of projects allowed to use a given private load zone.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@param id ID of the load zone.
@@ -543,9 +543,9 @@ func (r *ApiProjectsAllowedLoadZonesRetrieveRequest) Execute() (*AllowedLoadZone
 }
 
 /*
-ProjectsAllowedLoadZonesRetrieve List load zones that can be used by a given project.
+ProjectsAllowedLoadZonesRetrieve List private load zones that can be used by a given project.
 
-List load zones that can be used by a given project.
+List private load zones that can be used by a given project.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@param id ID of the project.
@@ -707,9 +707,9 @@ func (r *ApiProjectsAllowedLoadZonesUpdateRequest) Execute() (*AllowedLoadZonesL
 }
 
 /*
-ProjectsAllowedLoadZonesUpdate Update the list of load zones that can be used by a given project.
+ProjectsAllowedLoadZonesUpdate Update the list of private load zones that can be used by a given project.
 
-Update the list of load zones that can be used by a given project.
+Update the list of private load zones that can be used by a given project.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@param id ID of the project.

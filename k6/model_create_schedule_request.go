@@ -3,7 +3,7 @@ Grafana Cloud k6
 
 HTTP API for interacting with Grafana Cloud k6.
 
-API version: 1.6.0
+API version: 1.7.0
 Contact: info@grafana.com
 */
 
@@ -25,6 +25,7 @@ type CreateScheduleRequest struct {
 	// The timezone-aware date on which the schedule will start running the test.
 	Starts               time.Time                      `json:"starts"`
 	RecurrenceRule       NullableScheduleRecurrenceRule `json:"recurrence_rule,omitempty"`
+	Cron                 NullableScheduleCron           `json:"cron,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -115,6 +116,49 @@ func (o *CreateScheduleRequest) UnsetRecurrenceRule() {
 	o.RecurrenceRule.Unset()
 }
 
+// GetCron returns the Cron field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *CreateScheduleRequest) GetCron() ScheduleCron {
+	if o == nil || IsNil(o.Cron.Get()) {
+		var ret ScheduleCron
+		return ret
+	}
+	return *o.Cron.Get()
+}
+
+// GetCronOk returns a tuple with the Cron field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *CreateScheduleRequest) GetCronOk() (*ScheduleCron, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.Cron.Get(), o.Cron.IsSet()
+}
+
+// HasCron returns a boolean if a field has been set.
+func (o *CreateScheduleRequest) HasCron() bool {
+	if o != nil && o.Cron.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetCron gets a reference to the given NullableScheduleCron and assigns it to the Cron field.
+func (o *CreateScheduleRequest) SetCron(v ScheduleCron) {
+	o.Cron.Set(&v)
+}
+
+// SetCronNil sets the value for Cron to be an explicit nil
+func (o *CreateScheduleRequest) SetCronNil() {
+	o.Cron.Set(nil)
+}
+
+// UnsetCron ensures that no value is present for Cron, not even an explicit nil
+func (o *CreateScheduleRequest) UnsetCron() {
+	o.Cron.Unset()
+}
+
 func (o CreateScheduleRequest) MarshalJSON() ([]byte, error) {
 	toSerialize, err := o.ToMap()
 	if err != nil {
@@ -128,6 +172,9 @@ func (o CreateScheduleRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize["starts"] = o.Starts
 	if o.RecurrenceRule.IsSet() {
 		toSerialize["recurrence_rule"] = o.RecurrenceRule.Get()
+	}
+	if o.Cron.IsSet() {
+		toSerialize["cron"] = o.Cron.Get()
 	}
 
 	for key, value := range o.AdditionalProperties {
@@ -174,6 +221,7 @@ func (o *CreateScheduleRequest) UnmarshalJSON(data []byte) (err error) {
 	if err = json.Unmarshal(data, &additionalProperties); err == nil {
 		delete(additionalProperties, "starts")
 		delete(additionalProperties, "recurrence_rule")
+		delete(additionalProperties, "cron")
 		o.AdditionalProperties = additionalProperties
 	}
 

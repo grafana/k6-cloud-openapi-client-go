@@ -6,6 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Starts** | **time.Time** | The timezone-aware date on which the schedule will start running the test. | 
 **RecurrenceRule** | Pointer to [**NullableScheduleRecurrenceRule**](ScheduleRecurrenceRule.md) |  | [optional] 
+**Cron** | Pointer to [**NullableScheduleCron**](ScheduleCron.md) |  | [optional] 
 
 ## Methods
 
@@ -81,6 +82,41 @@ HasRecurrenceRule returns a boolean if a field has been set.
 `func (o *CreateScheduleRequest) UnsetRecurrenceRule()`
 
 UnsetRecurrenceRule ensures that no value is present for RecurrenceRule, not even an explicit nil
+### GetCron
+
+`func (o *CreateScheduleRequest) GetCron() ScheduleCron`
+
+GetCron returns the Cron field if non-nil, zero value otherwise.
+
+### GetCronOk
+
+`func (o *CreateScheduleRequest) GetCronOk() (*ScheduleCron, bool)`
+
+GetCronOk returns a tuple with the Cron field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetCron
+
+`func (o *CreateScheduleRequest) SetCron(v ScheduleCron)`
+
+SetCron sets Cron field to given value.
+
+### HasCron
+
+`func (o *CreateScheduleRequest) HasCron() bool`
+
+HasCron returns a boolean if a field has been set.
+
+### SetCronNil
+
+`func (o *CreateScheduleRequest) SetCronNil(b bool)`
+
+ SetCronNil sets the value for Cron to be an explicit nil
+
+### UnsetCron
+`func (o *CreateScheduleRequest) UnsetCron()`
+
+UnsetCron ensures that no value is present for Cron, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 
