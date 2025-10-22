@@ -51,6 +51,7 @@ docs/ProtocolVuh.md
 docs/ReductionRate.md
 docs/ReductionRateBreakdownValue.md
 docs/ScheduleApiModel.md
+docs/ScheduleCron.md
 docs/ScheduleListResponse.md
 docs/ScheduleRecurrenceRule.md
 docs/SchedulesAPI.md
@@ -106,6 +107,7 @@ model_protocol_vuh.go
 model_reduction_rate.go
 model_reduction_rate_breakdown_value.go
 model_schedule_api_model.go
+model_schedule_cron.go
 model_schedule_list_response.go
 model_schedule_recurrence_rule.go
 model_status_api_model.go

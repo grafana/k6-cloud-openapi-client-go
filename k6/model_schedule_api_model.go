@@ -3,7 +3,7 @@ Grafana Cloud k6
 
 HTTP API for interacting with Grafana Cloud k6.
 
-API version: 1.6.0
+API version: 1.7.0
 Contact: info@grafana.com
 */
 
@@ -29,6 +29,7 @@ type ScheduleApiModel struct {
 	// The date on which the schedule will start running the test.
 	Starts         time.Time                      `json:"starts"`
 	RecurrenceRule NullableScheduleRecurrenceRule `json:"recurrence_rule"`
+	Cron           NullableScheduleCron           `json:"cron"`
 	// Whether the schedule is deactivated. A deactivated schedule will not trigger new test runs, but the schedule recurrence rule and expiration is not affected.
 	Deactivated bool `json:"deactivated"`
 	// The date of the next scheduled test run. The value is `null` if the schedule is expired and no more occurrences are expected in the future according to the recurrence rule.
@@ -44,12 +45,13 @@ type _ScheduleApiModel ScheduleApiModel
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewScheduleApiModel(id int32, loadTestId int32, starts time.Time, recurrenceRule NullableScheduleRecurrenceRule, deactivated bool, nextRun NullableTime, createdBy NullableString) *ScheduleApiModel {
+func NewScheduleApiModel(id int32, loadTestId int32, starts time.Time, recurrenceRule NullableScheduleRecurrenceRule, cron NullableScheduleCron, deactivated bool, nextRun NullableTime, createdBy NullableString) *ScheduleApiModel {
 	this := ScheduleApiModel{}
 	this.Id = id
 	this.LoadTestId = loadTestId
 	this.Starts = starts
 	this.RecurrenceRule = recurrenceRule
+	this.Cron = cron
 	this.Deactivated = deactivated
 	this.NextRun = nextRun
 	this.CreatedBy = createdBy
@@ -162,6 +164,32 @@ func (o *ScheduleApiModel) SetRecurrenceRule(v ScheduleRecurrenceRule) {
 	o.RecurrenceRule.Set(&v)
 }
 
+// GetCron returns the Cron field value
+// If the value is explicit nil, the zero value for ScheduleCron will be returned
+func (o *ScheduleApiModel) GetCron() ScheduleCron {
+	if o == nil || o.Cron.Get() == nil {
+		var ret ScheduleCron
+		return ret
+	}
+
+	return *o.Cron.Get()
+}
+
+// GetCronOk returns a tuple with the Cron field value
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *ScheduleApiModel) GetCronOk() (*ScheduleCron, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.Cron.Get(), o.Cron.IsSet()
+}
+
+// SetCron sets field value
+func (o *ScheduleApiModel) SetCron(v ScheduleCron) {
+	o.Cron.Set(&v)
+}
+
 // GetDeactivated returns the Deactivated field value
 func (o *ScheduleApiModel) GetDeactivated() bool {
 	if o == nil {
@@ -252,6 +280,7 @@ func (o ScheduleApiModel) ToMap() (map[string]interface{}, error) {
 	toSerialize["load_test_id"] = o.LoadTestId
 	toSerialize["starts"] = o.Starts
 	toSerialize["recurrence_rule"] = o.RecurrenceRule.Get()
+	toSerialize["cron"] = o.Cron.Get()
 	toSerialize["deactivated"] = o.Deactivated
 	toSerialize["next_run"] = o.NextRun.Get()
 	toSerialize["created_by"] = o.CreatedBy.Get()
@@ -272,6 +301,7 @@ func (o *ScheduleApiModel) UnmarshalJSON(data []byte) (err error) {
 		"load_test_id",
 		"starts",
 		"recurrence_rule",
+		"cron",
 		"deactivated",
 		"next_run",
 		"created_by",
@@ -308,6 +338,7 @@ func (o *ScheduleApiModel) UnmarshalJSON(data []byte) (err error) {
 		delete(additionalProperties, "load_test_id")
 		delete(additionalProperties, "starts")
 		delete(additionalProperties, "recurrence_rule")
+		delete(additionalProperties, "cron")
 		delete(additionalProperties, "deactivated")
 		delete(additionalProperties, "next_run")
 		delete(additionalProperties, "created_by")

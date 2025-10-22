@@ -8,6 +8,7 @@ Name | Type | Description | Notes
 **LoadTestId** | **int32** | ID of the test to run. | 
 **Starts** | **time.Time** | The date on which the schedule will start running the test. | 
 **RecurrenceRule** | [**NullableScheduleRecurrenceRule**](ScheduleRecurrenceRule.md) |  | 
+**Cron** | [**NullableScheduleCron**](ScheduleCron.md) |  | 
 **Deactivated** | **bool** | Whether the schedule is deactivated. A deactivated schedule will not trigger new test runs, but the schedule recurrence rule and expiration is not affected. | 
 **NextRun** | **NullableTime** | The date of the next scheduled test run. The value is &#x60;null&#x60; if the schedule is expired and no more occurrences are expected in the future according to the recurrence rule. | 
 **CreatedBy** | **NullableString** | The email of the user who created the schedule if applicable. | 
@@ -16,7 +17,7 @@ Name | Type | Description | Notes
 
 ### NewScheduleApiModel
 
-`func NewScheduleApiModel(id int32, loadTestId int32, starts time.Time, recurrenceRule NullableScheduleRecurrenceRule, deactivated bool, nextRun NullableTime, createdBy NullableString, ) *ScheduleApiModel`
+`func NewScheduleApiModel(id int32, loadTestId int32, starts time.Time, recurrenceRule NullableScheduleRecurrenceRule, cron NullableScheduleCron, deactivated bool, nextRun NullableTime, createdBy NullableString, ) *ScheduleApiModel`
 
 NewScheduleApiModel instantiates a new ScheduleApiModel object
 This constructor will assign default values to properties that have it defined,
@@ -121,6 +122,36 @@ SetRecurrenceRule sets RecurrenceRule field to given value.
 `func (o *ScheduleApiModel) UnsetRecurrenceRule()`
 
 UnsetRecurrenceRule ensures that no value is present for RecurrenceRule, not even an explicit nil
+### GetCron
+
+`func (o *ScheduleApiModel) GetCron() ScheduleCron`
+
+GetCron returns the Cron field if non-nil, zero value otherwise.
+
+### GetCronOk
+
+`func (o *ScheduleApiModel) GetCronOk() (*ScheduleCron, bool)`
+
+GetCronOk returns a tuple with the Cron field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetCron
+
+`func (o *ScheduleApiModel) SetCron(v ScheduleCron)`
+
+SetCron sets Cron field to given value.
+
+
+### SetCronNil
+
+`func (o *ScheduleApiModel) SetCronNil(b bool)`
+
+ SetCronNil sets the value for Cron to be an explicit nil
+
+### UnsetCron
+`func (o *ScheduleApiModel) UnsetCron()`
+
+UnsetCron ensures that no value is present for Cron, not even an explicit nil
 ### GetDeactivated
 
 `func (o *ScheduleApiModel) GetDeactivated() bool`

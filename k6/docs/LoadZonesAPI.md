@@ -4,11 +4,11 @@ All URIs are relative to *https://api.k6.io*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**LoadZonesAllowedProjectsRetrieve**](LoadZonesAPI.md#LoadZonesAllowedProjectsRetrieve) | **Get** /cloud/v6/load_zones/{id}/allowed_projects | List projects allowed to use a given load zone.
-[**LoadZonesAllowedProjectsUpdate**](LoadZonesAPI.md#LoadZonesAllowedProjectsUpdate) | **Put** /cloud/v6/load_zones/{id}/allowed_projects | Update the list of projects allowed to use a given load zone.
+[**LoadZonesAllowedProjectsRetrieve**](LoadZonesAPI.md#LoadZonesAllowedProjectsRetrieve) | **Get** /cloud/v6/load_zones/{id}/allowed_projects | List projects allowed to use a given private load zone.
+[**LoadZonesAllowedProjectsUpdate**](LoadZonesAPI.md#LoadZonesAllowedProjectsUpdate) | **Put** /cloud/v6/load_zones/{id}/allowed_projects | Update the list of projects allowed to use a given private load zone.
 [**LoadZonesList**](LoadZonesAPI.md#LoadZonesList) | **Get** /cloud/v6/load_zones | List all load zones.
-[**ProjectsAllowedLoadZonesRetrieve**](LoadZonesAPI.md#ProjectsAllowedLoadZonesRetrieve) | **Get** /cloud/v6/projects/{id}/allowed_load_zones | List load zones that can be used by a given project.
-[**ProjectsAllowedLoadZonesUpdate**](LoadZonesAPI.md#ProjectsAllowedLoadZonesUpdate) | **Put** /cloud/v6/projects/{id}/allowed_load_zones | Update the list of load zones that can be used by a given project.
+[**ProjectsAllowedLoadZonesRetrieve**](LoadZonesAPI.md#ProjectsAllowedLoadZonesRetrieve) | **Get** /cloud/v6/projects/{id}/allowed_load_zones | List private load zones that can be used by a given project.
+[**ProjectsAllowedLoadZonesUpdate**](LoadZonesAPI.md#ProjectsAllowedLoadZonesUpdate) | **Put** /cloud/v6/projects/{id}/allowed_load_zones | Update the list of private load zones that can be used by a given project.
 
 
 
@@ -16,7 +16,7 @@ Method | HTTP request | Description
 
 > AllowedProjectsListApiModel LoadZonesAllowedProjectsRetrieve(ctx, id).XStackId(xStackId).Execute()
 
-List projects allowed to use a given load zone.
+List projects allowed to use a given private load zone.
 
 
 
@@ -88,7 +88,7 @@ Name | Type | Description  | Notes
 
 > AllowedProjectsListApiModel LoadZonesAllowedProjectsUpdate(ctx, id).XStackId(xStackId).UpdateAllowedProjectsListApiModel(updateAllowedProjectsListApiModel).Execute()
 
-Update the list of projects allowed to use a given load zone.
+Update the list of projects allowed to use a given private load zone.
 
 
 
@@ -230,7 +230,7 @@ Name | Type | Description  | Notes
 
 > AllowedLoadZonesListApiModel ProjectsAllowedLoadZonesRetrieve(ctx, id).XStackId(xStackId).Execute()
 
-List load zones that can be used by a given project.
+List private load zones that can be used by a given project.
 
 
 
@@ -302,7 +302,7 @@ Name | Type | Description  | Notes
 
 > AllowedLoadZonesListApiModel ProjectsAllowedLoadZonesUpdate(ctx, id).XStackId(xStackId).UpdateAllowedLoadZonesListApiModel(updateAllowedLoadZonesListApiModel).Execute()
 
-Update the list of load zones that can be used by a given project.
+Update the list of private load zones that can be used by a given project.
 
 
 
