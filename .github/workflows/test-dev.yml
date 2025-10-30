@@ -7,8 +7,7 @@ permissions:
 on:
   pull_request:
     branches:
-      - '**'
-      - '!main'
+      - 'main'
   workflow_dispatch:
 
 env:
@@ -33,23 +32,15 @@ jobs:
           # Secrets placed in the ci/repo/grafana/<repo>/<path> path in Vault
           # Since vault is write only, generated data can be found in 1Password as "k6 Cloud CI/CD Secrets" under the key "k6-go-openapi-client"
           repo_secrets: |
-            K6_STAGING_TOKEN=k6-cloud:K6_STAGING_TOKEN
-            K6_STAGING_STACK_ID=k6-cloud:K6_STAGING_STACK_ID
-            K6_STAGING_STACK_TOKEN=k6-cloud:K6_STAGING_STACK_TOKEN
-            K6_STAGING_STACK_URL=k6-cloud:K6_STAGING_STACK_URL
+            K6_CLOUD_TOKEN=k6-cloud:K6_STAGING_TOKEN
+            K6_CLOUD_STACK_ID=k6-cloud:K6_STAGING_STACK_ID
+            K6_CLOUD_STACK_TOKEN=k6-cloud:K6_STAGING_STACK_TOKEN
+            K6_STACK_URL=k6-cloud:K6_STAGING_STACK_URL
 
 
       - name: Run E2E Tests
         id: tests
         env:
           K6_CLOUD_URL: "https://api.staging.k6.io"
-          K6_STACK_URL: ${{ env.K6_STAGING_STACK_URL }}
-          K6_CLOUD_TOKEN: ${{ env.K6_STAGING_TOKEN }}
-          K6_CLOUD_STACK_ID: ${{ env.K6_STAGING_STACK_ID }}
-          K6_CLOUD_STACK_TOKEN: ${{ env.K6_STAGING_STACK_TOKEN }}
-        run: |
-          make e2e-test
-
-      - name: Check API Coverage
         run: |
           make e2e-test-coverage MIN_COVERAGE=${{ env.MIN_COVERAGE_PERCENT }}
