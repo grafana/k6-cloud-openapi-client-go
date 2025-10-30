@@ -6,7 +6,9 @@ permissions:
 
 on:
   pull_request:
-    branches: [ main ]
+    branches:
+      - '**'
+      - '!main'
   workflow_dispatch:
 
 env:
@@ -50,4 +52,4 @@ jobs:
 
       - name: Check API Coverage
         run: |
-          make e2e-coverage MIN_COVERAGE=${{ env.MIN_COVERAGE_PERCENT }}
+          make e2e-test-coverage MIN_COVERAGE=${{ env.MIN_COVERAGE_PERCENT }}

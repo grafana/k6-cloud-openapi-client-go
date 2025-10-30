@@ -76,29 +76,78 @@ func TestTestRunsAPI_TestRunsList(t *testing.T) {
 }
 
 func TestTestRunsAPI_LoadTestsTestRunsRetrieve(t *testing.T) {
-	req := testClient.TestRunsAPI.LoadTestsTestRunsRetrieve(testCtx, testLoadTestID).
-		XStackId(testStackID).
-		Count(true)
+	t.Run("retrieve load test test runs with count", func(t *testing.T) {
+		req := testClient.TestRunsAPI.LoadTestsTestRunsRetrieve(testCtx, testLoadTestID).
+			XStackId(testStackID).
+			Count(true)
 
-	res, httpRes, err := req.Execute()
-	if err != nil {
-		t.Fatalf("LoadTestsTestRunsRetrieve failed: %v", err)
-	}
-
-	if httpRes.StatusCode != 200 {
-		t.Errorf("Expected status 200, got %d", httpRes.StatusCode)
-	}
-
-	if !res.HasCount() {
-		t.Error("Expected count to be present in response")
-	}
-
-	// All returned test runs should belong to our test load test
-	for _, tr := range res.Value {
-		if tr.GetTestId() != testLoadTestID {
-			t.Errorf("Expected test ID %d, got %d", testLoadTestID, tr.GetTestId())
+		res, httpRes, err := req.Execute()
+		if err != nil {
+			t.Fatalf("LoadTestsTestRunsRetrieve failed: %v", err)
 		}
-	}
+
+		if httpRes.StatusCode != 200 {
+			t.Errorf("Expected status 200, got %d", httpRes.StatusCode)
+		}
+
+		if !res.HasCount() {
+			t.Error("Expected count to be present in response")
+		}
+
+		// All returned test runs should belong to our test load test
+		for _, tr := range res.Value {
+			if tr.GetTestId() != testLoadTestID {
+				t.Errorf("Expected test ID %d, got %d", testLoadTestID, tr.GetTestId())
+			}
+		}
+	})
+
+	t.Run("retrieve load test test runs with pagination", func(t *testing.T) {
+		req := testClient.TestRunsAPI.LoadTestsTestRunsRetrieve(testCtx, testLoadTestID).
+			XStackId(testStackID).
+			Top(5).
+			Skip(0)
+
+		res, httpRes, err := req.Execute()
+		if err != nil {
+			t.Fatalf("LoadTestsTestRunsRetrieve with pagination failed: %v", err)
+		}
+
+		if httpRes.StatusCode != 200 {
+			t.Errorf("Expected status 200, got %d", httpRes.StatusCode)
+		}
+
+		if len(res.Value) > 5 {
+			t.Errorf("Expected max 5 test runs, got %d", len(res.Value))
+		}
+	})
+
+	t.Run("retrieve load test test runs with date filters", func(t *testing.T) {
+		now := time.Now()
+		yesterday := now.Add(-24 * time.Hour)
+
+		req := testClient.TestRunsAPI.LoadTestsTestRunsRetrieve(testCtx, testLoadTestID).
+			XStackId(testStackID).
+			CreatedAfter(yesterday).
+			CreatedBefore(now)
+
+		res, httpRes, err := req.Execute()
+		if err != nil {
+			t.Fatalf("LoadTestsTestRunsRetrieve with date filters failed: %v", err)
+		}
+
+		if httpRes.StatusCode != 200 {
+			t.Errorf("Expected status 200, got %d", httpRes.StatusCode)
+		}
+
+		// Verify dates are within range
+		for _, tr := range res.Value {
+			created := tr.GetCreated()
+			if created.Before(yesterday) || created.After(now) {
+				t.Errorf("Test run created date %v is outside range %v - %v", created, yesterday, now)
+			}
+		}
+	})
 }
 
 func TestTestRunsAPI_TestRunsPartialUpdate(t *testing.T) {

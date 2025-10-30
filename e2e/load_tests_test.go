@@ -50,6 +50,48 @@ func TestLoadTestsAPI_LoadTestsList(t *testing.T) {
 			t.Errorf("Expected max 1 load test, got %d", len(res.Value))
 		}
 	})
+
+	t.Run("list load tests with name filter", func(t *testing.T) {
+		// First, get the test load test to get its name
+		retrieveReq := testClient.LoadTestsAPI.LoadTestsRetrieve(testCtx, testLoadTestID).
+			XStackId(testStackID)
+
+		loadTest, _, err := retrieveReq.Execute()
+		if err != nil {
+			t.Fatalf("Failed to retrieve test load test: %v", err)
+		}
+
+		loadTestName := loadTest.GetName()
+
+		// Now filter by that name
+		req := testClient.LoadTestsAPI.LoadTestsList(testCtx).
+			XStackId(testStackID).
+			Name(loadTestName)
+
+		res, httpRes, err := req.Execute()
+		if err != nil {
+			t.Fatalf("LoadTestsList with name filter failed: %v", err)
+		}
+
+		if httpRes.StatusCode != 200 {
+			t.Errorf("Expected status 200, got %d", httpRes.StatusCode)
+		}
+
+		// Verify all returned load tests have the filtered name
+		found := false
+		for _, lt := range res.Value {
+			if lt.GetName() != loadTestName {
+				t.Errorf("Expected load test name %s, got %s", loadTestName, lt.GetName())
+			}
+			if lt.GetId() == testLoadTestID {
+				found = true
+			}
+		}
+
+		if !found {
+			t.Errorf("Expected to find test load test ID %d in filtered results", testLoadTestID)
+		}
+	})
 }
 
 func TestLoadTestsAPI_LoadTestsRetrieve(t *testing.T) {
@@ -75,34 +117,57 @@ func TestLoadTestsAPI_LoadTestsRetrieve(t *testing.T) {
 }
 
 func TestLoadTestsAPI_ProjectsLoadTestsRetrieve(t *testing.T) {
-	req := testClient.LoadTestsAPI.ProjectsLoadTestsRetrieve(testCtx, testProjectID).
-		XStackId(testStackID).
-		Count(true)
+	t.Run("retrieve project load tests with count", func(t *testing.T) {
+		req := testClient.LoadTestsAPI.ProjectsLoadTestsRetrieve(testCtx, testProjectID).
+			XStackId(testStackID).
+			Count(true)
 
-	res, httpRes, err := req.Execute()
-	if err != nil {
-		t.Fatalf("ProjectsLoadTestsRetrieve failed: %v", err)
-	}
-
-	if httpRes.StatusCode != 200 {
-		t.Errorf("Expected status 200, got %d", httpRes.StatusCode)
-	}
-
-	if !res.HasCount() {
-		t.Error("Expected count to be present in response")
-	}
-
-	// Verify our test load test is in the list
-	found := false
-	for _, lt := range res.Value {
-		if lt.GetId() == testLoadTestID {
-			found = true
-			break
+		res, httpRes, err := req.Execute()
+		if err != nil {
+			t.Fatalf("ProjectsLoadTestsRetrieve failed: %v", err)
 		}
-	}
-	if !found {
-		t.Errorf("Expected to find test load test ID %d in project's load tests", testLoadTestID)
-	}
+
+		if httpRes.StatusCode != 200 {
+			t.Errorf("Expected status 200, got %d", httpRes.StatusCode)
+		}
+
+		if !res.HasCount() {
+			t.Error("Expected count to be present in response")
+		}
+
+		// Verify our test load test is in the list
+		found := false
+		for _, lt := range res.Value {
+			if lt.GetId() == testLoadTestID {
+				found = true
+				break
+			}
+		}
+		if !found {
+			t.Errorf("Expected to find test load test ID %d in project's load tests", testLoadTestID)
+		}
+	})
+
+	t.Run("retrieve project load tests with pagination and ordering", func(t *testing.T) {
+		req := testClient.LoadTestsAPI.ProjectsLoadTestsRetrieve(testCtx, testProjectID).
+			XStackId(testStackID).
+			Top(5).
+			Skip(0).
+			Orderby("created desc")
+
+		res, httpRes, err := req.Execute()
+		if err != nil {
+			t.Fatalf("ProjectsLoadTestsRetrieve with pagination failed: %v", err)
+		}
+
+		if httpRes.StatusCode != 200 {
+			t.Errorf("Expected status 200, got %d", httpRes.StatusCode)
+		}
+
+		if len(res.Value) > 5 {
+			t.Errorf("Expected max 5 load tests, got %d", len(res.Value))
+		}
+	})
 }
 
 func TestLoadTestsAPI_LoadTestsPartialUpdate(t *testing.T) {
@@ -311,5 +376,56 @@ func TestLoadTestsAPI_ValidateOptions(t *testing.T) {
 
 	if res.GetVuhUsage() < 0 {
 		t.Error("Expected VUH usage to be non-negative")
+	}
+}
+
+func TestLoadTestsAPI_LoadTestsDestroy(t *testing.T) {
+	// Create a temporary load test to delete
+	timestamp := time.Now().Unix()
+	tempLoadTestName := fmt.Sprintf("go-client-e2e-test-loadtest-destroy-%d", timestamp)
+	script := io.NopCloser(bytes.NewReader([]byte(`
+import http from 'k6/http';
+
+export default function() {
+	http.get('https://test.k6.io');
+}
+`)))
+
+	createReq := testClient.LoadTestsAPI.ProjectsLoadTestsCreate(testCtx, testProjectID).
+		Name(tempLoadTestName).
+		Script(script).
+		XStackId(testStackID)
+
+	tempLoadTest, _, err := createReq.Execute()
+	if err != nil {
+		t.Fatalf("Failed to create temporary load test: %v", err)
+	}
+	tempLoadTestID := tempLoadTest.GetId()
+	t.Logf("Created temporary load test: %s (ID: %d)", tempLoadTestName, tempLoadTestID)
+
+	// Now delete it using LoadTestsDestroy
+	destroyReq := testClient.LoadTestsAPI.LoadTestsDestroy(testCtx, tempLoadTestID).
+		XStackId(testStackID)
+
+	httpRes, err := destroyReq.Execute()
+	if err != nil {
+		t.Fatalf("LoadTestsDestroy failed: %v", err)
+	}
+
+	if httpRes.StatusCode != 204 {
+		t.Errorf("Expected status 204, got %d", httpRes.StatusCode)
+	}
+
+	// Verify the load test is deleted by trying to retrieve it
+	retrieveReq := testClient.LoadTestsAPI.LoadTestsRetrieve(testCtx, tempLoadTestID).
+		XStackId(testStackID)
+
+	_, httpRes, err = retrieveReq.Execute()
+	if err == nil {
+		t.Error("Expected error when retrieving deleted load test, but got none")
+	}
+
+	if httpRes != nil && httpRes.StatusCode == 200 {
+		t.Error("Expected load test to be deleted, but it still exists")
 	}
 }

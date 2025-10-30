@@ -50,6 +50,48 @@ func TestProjectsAPI_ProjectsList(t *testing.T) {
 			t.Errorf("Expected max 1 project, got %d", len(res.Value))
 		}
 	})
+
+	t.Run("list projects with name filter", func(t *testing.T) {
+		// First, get the test project to get its name
+		retrieveReq := testClient.ProjectsAPI.ProjectsRetrieve(testCtx, testProjectID).
+			XStackId(testStackID)
+
+		project, _, err := retrieveReq.Execute()
+		if err != nil {
+			t.Fatalf("Failed to retrieve test project: %v", err)
+		}
+
+		projectName := project.GetName()
+
+		// Now filter by that name
+		req := testClient.ProjectsAPI.ProjectsList(testCtx).
+			XStackId(testStackID).
+			Name(projectName)
+
+		res, httpRes, err := req.Execute()
+		if err != nil {
+			t.Fatalf("ProjectsList with name filter failed: %v", err)
+		}
+
+		if httpRes.StatusCode != 200 {
+			t.Errorf("Expected status 200, got %d", httpRes.StatusCode)
+		}
+
+		// Verify all returned projects have the filtered name
+		found := false
+		for _, p := range res.Value {
+			if p.GetName() != projectName {
+				t.Errorf("Expected project name %s, got %s", projectName, p.GetName())
+			}
+			if p.GetId() == testProjectID {
+				found = true
+			}
+		}
+
+		if !found {
+			t.Errorf("Expected to find test project ID %d in filtered results", testProjectID)
+		}
+	})
 }
 
 func TestProjectsAPI_ProjectsRetrieve(t *testing.T) {
@@ -124,22 +166,44 @@ func TestProjectsAPI_ProjectsLimitsRetrieve(t *testing.T) {
 }
 
 func TestProjectsAPI_ProjectLimitsRetrieve(t *testing.T) {
-	req := testClient.ProjectsAPI.ProjectLimitsRetrieve(testCtx).
-		XStackId(testStackID).
-		Count(true)
+	t.Run("retrieve project limits with count", func(t *testing.T) {
+		req := testClient.ProjectsAPI.ProjectLimitsRetrieve(testCtx).
+			XStackId(testStackID).
+			Count(true)
 
-	res, httpRes, err := req.Execute()
-	if err != nil {
-		t.Fatalf("ProjectLimitsRetrieve failed: %v", err)
-	}
+		res, httpRes, err := req.Execute()
+		if err != nil {
+			t.Fatalf("ProjectLimitsRetrieve failed: %v", err)
+		}
 
-	if httpRes.StatusCode != 200 {
-		t.Errorf("Expected status 200, got %d", httpRes.StatusCode)
-	}
+		if httpRes.StatusCode != 200 {
+			t.Errorf("Expected status 200, got %d", httpRes.StatusCode)
+		}
 
-	if !res.HasCount() {
-		t.Error("Expected count to be present in response")
-	}
+		if !res.HasCount() {
+			t.Error("Expected count to be present in response")
+		}
+	})
+
+	t.Run("retrieve project limits with pagination", func(t *testing.T) {
+		req := testClient.ProjectsAPI.ProjectLimitsRetrieve(testCtx).
+			XStackId(testStackID).
+			Top(5).
+			Skip(0)
+
+		res, httpRes, err := req.Execute()
+		if err != nil {
+			t.Fatalf("ProjectLimitsRetrieve with pagination failed: %v", err)
+		}
+
+		if httpRes.StatusCode != 200 {
+			t.Errorf("Expected status 200, got %d", httpRes.StatusCode)
+		}
+
+		if len(res.Value) > 5 {
+			t.Errorf("Expected max 5 project limits, got %d", len(res.Value))
+		}
+	})
 }
 
 func TestProjectsAPI_ProjectsLimitsPartialUpdate(t *testing.T) {
