@@ -7,7 +7,7 @@ import (
 	"github.com/grafana/k6-cloud-openapi-client-go/k6"
 )
 
-func TestSchedulesAPI_LoadTestsScheduleCreateRetrieve(t *testing.T) {
+func TestSchedulesAPI_LoadTestsScheduleCreate(t *testing.T) {
 	// Create a schedule
 	starts := time.Now().Add(24 * time.Hour) // Schedule for tomorrow
 	createReq := k6.NewCreateScheduleRequest(starts)
