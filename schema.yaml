@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Grafana Cloud k6
-  version: 1.7.0
+  version: 1.7.1
   description: HTTP API for interacting with Grafana Cloud k6.
   contact:
     name: Grafana Support
@@ -11,9 +11,9 @@ paths:
   /cloud/v6/auth:
     get:
       operationId: auth
-      description: Validate Personal k6 Cloud API token or Stack k6 Cloud API token
+      description: Validate a Grafana Cloud k6 Personal API token or Stack API token
         and access to the stack.
-      summary: Validate k6 Cloud API token and access to the stack.
+      summary: Validate a Grafana Cloud k6 API token and access to the stack.
       parameters:
       - in: header
         name: X-Stack-Url
@@ -737,8 +737,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponseApiModel'
-          description: The current script type can not satisfy the request Accept
-            header.
+          description: The current script type can't satisfy the request Accept header
+            format.
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':

@@ -3,7 +3,7 @@ Grafana Cloud k6
 
 HTTP API for interacting with Grafana Cloud k6.
 
-API version: 1.7.0
+API version: 1.7.1
 Contact: info@grafana.com
 */
 
@@ -41,7 +41,7 @@ var (
 	queryDescape    = strings.NewReplacer("%5B", "[", "%5D", "]")
 )
 
-// APIClient manages communication with the Grafana Cloud k6 API v1.7.0
+// APIClient manages communication with the Grafana Cloud k6 API v1.7.1
 // In most cases there should be only one, shared, APIClient.
 type APIClient struct {
 	cfg    *Configuration
@@ -142,6 +142,10 @@ func typeCheckParameter(obj interface{}, expected string, name string) error {
 
 func parameterValueToString(obj interface{}, key string) string {
 	if reflect.TypeOf(obj).Kind() != reflect.Ptr {
+		if actualObj, ok := obj.(interface{ GetActualInstanceValue() interface{} }); ok {
+			return fmt.Sprintf("%v", actualObj.GetActualInstanceValue())
+		}
+
 		return fmt.Sprintf("%v", obj)
 	}
 	var param, ok = obj.(MappedNullable)

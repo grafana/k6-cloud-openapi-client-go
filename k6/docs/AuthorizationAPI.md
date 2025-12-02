@@ -4,7 +4,7 @@ All URIs are relative to *https://api.k6.io*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**Auth**](AuthorizationAPI.md#Auth) | **Get** /cloud/v6/auth | Validate k6 Cloud API token and access to the stack.
+[**Auth**](AuthorizationAPI.md#Auth) | **Get** /cloud/v6/auth | Validate a Grafana Cloud k6 API token and access to the stack.
 
 
 
@@ -12,7 +12,7 @@ Method | HTTP request | Description
 
 > AuthenticationResponse Auth(ctx).XStackUrl(xStackUrl).Execute()
 
-Validate k6 Cloud API token and access to the stack.
+Validate a Grafana Cloud k6 API token and access to the stack.
 
 
 
