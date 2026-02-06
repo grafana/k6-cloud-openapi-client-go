@@ -43,6 +43,213 @@ paths:
           $ref: '#/components/responses/PermissionDenied'
         '500':
           $ref: '#/components/responses/UnexpectedError'
+  /cloud/v6/labels:
+    get:
+      operationId: labels_list
+      description: List all label keys (accessible by all authenticated users).
+      summary: List label keys.
+      tags:
+      - labels
+      security:
+      - k6ApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LabelKeyListResponse'
+              examples:
+                OK:
+                  value:
+                  - value:
+                    - id: 1
+                      key: environment
+                      description: Environment being tested
+                    - id: 2
+                      key: team
+                      description: Team responsible for the project
+          description: OK.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+      parameters:
+      - $ref: '#/components/parameters/stackId'
+    post:
+      operationId: labels_create
+      description: |-
+        Creates one or more label keys for the organization.
+
+        This operation is additive: it adds the new labels to the existing ones
+        without replacing them.
+      summary: Create label keys.
+      tags:
+      - labels
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LabelKeyCreateRequest'
+            examples:
+              Create:
+                value:
+                  value:
+                  - key: environment
+                    description: Environment being tested
+                  - key: team
+                    description: Team responsible for the project
+                  - key: cost_center
+        required: true
+      security:
+      - k6ApiToken: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LabelKeyListResponse'
+              examples:
+                Created:
+                  value:
+                    value:
+                    - id: 1
+                      key: environment
+                      description: Environment being tested
+                    - id: 2
+                      key: team
+                      description: Team responsible for the project
+                    - id: 3
+                      key: cost_center
+                      description: null
+          description: OK.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApiModel'
+          description: Duplicate keys in request.
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApiModel'
+          description: Maximum number of label keys (100) exceeded.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+      parameters:
+      - $ref: '#/components/parameters/stackId'
+  /cloud/v6/labels/{id}:
+    patch:
+      operationId: labels_partial_update
+      description: Update a label key (rename or update description) (Admin only).
+      summary: Update a label key.
+      parameters:
+      - $ref: '#/components/parameters/stackId'
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: ID of the label key.
+        required: true
+      tags:
+      - labels
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LabelKeyPatchRequest'
+            examples:
+              RenameKey:
+                value:
+                  key: env
+                summary: Rename key
+              UpdateDescription:
+                value:
+                  description: Environment (dev, prod)
+                summary: Update description
+              UpdateBoth:
+                value:
+                  key: env
+                  description: Environment (dev, prod)
+                summary: Update both
+      security:
+      - k6ApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LabelKeyResponse'
+              examples:
+                OK:
+                  value:
+                    id: 1
+                    key: env
+                    description: Environment (dev, prod)
+          description: OK.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApiModel'
+          description: Label key not found.
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApiModel'
+          description: Label key with new name already exists.
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+    delete:
+      operationId: labels_destroy
+      description: |-
+        Delete a label key (Admin only).
+
+        When a label key is deleted, all project labels using this key
+        are cascade deleted.
+      summary: Delete a label key.
+      parameters:
+      - $ref: '#/components/parameters/stackId'
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: ID of the label key.
+        required: true
+      tags:
+      - labels
+      security:
+      - k6ApiToken: []
+      responses:
+        '204':
+          description: OK.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApiModel'
+          description: Label key not found.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
   /cloud/v6/load_tests:
     get:
       operationId: load_tests_list
@@ -390,6 +597,18 @@ paths:
         schema:
           type: boolean
         description: Include collection length in the response object as `@count`.
+      - in: query
+        name: $orderby
+        schema:
+          type: string
+        description: |-
+          Comma-separated list of fields to use when ordering the results. Available fields:
+          - created
+
+          The default ascending order can be reversed by appending the `desc` specifier.
+        examples:
+          Simple:
+            value: created desc
       - in: query
         name: $skip
         schema:
@@ -819,6 +1038,14 @@ paths:
       summary: Start a test in Grafana Cloud.
       parameters:
       - $ref: '#/components/parameters/stackId'
+      - in: header
+        name: K6-Idempotency-Key
+        schema:
+          type: string
+          maxLength: 36
+          minLength: 1
+        description: Idempotency key to prevent duplicate test starts when retrying
+          requests. The key is valid for 10 minutes.
       - in: path
         name: id
         schema:
@@ -1046,6 +1273,16 @@ paths:
           default: 1000
           maximum: 1000
         description: Number of results to return per page.
+      - in: query
+        name: project_id_in
+        schema:
+          type: array
+          items:
+            type: integer
+          style: form
+          explode: false
+          maxItems: 30
+        description: Filter results by project ID (comma-separated list of IDs).
       tags:
       - projects
       security:
@@ -1095,11 +1332,12 @@ paths:
         description: |-
           Comma-separated list of fields to use when ordering the results. Available fields:
           - created
+          - name
 
           The default ascending order can be reversed by appending the `desc` specifier.
         examples:
-          Simple:
-            value: created desc
+          Multiple:
+            value: created desc,name
       - in: query
         name: $skip
         schema:
@@ -1116,7 +1354,14 @@ paths:
         name: name
         schema:
           type: string
+          maxLength: 255
         description: Filter results by project name (exact match).
+      - in: query
+        name: name_search
+        schema:
+          type: string
+          maxLength: 255
+        description: Search projects by name.
       tags:
       - projects
       security:
@@ -1450,6 +1695,11 @@ paths:
           type: integer
         description: ID of the project.
         required: true
+      - in: query
+        name: name
+        schema:
+          type: string
+        description: Filter results by load test name (exact match).
       tags:
       - load_tests
       security:
@@ -1688,6 +1938,163 @@ paths:
           $ref: '#/components/responses/PermissionDenied'
         '404':
           $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /cloud/v6/projects/{project_id}/labels:
+    get:
+      operationId: projects_labels_list
+      description: List all labels on a project.
+      summary: List project labels.
+      parameters:
+      - $ref: '#/components/parameters/stackId'
+      - in: path
+        name: project_id
+        schema:
+          type: integer
+        description: ID of the project.
+        required: true
+      tags:
+      - labels
+      security:
+      - k6ApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectLabelListResponse'
+              examples:
+                OK:
+                  value:
+                  - value:
+                    - key: environment
+                      value: production
+                    - key: team
+                      value: backend
+          description: OK.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+    put:
+      operationId: projects_labels_update
+      description: |-
+        Replace labels on a project (Admin or Editor).
+
+        This is a full replacement operation.
+      summary: Replace project labels.
+      parameters:
+      - $ref: '#/components/parameters/stackId'
+      - in: path
+        name: project_id
+        schema:
+          type: integer
+        description: ID of the project.
+        required: true
+      tags:
+      - labels
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectLabelPutRequest'
+            examples:
+              ReplaceLabelsUsingKeyId:
+                value:
+                  value:
+                  - key_id: 1
+                    value: aws
+                summary: Replace labels using key_id
+              ReplaceLabelsUsingKey:
+                value:
+                  value:
+                  - key: provider
+                    value: aws
+                summary: Replace labels using key
+        required: true
+      security:
+      - k6ApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectLabelPutResponse'
+              examples:
+                OK:
+                  value:
+                    value:
+                    - key_id: 1
+                      key: provider
+                      value: aws
+          description: OK.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApiModel'
+          description: Invalid label key ID or name, or duplicate keys in request.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApiModel'
+          description: Project not found.
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApiModel'
+          description: Max labels per project (30) or max unique pairs per organization
+            (500) exceeded.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /cloud/v6/projects/{project_id}/labels/{key}:
+    delete:
+      operationId: projects_labels_destroy
+      description: Remove a label from a project (Admin or Editor).
+      summary: Remove a label from project.
+      parameters:
+      - $ref: '#/components/parameters/stackId'
+      - in: path
+        name: key
+        schema:
+          type: string
+        description: Label key name.
+        required: true
+      - in: path
+        name: project_id
+        schema:
+          type: integer
+        description: ID of the project.
+        required: true
+      tags:
+      - labels
+      security:
+      - k6ApiToken: []
+      responses:
+        '204':
+          description: OK.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApiModel'
+          description: Label key not found on project.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
         '500':
           $ref: '#/components/responses/UnexpectedError'
   /cloud/v6/schedules:
@@ -2974,6 +3381,103 @@ components:
       - YEARLY
       title: Frequency
       type: string
+    LabelKeyCreateItem:
+      description: Single label key to create
+      properties:
+        key:
+          description: Label key name. Case-sensitive. Unique per organization.
+          maxLength: 64
+          minLength: 1
+          pattern: ^[^\s'\";\\%]+$
+          title: Key
+          type: string
+        description:
+          default: null
+          description: Optional description of the label key.
+          maxLength: 255
+          minLength: 1
+          title: Description
+          type:
+          - string
+          - 'null'
+      required:
+      - key
+      title: LabelKeyCreateItem
+      type: object
+    LabelKeyCreateRequest:
+      description: Request to create one or more label keys
+      properties:
+        value:
+          description: Array of label keys to create (1-100).
+          items:
+            $ref: '#/components/schemas/LabelKeyCreateItem'
+          maxItems: 100
+          minItems: 1
+          title: Value
+          type: array
+      required:
+      - value
+      title: LabelKeyCreateRequest
+      type: object
+    LabelKeyListResponse:
+      description: Response for listing label keys
+      properties:
+        value:
+          description: List of label keys.
+          items:
+            $ref: '#/components/schemas/LabelKeyResponse'
+          title: Value
+          type: array
+      required:
+      - value
+      title: LabelKeyListResponse
+      type: object
+    LabelKeyPatchRequest:
+      additionalProperties: false
+      description: Request to update a label key
+      properties:
+        key:
+          description: New label key name.
+          maxLength: 64
+          minLength: 1
+          pattern: ^[^\s'\";\\%]+$
+          title: Key
+          type:
+          - string
+          - 'null'
+        description:
+          description: New label key description.
+          maxLength: 255
+          minLength: 1
+          title: Description
+          type:
+          - string
+          - 'null'
+      title: LabelKeyPatchRequest
+      type: object
+    LabelKeyResponse:
+      description: Label key response model
+      properties:
+        id:
+          description: Label key ID.
+          title: Id
+          type: integer
+        key:
+          description: Label key name.
+          title: Key
+          type: string
+        description:
+          default: null
+          description: Label key description.
+          title: Description
+          type:
+          - string
+          - 'null'
+      required:
+      - id
+      - key
+      title: LabelKeyResponse
+      type: object
     LoadTestApiModel:
       properties:
         id:
@@ -3238,6 +3742,13 @@ components:
           format: date-time
           title: Updated
           type: string
+        labels:
+          additionalProperties:
+            type: string
+          default: {}
+          description: Project labels.
+          title: Labels
+          type: object
       required:
       - id
       - name
@@ -3246,6 +3757,118 @@ components:
       - created
       - updated
       title: Project
+      type: object
+    ProjectLabelItem:
+      description: Single project label (key-value pair)
+      properties:
+        key:
+          description: Label key name.
+          title: Key
+          type: string
+        value:
+          description: Label value.
+          title: Value
+          type: string
+      required:
+      - key
+      - value
+      title: ProjectLabelItem
+      type: object
+    ProjectLabelListResponse:
+      description: Response for listing project labels
+      properties:
+        value:
+          description: List of project labels.
+          items:
+            $ref: '#/components/schemas/ProjectLabelItem'
+          title: Value
+          type: array
+      required:
+      - value
+      title: ProjectLabelListResponse
+      type: object
+    ProjectLabelPutItem:
+      description: Single project label for PUT request
+      properties:
+        key_id:
+          default: null
+          description: Label key ID. Mutually exclusive with 'key'.
+          title: Key Id
+          type:
+          - integer
+          - 'null'
+        key:
+          default: null
+          description: Label key name. Mutually exclusive with 'key_id'.
+          maxLength: 64
+          minLength: 1
+          pattern: ^[^\s'\";\\%]+$
+          title: Key
+          type:
+          - string
+          - 'null'
+        value:
+          description: Label value.
+          maxLength: 64
+          minLength: 1
+          pattern: ^[^\s'\";\\%]+$
+          title: Value
+          type: string
+      required:
+      - value
+      title: ProjectLabelPutItem
+      type: object
+    ProjectLabelPutRequest:
+      description: |-
+        Request to replace project labels.
+
+        This is a full replacement of all labels on the project.
+      properties:
+        value:
+          description: Array of labels to assign (0-30).
+          items:
+            $ref: '#/components/schemas/ProjectLabelPutItem'
+          maxItems: 30
+          minItems: 0
+          title: Value
+          type: array
+      required:
+      - value
+      title: ProjectLabelPutRequest
+      type: object
+    ProjectLabelPutResponse:
+      description: Response for PUT project labels
+      properties:
+        value:
+          description: List of project labels.
+          items:
+            $ref: '#/components/schemas/ProjectLabelPutResponseItem'
+          title: Value
+          type: array
+      required:
+      - value
+      title: ProjectLabelPutResponse
+      type: object
+    ProjectLabelPutResponseItem:
+      description: Single project label in PUT response
+      properties:
+        key_id:
+          description: Label key ID.
+          title: Key Id
+          type: integer
+        key:
+          description: Label key name.
+          title: Key
+          type: string
+        value:
+          description: Label value.
+          title: Value
+          type: string
+      required:
+      - key_id
+      - key
+      - value
+      title: ProjectLabelPutResponseItem
       type: object
     ProjectLimitsApiModel:
       properties:
@@ -3780,6 +4403,11 @@ components:
           type:
           - object
           - 'null'
+        is_local_execution:
+          default: false
+          description: Whether the test is being executed locally.
+          title: Is Local Execution
+          type: boolean
       required:
       - options
       title: ValidateOptionsRequest
@@ -3863,6 +4491,8 @@ servers:
 tags:
 - name: authorization
   description: API endpoints for validating tokens.
+- name: labels
+  description: API endpoints for managing labels.
 - name: load_tests
   description: API endpoints for managing and starting tests.
 - name: load_zones

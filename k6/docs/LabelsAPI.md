@@ -1,99 +1,24 @@
-# \ProjectsAPI
+# \LabelsAPI
 
 All URIs are relative to *https://api.k6.io*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**ProjectLimitsRetrieve**](ProjectsAPI.md#ProjectLimitsRetrieve) | **Get** /cloud/v6/project-limits | List limits for all projects.
-[**ProjectsCreate**](ProjectsAPI.md#ProjectsCreate) | **Post** /cloud/v6/projects | Create a project.
-[**ProjectsDestroy**](ProjectsAPI.md#ProjectsDestroy) | **Delete** /cloud/v6/projects/{id} | Delete a project.
-[**ProjectsLimitsPartialUpdate**](ProjectsAPI.md#ProjectsLimitsPartialUpdate) | **Patch** /cloud/v6/projects/{id}/limits | Update project limits.
-[**ProjectsLimitsRetrieve**](ProjectsAPI.md#ProjectsLimitsRetrieve) | **Get** /cloud/v6/projects/{id}/limits | Get project limits.
-[**ProjectsList**](ProjectsAPI.md#ProjectsList) | **Get** /cloud/v6/projects | List all projects.
-[**ProjectsPartialUpdate**](ProjectsAPI.md#ProjectsPartialUpdate) | **Patch** /cloud/v6/projects/{id} | Update a project.
-[**ProjectsRetrieve**](ProjectsAPI.md#ProjectsRetrieve) | **Get** /cloud/v6/projects/{id} | Get a project by ID.
+[**LabelsCreate**](LabelsAPI.md#LabelsCreate) | **Post** /cloud/v6/labels | Create label keys.
+[**LabelsDestroy**](LabelsAPI.md#LabelsDestroy) | **Delete** /cloud/v6/labels/{id} | Delete a label key.
+[**LabelsList**](LabelsAPI.md#LabelsList) | **Get** /cloud/v6/labels | List label keys.
+[**LabelsPartialUpdate**](LabelsAPI.md#LabelsPartialUpdate) | **Patch** /cloud/v6/labels/{id} | Update a label key.
+[**ProjectsLabelsDestroy**](LabelsAPI.md#ProjectsLabelsDestroy) | **Delete** /cloud/v6/projects/{project_id}/labels/{key} | Remove a label from project.
+[**ProjectsLabelsList**](LabelsAPI.md#ProjectsLabelsList) | **Get** /cloud/v6/projects/{project_id}/labels | List project labels.
+[**ProjectsLabelsUpdate**](LabelsAPI.md#ProjectsLabelsUpdate) | **Put** /cloud/v6/projects/{project_id}/labels | Replace project labels.
 
 
 
-## ProjectLimitsRetrieve
+## LabelsCreate
 
-> ProjectLimitsListResponse ProjectLimitsRetrieve(ctx).XStackId(xStackId).Count(count).Skip(skip).Top(top).ProjectIdIn(projectIdIn).Execute()
+> LabelKeyListResponse LabelsCreate(ctx).XStackId(xStackId).LabelKeyCreateRequest(labelKeyCreateRequest).Execute()
 
-List limits for all projects.
-
-
-
-### Example
-
-```go
-package main
-
-import (
-	"context"
-	"fmt"
-	"os"
-	openapiclient "github.com/grafana/k6-cloud-openapi-client/k6"
-)
-
-func main() {
-	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-	count := true // bool | Include collection length in the response object as `@count`. (optional)
-	skip := int32(56) // int32 | The initial index from which to return the results. (optional)
-	top := int32(56) // int32 | Number of results to return per page. (optional) (default to 1000)
-	projectIdIn := []int32{int32(123)} // []int32 | Filter results by project ID (comma-separated list of IDs). (optional)
-
-	configuration := openapiclient.NewConfiguration()
-	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.ProjectsAPI.ProjectLimitsRetrieve(context.Background()).XStackId(xStackId).Count(count).Skip(skip).Top(top).ProjectIdIn(projectIdIn).Execute()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `ProjectsAPI.ProjectLimitsRetrieve``: %v\n", err)
-		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
-	}
-	// response from `ProjectLimitsRetrieve`: ProjectLimitsListResponse
-	fmt.Fprintf(os.Stdout, "Response from `ProjectsAPI.ProjectLimitsRetrieve`: %v\n", resp)
-}
-```
-
-### Path Parameters
-
-
-
-### Other Parameters
-
-Other parameters are passed through a pointer to a apiProjectLimitsRetrieveRequest struct via the builder pattern
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **xStackId** | **int32** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. | 
- **count** | **bool** | Include collection length in the response object as &#x60;@count&#x60;. | 
- **skip** | **int32** | The initial index from which to return the results. | 
- **top** | **int32** | Number of results to return per page. | [default to 1000]
- **projectIdIn** | **[]int32** | Filter results by project ID (comma-separated list of IDs). | 
-
-### Return type
-
-[**ProjectLimitsListResponse**](ProjectLimitsListResponse.md)
-
-### Authorization
-
-[k6ApiToken](../README.md#k6ApiToken)
-
-### HTTP request headers
-
-- **Content-Type**: Not defined
-- **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
-[[Back to Model list]](../README.md#documentation-for-models)
-[[Back to README]](../README.md)
-
-
-## ProjectsCreate
-
-> ProjectApiModel ProjectsCreate(ctx).XStackId(xStackId).CreateProjectApiModel(createProjectApiModel).Execute()
-
-Create a project.
+Create label keys.
 
 
 
@@ -111,17 +36,17 @@ import (
 
 func main() {
 	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-	createProjectApiModel := *openapiclient.NewCreateProjectApiModel("Name_example") // CreateProjectApiModel | 
+	labelKeyCreateRequest := *openapiclient.NewLabelKeyCreateRequest([]openapiclient.LabelKeyCreateItem{*openapiclient.NewLabelKeyCreateItem("Key_example")}) // LabelKeyCreateRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.ProjectsAPI.ProjectsCreate(context.Background()).XStackId(xStackId).CreateProjectApiModel(createProjectApiModel).Execute()
+	resp, r, err := apiClient.LabelsAPI.LabelsCreate(context.Background()).XStackId(xStackId).LabelKeyCreateRequest(labelKeyCreateRequest).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `ProjectsAPI.ProjectsCreate``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `LabelsAPI.LabelsCreate``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `ProjectsCreate`: ProjectApiModel
-	fmt.Fprintf(os.Stdout, "Response from `ProjectsAPI.ProjectsCreate`: %v\n", resp)
+	// response from `LabelsCreate`: LabelKeyListResponse
+	fmt.Fprintf(os.Stdout, "Response from `LabelsAPI.LabelsCreate`: %v\n", resp)
 }
 ```
 
@@ -131,17 +56,17 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiProjectsCreateRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiLabelsCreateRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **xStackId** | **int32** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. | 
- **createProjectApiModel** | [**CreateProjectApiModel**](CreateProjectApiModel.md) |  | 
+ **labelKeyCreateRequest** | [**LabelKeyCreateRequest**](LabelKeyCreateRequest.md) |  | 
 
 ### Return type
 
-[**ProjectApiModel**](ProjectApiModel.md)
+[**LabelKeyListResponse**](LabelKeyListResponse.md)
 
 ### Authorization
 
@@ -157,11 +82,11 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
-## ProjectsDestroy
+## LabelsDestroy
 
-> ProjectsDestroy(ctx, id).XStackId(xStackId).Execute()
+> LabelsDestroy(ctx, id).XStackId(xStackId).Execute()
 
-Delete a project.
+Delete a label key.
 
 
 
@@ -179,13 +104,13 @@ import (
 
 func main() {
 	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-	id := int32(56) // int32 | ID of the project.
+	id := int32(56) // int32 | ID of the label key.
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	r, err := apiClient.ProjectsAPI.ProjectsDestroy(context.Background(), id).XStackId(xStackId).Execute()
+	r, err := apiClient.LabelsAPI.LabelsDestroy(context.Background(), id).XStackId(xStackId).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `ProjectsAPI.ProjectsDestroy``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `LabelsAPI.LabelsDestroy``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
 }
@@ -197,11 +122,11 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int32** | ID of the project. | 
+**id** | **int32** | ID of the label key. | 
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiProjectsDestroyRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiLabelsDestroyRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -227,11 +152,11 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
-## ProjectsLimitsPartialUpdate
+## LabelsList
 
-> ProjectsLimitsPartialUpdate(ctx, id).XStackId(xStackId).PatchProjectLimitsRequest(patchProjectLimitsRequest).Execute()
+> []LabelKeyListResponse LabelsList(ctx).XStackId(xStackId).Execute()
 
-Update project limits.
+List label keys.
 
 
 
@@ -249,16 +174,84 @@ import (
 
 func main() {
 	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-	id := int32(56) // int32 | ID of the project.
-	patchProjectLimitsRequest := *openapiclient.NewPatchProjectLimitsRequest() // PatchProjectLimitsRequest |  (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	r, err := apiClient.ProjectsAPI.ProjectsLimitsPartialUpdate(context.Background(), id).XStackId(xStackId).PatchProjectLimitsRequest(patchProjectLimitsRequest).Execute()
+	resp, r, err := apiClient.LabelsAPI.LabelsList(context.Background()).XStackId(xStackId).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `ProjectsAPI.ProjectsLimitsPartialUpdate``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `LabelsAPI.LabelsList``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
+	// response from `LabelsList`: []LabelKeyListResponse
+	fmt.Fprintf(os.Stdout, "Response from `LabelsAPI.LabelsList`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiLabelsListRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **xStackId** | **int32** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. | 
+
+### Return type
+
+[**[]LabelKeyListResponse**](LabelKeyListResponse.md)
+
+### Authorization
+
+[k6ApiToken](../README.md#k6ApiToken)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## LabelsPartialUpdate
+
+> LabelKeyResponse LabelsPartialUpdate(ctx, id).XStackId(xStackId).LabelKeyPatchRequest(labelKeyPatchRequest).Execute()
+
+Update a label key.
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/grafana/k6-cloud-openapi-client/k6"
+)
+
+func main() {
+	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
+	id := int32(56) // int32 | ID of the label key.
+	labelKeyPatchRequest := *openapiclient.NewLabelKeyPatchRequest() // LabelKeyPatchRequest |  (optional)
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.LabelsAPI.LabelsPartialUpdate(context.Background(), id).XStackId(xStackId).LabelKeyPatchRequest(labelKeyPatchRequest).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `LabelsAPI.LabelsPartialUpdate``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `LabelsPartialUpdate`: LabelKeyResponse
+	fmt.Fprintf(os.Stdout, "Response from `LabelsAPI.LabelsPartialUpdate`: %v\n", resp)
 }
 ```
 
@@ -268,22 +261,22 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int32** | ID of the project. | 
+**id** | **int32** | ID of the label key. | 
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiProjectsLimitsPartialUpdateRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiLabelsPartialUpdateRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **xStackId** | **int32** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. | 
 
- **patchProjectLimitsRequest** | [**PatchProjectLimitsRequest**](PatchProjectLimitsRequest.md) |  | 
+ **labelKeyPatchRequest** | [**LabelKeyPatchRequest**](LabelKeyPatchRequest.md) |  | 
 
 ### Return type
 
- (empty response body)
+[**LabelKeyResponse**](LabelKeyResponse.md)
 
 ### Authorization
 
@@ -299,83 +292,11 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
-## ProjectsLimitsRetrieve
+## ProjectsLabelsDestroy
 
-> ProjectLimitsApiModel ProjectsLimitsRetrieve(ctx, id).XStackId(xStackId).Execute()
+> ProjectsLabelsDestroy(ctx, key, projectId).XStackId(xStackId).Execute()
 
-Get project limits.
-
-
-
-### Example
-
-```go
-package main
-
-import (
-	"context"
-	"fmt"
-	"os"
-	openapiclient "github.com/grafana/k6-cloud-openapi-client/k6"
-)
-
-func main() {
-	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-	id := int32(56) // int32 | ID of the project.
-
-	configuration := openapiclient.NewConfiguration()
-	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.ProjectsAPI.ProjectsLimitsRetrieve(context.Background(), id).XStackId(xStackId).Execute()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `ProjectsAPI.ProjectsLimitsRetrieve``: %v\n", err)
-		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
-	}
-	// response from `ProjectsLimitsRetrieve`: ProjectLimitsApiModel
-	fmt.Fprintf(os.Stdout, "Response from `ProjectsAPI.ProjectsLimitsRetrieve`: %v\n", resp)
-}
-```
-
-### Path Parameters
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
-**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int32** | ID of the project. | 
-
-### Other Parameters
-
-Other parameters are passed through a pointer to a apiProjectsLimitsRetrieveRequest struct via the builder pattern
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **xStackId** | **int32** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. | 
-
-
-### Return type
-
-[**ProjectLimitsApiModel**](ProjectLimitsApiModel.md)
-
-### Authorization
-
-[k6ApiToken](../README.md#k6ApiToken)
-
-### HTTP request headers
-
-- **Content-Type**: Not defined
-- **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
-[[Back to Model list]](../README.md#documentation-for-models)
-[[Back to README]](../README.md)
-
-
-## ProjectsList
-
-> ProjectListResponse ProjectsList(ctx).XStackId(xStackId).Count(count).Orderby(orderby).Skip(skip).Top(top).Name(name).NameSearch(nameSearch).Execute()
-
-List all projects.
+Remove a label from project.
 
 
 
@@ -393,92 +314,14 @@ import (
 
 func main() {
 	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-	count := true // bool | Include collection length in the response object as `@count`. (optional)
-	orderby := "created desc,name" // string | Comma-separated list of fields to use when ordering the results. Available fields: - created - name  The default ascending order can be reversed by appending the `desc` specifier. (optional)
-	skip := int32(56) // int32 | The initial index from which to return the results. (optional)
-	top := int32(56) // int32 | Number of results to return per page. (optional) (default to 1000)
-	name := "name_example" // string | Filter results by project name (exact match). (optional)
-	nameSearch := "nameSearch_example" // string | Search projects by name. (optional)
+	key := "key_example" // string | Label key name.
+	projectId := int32(56) // int32 | ID of the project.
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.ProjectsAPI.ProjectsList(context.Background()).XStackId(xStackId).Count(count).Orderby(orderby).Skip(skip).Top(top).Name(name).NameSearch(nameSearch).Execute()
+	r, err := apiClient.LabelsAPI.ProjectsLabelsDestroy(context.Background(), key, projectId).XStackId(xStackId).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `ProjectsAPI.ProjectsList``: %v\n", err)
-		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
-	}
-	// response from `ProjectsList`: ProjectListResponse
-	fmt.Fprintf(os.Stdout, "Response from `ProjectsAPI.ProjectsList`: %v\n", resp)
-}
-```
-
-### Path Parameters
-
-
-
-### Other Parameters
-
-Other parameters are passed through a pointer to a apiProjectsListRequest struct via the builder pattern
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **xStackId** | **int32** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. | 
- **count** | **bool** | Include collection length in the response object as &#x60;@count&#x60;. | 
- **orderby** | **string** | Comma-separated list of fields to use when ordering the results. Available fields: - created - name  The default ascending order can be reversed by appending the &#x60;desc&#x60; specifier. | 
- **skip** | **int32** | The initial index from which to return the results. | 
- **top** | **int32** | Number of results to return per page. | [default to 1000]
- **name** | **string** | Filter results by project name (exact match). | 
- **nameSearch** | **string** | Search projects by name. | 
-
-### Return type
-
-[**ProjectListResponse**](ProjectListResponse.md)
-
-### Authorization
-
-[k6ApiToken](../README.md#k6ApiToken)
-
-### HTTP request headers
-
-- **Content-Type**: Not defined
-- **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
-[[Back to Model list]](../README.md#documentation-for-models)
-[[Back to README]](../README.md)
-
-
-## ProjectsPartialUpdate
-
-> ProjectsPartialUpdate(ctx, id).XStackId(xStackId).PatchProjectApiModel(patchProjectApiModel).Execute()
-
-Update a project.
-
-
-
-### Example
-
-```go
-package main
-
-import (
-	"context"
-	"fmt"
-	"os"
-	openapiclient "github.com/grafana/k6-cloud-openapi-client/k6"
-)
-
-func main() {
-	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-	id := int32(56) // int32 | ID of the project.
-	patchProjectApiModel := *openapiclient.NewPatchProjectApiModel("Name_example") // PatchProjectApiModel | 
-
-	configuration := openapiclient.NewConfiguration()
-	apiClient := openapiclient.NewAPIClient(configuration)
-	r, err := apiClient.ProjectsAPI.ProjectsPartialUpdate(context.Background(), id).XStackId(xStackId).PatchProjectApiModel(patchProjectApiModel).Execute()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `ProjectsAPI.ProjectsPartialUpdate``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `LabelsAPI.ProjectsLabelsDestroy``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
 }
@@ -490,18 +333,19 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int32** | ID of the project. | 
+**key** | **string** | Label key name. | 
+**projectId** | **int32** | ID of the project. | 
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiProjectsPartialUpdateRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiProjectsLabelsDestroyRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **xStackId** | **int32** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. | 
 
- **patchProjectApiModel** | [**PatchProjectApiModel**](PatchProjectApiModel.md) |  | 
+
 
 ### Return type
 
@@ -513,7 +357,7 @@ Name | Type | Description  | Notes
 
 ### HTTP request headers
 
-- **Content-Type**: application/json
+- **Content-Type**: Not defined
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
@@ -521,11 +365,11 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
-## ProjectsRetrieve
+## ProjectsLabelsList
 
-> ProjectApiModel ProjectsRetrieve(ctx, id).XStackId(xStackId).Execute()
+> []ProjectLabelListResponse ProjectsLabelsList(ctx, projectId).XStackId(xStackId).Execute()
 
-Get a project by ID.
+List project labels.
 
 
 
@@ -543,17 +387,17 @@ import (
 
 func main() {
 	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-	id := int32(56) // int32 | ID of the project.
+	projectId := int32(56) // int32 | ID of the project.
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.ProjectsAPI.ProjectsRetrieve(context.Background(), id).XStackId(xStackId).Execute()
+	resp, r, err := apiClient.LabelsAPI.ProjectsLabelsList(context.Background(), projectId).XStackId(xStackId).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `ProjectsAPI.ProjectsRetrieve``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `LabelsAPI.ProjectsLabelsList``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `ProjectsRetrieve`: ProjectApiModel
-	fmt.Fprintf(os.Stdout, "Response from `ProjectsAPI.ProjectsRetrieve`: %v\n", resp)
+	// response from `ProjectsLabelsList`: []ProjectLabelListResponse
+	fmt.Fprintf(os.Stdout, "Response from `LabelsAPI.ProjectsLabelsList`: %v\n", resp)
 }
 ```
 
@@ -563,11 +407,11 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int32** | ID of the project. | 
+**projectId** | **int32** | ID of the project. | 
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiProjectsRetrieveRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiProjectsLabelsListRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -577,7 +421,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**ProjectApiModel**](ProjectApiModel.md)
+[**[]ProjectLabelListResponse**](ProjectLabelListResponse.md)
 
 ### Authorization
 
@@ -586,6 +430,80 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
 - **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## ProjectsLabelsUpdate
+
+> ProjectLabelPutResponse ProjectsLabelsUpdate(ctx, projectId).XStackId(xStackId).ProjectLabelPutRequest(projectLabelPutRequest).Execute()
+
+Replace project labels.
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/grafana/k6-cloud-openapi-client/k6"
+)
+
+func main() {
+	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
+	projectId := int32(56) // int32 | ID of the project.
+	projectLabelPutRequest := *openapiclient.NewProjectLabelPutRequest([]openapiclient.ProjectLabelPutItem{*openapiclient.NewProjectLabelPutItem("Value_example")}) // ProjectLabelPutRequest | 
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.LabelsAPI.ProjectsLabelsUpdate(context.Background(), projectId).XStackId(xStackId).ProjectLabelPutRequest(projectLabelPutRequest).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `LabelsAPI.ProjectsLabelsUpdate``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `ProjectsLabelsUpdate`: ProjectLabelPutResponse
+	fmt.Fprintf(os.Stdout, "Response from `LabelsAPI.ProjectsLabelsUpdate`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**projectId** | **int32** | ID of the project. | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiProjectsLabelsUpdateRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **xStackId** | **int32** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. | 
+
+ **projectLabelPutRequest** | [**ProjectLabelPutRequest**](ProjectLabelPutRequest.md) |  | 
+
+### Return type
+
+[**ProjectLabelPutResponse**](ProjectLabelPutResponse.md)
+
+### Authorization
+
+[k6ApiToken](../README.md#k6ApiToken)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
