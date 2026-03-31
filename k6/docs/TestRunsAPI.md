@@ -19,7 +19,7 @@ Method | HTTP request | Description
 
 ## LoadTestsTestRunsRetrieve
 
-> TestRunListResponse LoadTestsTestRunsRetrieve(ctx, id).XStackId(xStackId).Count(count).Skip(skip).Top(top).CreatedAfter(createdAfter).CreatedBefore(createdBefore).Execute()
+> TestRunListResponse LoadTestsTestRunsRetrieve(ctx, id).XStackId(xStackId).Count(count).Orderby(orderby).Skip(skip).Top(top).CreatedAfter(createdAfter).CreatedBefore(createdBefore).Execute()
 
 List all runs of a load test.
 
@@ -42,6 +42,7 @@ func main() {
 	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
 	id := int32(56) // int32 | ID of the load test.
 	count := true // bool | Include collection length in the response object as `@count`. (optional)
+	orderby := "created desc" // string | Comma-separated list of fields to use when ordering the results. Available fields: - created  The default ascending order can be reversed by appending the `desc` specifier. (optional)
 	skip := int32(56) // int32 | The initial index from which to return the results. (optional)
 	top := int32(56) // int32 | Number of results to return per page. (optional) (default to 1000)
 	createdAfter := time.Now() // time.Time | Filter test runs created on or after this date and time (inclusive). (optional)
@@ -49,7 +50,7 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.TestRunsAPI.LoadTestsTestRunsRetrieve(context.Background(), id).XStackId(xStackId).Count(count).Skip(skip).Top(top).CreatedAfter(createdAfter).CreatedBefore(createdBefore).Execute()
+	resp, r, err := apiClient.TestRunsAPI.LoadTestsTestRunsRetrieve(context.Background(), id).XStackId(xStackId).Count(count).Orderby(orderby).Skip(skip).Top(top).CreatedAfter(createdAfter).CreatedBefore(createdBefore).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `TestRunsAPI.LoadTestsTestRunsRetrieve``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -77,6 +78,7 @@ Name | Type | Description  | Notes
  **xStackId** | **int32** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. | 
 
  **count** | **bool** | Include collection length in the response object as &#x60;@count&#x60;. | 
+ **orderby** | **string** | Comma-separated list of fields to use when ordering the results. Available fields: - created  The default ascending order can be reversed by appending the &#x60;desc&#x60; specifier. | 
  **skip** | **int32** | The initial index from which to return the results. | 
  **top** | **int32** | Number of results to return per page. | [default to 1000]
  **createdAfter** | **time.Time** | Filter test runs created on or after this date and time (inclusive). | 

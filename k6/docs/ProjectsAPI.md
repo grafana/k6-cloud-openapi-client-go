@@ -17,7 +17,7 @@ Method | HTTP request | Description
 
 ## ProjectLimitsRetrieve
 
-> ProjectLimitsListResponse ProjectLimitsRetrieve(ctx).XStackId(xStackId).Count(count).Skip(skip).Top(top).Execute()
+> ProjectLimitsListResponse ProjectLimitsRetrieve(ctx).XStackId(xStackId).Count(count).Skip(skip).Top(top).ProjectIdIn(projectIdIn).Execute()
 
 List limits for all projects.
 
@@ -40,10 +40,11 @@ func main() {
 	count := true // bool | Include collection length in the response object as `@count`. (optional)
 	skip := int32(56) // int32 | The initial index from which to return the results. (optional)
 	top := int32(56) // int32 | Number of results to return per page. (optional) (default to 1000)
+	projectIdIn := []int32{int32(123)} // []int32 | Filter results by project ID (comma-separated list of IDs). (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.ProjectsAPI.ProjectLimitsRetrieve(context.Background()).XStackId(xStackId).Count(count).Skip(skip).Top(top).Execute()
+	resp, r, err := apiClient.ProjectsAPI.ProjectLimitsRetrieve(context.Background()).XStackId(xStackId).Count(count).Skip(skip).Top(top).ProjectIdIn(projectIdIn).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `ProjectsAPI.ProjectLimitsRetrieve``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -68,6 +69,7 @@ Name | Type | Description  | Notes
  **count** | **bool** | Include collection length in the response object as &#x60;@count&#x60;. | 
  **skip** | **int32** | The initial index from which to return the results. | 
  **top** | **int32** | Number of results to return per page. | [default to 1000]
+ **projectIdIn** | **[]int32** | Filter results by project ID (comma-separated list of IDs). | 
 
 ### Return type
 
@@ -371,7 +373,7 @@ Name | Type | Description  | Notes
 
 ## ProjectsList
 
-> ProjectListResponse ProjectsList(ctx).XStackId(xStackId).Count(count).Orderby(orderby).Skip(skip).Top(top).Name(name).Execute()
+> ProjectListResponse ProjectsList(ctx).XStackId(xStackId).Count(count).Orderby(orderby).Skip(skip).Top(top).Name(name).NameSearch(nameSearch).Execute()
 
 List all projects.
 
@@ -392,14 +394,15 @@ import (
 func main() {
 	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
 	count := true // bool | Include collection length in the response object as `@count`. (optional)
-	orderby := "created desc" // string | Comma-separated list of fields to use when ordering the results. Available fields: - created  The default ascending order can be reversed by appending the `desc` specifier. (optional)
+	orderby := "created desc,name" // string | Comma-separated list of fields to use when ordering the results. Available fields: - created - name  The default ascending order can be reversed by appending the `desc` specifier. (optional)
 	skip := int32(56) // int32 | The initial index from which to return the results. (optional)
 	top := int32(56) // int32 | Number of results to return per page. (optional) (default to 1000)
 	name := "name_example" // string | Filter results by project name (exact match). (optional)
+	nameSearch := "nameSearch_example" // string | Search projects by name. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.ProjectsAPI.ProjectsList(context.Background()).XStackId(xStackId).Count(count).Orderby(orderby).Skip(skip).Top(top).Name(name).Execute()
+	resp, r, err := apiClient.ProjectsAPI.ProjectsList(context.Background()).XStackId(xStackId).Count(count).Orderby(orderby).Skip(skip).Top(top).Name(name).NameSearch(nameSearch).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `ProjectsAPI.ProjectsList``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -422,10 +425,11 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **xStackId** | **int32** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. | 
  **count** | **bool** | Include collection length in the response object as &#x60;@count&#x60;. | 
- **orderby** | **string** | Comma-separated list of fields to use when ordering the results. Available fields: - created  The default ascending order can be reversed by appending the &#x60;desc&#x60; specifier. | 
+ **orderby** | **string** | Comma-separated list of fields to use when ordering the results. Available fields: - created - name  The default ascending order can be reversed by appending the &#x60;desc&#x60; specifier. | 
  **skip** | **int32** | The initial index from which to return the results. | 
  **top** | **int32** | Number of results to return per page. | [default to 1000]
  **name** | **string** | Filter results by project name (exact match). | 
+ **nameSearch** | **string** | Search projects by name. | 
 
 ### Return type
 

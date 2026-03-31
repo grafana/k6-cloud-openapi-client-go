@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 **ProjectId** | Pointer to **NullableInt32** | ID of a project where the test belongs. | [optional] 
 **Options** | [**Options**](Options.md) | k6 script options object to validate. | 
 **K6Dependencies** | Pointer to **map[string]string** | Version of k6 and extensions to validate, as a map of dependency name to dependency version constraint. | [optional] 
+**IsLocalExecution** | Pointer to **bool** | Whether the test is being executed locally. | [optional] [default to false]
 
 ## Methods
 
@@ -106,6 +107,31 @@ SetK6Dependencies sets K6Dependencies field to given value.
 `func (o *ValidateOptionsRequest) HasK6Dependencies() bool`
 
 HasK6Dependencies returns a boolean if a field has been set.
+
+### GetIsLocalExecution
+
+`func (o *ValidateOptionsRequest) GetIsLocalExecution() bool`
+
+GetIsLocalExecution returns the IsLocalExecution field if non-nil, zero value otherwise.
+
+### GetIsLocalExecutionOk
+
+`func (o *ValidateOptionsRequest) GetIsLocalExecutionOk() (*bool, bool)`
+
+GetIsLocalExecutionOk returns a tuple with the IsLocalExecution field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetIsLocalExecution
+
+`func (o *ValidateOptionsRequest) SetIsLocalExecution(v bool)`
+
+SetIsLocalExecution sets IsLocalExecution field to given value.
+
+### HasIsLocalExecution
+
+`func (o *ValidateOptionsRequest) HasIsLocalExecution() bool`
+
+HasIsLocalExecution returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
