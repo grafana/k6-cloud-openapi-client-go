@@ -526,7 +526,7 @@ Name | Type | Description  | Notes
 
 ## LoadTestsStart
 
-> TestRunApiModel LoadTestsStart(ctx, id).XStackId(xStackId).Execute()
+> StartLoadTestResponse LoadTestsStart(ctx, id).XStackId(xStackId).K6IdempotencyKey(k6IdempotencyKey).Execute()
 
 Start a test in Grafana Cloud.
 
@@ -547,15 +547,16 @@ import (
 func main() {
 	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
 	id := int32(56) // int32 | ID of the load test.
+	k6IdempotencyKey := "k6IdempotencyKey_example" // string | Idempotency key to prevent duplicate test starts when retrying requests. The key is valid for 10 minutes. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.LoadTestsAPI.LoadTestsStart(context.Background(), id).XStackId(xStackId).Execute()
+	resp, r, err := apiClient.LoadTestsAPI.LoadTestsStart(context.Background(), id).XStackId(xStackId).K6IdempotencyKey(k6IdempotencyKey).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `LoadTestsAPI.LoadTestsStart``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `LoadTestsStart`: TestRunApiModel
+	// response from `LoadTestsStart`: StartLoadTestResponse
 	fmt.Fprintf(os.Stdout, "Response from `LoadTestsAPI.LoadTestsStart`: %v\n", resp)
 }
 ```
@@ -577,10 +578,11 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **xStackId** | **int32** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. | 
 
+ **k6IdempotencyKey** | **string** | Idempotency key to prevent duplicate test starts when retrying requests. The key is valid for 10 minutes. | 
 
 ### Return type
 
-[**TestRunApiModel**](TestRunApiModel.md)
+[**StartLoadTestResponse**](StartLoadTestResponse.md)
 
 ### Authorization
 
@@ -620,7 +622,7 @@ func main() {
 	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
 	id := int32(56) // int32 | ID of the project.
 	name := "name_example" // string | Unique name of the test within the project.
-	script := os.NewFile(1234, "some_file") // *os.File | Test script in the form of a UTF-8 encoded text or a k6 .tar archive.
+	script := os.NewFile(1234, "some_file") // *os.File | Test script in the form of a UTF-8 encoded text or a k6 .tar archive. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -674,7 +676,7 @@ Name | Type | Description  | Notes
 
 ## ProjectsLoadTestsRetrieve
 
-> LoadTestListResponse ProjectsLoadTestsRetrieve(ctx, id).XStackId(xStackId).Count(count).Orderby(orderby).Skip(skip).Top(top).Execute()
+> LoadTestListResponse ProjectsLoadTestsRetrieve(ctx, id).XStackId(xStackId).Count(count).Orderby(orderby).Skip(skip).Top(top).Name(name).Execute()
 
 List load tests in a project.
 
@@ -699,10 +701,11 @@ func main() {
 	orderby := "id desc,project_id" // string | Comma-separated list of fields to use when ordering the results. Available fields: - id - project_id - name - created - updated  The default ascending order can be reversed by appending the `desc` specifier. (optional)
 	skip := int32(56) // int32 | The initial index from which to return the results. (optional)
 	top := int32(56) // int32 | Number of results to return per page. (optional) (default to 1000)
+	name := "name_example" // string | Filter results by load test name (exact match). (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.LoadTestsAPI.ProjectsLoadTestsRetrieve(context.Background(), id).XStackId(xStackId).Count(count).Orderby(orderby).Skip(skip).Top(top).Execute()
+	resp, r, err := apiClient.LoadTestsAPI.ProjectsLoadTestsRetrieve(context.Background(), id).XStackId(xStackId).Count(count).Orderby(orderby).Skip(skip).Top(top).Name(name).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `LoadTestsAPI.ProjectsLoadTestsRetrieve``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -733,6 +736,7 @@ Name | Type | Description  | Notes
  **orderby** | **string** | Comma-separated list of fields to use when ordering the results. Available fields: - id - project_id - name - created - updated  The default ascending order can be reversed by appending the &#x60;desc&#x60; specifier. | 
  **skip** | **int32** | The initial index from which to return the results. | 
  **top** | **int32** | Number of results to return per page. | [default to 1000]
+ **name** | **string** | Filter results by load test name (exact match). | 
 
 ### Return type
 

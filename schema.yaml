@@ -1,12 +1,30 @@
 openapi: 3.1.0
 info:
   title: Grafana Cloud k6
-  version: 1.7.1
+  version: 1.9.1
   description: HTTP API for interacting with Grafana Cloud k6.
   contact:
     name: Grafana Support
     url: https://grafana.com/help/
     email: info@grafana.com
+servers:
+- url: https://api.k6.io
+  description: Global k6 Cloud API.
+tags:
+- name: authorization
+  description: API endpoints for validating tokens.
+- name: labels
+  description: API endpoints for managing labels.
+- name: load_tests
+  description: API endpoints for managing and starting tests.
+- name: load_zones
+  description: API endpoints for managing load zones.
+- name: projects
+  description: API endpoints for managing projects.
+- name: schedules
+  description: API endpoints for managing test schedules.
+- name: test_runs
+  description: API endpoints for managing test runs.
 paths:
   /cloud/v6/auth:
     get:
@@ -41,6 +59,211 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/PermissionDenied'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /cloud/v6/labels:
+    get:
+      operationId: labels_list
+      description: List all label keys (accessible by all authenticated users).
+      summary: List label keys.
+      tags:
+      - labels
+      security:
+      - k6ApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LabelKeyListResponse'
+              examples:
+                OK:
+                  value:
+                    value:
+                    - id: 1
+                      key: environment
+                      description: Environment being tested
+                    - id: 2
+                      key: team
+                      description: Team responsible for the project
+          description: OK.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+      parameters:
+      - $ref: '#/components/parameters/stackId'
+    post:
+      operationId: labels_create
+      description: |-
+        Creates one or more label keys for the organization.
+
+        This operation is additive: it adds the new labels to the existing ones
+        without replacing them.
+      summary: Create label keys.
+      tags:
+      - labels
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LabelKeyCreateRequest'
+            examples:
+              Create:
+                value:
+                  value:
+                  - key: environment
+                    description: Environment being tested
+                  - key: team
+                    description: Team responsible for the project
+                  - key: cost_center
+        required: true
+      security:
+      - k6ApiToken: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LabelKeyListResponse'
+              examples:
+                Created:
+                  value:
+                    value:
+                    - id: 1
+                      key: environment
+                      description: Environment being tested
+                    - id: 2
+                      key: team
+                      description: Team responsible for the project
+                    - id: 3
+                      key: cost_center
+                      description: null
+          description: OK.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApiModel'
+          description: Duplicate keys in request.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApiModel'
+          description: Maximum number of label keys (100) exceeded.
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+      parameters:
+      - $ref: '#/components/parameters/stackId'
+  /cloud/v6/labels/{id}:
+    patch:
+      operationId: labels_partial_update
+      description: Update a label key (rename or update description) (Admin only).
+      summary: Update a label key.
+      parameters:
+      - $ref: '#/components/parameters/stackId'
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: ID of the label key.
+        required: true
+      tags:
+      - labels
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LabelKeyPatchRequest'
+            examples:
+              RenameKey:
+                value:
+                  key: env
+                summary: Rename key
+              UpdateDescription:
+                value:
+                  description: Environment (dev, prod)
+                summary: Update description
+              UpdateBoth:
+                value:
+                  key: env
+                  description: Environment (dev, prod)
+                summary: Update both
+      security:
+      - k6ApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LabelKeyResponse'
+              examples:
+                OK:
+                  value:
+                    id: 1
+                    key: env
+                    description: Environment (dev, prod)
+          description: OK.
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApiModel'
+          description: Label key not found.
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApiModel'
+          description: Label key with new name already exists.
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+    delete:
+      operationId: labels_destroy
+      description: |-
+        Delete a label key (Admin only).
+
+        When a label key is deleted, all project labels using this key
+        are cascade deleted.
+      summary: Delete a label key.
+      parameters:
+      - $ref: '#/components/parameters/stackId'
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: ID of the label key.
+        required: true
+      tags:
+      - labels
+      security:
+      - k6ApiToken: []
+      responses:
+        '204':
+          description: OK.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApiModel'
+          description: Label key not found.
         '500':
           $ref: '#/components/responses/UnexpectedError'
   /cloud/v6/load_tests:
@@ -391,6 +614,18 @@ paths:
           type: boolean
         description: Include collection length in the response object as `@count`.
       - in: query
+        name: $orderby
+        schema:
+          type: string
+        description: |-
+          Comma-separated list of fields to use when ordering the results. Available fields:
+          - created
+
+          The default ascending order can be reversed by appending the `desc` specifier.
+        examples:
+          Simple:
+            value: created desc
+      - in: query
         name: $skip
         schema:
           type: integer
@@ -452,8 +687,8 @@ paths:
                         total_vuh: 6.75
                         breakdown:
                           protocol_vuh: 6.75
-                          browser_vuh: 0.0
-                          base_total_vuh: 10.0
+                          browser_vuh: 0
+                          base_total_vuh: 10
                           reduction_rate: 32.5
                           reduction_rate_breakdown:
                             volume: 10
@@ -494,6 +729,10 @@ paths:
                         entered: '2024-06-01T19:00:10Z'
                       - type: running
                         entered: '2024-06-01T19:00:20Z'
+                      max_vus: 10
+                      max_browser_vus: 0
+                      estimated_duration: 1800
+                      execution_duration: 600
                     '@count': 123
                     '@nextLink': https://api.k6.io/cloud/v6/load_tests/123/test_runs?$skip=50&$top=20
           description: OK.
@@ -577,12 +816,6 @@ paths:
       responses:
         '204':
           description: OK.
-        '409':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponseApiModel'
-          description: The name is already taken.
         '400':
           $ref: '#/components/responses/ValidationError'
         '401':
@@ -591,6 +824,12 @@ paths:
           $ref: '#/components/responses/PermissionDenied'
         '404':
           $ref: '#/components/responses/NotFound'
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApiModel'
+          description: The name is already taken.
         '500':
           $ref: '#/components/responses/UnexpectedError'
     delete:
@@ -612,18 +851,18 @@ paths:
       responses:
         '204':
           description: OK.
-        '409':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponseApiModel'
-          description: Cannot delete test while it's running.
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/PermissionDenied'
         '404':
           $ref: '#/components/responses/NotFound'
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApiModel'
+          description: Cannot delete test while it's running.
         '500':
           $ref: '#/components/responses/UnexpectedError'
   /cloud/v6/load_tests/{id}/move:
@@ -658,12 +897,6 @@ paths:
       responses:
         '204':
           description: OK.
-        '409':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponseApiModel'
-          description: Test with the same name exists in the destination.
         '400':
           $ref: '#/components/responses/ValidationError'
         '401':
@@ -672,6 +905,12 @@ paths:
           $ref: '#/components/responses/PermissionDenied'
         '404':
           $ref: '#/components/responses/NotFound'
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApiModel'
+          description: Test with the same name exists in the destination.
         '500':
           $ref: '#/components/responses/UnexpectedError'
   /cloud/v6/load_tests/{id}/script:
@@ -732,6 +971,12 @@ paths:
                   value: (.tar data)
                   summary: K6 Archive Script
           description: OK.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '404':
+          $ref: '#/components/responses/NotFound'
         '406':
           content:
             application/json:
@@ -739,12 +984,6 @@ paths:
                 $ref: '#/components/schemas/ErrorResponseApiModel'
           description: The current script type can't satisfy the request Accept header
             format.
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/PermissionDenied'
-        '404':
-          $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/UnexpectedError'
     put:
@@ -819,6 +1058,14 @@ paths:
       summary: Start a test in Grafana Cloud.
       parameters:
       - $ref: '#/components/parameters/stackId'
+      - in: header
+        name: K6-Idempotency-Key
+        schema:
+          type: string
+          maxLength: 36
+          minLength: 1
+        description: Idempotency key to prevent duplicate test starts when retrying
+          requests. The key is valid for 10 minutes.
       - in: path
         name: id
         schema:
@@ -834,7 +1081,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TestRunApiModel'
+                $ref: '#/components/schemas/StartLoadTestResponse'
               examples:
                 Started:
                   value:
@@ -864,6 +1111,11 @@ paths:
                     status_history:
                     - type: created
                       entered: '2024-06-01T19:00:00Z'
+                    max_vus: null
+                    max_browser_vus: null
+                    estimated_duration: null
+                    execution_duration: 0
+                    test_run_details_page_url: https://example.grafana.net/a/k6-app/runs/1234
           description: OK.
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -1046,6 +1298,16 @@ paths:
           default: 1000
           maximum: 1000
         description: Number of results to return per page.
+      - in: query
+        name: project_id_in
+        schema:
+          type: array
+          items:
+            type: integer
+          style: form
+          explode: false
+          maxItems: 30
+        description: Filter results by project ID (comma-separated list of IDs).
       tags:
       - projects
       security:
@@ -1095,11 +1357,12 @@ paths:
         description: |-
           Comma-separated list of fields to use when ordering the results. Available fields:
           - created
+          - name
 
           The default ascending order can be reversed by appending the `desc` specifier.
         examples:
-          Simple:
-            value: created desc
+          Multiple:
+            value: created desc,name
       - in: query
         name: $skip
         schema:
@@ -1116,7 +1379,14 @@ paths:
         name: name
         schema:
           type: string
+          maxLength: 255
         description: Filter results by project name (exact match).
+      - in: query
+        name: name_search
+        schema:
+          type: string
+          maxLength: 255
+        description: Search projects by name.
       tags:
       - projects
       security:
@@ -1182,6 +1452,12 @@ paths:
                     created: '2024-12-04T19:57:46.339Z'
                     updated: '2024-12-04T19:57:46.339Z'
           description: OK.
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
         '409':
           content:
             application/json:
@@ -1189,12 +1465,6 @@ paths:
                 $ref: '#/components/schemas/ErrorResponseApiModel'
           description: Project name is already in use or maximum number of projects
             (1000) reached.
-        '400':
-          $ref: '#/components/responses/ValidationError'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/PermissionDenied'
         '500':
           $ref: '#/components/responses/UnexpectedError'
       parameters:
@@ -1450,6 +1720,11 @@ paths:
           type: integer
         description: ID of the project.
         required: true
+      - in: query
+        name: name
+        schema:
+          type: string
+        description: Filter results by load test name (exact match).
       tags:
       - load_tests
       security:
@@ -1555,12 +1830,6 @@ paths:
                     created: '2024-12-03T09:53:00.553'
                     updated: '2024-12-03T09:53:00.553'
           description: OK.
-        '409':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponseApiModel'
-          description: The name is already taken.
         '400':
           $ref: '#/components/responses/ValidationError'
         '401':
@@ -1569,6 +1838,12 @@ paths:
           $ref: '#/components/responses/PermissionDenied'
         '404':
           $ref: '#/components/responses/NotFound'
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApiModel'
+          description: The name is already taken.
         '500':
           $ref: '#/components/responses/UnexpectedError'
   /cloud/v6/projects/{id}:
@@ -1641,12 +1916,6 @@ paths:
       responses:
         '204':
           description: OK.
-        '409':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponseApiModel'
-          description: Project name is already in use.
         '400':
           $ref: '#/components/responses/ValidationError'
         '401':
@@ -1655,6 +1924,12 @@ paths:
           $ref: '#/components/responses/PermissionDenied'
         '404':
           $ref: '#/components/responses/NotFound'
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApiModel'
+          description: Project name is already in use.
         '500':
           $ref: '#/components/responses/UnexpectedError'
     delete:
@@ -1676,18 +1951,173 @@ paths:
       responses:
         '204':
           description: OK.
-        '409':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponseApiModel'
-          description: Cannot delete project with a running test.
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/PermissionDenied'
         '404':
           $ref: '#/components/responses/NotFound'
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApiModel'
+          description: Cannot delete project with a running test.
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /cloud/v6/projects/{project_id}/labels:
+    get:
+      operationId: projects_labels_list
+      description: List all labels on a project.
+      summary: List project labels.
+      parameters:
+      - $ref: '#/components/parameters/stackId'
+      - in: path
+        name: project_id
+        schema:
+          type: integer
+        description: ID of the project.
+        required: true
+      tags:
+      - labels
+      security:
+      - k6ApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectLabelListResponse'
+              examples:
+                OK:
+                  value:
+                    value:
+                    - key: environment
+                      value: production
+                    - key: team
+                      value: backend
+          description: OK.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+    put:
+      operationId: projects_labels_update
+      description: |-
+        Replace labels on a project (Admin or Editor).
+
+        This is a full replacement operation.
+      summary: Replace project labels.
+      parameters:
+      - $ref: '#/components/parameters/stackId'
+      - in: path
+        name: project_id
+        schema:
+          type: integer
+        description: ID of the project.
+        required: true
+      tags:
+      - labels
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectLabelPutRequest'
+            examples:
+              ReplaceLabelsUsingKeyId:
+                value:
+                  value:
+                  - key_id: 1
+                    value: aws
+                summary: Replace labels using key_id
+              ReplaceLabelsUsingKey:
+                value:
+                  value:
+                  - key: provider
+                    value: aws
+                summary: Replace labels using key
+        required: true
+      security:
+      - k6ApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectLabelPutResponse'
+              examples:
+                OK:
+                  value:
+                    value:
+                    - key_id: 1
+                      key: provider
+                      value: aws
+          description: OK.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApiModel'
+          description: Invalid label key ID or name, or duplicate keys in request.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApiModel'
+          description: Project not found.
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApiModel'
+          description: Max labels per project (30) or max unique pairs per organization
+            (500) exceeded.
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /cloud/v6/projects/{project_id}/labels/{key}:
+    delete:
+      operationId: projects_labels_destroy
+      description: Remove a label from a project (Admin or Editor).
+      summary: Remove a label from project.
+      parameters:
+      - $ref: '#/components/parameters/stackId'
+      - in: path
+        name: key
+        schema:
+          type: string
+        description: Label key name.
+        required: true
+      - in: path
+        name: project_id
+        schema:
+          type: integer
+        description: ID of the project.
+        required: true
+      tags:
+      - labels
+      security:
+      - k6ApiToken: []
+      responses:
+        '204':
+          description: OK.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApiModel'
+          description: Label key not found on project.
         '500':
           $ref: '#/components/responses/UnexpectedError'
   /cloud/v6/schedules:
@@ -1913,18 +2343,18 @@ paths:
       responses:
         '204':
           description: OK.
-        '409':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponseApiModel'
-          description: Cannot re-activate an expired schedule.
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/PermissionDenied'
         '404':
           $ref: '#/components/responses/NotFound'
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApiModel'
+          description: Cannot re-activate an expired schedule.
         '500':
           $ref: '#/components/responses/UnexpectedError'
   /cloud/v6/schedules/{id}/deactivate:
@@ -2029,8 +2459,8 @@ paths:
                         total_vuh: 6.75
                         breakdown:
                           protocol_vuh: 6.75
-                          browser_vuh: 0.0
-                          base_total_vuh: 10.0
+                          browser_vuh: 0
+                          base_total_vuh: 10
                           reduction_rate: 32.5
                           reduction_rate_breakdown:
                             volume: 10
@@ -2071,6 +2501,10 @@ paths:
                         entered: '2024-06-01T19:00:10Z'
                       - type: running
                         entered: '2024-06-01T19:00:20Z'
+                      max_vus: 10
+                      max_browser_vus: 0
+                      estimated_duration: 1800
+                      execution_duration: 600
                     '@count': 123
                     '@nextLink': https://api.k6.io/cloud/v6/test_runs?$skip=50&$top=20
           description: OK.
@@ -2118,8 +2552,8 @@ paths:
                       total_vuh: 6.75
                       breakdown:
                         protocol_vuh: 6.75
-                        browser_vuh: 0.0
-                        base_total_vuh: 10.0
+                        browser_vuh: 0
+                        base_total_vuh: 10
                         reduction_rate: 32.5
                         reduction_rate_breakdown:
                           volume: 10
@@ -2160,6 +2594,10 @@ paths:
                       entered: '2024-06-01T19:00:10Z'
                     - type: running
                       entered: '2024-06-01T19:00:20Z'
+                    max_vus: 10
+                    max_browser_vus: 0
+                    estimated_duration: 1800
+                    execution_duration: 600
                 Completed:
                   value:
                     id: 1234
@@ -2172,8 +2610,8 @@ paths:
                       total_vuh: 6.75
                       breakdown:
                         protocol_vuh: 6.75
-                        browser_vuh: 0.0
-                        base_total_vuh: 10.0
+                        browser_vuh: 0
+                        base_total_vuh: 10
                         reduction_rate: 32.5
                         reduction_rate_breakdown:
                           volume: 10
@@ -2218,6 +2656,10 @@ paths:
                       entered: '2024-06-01T19:30:20Z'
                     - type: completed
                       entered: '2024-06-01T19:30:30Z'
+                    max_vus: 10
+                    max_browser_vus: 0
+                    estimated_duration: 1800
+                    execution_duration: 1800
                 ValidationError:
                   value:
                     id: 1234
@@ -2256,6 +2698,10 @@ paths:
                         by_user: null
                         message: Validation error
                         code: 123
+                    max_vus: null
+                    max_browser_vus: null
+                    estimated_duration: null
+                    execution_duration: 0
                   summary: Validation Error
           description: OK.
         '401':
@@ -2324,18 +2770,18 @@ paths:
       responses:
         '204':
           description: OK.
-        '409':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponseApiModel'
-          description: Cannot delete test while it's running.
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/PermissionDenied'
         '404':
           $ref: '#/components/responses/NotFound'
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApiModel'
+          description: Cannot delete test while it's running.
         '500':
           $ref: '#/components/responses/UnexpectedError'
   /cloud/v6/test_runs/{id}/abort:
@@ -2358,18 +2804,18 @@ paths:
       responses:
         '204':
           description: OK.
-        '409':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponseApiModel'
-          description: Cannot abort a non-running test.
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/PermissionDenied'
         '404':
           $ref: '#/components/responses/NotFound'
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseApiModel'
+          description: Cannot abort a non-running test.
         '500':
           $ref: '#/components/responses/UnexpectedError'
   /cloud/v6/test_runs/{id}/distribution:
@@ -2413,6 +2859,10 @@ paths:
                           public_ip: 3.82.149.216
                   summary: Distribution Data
           description: OK.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
         '404':
           content:
             application/json:
@@ -2420,10 +2870,6 @@ paths:
                 $ref: '#/components/schemas/ErrorResponseApiModel'
           description: Resource matching query does not exist or no distribution data
             available for the given test run.
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/PermissionDenied'
         '500':
           $ref: '#/components/responses/UnexpectedError'
   /cloud/v6/test_runs/{id}/save:
@@ -2446,6 +2892,12 @@ paths:
       responses:
         '204':
           description: OK.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '404':
+          $ref: '#/components/responses/NotFound'
         '409':
           content:
             application/json:
@@ -2465,12 +2917,6 @@ paths:
                   summary: Limit reached
           description: The test run results have been deleted, or the maximum number
             of saved test runs has been reached.
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/PermissionDenied'
-        '404':
-          $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/UnexpectedError'
   /cloud/v6/test_runs/{id}/script:
@@ -2651,8 +3097,8 @@ paths:
                     vuh_usage: 6.75
                     breakdown:
                       protocol_vuh: 6.75
-                      browser_vuh: 0.0
-                      base_total_vuh: 10.0
+                      browser_vuh: 0
+                      base_total_vuh: 10
                       reduction_rate: 32.5
                       reduction_rate_breakdown:
                         volume: 10
@@ -2825,7 +3271,6 @@ components:
       title: CostBreakdownApiModel
       type: object
     CreateLoadTestApiModel:
-      additionalProperties: false
       properties:
         name:
           description: Unique name of the test within the project.
@@ -2834,14 +3279,16 @@ components:
           title: Name
           type: string
         script:
+          default: null
           description: Test script in the form of a UTF-8 encoded text or a k6 .tar
             archive.
           format: binary
           title: Script
-          type: string
+          type:
+          - string
+          - 'null'
       required:
       - name
-      - script
       title: CreateLoadTest
       type: object
     CreateProjectApiModel:
@@ -2974,6 +3421,103 @@ components:
       - YEARLY
       title: Frequency
       type: string
+    LabelKeyCreateItem:
+      description: Single label key to create
+      properties:
+        key:
+          description: Label key name. Case-sensitive. Unique per organization.
+          maxLength: 64
+          minLength: 1
+          pattern: ^[^\s'\";\\%]+$
+          title: Key
+          type: string
+        description:
+          default: null
+          description: Optional description of the label key.
+          maxLength: 255
+          minLength: 1
+          title: Description
+          type:
+          - string
+          - 'null'
+      required:
+      - key
+      title: LabelKeyCreateItem
+      type: object
+    LabelKeyCreateRequest:
+      description: Request to create one or more label keys
+      properties:
+        value:
+          description: Array of label keys to create (1-100).
+          items:
+            $ref: '#/components/schemas/LabelKeyCreateItem'
+          maxItems: 100
+          minItems: 1
+          title: Value
+          type: array
+      required:
+      - value
+      title: LabelKeyCreateRequest
+      type: object
+    LabelKeyListResponse:
+      description: Response for listing label keys
+      properties:
+        value:
+          description: List of the resulting values.
+          items:
+            $ref: '#/components/schemas/LabelKeyResponse'
+          title: Value
+          type: array
+      required:
+      - value
+      title: LabelKeyListResponse
+      type: object
+    LabelKeyPatchRequest:
+      additionalProperties: false
+      description: Request to update a label key
+      properties:
+        key:
+          description: New label key name.
+          maxLength: 64
+          minLength: 1
+          pattern: ^[^\s'\";\\%]+$
+          title: Key
+          type:
+          - string
+          - 'null'
+        description:
+          description: New label key description.
+          maxLength: 255
+          minLength: 1
+          title: Description
+          type:
+          - string
+          - 'null'
+      title: LabelKeyPatchRequest
+      type: object
+    LabelKeyResponse:
+      description: Label key response model
+      properties:
+        id:
+          description: Label key ID.
+          title: Id
+          type: integer
+        key:
+          description: Label key name.
+          title: Key
+          type: string
+        description:
+          default: null
+          description: Label key description.
+          title: Description
+          type:
+          - string
+          - 'null'
+      required:
+      - id
+      - key
+      title: LabelKeyResponse
+      type: object
     LoadTestApiModel:
       properties:
         id:
@@ -3238,6 +3782,13 @@ components:
           format: date-time
           title: Updated
           type: string
+        labels:
+          additionalProperties:
+            type: string
+          default: {}
+          description: Project labels.
+          title: Labels
+          type: object
       required:
       - id
       - name
@@ -3246,6 +3797,118 @@ components:
       - created
       - updated
       title: Project
+      type: object
+    ProjectLabelItem:
+      description: Single project label (key-value pair)
+      properties:
+        key:
+          description: Label key name.
+          title: Key
+          type: string
+        value:
+          description: Label value.
+          title: Value
+          type: string
+      required:
+      - key
+      - value
+      title: ProjectLabelItem
+      type: object
+    ProjectLabelListResponse:
+      description: Response for listing project labels
+      properties:
+        value:
+          description: List of the resulting values.
+          items:
+            $ref: '#/components/schemas/ProjectLabelItem'
+          title: Value
+          type: array
+      required:
+      - value
+      title: ProjectLabelListResponse
+      type: object
+    ProjectLabelPutItem:
+      description: Single project label for PUT request
+      properties:
+        key_id:
+          default: null
+          description: Label key ID. Mutually exclusive with 'key'.
+          title: Key Id
+          type:
+          - integer
+          - 'null'
+        key:
+          default: null
+          description: Label key name. Mutually exclusive with 'key_id'.
+          maxLength: 64
+          minLength: 1
+          pattern: ^[^\s'\";\\%]+$
+          title: Key
+          type:
+          - string
+          - 'null'
+        value:
+          description: Label value.
+          maxLength: 64
+          minLength: 1
+          pattern: ^[^\s'\";\\%]+$
+          title: Value
+          type: string
+      required:
+      - value
+      title: ProjectLabelPutItem
+      type: object
+    ProjectLabelPutRequest:
+      description: |-
+        Request to replace project labels.
+
+        This is a full replacement of all labels on the project.
+      properties:
+        value:
+          description: Array of labels to assign (0-30).
+          items:
+            $ref: '#/components/schemas/ProjectLabelPutItem'
+          maxItems: 30
+          minItems: 0
+          title: Value
+          type: array
+      required:
+      - value
+      title: ProjectLabelPutRequest
+      type: object
+    ProjectLabelPutResponse:
+      description: Response for PUT project labels
+      properties:
+        value:
+          description: List of project labels.
+          items:
+            $ref: '#/components/schemas/ProjectLabelPutResponseItem'
+          title: Value
+          type: array
+      required:
+      - value
+      title: ProjectLabelPutResponse
+      type: object
+    ProjectLabelPutResponseItem:
+      description: Single project label in PUT response
+      properties:
+        key_id:
+          description: Label key ID.
+          title: Key Id
+          type: integer
+        key:
+          description: Label key name.
+          title: Key
+          type: string
+        value:
+          description: Label value.
+          title: Value
+          type: string
+      required:
+      - key_id
+      - key
+      - value
+      title: ProjectLabelPutResponseItem
       type: object
     ProjectLimitsApiModel:
       properties:
@@ -3490,6 +4153,174 @@ components:
       - frequency
       title: ScheduleRecurrenceRule
       type: object
+    StartLoadTestResponse:
+      properties:
+        id:
+          description: ID of the test run.
+          title: Id
+          type: integer
+        test_id:
+          description: ID of the parent test.
+          title: Test Id
+          type: integer
+        project_id:
+          description: ID of the parent project.
+          title: Project Id
+          type: integer
+        started_by:
+          description: Email of the user who started the test if started with a user
+            token.
+          format: email
+          title: Started By
+          type:
+          - string
+          - 'null'
+        created:
+          description: Date and time when the test run was started.
+          format: date-time
+          title: Created
+          type: string
+        ended:
+          description: Date and time when the test run ended. Unset if the test is
+            still running.
+          format: date-time
+          title: Ended
+          type:
+          - string
+          - 'null'
+        note:
+          description: User-defined note for the test run.
+          title: Note
+          type: string
+        retention_expiry:
+          description: Timestamp after which the test run results are deleted or null
+            if the test run is saved.
+          format: date-time
+          title: Retention Expiry
+          type:
+          - string
+          - 'null'
+        cost:
+          description: |-
+            Test run cost details. The cost is available only after test run validation.
+
+            - For test runs still in progress, the value is an estimate of the full cost that will be charged upon successful completion.
+            - For finished test runs, the value is the real cost charged for the test run.
+          oneOf:
+          - $ref: '#/components/schemas/TestCostApiModel'
+          - type: 'null'
+        status:
+          description: Current test run status.
+          title: Status
+          type: string
+        status_details:
+          $ref: '#/components/schemas/StatusApiModel'
+          description: Details of the current test run status.
+        status_history:
+          description: List of test run status objects sorted by the status start
+            time. The list represents the test run status history.
+          items:
+            $ref: '#/components/schemas/StatusApiModel'
+          title: Status History
+          type: array
+        distribution:
+          description: List of the load zones configured for the test and the corresponding
+            distribution percentages.
+          items:
+            $ref: '#/components/schemas/DistributionZoneApiModel'
+          title: Distribution
+          type:
+          - array
+          - 'null'
+        result:
+          description: Test run result. `passed` if there were no issues, `failed`
+            if thresholds were breached, `error` if the execution was not completed.
+          title: Result
+          type:
+          - string
+          - 'null'
+        result_details:
+          additionalProperties: true
+          description: Additional information about the test run result.
+          title: Result Details
+          type:
+          - object
+          - 'null'
+        options:
+          additionalProperties: true
+          description: The original options object if available.
+          title: Options
+          type:
+          - object
+          - 'null'
+        k6_dependencies:
+          additionalProperties:
+            type: string
+          description: The requested version of k6 and extensions that was part of
+            the script/archive.
+          title: k6 Dependencies
+          type: object
+        k6_versions:
+          additionalProperties:
+            type: string
+          description: The computed version for k6 and extensions used to run the
+            test.
+          title: k6 Versions
+          type: object
+        max_vus:
+          description: The maximum number of total VUs (browser and protocol) at any
+            stage of the execution plan.
+          title: Max Vus
+          type:
+          - integer
+          - 'null'
+        max_browser_vus:
+          description: The maximum number of browser VUs at any stage of the execution
+            plan.
+          title: Max Browser Vus
+          type:
+          - integer
+          - 'null'
+        estimated_duration:
+          description: The estimated duration of the test run in seconds.
+          title: Estimated Duration
+          type:
+          - integer
+          - 'null'
+        execution_duration:
+          description: The real billable duration of the test run in seconds.
+          title: Execution Duration
+          type: integer
+        test_run_details_page_url:
+          description: URL to the Grafana web app test run page.
+          title: Test Run Details Page Url
+          type: string
+      required:
+      - id
+      - test_id
+      - project_id
+      - started_by
+      - created
+      - ended
+      - note
+      - retention_expiry
+      - cost
+      - status
+      - status_details
+      - status_history
+      - distribution
+      - result
+      - result_details
+      - options
+      - k6_dependencies
+      - k6_versions
+      - max_vus
+      - max_browser_vus
+      - estimated_duration
+      - execution_duration
+      - test_run_details_page_url
+      title: StartLoadTestResponse
+      type: object
     StatusApiModel:
       description: Details of the test run status.
       properties:
@@ -3671,6 +4502,30 @@ components:
             test.
           title: k6 Versions
           type: object
+        max_vus:
+          description: The maximum number of total VUs (browser and protocol) at any
+            stage of the execution plan.
+          title: Max Vus
+          type:
+          - integer
+          - 'null'
+        max_browser_vus:
+          description: The maximum number of browser VUs at any stage of the execution
+            plan.
+          title: Max Browser Vus
+          type:
+          - integer
+          - 'null'
+        estimated_duration:
+          description: The estimated duration of the test run in seconds.
+          title: Estimated Duration
+          type:
+          - integer
+          - 'null'
+        execution_duration:
+          description: The real billable duration of the test run in seconds.
+          title: Execution Duration
+          type: integer
       required:
       - id
       - test_id
@@ -3690,6 +4545,10 @@ components:
       - options
       - k6_dependencies
       - k6_versions
+      - max_vus
+      - max_browser_vus
+      - estimated_duration
+      - execution_duration
       title: TestRun
       type: object
     TestRunDistributionApiModel:
@@ -3780,6 +4639,11 @@ components:
           type:
           - object
           - 'null'
+        is_local_execution:
+          default: false
+          description: Whether the test is being executed locally.
+          title: Is Local Execution
+          type: boolean
       required:
       - options
       title: ValidateOptionsRequest
@@ -3810,11 +4674,19 @@ components:
       title: Weekday
       type: string
   securitySchemes:
+    gcomToken:
+      type: http
+      scheme: bearer
+      description: Token-based authentication using GCom API bearer token.
     k6ApiToken:
       type: http
       scheme: bearer
       description: Token-based authentication using k6 Personal API token or Grafana
         Stack API token.
+    testRunToken:
+      type: http
+      scheme: bearer
+      description: Token-based authentication using short-lived test run token.
   parameters:
     stackId:
       in: header
@@ -3857,19 +4729,3 @@ components:
           schema:
             $ref: '#/components/schemas/ErrorResponseApiModel'
       description: Unexpected error.
-servers:
-- url: https://api.k6.io
-  description: Global k6 Cloud API.
-tags:
-- name: authorization
-  description: API endpoints for validating tokens.
-- name: load_tests
-  description: API endpoints for managing and starting tests.
-- name: load_zones
-  description: API endpoints for managing load zones.
-- name: projects
-  description: API endpoints for managing projects.
-- name: schedules
-  description: API endpoints for managing test schedules.
-- name: test_runs
-  description: API endpoints for managing test runs.
