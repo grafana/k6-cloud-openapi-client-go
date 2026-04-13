@@ -12,7 +12,7 @@ Name | Type | Description | Notes
 **Ended** | **NullableTime** | Date and time when the test run ended. Unset if the test is still running. | 
 **Note** | **string** | User-defined note for the test run. | 
 **RetentionExpiry** | **NullableTime** | Timestamp after which the test run results are deleted or null if the test run is saved. | 
-**Cost** | [**NullableTestCostApiModel**](TestCostApiModel.md) |  | 
+**Cost** | [**NullableTestRunApiModelCost**](TestRunApiModelCost.md) |  | 
 **Status** | **string** | Current test run status. | 
 **StatusDetails** | [**StatusApiModel**](StatusApiModel.md) | Details of the current test run status. | 
 **StatusHistory** | [**[]StatusApiModel**](StatusApiModel.md) | List of test run status objects sorted by the status start time. The list represents the test run status history. | 
@@ -22,12 +22,16 @@ Name | Type | Description | Notes
 **Options** | **map[string]interface{}** | The original options object if available. | 
 **K6Dependencies** | **map[string]string** | The requested version of k6 and extensions that was part of the script/archive. | 
 **K6Versions** | **map[string]string** | The computed version for k6 and extensions used to run the test. | 
+**MaxVus** | **NullableInt32** | The maximum number of total VUs (browser and protocol) at any stage of the execution plan. | 
+**MaxBrowserVus** | **NullableInt32** | The maximum number of browser VUs at any stage of the execution plan. | 
+**EstimatedDuration** | **NullableInt32** | The estimated duration of the test run in seconds. | 
+**ExecutionDuration** | **int32** | The real billable duration of the test run in seconds. | 
 
 ## Methods
 
 ### NewTestRunApiModel
 
-`func NewTestRunApiModel(id int32, testId int32, projectId int32, startedBy NullableString, created time.Time, ended NullableTime, note string, retentionExpiry NullableTime, cost NullableTestCostApiModel, status string, statusDetails StatusApiModel, statusHistory []StatusApiModel, distribution []DistributionZoneApiModel, result NullableString, resultDetails map[string]interface{}, options map[string]interface{}, k6Dependencies map[string]string, k6Versions map[string]string, ) *TestRunApiModel`
+`func NewTestRunApiModel(id int32, testId int32, projectId int32, startedBy NullableString, created time.Time, ended NullableTime, note string, retentionExpiry NullableTime, cost NullableTestRunApiModelCost, status string, statusDetails StatusApiModel, statusHistory []StatusApiModel, distribution []DistributionZoneApiModel, result NullableString, resultDetails map[string]interface{}, options map[string]interface{}, k6Dependencies map[string]string, k6Versions map[string]string, maxVus NullableInt32, maxBrowserVus NullableInt32, estimatedDuration NullableInt32, executionDuration int32, ) *TestRunApiModel`
 
 NewTestRunApiModel instantiates a new TestRunApiModel object
 This constructor will assign default values to properties that have it defined,
@@ -234,20 +238,20 @@ SetRetentionExpiry sets RetentionExpiry field to given value.
 UnsetRetentionExpiry ensures that no value is present for RetentionExpiry, not even an explicit nil
 ### GetCost
 
-`func (o *TestRunApiModel) GetCost() TestCostApiModel`
+`func (o *TestRunApiModel) GetCost() TestRunApiModelCost`
 
 GetCost returns the Cost field if non-nil, zero value otherwise.
 
 ### GetCostOk
 
-`func (o *TestRunApiModel) GetCostOk() (*TestCostApiModel, bool)`
+`func (o *TestRunApiModel) GetCostOk() (*TestRunApiModelCost, bool)`
 
 GetCostOk returns a tuple with the Cost field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetCost
 
-`func (o *TestRunApiModel) SetCost(v TestCostApiModel)`
+`func (o *TestRunApiModel) SetCost(v TestRunApiModelCost)`
 
 SetCost sets Cost field to given value.
 
@@ -480,6 +484,116 @@ and a boolean to check if the value has been set.
 `func (o *TestRunApiModel) SetK6Versions(v map[string]string)`
 
 SetK6Versions sets K6Versions field to given value.
+
+
+### GetMaxVus
+
+`func (o *TestRunApiModel) GetMaxVus() int32`
+
+GetMaxVus returns the MaxVus field if non-nil, zero value otherwise.
+
+### GetMaxVusOk
+
+`func (o *TestRunApiModel) GetMaxVusOk() (*int32, bool)`
+
+GetMaxVusOk returns a tuple with the MaxVus field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetMaxVus
+
+`func (o *TestRunApiModel) SetMaxVus(v int32)`
+
+SetMaxVus sets MaxVus field to given value.
+
+
+### SetMaxVusNil
+
+`func (o *TestRunApiModel) SetMaxVusNil(b bool)`
+
+ SetMaxVusNil sets the value for MaxVus to be an explicit nil
+
+### UnsetMaxVus
+`func (o *TestRunApiModel) UnsetMaxVus()`
+
+UnsetMaxVus ensures that no value is present for MaxVus, not even an explicit nil
+### GetMaxBrowserVus
+
+`func (o *TestRunApiModel) GetMaxBrowserVus() int32`
+
+GetMaxBrowserVus returns the MaxBrowserVus field if non-nil, zero value otherwise.
+
+### GetMaxBrowserVusOk
+
+`func (o *TestRunApiModel) GetMaxBrowserVusOk() (*int32, bool)`
+
+GetMaxBrowserVusOk returns a tuple with the MaxBrowserVus field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetMaxBrowserVus
+
+`func (o *TestRunApiModel) SetMaxBrowserVus(v int32)`
+
+SetMaxBrowserVus sets MaxBrowserVus field to given value.
+
+
+### SetMaxBrowserVusNil
+
+`func (o *TestRunApiModel) SetMaxBrowserVusNil(b bool)`
+
+ SetMaxBrowserVusNil sets the value for MaxBrowserVus to be an explicit nil
+
+### UnsetMaxBrowserVus
+`func (o *TestRunApiModel) UnsetMaxBrowserVus()`
+
+UnsetMaxBrowserVus ensures that no value is present for MaxBrowserVus, not even an explicit nil
+### GetEstimatedDuration
+
+`func (o *TestRunApiModel) GetEstimatedDuration() int32`
+
+GetEstimatedDuration returns the EstimatedDuration field if non-nil, zero value otherwise.
+
+### GetEstimatedDurationOk
+
+`func (o *TestRunApiModel) GetEstimatedDurationOk() (*int32, bool)`
+
+GetEstimatedDurationOk returns a tuple with the EstimatedDuration field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetEstimatedDuration
+
+`func (o *TestRunApiModel) SetEstimatedDuration(v int32)`
+
+SetEstimatedDuration sets EstimatedDuration field to given value.
+
+
+### SetEstimatedDurationNil
+
+`func (o *TestRunApiModel) SetEstimatedDurationNil(b bool)`
+
+ SetEstimatedDurationNil sets the value for EstimatedDuration to be an explicit nil
+
+### UnsetEstimatedDuration
+`func (o *TestRunApiModel) UnsetEstimatedDuration()`
+
+UnsetEstimatedDuration ensures that no value is present for EstimatedDuration, not even an explicit nil
+### GetExecutionDuration
+
+`func (o *TestRunApiModel) GetExecutionDuration() int32`
+
+GetExecutionDuration returns the ExecutionDuration field if non-nil, zero value otherwise.
+
+### GetExecutionDurationOk
+
+`func (o *TestRunApiModel) GetExecutionDurationOk() (*int32, bool)`
+
+GetExecutionDurationOk returns a tuple with the ExecutionDuration field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetExecutionDuration
+
+`func (o *TestRunApiModel) SetExecutionDuration(v int32)`
+
+SetExecutionDuration sets ExecutionDuration field to given value.
 
 
 

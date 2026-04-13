@@ -10,6 +10,7 @@ Name | Type | Description | Notes
 **GrafanaFolderUid** | **NullableString** | Grafana folder UID. | 
 **Created** | **time.Time** | The date when the project was created. | 
 **Updated** | **time.Time** | The date when the project was last updated. | 
+**Labels** | Pointer to **map[string]string** | Project labels. | [optional] [default to {}]
 
 ## Methods
 
@@ -159,6 +160,31 @@ and a boolean to check if the value has been set.
 
 SetUpdated sets Updated field to given value.
 
+
+### GetLabels
+
+`func (o *ProjectApiModel) GetLabels() map[string]string`
+
+GetLabels returns the Labels field if non-nil, zero value otherwise.
+
+### GetLabelsOk
+
+`func (o *ProjectApiModel) GetLabelsOk() (*map[string]string, bool)`
+
+GetLabelsOk returns a tuple with the Labels field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetLabels
+
+`func (o *ProjectApiModel) SetLabels(v map[string]string)`
+
+SetLabels sets Labels field to given value.
+
+### HasLabels
+
+`func (o *ProjectApiModel) HasLabels() bool`
+
+HasLabels returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
