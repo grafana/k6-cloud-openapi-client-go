@@ -7,12 +7,15 @@ Name | Type | Description | Notes
 **Id** | **int32** | ID of the load zone. | 
 **Name** | **string** | Name of the load zone. | 
 **K6LoadZoneId** | **string** | ID used to identify the load zone in the k6 scripts. | 
+**Available** | **bool** | Whether the load zone can be used to start tests. | 
+**CustomLoadRunnerImage** | **NullableString** | Custom load runner image. Only set for private load zones. | 
+**Public** | **bool** | Whether the load zone is public or private. | 
 
 ## Methods
 
 ### NewLoadZoneApiModel
 
-`func NewLoadZoneApiModel(id int32, name string, k6LoadZoneId string, ) *LoadZoneApiModel`
+`func NewLoadZoneApiModel(id int32, name string, k6LoadZoneId string, available bool, customLoadRunnerImage NullableString, public bool, ) *LoadZoneApiModel`
 
 NewLoadZoneApiModel instantiates a new LoadZoneApiModel object
 This constructor will assign default values to properties that have it defined,
@@ -85,6 +88,76 @@ and a boolean to check if the value has been set.
 `func (o *LoadZoneApiModel) SetK6LoadZoneId(v string)`
 
 SetK6LoadZoneId sets K6LoadZoneId field to given value.
+
+
+### GetAvailable
+
+`func (o *LoadZoneApiModel) GetAvailable() bool`
+
+GetAvailable returns the Available field if non-nil, zero value otherwise.
+
+### GetAvailableOk
+
+`func (o *LoadZoneApiModel) GetAvailableOk() (*bool, bool)`
+
+GetAvailableOk returns a tuple with the Available field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetAvailable
+
+`func (o *LoadZoneApiModel) SetAvailable(v bool)`
+
+SetAvailable sets Available field to given value.
+
+
+### GetCustomLoadRunnerImage
+
+`func (o *LoadZoneApiModel) GetCustomLoadRunnerImage() string`
+
+GetCustomLoadRunnerImage returns the CustomLoadRunnerImage field if non-nil, zero value otherwise.
+
+### GetCustomLoadRunnerImageOk
+
+`func (o *LoadZoneApiModel) GetCustomLoadRunnerImageOk() (*string, bool)`
+
+GetCustomLoadRunnerImageOk returns a tuple with the CustomLoadRunnerImage field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetCustomLoadRunnerImage
+
+`func (o *LoadZoneApiModel) SetCustomLoadRunnerImage(v string)`
+
+SetCustomLoadRunnerImage sets CustomLoadRunnerImage field to given value.
+
+
+### SetCustomLoadRunnerImageNil
+
+`func (o *LoadZoneApiModel) SetCustomLoadRunnerImageNil(b bool)`
+
+ SetCustomLoadRunnerImageNil sets the value for CustomLoadRunnerImage to be an explicit nil
+
+### UnsetCustomLoadRunnerImage
+`func (o *LoadZoneApiModel) UnsetCustomLoadRunnerImage()`
+
+UnsetCustomLoadRunnerImage ensures that no value is present for CustomLoadRunnerImage, not even an explicit nil
+### GetPublic
+
+`func (o *LoadZoneApiModel) GetPublic() bool`
+
+GetPublic returns the Public field if non-nil, zero value otherwise.
+
+### GetPublicOk
+
+`func (o *LoadZoneApiModel) GetPublicOk() (*bool, bool)`
+
+GetPublicOk returns a tuple with the Public field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetPublic
+
+`func (o *LoadZoneApiModel) SetPublic(v bool)`
+
+SetPublic sets Public field to given value.
 
 
 

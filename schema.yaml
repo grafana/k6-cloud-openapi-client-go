@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Grafana Cloud k6
-  version: 1.9.1
+  version: 1.9.3
   description: HTTP API for interacting with Grafana Cloud k6.
   contact:
     name: Grafana Support
@@ -26,11 +26,195 @@ tags:
 - name: test_runs
   description: API endpoints for managing test runs.
 paths:
+  /provisioning/v1/load_tests/{id}/start_local_execution:
+    post:
+      operationId: start_local_execution_test
+      description: Start a test in local execution mode.
+      summary: Start a test in local execution mode.
+      parameters:
+      - in: header
+        name: K6-Idempotency-Key
+        schema:
+          type: string
+          maxLength: 36
+          minLength: 1
+        description: Idempotency key to prevent duplicate test starts when retrying requests. The key is valid for 10 minutes.
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: ID of the load test.
+        required: true
+      tags:
+      - provisioning
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StartLocalExecutionTestRequest'
+            examples:
+              Start:
+                value:
+                  options:
+                    vus: 10
+                    duration: 10m
+                  max_vus: 10
+                  total_duration: 630
+                  instances: null
+                  archive_size: 1000
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StartLocalExecutionTestResponse'
+              examples:
+                Started:
+                  value:
+                    test_run_id: 1234
+                    archive_upload_url: https://example.com/archive.tar
+                    runtime_config:
+                      metrics:
+                        push_url: https://example.com/metrics
+                        push_interval: 1s
+                        push_concurrency: 10
+                        aggregation_period: 1s
+                        aggregation_wait_period: 1s
+                        aggregation_min_samples: 10
+                        max_samples_per_package: 1000
+                      traces:
+                        push_url: https://example.com/traces
+                        traces_metadata: {}
+                        proto: http
+                      files:
+                        push_url: https://example.com/files
+                        screenshots_base_path: /screenshots
+                        headers: {}
+                        method: POST
+                      logs:
+                        push_url: https://example.com/logs
+                        tail_url: https://example.com/logs/tail
+                        limit: 900
+                        push_period_seconds: 3s
+                        level: info
+                        message_max_size: 10000
+                        allowed_labels:
+                        - lz
+                        - level
+                        - test_run_id
+                        - instance_id
+                        - source
+                      secrets:
+                        endpoint: https://api.k6.io/provisioning/v1/test_runs/1234/decrypt_secret?name={key}
+                        response_path: plaintext
+                      test_run_token: test_run_token
+                    test_run_details_page_url: https://example.com/test_run_details
+          description: OK.
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /provisioning/v1/test_runs/{id}/notify:
+    post:
+      operationId: test_runs_notify
+      description: Report a test run lifecycle event.
+      summary: Report a test run lifecycle event.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: ID of the test run.
+        required: true
+      tags:
+      - provisioning
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScriptExecutionCompletedNotificationApiModel'
+            examples:
+              ScriptExecutionCompleted:
+                value:
+                  event_type: script_execution_completed
+                  error: null
+              ScriptExecutionCompletedWithError:
+                value:
+                  event_type: script_execution_completed
+                  error:
+                    code: 8030
+                    reason: 'An error occurred during setup() execution: TypeError: Cannot read property ''x'' of undefined'
+        required: true
+      responses:
+        '204':
+          description: OK.
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /provisioning/v1/test_runs/{test_run_id}/decrypt_secret:
+    get:
+      operationId: test_runs_decrypt_secret_retrieve
+      description: |-
+        Decrypt the indicated test.
+
+        Note that the test run is not used directly in this endpoint. It's included in the path
+        so the "test run based authentication" can happen, but after that, if we actually get
+        to the code here, all we need is the organization related information.
+      summary: Decrypt a secret for a test run.
+      parameters:
+      - in: query
+        name: name
+        schema:
+          type: string
+        description: The name of the secret to decrypt.
+        required: true
+      - in: path
+        name: test_run_id
+        schema:
+          type: integer
+        description: ID of the test run.
+        required: true
+      tags:
+      - provisioning
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DecryptedApiModel'
+              examples:
+                OK:
+                  value:
+                    plaintext: 42abc
+          description: OK.
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
   /cloud/v6/auth:
     get:
       operationId: auth
-      description: Validate a Grafana Cloud k6 Personal API token or Stack API token
-        and access to the stack.
+      description: Validate a Grafana Cloud k6 Personal API token or Stack API token and access to the stack.
       summary: Validate a Grafana Cloud k6 API token and access to the stack.
       parameters:
       - in: header
@@ -982,8 +1166,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponseApiModel'
-          description: The current script type can't satisfy the request Accept header
-            format.
+          description: The current script type can't satisfy the request Accept header format.
         '500':
           $ref: '#/components/responses/UnexpectedError'
     put:
@@ -1064,8 +1247,7 @@ paths:
           type: string
           maxLength: 36
           minLength: 1
-        description: Idempotency key to prevent duplicate test starts when retrying
-          requests. The key is valid for 10 minutes.
+        description: Idempotency key to prevent duplicate test starts when retrying requests. The key is valid for 10 minutes.
       - in: path
         name: id
         schema:
@@ -1154,12 +1336,21 @@ paths:
                     - id: 1
                       name: US East (N. Virginia)
                       k6_load_zone_id: amazon:us:ashburn
+                      available: true
+                      custom_load_runner_image: null
+                      public: true
                     - id: 2
                       name: Ops playground
                       k6_load_zone_id: ops-playground-plz
+                      available: true
+                      custom_load_runner_image: grafana/k6:latest
+                      public: false
                     - id: 3
                       name: Asia Pacific (Tokyo)
                       k6_load_zone_id: amazon:jp:tokyo
+                      available: false
+                      custom_load_runner_image: null
+                      public: true
           description: OK.
         '400':
           $ref: '#/components/responses/ValidationError'
@@ -1216,8 +1407,7 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
     put:
       operationId: load_zones_allowed_projects_update
-      description: Update the list of projects allowed to use a given private load
-        zone.
+      description: Update the list of projects allowed to use a given private load zone.
       summary: Update the list of projects allowed to use a given private load zone.
       parameters:
       - $ref: '#/components/parameters/stackId'
@@ -1463,8 +1653,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponseApiModel'
-          description: Project name is already in use or maximum number of projects
-            (1000) reached.
+          description: Project name is already in use or maximum number of projects (1000) reached.
         '500':
           $ref: '#/components/responses/UnexpectedError'
       parameters:
@@ -1499,12 +1688,21 @@ paths:
                     - id: 24
                       name: EU region load zone
                       k6_load_zone_id: eu-region-load-zone
+                      available: true
+                      custom_load_runner_image: grafana/k6:latest
+                      public: false
                     - id: 173
                       name: US region load zone
                       k6_load_zone_id: us-region-load-zone
+                      available: true
+                      custom_load_runner_image: grafana/k6:latest
+                      public: false
                     - id: 8345
                       name: Ops playground load zone
                       k6_load_zone_id: ops-playground-load-zone
+                      available: false
+                      custom_load_runner_image: null
+                      public: false
           description: OK.
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -1516,8 +1714,7 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
     put:
       operationId: projects_allowed_load_zones_update
-      description: Update the list of private load zones that can be used by a given
-        project.
+      description: Update the list of private load zones that can be used by a given project.
       summary: Update the list of private load zones that can be used by a given project.
       parameters:
       - $ref: '#/components/parameters/stackId'
@@ -1557,12 +1754,21 @@ paths:
                     - id: 24
                       name: EU region load zone
                       k6_load_zone_id: eu-region-load-zone
+                      available: true
+                      custom_load_runner_image: grafana/k6:latest
+                      public: false
                     - id: 173
                       name: US region load zone
                       k6_load_zone_id: us-region-load-zone
+                      available: true
+                      custom_load_runner_image: grafana/k6:latest
+                      public: false
                     - id: 8345
                       name: Ops playground load zone
                       k6_load_zone_id: ops-playground-load-zone
+                      available: false
+                      custom_load_runner_image: null
+                      public: false
           description: OK.
         '400':
           $ref: '#/components/responses/ValidationError'
@@ -2078,8 +2284,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponseApiModel'
-          description: Max labels per project (30) or max unique pairs per organization
-            (500) exceeded.
+          description: Max labels per project (30) or max unique pairs per organization (500) exceeded.
         '500':
           $ref: '#/components/responses/UnexpectedError'
   /cloud/v6/projects/{project_id}/labels/{key}:
@@ -2868,8 +3073,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponseApiModel'
-          description: Resource matching query does not exist or no distribution data
-            available for the given test run.
+          description: Resource matching query does not exist or no distribution data available for the given test run.
         '500':
           $ref: '#/components/responses/UnexpectedError'
   /cloud/v6/test_runs/{id}/save:
@@ -2915,8 +3119,7 @@ paths:
                       message: The maximum number of saved test runs has been reached
                       code: conflict
                   summary: Limit reached
-          description: The test run results have been deleted, or the maximum number
-            of saved test runs has been reached.
+          description: The test run results have been deleted, or the maximum number of saved test runs has been reached.
         '500':
           $ref: '#/components/responses/UnexpectedError'
   /cloud/v6/test_runs/{id}/script:
@@ -3116,6 +3319,375 @@ paths:
       - $ref: '#/components/parameters/stackId'
 components:
   schemas:
+    DecryptedApiModel:
+      description: Model for the response of the secrets decryption endpoint.
+      properties:
+        plaintext:
+          description: The decrypted secret.
+          title: Plaintext
+          type: string
+      required:
+      - plaintext
+      title: Decrypted
+      type: object
+    ErrorApiModel:
+      description: Details of the error.
+      properties:
+        message:
+          description: Human-readable string describing the error.
+          title: Message
+          type: string
+        code:
+          description: Service-defined error code.
+          title: Code
+          type: string
+        target:
+          default: null
+          description: A string indicating the target of the error. For example, the name of the property in error.
+          title: Target
+          type:
+          - string
+          - 'null'
+        details:
+          default: null
+          description: Array of objects with more specific error information when applicable.
+          items:
+            $ref: '#/components/schemas/ErrorDetailsApiModel'
+          title: Details
+          type:
+          - array
+          - 'null'
+      required:
+      - message
+      - code
+      title: Error
+      type: object
+    ErrorDetailsApiModel:
+      properties:
+        message:
+          description: Human-readable string describing the error.
+          title: Message
+          type: string
+        code:
+          description: Service-defined error code.
+          title: Code
+          type: string
+        target:
+          default: null
+          description: A string indicating the target of the error. For example, the name of the property in error.
+          title: Target
+          type:
+          - string
+          - 'null'
+      required:
+      - message
+      - code
+      title: ErrorDetails
+      type: object
+    ErrorResponseApiModel:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorApiModel'
+      required:
+      - error
+      title: ErrorResponse
+      type: object
+    FilesRuntimeConfig:
+      description: Files upload runtime configuration.
+      properties:
+        push_url:
+          description: URL to generate a pre-signed URLs for file uploads.
+          title: Push Url
+          type: string
+        screenshots_base_path:
+          description: Base path for screenshot uploads.
+          title: Screenshots Base Path
+          type: string
+        headers:
+          additionalProperties:
+            type: string
+          description: HTTP headers to include in requests.
+          title: Headers
+          type: object
+        method:
+          description: HTTP method to use for screenshot uploads.
+          title: Method
+          type: string
+      required:
+      - push_url
+      - screenshots_base_path
+      - headers
+      - method
+      title: FilesRuntimeConfig
+      type: object
+    LocalExecutionOptions:
+      additionalProperties: true
+      description: Parsed k6 script options.
+      properties: {}
+      title: LocalExecutionOptions
+      type: object
+    LogsRuntimeConfig:
+      description: Logs push runtime configuration.
+      properties:
+        push_url:
+          description: URL to push logs to.
+          title: Push Url
+          type: string
+        tail_url:
+          description: URL to tail logs from.
+          title: Tail Url
+          type: string
+        limit:
+          description: Maximum number of log lines to push per interval.
+          title: Limit
+          type: integer
+        push_period_seconds:
+          description: How often logs are pushed to the ingest service, for example '3s'.
+          title: Push Period Seconds
+          type: string
+        level:
+          description: Minimum log level to collect.
+          title: Level
+          type: string
+        message_max_size:
+          description: Maximum size in bytes of a single log message.
+          title: Message Max Size
+          type: integer
+        allowed_labels:
+          description: Log stream labels that are allowed to be forwarded.
+          items:
+            type: string
+          title: Allowed Labels
+          type: array
+      required:
+      - push_url
+      - tail_url
+      - limit
+      - push_period_seconds
+      - level
+      - message_max_size
+      - allowed_labels
+      title: LogsRuntimeConfig
+      type: object
+    MetricsRuntimeConfig:
+      description: Metrics push runtime configuration.
+      properties:
+        push_url:
+          description: URL to push metrics to.
+          title: Push Url
+          type: string
+        push_interval:
+          description: The time interval between periodic API calls for sending samples to the cloud ingest service.
+          title: Push Interval
+          type:
+          - string
+          - 'null'
+        push_concurrency:
+          description: How many concurrent pushes will be done at the same time to the cloud.
+          title: Push Concurrency
+          type:
+          - integer
+          - 'null'
+        aggregation_period:
+          description: If specified and is greater than 0, sample aggregation with that period is enabled.
+          title: Aggregation Period
+          type:
+          - string
+          - 'null'
+        aggregation_wait_period:
+          description: If aggregation is enabled, this specifies how long we'll wait for period samples to accumulate before trying to aggregate them.
+          title: Aggregation Wait Period
+          type:
+          - string
+          - 'null'
+        aggregation_min_samples:
+          description: The minimum number of samples to aggregate.
+          title: Aggregation Min Samples
+          type:
+          - integer
+          - 'null'
+        max_samples_per_package:
+          description: The max allowed number of time series in a single batch.
+          title: Max Samples Per Package
+          type:
+          - integer
+          - 'null'
+      required:
+      - push_url
+      - push_interval
+      - push_concurrency
+      - aggregation_period
+      - aggregation_wait_period
+      - aggregation_min_samples
+      - max_samples_per_package
+      title: MetricsRuntimeConfig
+      type: object
+    RuntimeConfig:
+      description: Runtime configuration override for the test run.
+      properties:
+        metrics:
+          $ref: '#/components/schemas/MetricsRuntimeConfig'
+        traces:
+          $ref: '#/components/schemas/TracesRuntimeConfig'
+        files:
+          $ref: '#/components/schemas/FilesRuntimeConfig'
+        logs:
+          $ref: '#/components/schemas/LogsRuntimeConfig'
+        secrets:
+          $ref: '#/components/schemas/SecretsRuntimeConfig'
+        test_run_token:
+          description: The short-lived test run token.
+          title: Test Run Token
+          type: string
+      required:
+      - metrics
+      - traces
+      - files
+      - logs
+      - secrets
+      - test_run_token
+      title: RuntimeConfig
+      type: object
+    ScriptExecutionCompletedNotificationApiModel:
+      description: Request body for reporting a test run lifecycle event.
+      properties:
+        event_type:
+          const: script_execution_completed
+          description: Event type.
+          title: Event Type
+          type: string
+        error:
+          default: null
+          description: Error details if the script execution completed with an error.
+          oneOf:
+          - $ref: '#/components/schemas/ScriptExecutionError'
+          - type: 'null'
+      required:
+      - event_type
+      title: ScriptExecutionCompletedNotification
+      type: object
+    ScriptExecutionError:
+      description: Error payload for a test run lifecycle event notification.
+      properties:
+        code:
+          description: Error code.
+          title: Code
+          type: integer
+        reason:
+          description: Human-readable error description shown to the user.
+          title: Reason
+          type: string
+        detail:
+          default: null
+          description: Optional internal debug information.
+          title: Detail
+          type:
+          - string
+          - 'null'
+      required:
+      - code
+      - reason
+      title: ScriptExecutionError
+      type: object
+    SecretsRuntimeConfig:
+      description: Secrets runtime configuration.
+      properties:
+        endpoint:
+          description: URL template for the secrets decrypt endpoint.
+          title: Endpoint
+          type: string
+        response_path:
+          description: JSON path to extract the secret value from the response.
+          title: Response Path
+          type: string
+      required:
+      - endpoint
+      - response_path
+      title: SecretsRuntimeConfig
+      type: object
+    StartLocalExecutionTestRequest:
+      properties:
+        options:
+          $ref: '#/components/schemas/LocalExecutionOptions'
+        max_vus:
+          description: Maximum number of virtual users during the test.
+          title: Max Vus
+          type: integer
+        total_duration:
+          description: Total duration of the test in seconds.
+          title: Total Duration
+          type: integer
+        instances:
+          default: null
+          description: Number of load generator instances that will run the test (k6-operator only).
+          exclusiveMinimum: 0
+          title: Instances
+          type:
+          - integer
+          - 'null'
+        archive_size:
+          default: null
+          description: K6 archive file size in bytes or null if not uploading.
+          exclusiveMinimum: 0
+          maximum: 100000000
+          title: Archive Size
+          type:
+          - integer
+          - 'null'
+      required:
+      - options
+      - max_vus
+      - total_duration
+      title: StartLocalExecutionTestRequest
+      type: object
+    StartLocalExecutionTestResponse:
+      properties:
+        test_run_id:
+          description: ID of the created test run.
+          title: Test Run Id
+          type: integer
+        runtime_config:
+          $ref: '#/components/schemas/RuntimeConfig'
+        archive_upload_url:
+          description: URL to upload the k6 archive or null if not uploading.
+          title: Archive Upload Url
+          type:
+          - string
+          - 'null'
+        test_run_details_page_url:
+          description: URL to the Grafana web app.
+          title: Test Run Details Page Url
+          type: string
+      required:
+      - test_run_id
+      - runtime_config
+      - archive_upload_url
+      - test_run_details_page_url
+      title: StartLocalExecutionTestResponse
+      type: object
+    TracesRuntimeConfig:
+      description: Traces push runtime configuration.
+      properties:
+        push_url:
+          description: URL to push traces to.
+          title: Push Url
+          type: string
+        traces_metadata:
+          additionalProperties:
+            type: string
+          description: Metadata labels attached to all traces.
+          title: Traces Metadata
+          type: object
+        proto:
+          description: Protocol to use for pushing traces.
+          title: Proto
+          type: string
+      required:
+      - push_url
+      - traces_metadata
+      - proto
+      title: TracesRuntimeConfig
+      type: object
     AllowedLoadZoneApiModel:
       properties:
         id:
@@ -3130,10 +3702,27 @@ components:
           description: ID used to identify the load zone in the k6 scripts.
           title: K6 load zone ID
           type: string
+        available:
+          description: Whether the load zone can be used to start tests.
+          title: Available
+          type: boolean
+        custom_load_runner_image:
+          description: Custom load runner image. Only set for private load zones.
+          title: Custom load runner image
+          type:
+          - string
+          - 'null'
+        public:
+          description: Whether the load zone is public or private.
+          title: Public
+          type: boolean
       required:
       - id
       - name
       - k6_load_zone_id
+      - available
+      - custom_load_runner_image
+      - public
       title: AllowedLoadZone
       type: object
     AllowedLoadZoneToUpdateApiModel:
@@ -3229,15 +3818,13 @@ components:
           anyOf:
           - type: number
           - type: string
-          description: Number of billed VUH charged for the protocol part of the test
-            run.
+          description: Number of billed VUH charged for the protocol part of the test run.
           title: Protocol Vuh
         browser_vuh:
           anyOf:
           - type: number
           - type: string
-          description: Number of billed VUH charged for the browser part of the test
-            run.
+          description: Number of billed VUH charged for the browser part of the test run.
           title: Browser Vuh
         base_total_vuh:
           anyOf:
@@ -3249,8 +3836,7 @@ components:
           anyOf:
           - type: number
           - type: string
-          description: The effective reduction rate after applying all individual
-            reductions to the base VUH usage.
+          description: The effective reduction rate after applying all individual reductions to the base VUH usage.
           title: Reduction Rate
         reduction_rate_breakdown:
           additionalProperties:
@@ -3280,8 +3866,7 @@ components:
           type: string
         script:
           default: null
-          description: Test script in the form of a UTF-8 encoded text or a k6 .tar
-            archive.
+          description: Test script in the form of a UTF-8 encoded text or a k6 .tar archive.
           format: binary
           title: Script
           type:
@@ -3306,24 +3891,19 @@ components:
     CreateScheduleRequest:
       properties:
         starts:
-          description: The timezone-aware date on which the schedule will start running
-            the test.
+          description: The timezone-aware date on which the schedule will start running the test.
           format: date-time
           title: Starts
           type: string
         recurrence_rule:
           default: null
-          description: The schedule recurrence settings. If null, the test will run
-            only once on the `starts` date. Only one of `recurrence_rule` and `cron`
-            can be set.
+          description: The schedule recurrence settings. If null, the test will run only once on the `starts` date. Only one of `recurrence_rule` and `cron` can be set.
           oneOf:
           - $ref: '#/components/schemas/ScheduleRecurrenceRule'
           - type: 'null'
         cron:
           default: null
-          description: The cron schedule to trigger the test periodically. If null,
-            the test runs only once on the `starts` date. Only one of `recurrence_rule`
-            and `cron` can be set.
+          description: The cron schedule to trigger the test periodically. If null, the test runs only once on the `starts` date. Only one of `recurrence_rule` and `cron` can be set.
           oneOf:
           - $ref: '#/components/schemas/ScheduleCron'
           - type: 'null'
@@ -3345,71 +3925,6 @@ components:
       - load_zone
       - percent
       title: DistributionZone
-      type: object
-    ErrorApiModel:
-      description: Details of the error.
-      properties:
-        message:
-          description: Human-readable string describing the error.
-          title: Message
-          type: string
-        code:
-          description: Service-defined error code.
-          title: Code
-          type: string
-        target:
-          default: null
-          description: A string indicating the target of the error. For example, the
-            name of the property in error.
-          title: Target
-          type:
-          - string
-          - 'null'
-        details:
-          default: null
-          description: Array of objects with more specific error information when
-            applicable.
-          items:
-            $ref: '#/components/schemas/ErrorDetailsApiModel'
-          title: Details
-          type:
-          - array
-          - 'null'
-      required:
-      - message
-      - code
-      title: Error
-      type: object
-    ErrorDetailsApiModel:
-      properties:
-        message:
-          description: Human-readable string describing the error.
-          title: Message
-          type: string
-        code:
-          description: Service-defined error code.
-          title: Code
-          type: string
-        target:
-          default: null
-          description: A string indicating the target of the error. For example, the
-            name of the property in error.
-          title: Target
-          type:
-          - string
-          - 'null'
-      required:
-      - message
-      - code
-      title: ErrorDetails
-      type: object
-    ErrorResponseApiModel:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorApiModel'
-      required:
-      - error
-      title: ErrorResponse
       type: object
     Frequency:
       description: The unit type of the recurrence interval.
@@ -3574,8 +4089,7 @@ components:
           title: '@Count'
           type: integer
         '@nextLink':
-          description: A reference to the next page of results. The property is included
-            until there are no more pages of results to retrieve.
+          description: A reference to the next page of results. The property is included until there are no more pages of results to retrieve.
           examples:
           - http://api.example.org/accounts/?%24skip=400&%24top=100
           format: uri
@@ -3599,10 +4113,27 @@ components:
           description: ID used to identify the load zone in the k6 scripts.
           title: K6 load zone ID
           type: string
+        available:
+          description: Whether the load zone can be used to start tests.
+          title: Available
+          type: boolean
+        custom_load_runner_image:
+          description: Custom load runner image. Only set for private load zones.
+          title: Custom load runner image
+          type:
+          - string
+          - 'null'
+        public:
+          description: Whether the load zone is public or private.
+          title: Public
+          type: boolean
       required:
       - id
       - name
       - k6_load_zone_id
+      - available
+      - custom_load_runner_image
+      - public
       title: LoadZone
       type: object
     LoadZoneDistributionApiModel:
@@ -3707,8 +4238,7 @@ components:
       additionalProperties: false
       properties:
         vuh_max_per_month:
-          description: Max amount of virtual user hours (VUH) used per one calendar
-            month.
+          description: Max amount of virtual user hours (VUH) used per one calendar month.
           minimum: 1
           title: Vuh Max Per Month
           type:
@@ -3722,8 +4252,7 @@ components:
           - integer
           - 'null'
         vu_browser_max_per_test:
-          description: Max number of concurrent browser virtual users (VUs) used in
-            one test.
+          description: Max number of concurrent browser virtual users (VUs) used in one test.
           minimum: 1
           title: Vu Browser Max Per Test
           type:
@@ -3762,8 +4291,7 @@ components:
           title: Name
           type: string
         is_default:
-          description: Use this project as default for running tests when no explicit
-            project ID is provided.
+          description: Use this project as default for running tests when no explicit project ID is provided.
           title: Is Default
           type: boolean
         grafana_folder_uid:
@@ -3917,8 +4445,7 @@ components:
           title: Project Id
           type: integer
         vuh_max_per_month:
-          description: Max amount of virtual user hours (VUH) used per one calendar
-            month.
+          description: Max amount of virtual user hours (VUH) used per one calendar month.
           minimum: 1
           title: Vuh Max Per Month
           type:
@@ -3932,8 +4459,7 @@ components:
           - integer
           - 'null'
         vu_browser_max_per_test:
-          description: Max number of concurrent browser virtual users (VUs) used in
-            one test.
+          description: Max number of concurrent browser virtual users (VUs) used in one test.
           minimum: 1
           title: Vu Browser Max Per Test
           type:
@@ -3969,8 +4495,7 @@ components:
           title: '@Count'
           type: integer
         '@nextLink':
-          description: A reference to the next page of results. The property is included
-            until there are no more pages of results to retrieve.
+          description: A reference to the next page of results. The property is included until there are no more pages of results to retrieve.
           examples:
           - http://api.example.org/accounts/?%24skip=400&%24top=100
           format: uri
@@ -3995,8 +4520,7 @@ components:
           title: '@Count'
           type: integer
         '@nextLink':
-          description: A reference to the next page of results. The property is included
-            until there are no more pages of results to retrieve.
+          description: A reference to the next page of results. The property is included until there are no more pages of results to retrieve.
           examples:
           - http://api.example.org/accounts/?%24skip=400&%24top=100
           format: uri
@@ -4022,29 +4546,21 @@ components:
           title: Starts
           type: string
         recurrence_rule:
-          description: The schedule recurrence settings. If null, the test will run
-            only once on the `starts` date. Only one of `recurrence_rule` and `cron`
-            can be set.
+          description: The schedule recurrence settings. If null, the test will run only once on the `starts` date. Only one of `recurrence_rule` and `cron` can be set.
           oneOf:
           - $ref: '#/components/schemas/ScheduleRecurrenceRule'
           - type: 'null'
         cron:
-          description: The cron schedule to trigger the test periodically. If null,
-            the test runs only once on the `starts` date. Only one of `recurrence_rule`
-            and `cron` can be set.
+          description: The cron schedule to trigger the test periodically. If null, the test runs only once on the `starts` date. Only one of `recurrence_rule` and `cron` can be set.
           oneOf:
           - $ref: '#/components/schemas/ScheduleCron'
           - type: 'null'
         deactivated:
-          description: Whether the schedule is deactivated. A deactivated schedule
-            will not trigger new test runs, but the schedule recurrence rule and expiration
-            is not affected.
+          description: Whether the schedule is deactivated. A deactivated schedule will not trigger new test runs, but the schedule recurrence rule and expiration is not affected.
           title: Deactivated
           type: boolean
         next_run:
-          description: The date of the next scheduled test run. The value is `null`
-            if the schedule is expired and no more occurrences are expected in the
-            future according to the recurrence rule.
+          description: The date of the next scheduled test run. The value is `null` if the schedule is expired and no more occurrences are expected in the future according to the recurrence rule.
           format: date-time
           title: Next Run
           type:
@@ -4070,8 +4586,7 @@ components:
     ScheduleCron:
       properties:
         schedule:
-          description: 'A cron expression with exactly 5 entries, or an alias. The
-            allowed aliases are: @yearly, @annually, @monthly, @weekly, @daily, @hourly.'
+          description: 'A cron expression with exactly 5 entries, or an alias. The allowed aliases are: @yearly, @annually, @monthly, @weekly, @daily, @hourly.'
           maxLength: 256
           title: Schedule
           type: string
@@ -4100,8 +4615,7 @@ components:
           title: '@Count'
           type: integer
         '@nextLink':
-          description: A reference to the next page of results. The property is included
-            until there are no more pages of results to retrieve.
+          description: A reference to the next page of results. The property is included until there are no more pages of results to retrieve.
           examples:
           - http://api.example.org/accounts/?%24skip=400&%24top=100
           format: uri
@@ -4117,15 +4631,13 @@ components:
           $ref: '#/components/schemas/Frequency'
         interval:
           default: 1
-          description: The interval between each frequency iteration. An interval
-            of 2 with 'HOURLY' frequency makes the test run once every 2 hours.
+          description: The interval between each frequency iteration. An interval of 2 with 'HOURLY' frequency makes the test run once every 2 hours.
           minimum: 1
           title: Interval
           type: integer
         byday:
           default: null
-          description: The weekdays when the 'WEEKLY' recurrence will be applied.
-            Cannot be set for other frequencies.
+          description: The weekdays when the 'WEEKLY' recurrence will be applied. Cannot be set for other frequencies.
           items:
             $ref: '#/components/schemas/Weekday'
           title: Byday
@@ -4134,8 +4646,7 @@ components:
           - 'null'
         until:
           default: null
-          description: A datetime instance specifying the upper-bound time limit of
-            the recurrence.
+          description: A datetime instance specifying the upper-bound time limit of the recurrence.
           format: date-time
           title: Until
           type:
@@ -4168,8 +4679,7 @@ components:
           title: Project Id
           type: integer
         started_by:
-          description: Email of the user who started the test if started with a user
-            token.
+          description: Email of the user who started the test if started with a user token.
           format: email
           title: Started By
           type:
@@ -4181,8 +4691,7 @@ components:
           title: Created
           type: string
         ended:
-          description: Date and time when the test run ended. Unset if the test is
-            still running.
+          description: Date and time when the test run ended. Unset if the test is still running.
           format: date-time
           title: Ended
           type:
@@ -4193,8 +4702,7 @@ components:
           title: Note
           type: string
         retention_expiry:
-          description: Timestamp after which the test run results are deleted or null
-            if the test run is saved.
+          description: Timestamp after which the test run results are deleted or null if the test run is saved.
           format: date-time
           title: Retention Expiry
           type:
@@ -4217,15 +4725,13 @@ components:
           $ref: '#/components/schemas/StatusApiModel'
           description: Details of the current test run status.
         status_history:
-          description: List of test run status objects sorted by the status start
-            time. The list represents the test run status history.
+          description: List of test run status objects sorted by the status start time. The list represents the test run status history.
           items:
             $ref: '#/components/schemas/StatusApiModel'
           title: Status History
           type: array
         distribution:
-          description: List of the load zones configured for the test and the corresponding
-            distribution percentages.
+          description: List of the load zones configured for the test and the corresponding distribution percentages.
           items:
             $ref: '#/components/schemas/DistributionZoneApiModel'
           title: Distribution
@@ -4233,8 +4739,7 @@ components:
           - array
           - 'null'
         result:
-          description: Test run result. `passed` if there were no issues, `failed`
-            if thresholds were breached, `error` if the execution was not completed.
+          description: Test run result. `passed` if there were no issues, `failed` if thresholds were breached, `error` if the execution was not completed.
           title: Result
           type:
           - string
@@ -4256,27 +4761,23 @@ components:
         k6_dependencies:
           additionalProperties:
             type: string
-          description: The requested version of k6 and extensions that was part of
-            the script/archive.
+          description: The requested version of k6 and extensions that was part of the script/archive.
           title: k6 Dependencies
           type: object
         k6_versions:
           additionalProperties:
             type: string
-          description: The computed version for k6 and extensions used to run the
-            test.
+          description: The computed version for k6 and extensions used to run the test.
           title: k6 Versions
           type: object
         max_vus:
-          description: The maximum number of total VUs (browser and protocol) at any
-            stage of the execution plan.
+          description: The maximum number of total VUs (browser and protocol) at any stage of the execution plan.
           title: Max Vus
           type:
           - integer
           - 'null'
         max_browser_vus:
-          description: The maximum number of browser VUs at any stage of the execution
-            plan.
+          description: The maximum number of browser VUs at any stage of the execution plan.
           title: Max Browser Vus
           type:
           - integer
@@ -4325,8 +4826,7 @@ components:
       description: Details of the test run status.
       properties:
         type:
-          description: 'Type of simple test run status: `created`, `queued`, `initializing`,
-            `running`, `processing_metrics`, `completed` or `aborted`.'
+          description: 'Type of simple test run status: `created`, `queued`, `initializing`, `running`, `processing_metrics`, `completed` or `aborted`.'
           title: Type
           type: string
         entered:
@@ -4403,8 +4903,7 @@ components:
           title: Project Id
           type: integer
         started_by:
-          description: Email of the user who started the test if started with a user
-            token.
+          description: Email of the user who started the test if started with a user token.
           format: email
           title: Started By
           type:
@@ -4416,8 +4915,7 @@ components:
           title: Created
           type: string
         ended:
-          description: Date and time when the test run ended. Unset if the test is
-            still running.
+          description: Date and time when the test run ended. Unset if the test is still running.
           format: date-time
           title: Ended
           type:
@@ -4428,8 +4926,7 @@ components:
           title: Note
           type: string
         retention_expiry:
-          description: Timestamp after which the test run results are deleted or null
-            if the test run is saved.
+          description: Timestamp after which the test run results are deleted or null if the test run is saved.
           format: date-time
           title: Retention Expiry
           type:
@@ -4452,15 +4949,13 @@ components:
           $ref: '#/components/schemas/StatusApiModel'
           description: Details of the current test run status.
         status_history:
-          description: List of test run status objects sorted by the status start
-            time. The list represents the test run status history.
+          description: List of test run status objects sorted by the status start time. The list represents the test run status history.
           items:
             $ref: '#/components/schemas/StatusApiModel'
           title: Status History
           type: array
         distribution:
-          description: List of the load zones configured for the test and the corresponding
-            distribution percentages.
+          description: List of the load zones configured for the test and the corresponding distribution percentages.
           items:
             $ref: '#/components/schemas/DistributionZoneApiModel'
           title: Distribution
@@ -4468,8 +4963,7 @@ components:
           - array
           - 'null'
         result:
-          description: Test run result. `passed` if there were no issues, `failed`
-            if thresholds were breached, `error` if the execution was not completed.
+          description: Test run result. `passed` if there were no issues, `failed` if thresholds were breached, `error` if the execution was not completed.
           title: Result
           type:
           - string
@@ -4491,27 +4985,23 @@ components:
         k6_dependencies:
           additionalProperties:
             type: string
-          description: The requested version of k6 and extensions that was part of
-            the script/archive.
+          description: The requested version of k6 and extensions that was part of the script/archive.
           title: k6 Dependencies
           type: object
         k6_versions:
           additionalProperties:
             type: string
-          description: The computed version for k6 and extensions used to run the
-            test.
+          description: The computed version for k6 and extensions used to run the test.
           title: k6 Versions
           type: object
         max_vus:
-          description: The maximum number of total VUs (browser and protocol) at any
-            stage of the execution plan.
+          description: The maximum number of total VUs (browser and protocol) at any stage of the execution plan.
           title: Max Vus
           type:
           - integer
           - 'null'
         max_browser_vus:
-          description: The maximum number of browser VUs at any stage of the execution
-            plan.
+          description: The maximum number of browser VUs at any stage of the execution plan.
           title: Max Browser Vus
           type:
           - integer
@@ -4556,8 +5046,7 @@ components:
         distribution:
           additionalProperties:
             $ref: '#/components/schemas/LoadZoneDistributionApiModel'
-          description: Distribution of nodes across the load generators for the test
-            run.
+          description: Distribution of nodes across the load generators for the test run.
           title: Distribution
           type: object
       required:
@@ -4579,8 +5068,7 @@ components:
           title: '@Count'
           type: integer
         '@nextLink':
-          description: A reference to the next page of results. The property is included
-            until there are no more pages of results to retrieve.
+          description: A reference to the next page of results. The property is included until there are no more pages of results to retrieve.
           examples:
           - http://api.example.org/accounts/?%24skip=400&%24top=100
           format: uri
@@ -4593,8 +5081,7 @@ components:
     UpdateAllowedLoadZonesListApiModel:
       properties:
         value:
-          description: List of the load zones that the project will be allowed to
-            use.
+          description: List of the load zones that the project will be allowed to use.
           items:
             $ref: '#/components/schemas/AllowedLoadZoneToUpdateApiModel'
           maxItems: 500
@@ -4633,8 +5120,7 @@ components:
           additionalProperties:
             type: string
           default: null
-          description: Version of k6 and extensions to validate, as a map of dependency
-            name to dependency version constraint.
+          description: Version of k6 and extensions to validate, as a map of dependency name to dependency version constraint.
           title: K6 Dependencies
           type:
           - object
@@ -4681,23 +5167,11 @@ components:
     k6ApiToken:
       type: http
       scheme: bearer
-      description: Token-based authentication using k6 Personal API token or Grafana
-        Stack API token.
+      description: Token-based authentication using k6 Personal API token or Grafana Stack API token.
     testRunToken:
       type: http
       scheme: bearer
       description: Token-based authentication using short-lived test run token.
-  parameters:
-    stackId:
-      in: header
-      name: X-Stack-Id
-      description: |-
-        Numeric ID of the Grafana stack representing the request scope.
-        - If the API is called with a *Personal API token*, the user must be a member of the specified stack.
-        - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-      schema:
-        type: integer
-      required: true
   responses:
     ValidationError:
       content:
@@ -4729,3 +5203,14 @@ components:
           schema:
             $ref: '#/components/schemas/ErrorResponseApiModel'
       description: Unexpected error.
+  parameters:
+    stackId:
+      in: header
+      name: X-Stack-Id
+      description: |-
+        Numeric ID of the Grafana stack representing the request scope.
+        - If the API is called with a *Personal API token*, the user must be a member of the specified stack.
+        - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
+      schema:
+        type: integer
+      required: true
