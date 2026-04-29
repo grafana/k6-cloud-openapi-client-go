@@ -9,9 +9,15 @@ generate:
 format:
 	find k6 -name \*.go -exec goimports -w {} \;
 
-## update-schema: Retrieves the latest version of the OpenAPI schema.
+## update-schema: Fetches the latest public API spec and merges it with provisioning.yaml.
 update-schema:
-	wget -O schema.yaml https://api.k6.io/cloud/v6/openapi
+	@if [ ! -f provisioning.yaml ]; then \
+		echo "error: provisioning.yaml not found"; \
+		exit 1; \
+	fi
+	wget -O public.yaml https://api.k6.io/cloud/v6/openapi
+	yq eval-all -I 2 -c 'select(fileIndex == 0) *d select(fileIndex == 1)' provisioning.yaml public.yaml > schema.yaml
+	rm -f public.yaml
 
 ## help: Prints a list of available build targets.
 help:
