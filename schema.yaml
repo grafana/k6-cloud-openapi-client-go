@@ -1,30 +1,12 @@
 openapi: 3.1.0
 info:
   title: Grafana Cloud k6
-  version: 1.9.3
+  version: 1.9.9
   description: HTTP API for interacting with Grafana Cloud k6.
   contact:
     name: Grafana Support
     url: https://grafana.com/help/
     email: info@grafana.com
-servers:
-- url: https://api.k6.io
-  description: Global k6 Cloud API.
-tags:
-- name: authorization
-  description: API endpoints for validating tokens.
-- name: labels
-  description: API endpoints for managing labels.
-- name: load_tests
-  description: API endpoints for managing and starting tests.
-- name: load_zones
-  description: API endpoints for managing load zones.
-- name: projects
-  description: API endpoints for managing projects.
-- name: schedules
-  description: API endpoints for managing test schedules.
-- name: test_runs
-  description: API endpoints for managing test runs.
 paths:
   /provisioning/v1/load_tests/{id}/start_local_execution:
     post:
@@ -357,6 +339,7 @@ paths:
         name: id
         schema:
           type: integer
+          format: int64
         description: ID of the label key.
         required: true
       tags:
@@ -429,6 +412,7 @@ paths:
         name: id
         schema:
           type: integer
+          format: int64
         description: ID of the label key.
         required: true
       tags:
@@ -537,6 +521,7 @@ paths:
         name: id
         schema:
           type: integer
+          format: int64
         description: ID of the load test.
         required: true
       tags:
@@ -655,6 +640,7 @@ paths:
         name: id
         schema:
           type: integer
+          format: int64
         description: ID of the load test.
         required: true
       tags:
@@ -845,8 +831,14 @@ paths:
         name: id
         schema:
           type: integer
+          format: int64
         description: ID of the load test.
         required: true
+      - in: query
+        name: is_starred
+        schema:
+          type: boolean
+        description: Filter by starred state. `true` or `1` returns only starred runs; `false` or `0` returns only unstarred runs. Omit the parameter to return all runs for this load test.
       tags:
       - test_runs
       security:
@@ -917,6 +909,7 @@ paths:
                       max_browser_vus: 0
                       estimated_duration: 1800
                       execution_duration: 600
+                      is_starred: false
                     '@count': 123
                     '@nextLink': https://api.k6.io/cloud/v6/load_tests/123/test_runs?$skip=50&$top=20
           description: OK.
@@ -941,6 +934,7 @@ paths:
         name: id
         schema:
           type: integer
+          format: int64
         description: ID of the load test.
         required: true
       tags:
@@ -981,6 +975,7 @@ paths:
         name: id
         schema:
           type: integer
+          format: int64
         description: ID of the load test.
         required: true
       tags:
@@ -1026,6 +1021,7 @@ paths:
         name: id
         schema:
           type: integer
+          format: int64
         description: ID of the load test.
         required: true
       tags:
@@ -1062,6 +1058,7 @@ paths:
         name: id
         schema:
           type: integer
+          format: int64
         description: ID of the load test.
         required: true
       tags:
@@ -1112,6 +1109,7 @@ paths:
         name: id
         schema:
           type: integer
+          format: int64
         description: ID of the load test.
         required: true
       tags:
@@ -1184,6 +1182,7 @@ paths:
         name: id
         schema:
           type: integer
+          format: int64
         description: ID of the load test.
         required: true
       tags:
@@ -1252,6 +1251,7 @@ paths:
         name: id
         schema:
           type: integer
+          format: int64
         description: ID of the load test.
         required: true
       tags:
@@ -1297,6 +1297,7 @@ paths:
                     max_browser_vus: null
                     estimated_duration: null
                     execution_duration: 0
+                    is_starred: false
                     test_run_details_page_url: https://example.grafana.net/a/k6-app/runs/1234
           description: OK.
         '401':
@@ -1371,6 +1372,7 @@ paths:
         name: id
         schema:
           type: integer
+          format: int64
         description: ID of the load zone.
         required: true
       tags:
@@ -1415,6 +1417,7 @@ paths:
         name: id
         schema:
           type: integer
+          format: int64
         description: ID of the load zone.
         required: true
       tags:
@@ -1669,6 +1672,7 @@ paths:
         name: id
         schema:
           type: integer
+          format: int64
         description: ID of the project.
         required: true
       tags:
@@ -1722,6 +1726,7 @@ paths:
         name: id
         schema:
           type: integer
+          format: int64
         description: ID of the project.
         required: true
       tags:
@@ -1791,6 +1796,7 @@ paths:
         name: id
         schema:
           type: integer
+          format: int64
         description: ID of the project.
         required: true
       tags:
@@ -1833,6 +1839,7 @@ paths:
         name: id
         schema:
           type: integer
+          format: int64
         description: ID of the project.
         required: true
       tags:
@@ -1924,6 +1931,7 @@ paths:
         name: id
         schema:
           type: integer
+          format: int64
         description: ID of the project.
         required: true
       - in: query
@@ -1979,6 +1987,7 @@ paths:
         name: id
         schema:
           type: integer
+          format: int64
         description: ID of the project.
         required: true
       tags:
@@ -2063,6 +2072,7 @@ paths:
         name: id
         schema:
           type: integer
+          format: int64
         description: ID of the project.
         required: true
       tags:
@@ -2103,6 +2113,7 @@ paths:
         name: id
         schema:
           type: integer
+          format: int64
         description: ID of the project.
         required: true
       tags:
@@ -2148,6 +2159,7 @@ paths:
         name: id
         schema:
           type: integer
+          format: int64
         description: ID of the project.
         required: true
       tags:
@@ -2182,6 +2194,7 @@ paths:
         name: project_id
         schema:
           type: integer
+          format: int64
         description: ID of the project.
         required: true
       tags:
@@ -2224,6 +2237,7 @@ paths:
         name: project_id
         schema:
           type: integer
+          format: int64
         description: ID of the project.
         required: true
       tags:
@@ -2304,6 +2318,7 @@ paths:
         name: project_id
         schema:
           type: integer
+          format: int64
         description: ID of the project.
         required: true
       tags:
@@ -2395,6 +2410,7 @@ paths:
         name: id
         schema:
           type: integer
+          format: int64
         description: ID of the schedule.
         required: true
       tags:
@@ -2507,6 +2523,7 @@ paths:
         name: id
         schema:
           type: integer
+          format: int64
         description: ID of the schedule.
         required: true
       tags:
@@ -2539,6 +2556,7 @@ paths:
         name: id
         schema:
           type: integer
+          format: int64
         description: ID of the schedule.
         required: true
       tags:
@@ -2579,6 +2597,7 @@ paths:
         name: id
         schema:
           type: integer
+          format: int64
         description: ID of the schedule.
         required: true
       tags:
@@ -2710,6 +2729,7 @@ paths:
                       max_browser_vus: 0
                       estimated_duration: 1800
                       execution_duration: 600
+                      is_starred: false
                     '@count': 123
                     '@nextLink': https://api.k6.io/cloud/v6/test_runs?$skip=50&$top=20
           description: OK.
@@ -2732,6 +2752,7 @@ paths:
         name: id
         schema:
           type: integer
+          format: int64
         description: ID of the load test run.
         required: true
       tags:
@@ -2803,6 +2824,7 @@ paths:
                     max_browser_vus: 0
                     estimated_duration: 1800
                     execution_duration: 600
+                    is_starred: false
                 Completed:
                   value:
                     id: 1234
@@ -2865,6 +2887,7 @@ paths:
                     max_browser_vus: 0
                     estimated_duration: 1800
                     execution_duration: 1800
+                    is_starred: true
                 ValidationError:
                   value:
                     id: 1234
@@ -2907,6 +2930,7 @@ paths:
                     max_browser_vus: null
                     estimated_duration: null
                     execution_duration: 0
+                    is_starred: false
                   summary: Validation Error
           description: OK.
         '401':
@@ -2927,6 +2951,7 @@ paths:
         name: id
         schema:
           type: integer
+          format: int64
         description: ID of the load test run.
         required: true
       tags:
@@ -2966,6 +2991,7 @@ paths:
         name: id
         schema:
           type: integer
+          format: int64
         description: ID of the load test run.
         required: true
       tags:
@@ -3000,6 +3026,7 @@ paths:
         name: id
         schema:
           type: integer
+          format: int64
         description: ID of the load test run.
         required: true
       tags:
@@ -3034,6 +3061,7 @@ paths:
         name: id
         schema:
           type: integer
+          format: int64
         description: ID of the load test run.
         required: true
       tags:
@@ -3087,6 +3115,7 @@ paths:
         name: id
         schema:
           type: integer
+          format: int64
         description: ID of the load test run.
         required: true
       tags:
@@ -3133,6 +3162,7 @@ paths:
         name: id
         schema:
           type: integer
+          format: int64
         description: ID of the load test run.
         required: true
       tags:
@@ -3184,6 +3214,35 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/UnexpectedError'
+  /cloud/v6/test_runs/{id}/star:
+    post:
+      operationId: test_runs_star
+      description: Marks a test run for quick access in comparison workflows. Starring a test run does not extend metrics retention.
+      summary: Star a test run.
+      parameters:
+      - $ref: '#/components/parameters/stackId'
+      - in: path
+        name: id
+        schema:
+          type: integer
+          format: int64
+        description: ID of the load test run.
+        required: true
+      tags:
+      - test_runs
+      security:
+      - k6ApiToken: []
+      responses:
+        '204':
+          description: OK.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
   /cloud/v6/test_runs/{id}/unsave:
     post:
       operationId: test_runs_unsave
@@ -3198,6 +3257,36 @@ paths:
         name: id
         schema:
           type: integer
+          format: int64
+        description: ID of the load test run.
+        required: true
+      tags:
+      - test_runs
+      security:
+      - k6ApiToken: []
+      responses:
+        '204':
+          description: OK.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+  /cloud/v6/test_runs/{id}/unstar:
+    post:
+      operationId: test_runs_unstar
+      description: Removes a test run from the starred comparison workflow.
+      summary: Unstar a test run.
+      parameters:
+      - $ref: '#/components/parameters/stackId'
+      - in: path
+        name: id
+        schema:
+          type: integer
+          format: int64
         description: ID of the load test run.
         required: true
       tags:
@@ -3329,68 +3418,6 @@ components:
       required:
       - plaintext
       title: Decrypted
-      type: object
-    ErrorApiModel:
-      description: Details of the error.
-      properties:
-        message:
-          description: Human-readable string describing the error.
-          title: Message
-          type: string
-        code:
-          description: Service-defined error code.
-          title: Code
-          type: string
-        target:
-          default: null
-          description: A string indicating the target of the error. For example, the name of the property in error.
-          title: Target
-          type:
-          - string
-          - 'null'
-        details:
-          default: null
-          description: Array of objects with more specific error information when applicable.
-          items:
-            $ref: '#/components/schemas/ErrorDetailsApiModel'
-          title: Details
-          type:
-          - array
-          - 'null'
-      required:
-      - message
-      - code
-      title: Error
-      type: object
-    ErrorDetailsApiModel:
-      properties:
-        message:
-          description: Human-readable string describing the error.
-          title: Message
-          type: string
-        code:
-          description: Service-defined error code.
-          title: Code
-          type: string
-        target:
-          default: null
-          description: A string indicating the target of the error. For example, the name of the property in error.
-          title: Target
-          type:
-          - string
-          - 'null'
-      required:
-      - message
-      - code
-      title: ErrorDetails
-      type: object
-    ErrorResponseApiModel:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorApiModel'
-      required:
-      - error
-      title: ErrorResponse
       type: object
     FilesRuntimeConfig:
       description: Files upload runtime configuration.
@@ -3692,6 +3719,7 @@ components:
       properties:
         id:
           description: ID of the load zone.
+          format: int64
           title: Load zone ID
           type: integer
         name:
@@ -3729,6 +3757,7 @@ components:
       properties:
         id:
           description: ID of the load zone.
+          format: int64
           title: Load zone ID
           type: integer
       required:
@@ -3751,6 +3780,7 @@ components:
       properties:
         id:
           description: ID of the project.
+          format: int64
           title: Project ID
           type: integer
         name:
@@ -3766,6 +3796,7 @@ components:
       properties:
         id:
           description: ID of the project.
+          format: int64
           title: Project ID
           type: integer
       required:
@@ -3788,10 +3819,12 @@ components:
       properties:
         stack_id:
           description: The ID of the Grafana stack matching the provided URL.
+          format: int64
           title: Stack Id
           type: integer
         default_project_id:
           description: The ID of the default project in the stack.
+          format: int64
           title: Default Project Id
           type: integer
       required:
@@ -3805,6 +3838,7 @@ components:
         projectID:
           default: null
           description: ID of a project where the test belongs.
+          format: int64
           title: Projectid
           type:
           - integer
@@ -3926,6 +3960,68 @@ components:
       - percent
       title: DistributionZone
       type: object
+    ErrorApiModel:
+      description: Details of the error.
+      properties:
+        message:
+          description: Human-readable string describing the error.
+          title: Message
+          type: string
+        code:
+          description: Service-defined error code.
+          title: Code
+          type: string
+        target:
+          default: null
+          description: A string indicating the target of the error. For example, the name of the property in error.
+          title: Target
+          type:
+          - string
+          - 'null'
+        details:
+          default: null
+          description: Array of objects with more specific error information when applicable.
+          items:
+            $ref: '#/components/schemas/ErrorDetailsApiModel'
+          title: Details
+          type:
+          - array
+          - 'null'
+      required:
+      - message
+      - code
+      title: Error
+      type: object
+    ErrorDetailsApiModel:
+      properties:
+        message:
+          description: Human-readable string describing the error.
+          title: Message
+          type: string
+        code:
+          description: Service-defined error code.
+          title: Code
+          type: string
+        target:
+          default: null
+          description: A string indicating the target of the error. For example, the name of the property in error.
+          title: Target
+          type:
+          - string
+          - 'null'
+      required:
+      - message
+      - code
+      title: ErrorDetails
+      type: object
+    ErrorResponseApiModel:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorApiModel'
+      required:
+      - error
+      title: ErrorResponse
+      type: object
     Frequency:
       description: The unit type of the recurrence interval.
       enum:
@@ -4015,6 +4111,7 @@ components:
       properties:
         id:
           description: Label key ID.
+          format: int64
           title: Id
           type: integer
         key:
@@ -4037,10 +4134,12 @@ components:
       properties:
         id:
           description: ID of the load test.
+          format: int64
           title: Id
           type: integer
         project_id:
           description: ID of the parent project.
+          format: int64
           title: Project Id
           type: integer
         name:
@@ -4051,6 +4150,7 @@ components:
           type: string
         baseline_test_run_id:
           description: ID of a baseline test run used for results comparison.
+          format: int64
           title: Baseline Test Run Id
           type:
           - integer
@@ -4103,6 +4203,7 @@ components:
       properties:
         id:
           description: ID of the load zone.
+          format: int64
           title: Load zone ID
           type: integer
         name:
@@ -4171,6 +4272,7 @@ components:
       properties:
         project_id:
           description: ID of the destination project.
+          format: int64
           title: Project ID
           type: integer
       required:
@@ -4215,6 +4317,7 @@ components:
           type: string
         baseline_test_run_id:
           description: ID of a baseline test run used for results comparison.
+          format: int64
           title: Baseline Test Run Id
           type:
           - integer
@@ -4282,6 +4385,7 @@ components:
       properties:
         id:
           description: Project ID.
+          format: int64
           title: Id
           type: integer
         name:
@@ -4361,6 +4465,7 @@ components:
         key_id:
           default: null
           description: Label key ID. Mutually exclusive with 'key'.
+          format: int64
           title: Key Id
           type:
           - integer
@@ -4422,6 +4527,7 @@ components:
       properties:
         key_id:
           description: Label key ID.
+          format: int64
           title: Key Id
           type: integer
         key:
@@ -4442,6 +4548,7 @@ components:
       properties:
         project_id:
           description: ID of the related project.
+          format: int64
           title: Project Id
           type: integer
         vuh_max_per_month:
@@ -4534,10 +4641,12 @@ components:
       properties:
         id:
           description: ID of the schedule.
+          format: int64
           title: Id
           type: integer
         load_test_id:
           description: ID of the test to run.
+          format: int64
           title: Load Test Id
           type: integer
         starts:
@@ -4668,14 +4777,17 @@ components:
       properties:
         id:
           description: ID of the test run.
+          format: int64
           title: Id
           type: integer
         test_id:
           description: ID of the parent test.
+          format: int64
           title: Test Id
           type: integer
         project_id:
           description: ID of the parent project.
+          format: int64
           title: Project Id
           type: integer
         started_by:
@@ -4792,6 +4904,10 @@ components:
           description: The real billable duration of the test run in seconds.
           title: Execution Duration
           type: integer
+        is_starred:
+          description: Whether the test run is starred for quick access.
+          title: Is Starred
+          type: boolean
         test_run_details_page_url:
           description: URL to the Grafana web app test run page.
           title: Test Run Details Page Url
@@ -4819,6 +4935,7 @@ components:
       - max_browser_vus
       - estimated_duration
       - execution_duration
+      - is_starred
       - test_run_details_page_url
       title: StartLoadTestResponse
       type: object
@@ -4892,14 +5009,17 @@ components:
       properties:
         id:
           description: ID of the test run.
+          format: int64
           title: Id
           type: integer
         test_id:
           description: ID of the parent test.
+          format: int64
           title: Test Id
           type: integer
         project_id:
           description: ID of the parent project.
+          format: int64
           title: Project Id
           type: integer
         started_by:
@@ -5016,6 +5136,10 @@ components:
           description: The real billable duration of the test run in seconds.
           title: Execution Duration
           type: integer
+        is_starred:
+          description: Whether the test run is starred for quick access.
+          title: Is Starred
+          type: boolean
       required:
       - id
       - test_id
@@ -5039,6 +5163,7 @@ components:
       - max_browser_vus
       - estimated_duration
       - execution_duration
+      - is_starred
       title: TestRun
       type: object
     TestRunDistributionApiModel:
@@ -5109,6 +5234,7 @@ components:
         project_id:
           default: null
           description: ID of a project where the test belongs.
+          format: int64
           title: Project Id
           type:
           - integer
@@ -5172,6 +5298,17 @@ components:
       type: http
       scheme: bearer
       description: Token-based authentication using short-lived test run token.
+  parameters:
+    stackId:
+      in: header
+      name: X-Stack-Id
+      description: |-
+        Numeric ID of the Grafana stack representing the request scope.
+        - If the API is called with a *Personal API token*, the user must be a member of the specified stack.
+        - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
+      schema:
+        type: integer
+      required: true
   responses:
     ValidationError:
       content:
@@ -5203,14 +5340,21 @@ components:
           schema:
             $ref: '#/components/schemas/ErrorResponseApiModel'
       description: Unexpected error.
-  parameters:
-    stackId:
-      in: header
-      name: X-Stack-Id
-      description: |-
-        Numeric ID of the Grafana stack representing the request scope.
-        - If the API is called with a *Personal API token*, the user must be a member of the specified stack.
-        - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-      schema:
-        type: integer
-      required: true
+tags:
+- name: authorization
+  description: API endpoints for validating tokens.
+- name: labels
+  description: API endpoints for managing labels.
+- name: load_tests
+  description: API endpoints for managing and starting tests.
+- name: load_zones
+  description: API endpoints for managing load zones.
+- name: projects
+  description: API endpoints for managing projects.
+- name: schedules
+  description: API endpoints for managing test schedules.
+- name: test_runs
+  description: API endpoints for managing test runs.
+servers:
+- url: https://api.k6.io
+  description: Global k6 Cloud API.

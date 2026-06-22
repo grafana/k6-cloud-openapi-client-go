@@ -3,7 +3,7 @@ Grafana Cloud k6
 
 HTTP API for interacting with Grafana Cloud k6.
 
-API version: 1.9.3
+API version: 1.9.9
 Contact: info@grafana.com
 */
 
@@ -22,7 +22,7 @@ var _ MappedNullable = &ValidateOptionsRequest{}
 // ValidateOptionsRequest struct for ValidateOptionsRequest
 type ValidateOptionsRequest struct {
 	// ID of a project where the test belongs.
-	ProjectId NullableInt32 `json:"project_id,omitempty"`
+	ProjectId NullableInt64 `json:"project_id,omitempty"`
 	// k6 script options object to validate.
 	Options Options `json:"options"`
 	// Version of k6 and extensions to validate, as a map of dependency name to dependency version constraint.
@@ -57,9 +57,9 @@ func NewValidateOptionsRequestWithDefaults() *ValidateOptionsRequest {
 }
 
 // GetProjectId returns the ProjectId field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *ValidateOptionsRequest) GetProjectId() int32 {
+func (o *ValidateOptionsRequest) GetProjectId() int64 {
 	if o == nil || IsNil(o.ProjectId.Get()) {
-		var ret int32
+		var ret int64
 		return ret
 	}
 	return *o.ProjectId.Get()
@@ -68,7 +68,7 @@ func (o *ValidateOptionsRequest) GetProjectId() int32 {
 // GetProjectIdOk returns a tuple with the ProjectId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *ValidateOptionsRequest) GetProjectIdOk() (*int32, bool) {
+func (o *ValidateOptionsRequest) GetProjectIdOk() (*int64, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -84,8 +84,8 @@ func (o *ValidateOptionsRequest) HasProjectId() bool {
 	return false
 }
 
-// SetProjectId gets a reference to the given NullableInt32 and assigns it to the ProjectId field.
-func (o *ValidateOptionsRequest) SetProjectId(v int32) {
+// SetProjectId gets a reference to the given NullableInt64 and assigns it to the ProjectId field.
+func (o *ValidateOptionsRequest) SetProjectId(v int64) {
 	o.ProjectId.Set(&v)
 }
 

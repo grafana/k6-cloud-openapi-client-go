@@ -3,7 +3,7 @@ Grafana Cloud k6
 
 HTTP API for interacting with Grafana Cloud k6.
 
-API version: 1.9.3
+API version: 1.9.9
 Contact: info@grafana.com
 */
 
@@ -41,7 +41,7 @@ var (
 	queryDescape    = strings.NewReplacer("%5B", "[", "%5D", "]")
 )
 
-// APIClient manages communication with the Grafana Cloud k6 API v1.9.3
+// APIClient manages communication with the Grafana Cloud k6 API v1.9.9
 // In most cases there should be only one, shared, APIClient.
 type APIClient struct {
 	cfg    *Configuration

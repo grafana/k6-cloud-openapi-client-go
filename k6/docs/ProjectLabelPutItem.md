@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**KeyId** | Pointer to **NullableInt32** | Label key ID. Mutually exclusive with &#39;key&#39;. | [optional] 
+**KeyId** | Pointer to **NullableInt64** | Label key ID. Mutually exclusive with &#39;key&#39;. | [optional] 
 **Key** | Pointer to **NullableString** | Label key name. Mutually exclusive with &#39;key_id&#39;. | [optional] 
 **Value** | **string** | Label value. | 
 
@@ -29,20 +29,20 @@ but it doesn't guarantee that properties required by API are set
 
 ### GetKeyId
 
-`func (o *ProjectLabelPutItem) GetKeyId() int32`
+`func (o *ProjectLabelPutItem) GetKeyId() int64`
 
 GetKeyId returns the KeyId field if non-nil, zero value otherwise.
 
 ### GetKeyIdOk
 
-`func (o *ProjectLabelPutItem) GetKeyIdOk() (*int32, bool)`
+`func (o *ProjectLabelPutItem) GetKeyIdOk() (*int64, bool)`
 
 GetKeyIdOk returns a tuple with the KeyId field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetKeyId
 
-`func (o *ProjectLabelPutItem) SetKeyId(v int32)`
+`func (o *ProjectLabelPutItem) SetKeyId(v int64)`
 
 SetKeyId sets KeyId field to given value.
 

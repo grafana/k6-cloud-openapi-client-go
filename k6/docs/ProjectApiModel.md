@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | **int32** | Project ID. | 
+**Id** | **int64** | Project ID. | 
 **Name** | **string** | Project name. | 
 **IsDefault** | **bool** | Use this project as default for running tests when no explicit project ID is provided. | 
 **GrafanaFolderUid** | **NullableString** | Grafana folder UID. | 
@@ -16,7 +16,7 @@ Name | Type | Description | Notes
 
 ### NewProjectApiModel
 
-`func NewProjectApiModel(id int32, name string, isDefault bool, grafanaFolderUid NullableString, created time.Time, updated time.Time, ) *ProjectApiModel`
+`func NewProjectApiModel(id int64, name string, isDefault bool, grafanaFolderUid NullableString, created time.Time, updated time.Time, ) *ProjectApiModel`
 
 NewProjectApiModel instantiates a new ProjectApiModel object
 This constructor will assign default values to properties that have it defined,
@@ -33,20 +33,20 @@ but it doesn't guarantee that properties required by API are set
 
 ### GetId
 
-`func (o *ProjectApiModel) GetId() int32`
+`func (o *ProjectApiModel) GetId() int64`
 
 GetId returns the Id field if non-nil, zero value otherwise.
 
 ### GetIdOk
 
-`func (o *ProjectApiModel) GetIdOk() (*int32, bool)`
+`func (o *ProjectApiModel) GetIdOk() (*int64, bool)`
 
 GetIdOk returns a tuple with the Id field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetId
 
-`func (o *ProjectApiModel) SetId(v int32)`
+`func (o *ProjectApiModel) SetId(v int64)`
 
 SetId sets Id field to given value.
 

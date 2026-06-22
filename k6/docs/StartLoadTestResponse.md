@@ -4,9 +4,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | **int32** | ID of the test run. | 
-**TestId** | **int32** | ID of the parent test. | 
-**ProjectId** | **int32** | ID of the parent project. | 
+**Id** | **int64** | ID of the test run. | 
+**TestId** | **int64** | ID of the parent test. | 
+**ProjectId** | **int64** | ID of the parent project. | 
 **StartedBy** | **NullableString** | Email of the user who started the test if started with a user token. | 
 **Created** | **time.Time** | Date and time when the test run was started. | 
 **Ended** | **NullableTime** | Date and time when the test run ended. Unset if the test is still running. | 
@@ -26,13 +26,14 @@ Name | Type | Description | Notes
 **MaxBrowserVus** | **NullableInt32** | The maximum number of browser VUs at any stage of the execution plan. | 
 **EstimatedDuration** | **NullableInt32** | The estimated duration of the test run in seconds. | 
 **ExecutionDuration** | **int32** | The real billable duration of the test run in seconds. | 
+**IsStarred** | **bool** | Whether the test run is starred for quick access. | 
 **TestRunDetailsPageUrl** | **string** | URL to the Grafana web app test run page. | 
 
 ## Methods
 
 ### NewStartLoadTestResponse
 
-`func NewStartLoadTestResponse(id int32, testId int32, projectId int32, startedBy NullableString, created time.Time, ended NullableTime, note string, retentionExpiry NullableTime, cost NullableTestCostApiModel, status string, statusDetails StatusApiModel, statusHistory []StatusApiModel, distribution []DistributionZoneApiModel, result NullableString, resultDetails map[string]interface{}, options map[string]interface{}, k6Dependencies map[string]string, k6Versions map[string]string, maxVus NullableInt32, maxBrowserVus NullableInt32, estimatedDuration NullableInt32, executionDuration int32, testRunDetailsPageUrl string, ) *StartLoadTestResponse`
+`func NewStartLoadTestResponse(id int64, testId int64, projectId int64, startedBy NullableString, created time.Time, ended NullableTime, note string, retentionExpiry NullableTime, cost NullableTestCostApiModel, status string, statusDetails StatusApiModel, statusHistory []StatusApiModel, distribution []DistributionZoneApiModel, result NullableString, resultDetails map[string]interface{}, options map[string]interface{}, k6Dependencies map[string]string, k6Versions map[string]string, maxVus NullableInt32, maxBrowserVus NullableInt32, estimatedDuration NullableInt32, executionDuration int32, isStarred bool, testRunDetailsPageUrl string, ) *StartLoadTestResponse`
 
 NewStartLoadTestResponse instantiates a new StartLoadTestResponse object
 This constructor will assign default values to properties that have it defined,
@@ -49,60 +50,60 @@ but it doesn't guarantee that properties required by API are set
 
 ### GetId
 
-`func (o *StartLoadTestResponse) GetId() int32`
+`func (o *StartLoadTestResponse) GetId() int64`
 
 GetId returns the Id field if non-nil, zero value otherwise.
 
 ### GetIdOk
 
-`func (o *StartLoadTestResponse) GetIdOk() (*int32, bool)`
+`func (o *StartLoadTestResponse) GetIdOk() (*int64, bool)`
 
 GetIdOk returns a tuple with the Id field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetId
 
-`func (o *StartLoadTestResponse) SetId(v int32)`
+`func (o *StartLoadTestResponse) SetId(v int64)`
 
 SetId sets Id field to given value.
 
 
 ### GetTestId
 
-`func (o *StartLoadTestResponse) GetTestId() int32`
+`func (o *StartLoadTestResponse) GetTestId() int64`
 
 GetTestId returns the TestId field if non-nil, zero value otherwise.
 
 ### GetTestIdOk
 
-`func (o *StartLoadTestResponse) GetTestIdOk() (*int32, bool)`
+`func (o *StartLoadTestResponse) GetTestIdOk() (*int64, bool)`
 
 GetTestIdOk returns a tuple with the TestId field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetTestId
 
-`func (o *StartLoadTestResponse) SetTestId(v int32)`
+`func (o *StartLoadTestResponse) SetTestId(v int64)`
 
 SetTestId sets TestId field to given value.
 
 
 ### GetProjectId
 
-`func (o *StartLoadTestResponse) GetProjectId() int32`
+`func (o *StartLoadTestResponse) GetProjectId() int64`
 
 GetProjectId returns the ProjectId field if non-nil, zero value otherwise.
 
 ### GetProjectIdOk
 
-`func (o *StartLoadTestResponse) GetProjectIdOk() (*int32, bool)`
+`func (o *StartLoadTestResponse) GetProjectIdOk() (*int64, bool)`
 
 GetProjectIdOk returns a tuple with the ProjectId field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetProjectId
 
-`func (o *StartLoadTestResponse) SetProjectId(v int32)`
+`func (o *StartLoadTestResponse) SetProjectId(v int64)`
 
 SetProjectId sets ProjectId field to given value.
 
@@ -595,6 +596,26 @@ and a boolean to check if the value has been set.
 `func (o *StartLoadTestResponse) SetExecutionDuration(v int32)`
 
 SetExecutionDuration sets ExecutionDuration field to given value.
+
+
+### GetIsStarred
+
+`func (o *StartLoadTestResponse) GetIsStarred() bool`
+
+GetIsStarred returns the IsStarred field if non-nil, zero value otherwise.
+
+### GetIsStarredOk
+
+`func (o *StartLoadTestResponse) GetIsStarredOk() (*bool, bool)`
+
+GetIsStarredOk returns a tuple with the IsStarred field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetIsStarred
+
+`func (o *StartLoadTestResponse) SetIsStarred(v bool)`
+
+SetIsStarred sets IsStarred field to given value.
 
 
 ### GetTestRunDetailsPageUrl

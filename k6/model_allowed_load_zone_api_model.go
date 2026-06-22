@@ -3,7 +3,7 @@ Grafana Cloud k6
 
 HTTP API for interacting with Grafana Cloud k6.
 
-API version: 1.9.3
+API version: 1.9.9
 Contact: info@grafana.com
 */
 
@@ -22,7 +22,7 @@ var _ MappedNullable = &AllowedLoadZoneApiModel{}
 // AllowedLoadZoneApiModel struct for AllowedLoadZoneApiModel
 type AllowedLoadZoneApiModel struct {
 	// ID of the load zone.
-	Id int32 `json:"id"`
+	Id int64 `json:"id"`
 	// Name of the load zone.
 	Name string `json:"name"`
 	// ID used to identify the load zone in the k6 scripts.
@@ -42,7 +42,7 @@ type _AllowedLoadZoneApiModel AllowedLoadZoneApiModel
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewAllowedLoadZoneApiModel(id int32, name string, k6LoadZoneId string, available bool, customLoadRunnerImage NullableString, public bool) *AllowedLoadZoneApiModel {
+func NewAllowedLoadZoneApiModel(id int64, name string, k6LoadZoneId string, available bool, customLoadRunnerImage NullableString, public bool) *AllowedLoadZoneApiModel {
 	this := AllowedLoadZoneApiModel{}
 	this.Id = id
 	this.Name = name
@@ -62,9 +62,9 @@ func NewAllowedLoadZoneApiModelWithDefaults() *AllowedLoadZoneApiModel {
 }
 
 // GetId returns the Id field value
-func (o *AllowedLoadZoneApiModel) GetId() int32 {
+func (o *AllowedLoadZoneApiModel) GetId() int64 {
 	if o == nil {
-		var ret int32
+		var ret int64
 		return ret
 	}
 
@@ -73,7 +73,7 @@ func (o *AllowedLoadZoneApiModel) GetId() int32 {
 
 // GetIdOk returns a tuple with the Id field value
 // and a boolean to check if the value has been set.
-func (o *AllowedLoadZoneApiModel) GetIdOk() (*int32, bool) {
+func (o *AllowedLoadZoneApiModel) GetIdOk() (*int64, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -81,7 +81,7 @@ func (o *AllowedLoadZoneApiModel) GetIdOk() (*int32, bool) {
 }
 
 // SetId sets field value
-func (o *AllowedLoadZoneApiModel) SetId(v int32) {
+func (o *AllowedLoadZoneApiModel) SetId(v int64) {
 	o.Id = v
 }
 

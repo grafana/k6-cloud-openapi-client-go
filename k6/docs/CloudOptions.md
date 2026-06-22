@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ProjectID** | Pointer to **int32** | ID of a project where the test belongs. | [optional] 
+**ProjectID** | Pointer to **int64** | ID of a project where the test belongs. | [optional] 
 
 ## Methods
 
@@ -27,20 +27,20 @@ but it doesn't guarantee that properties required by API are set
 
 ### GetProjectID
 
-`func (o *CloudOptions) GetProjectID() int32`
+`func (o *CloudOptions) GetProjectID() int64`
 
 GetProjectID returns the ProjectID field if non-nil, zero value otherwise.
 
 ### GetProjectIDOk
 
-`func (o *CloudOptions) GetProjectIDOk() (*int32, bool)`
+`func (o *CloudOptions) GetProjectIDOk() (*int64, bool)`
 
 GetProjectIDOk returns a tuple with the ProjectID field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetProjectID
 
-`func (o *CloudOptions) SetProjectID(v int32)`
+`func (o *CloudOptions) SetProjectID(v int64)`
 
 SetProjectID sets ProjectID field to given value.
 

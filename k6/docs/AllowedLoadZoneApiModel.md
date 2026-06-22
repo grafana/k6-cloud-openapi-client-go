@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | **int32** | ID of the load zone. | 
+**Id** | **int64** | ID of the load zone. | 
 **Name** | **string** | Name of the load zone. | 
 **K6LoadZoneId** | **string** | ID used to identify the load zone in the k6 scripts. | 
 **Available** | **bool** | Whether the load zone can be used to start tests. | 
@@ -15,7 +15,7 @@ Name | Type | Description | Notes
 
 ### NewAllowedLoadZoneApiModel
 
-`func NewAllowedLoadZoneApiModel(id int32, name string, k6LoadZoneId string, available bool, customLoadRunnerImage NullableString, public bool, ) *AllowedLoadZoneApiModel`
+`func NewAllowedLoadZoneApiModel(id int64, name string, k6LoadZoneId string, available bool, customLoadRunnerImage NullableString, public bool, ) *AllowedLoadZoneApiModel`
 
 NewAllowedLoadZoneApiModel instantiates a new AllowedLoadZoneApiModel object
 This constructor will assign default values to properties that have it defined,
@@ -32,20 +32,20 @@ but it doesn't guarantee that properties required by API are set
 
 ### GetId
 
-`func (o *AllowedLoadZoneApiModel) GetId() int32`
+`func (o *AllowedLoadZoneApiModel) GetId() int64`
 
 GetId returns the Id field if non-nil, zero value otherwise.
 
 ### GetIdOk
 
-`func (o *AllowedLoadZoneApiModel) GetIdOk() (*int32, bool)`
+`func (o *AllowedLoadZoneApiModel) GetIdOk() (*int64, bool)`
 
 GetIdOk returns a tuple with the Id field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetId
 
-`func (o *AllowedLoadZoneApiModel) SetId(v int32)`
+`func (o *AllowedLoadZoneApiModel) SetId(v int64)`
 
 SetId sets Id field to given value.
 

@@ -4,10 +4,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | **int32** | ID of the load test. | 
-**ProjectId** | **int32** | ID of the parent project. | 
+**Id** | **int64** | ID of the load test. | 
+**ProjectId** | **int64** | ID of the parent project. | 
 **Name** | **string** | Unique name of the test within the project. | 
-**BaselineTestRunId** | **NullableInt32** | ID of a baseline test run used for results comparison. | 
+**BaselineTestRunId** | **NullableInt64** | ID of a baseline test run used for results comparison. | 
 **Created** | **time.Time** | The date when the test was created. | 
 **Updated** | **time.Time** | The date when the test was last updated. | 
 
@@ -15,7 +15,7 @@ Name | Type | Description | Notes
 
 ### NewLoadTestApiModel
 
-`func NewLoadTestApiModel(id int32, projectId int32, name string, baselineTestRunId NullableInt32, created time.Time, updated time.Time, ) *LoadTestApiModel`
+`func NewLoadTestApiModel(id int64, projectId int64, name string, baselineTestRunId NullableInt64, created time.Time, updated time.Time, ) *LoadTestApiModel`
 
 NewLoadTestApiModel instantiates a new LoadTestApiModel object
 This constructor will assign default values to properties that have it defined,
@@ -32,40 +32,40 @@ but it doesn't guarantee that properties required by API are set
 
 ### GetId
 
-`func (o *LoadTestApiModel) GetId() int32`
+`func (o *LoadTestApiModel) GetId() int64`
 
 GetId returns the Id field if non-nil, zero value otherwise.
 
 ### GetIdOk
 
-`func (o *LoadTestApiModel) GetIdOk() (*int32, bool)`
+`func (o *LoadTestApiModel) GetIdOk() (*int64, bool)`
 
 GetIdOk returns a tuple with the Id field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetId
 
-`func (o *LoadTestApiModel) SetId(v int32)`
+`func (o *LoadTestApiModel) SetId(v int64)`
 
 SetId sets Id field to given value.
 
 
 ### GetProjectId
 
-`func (o *LoadTestApiModel) GetProjectId() int32`
+`func (o *LoadTestApiModel) GetProjectId() int64`
 
 GetProjectId returns the ProjectId field if non-nil, zero value otherwise.
 
 ### GetProjectIdOk
 
-`func (o *LoadTestApiModel) GetProjectIdOk() (*int32, bool)`
+`func (o *LoadTestApiModel) GetProjectIdOk() (*int64, bool)`
 
 GetProjectIdOk returns a tuple with the ProjectId field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetProjectId
 
-`func (o *LoadTestApiModel) SetProjectId(v int32)`
+`func (o *LoadTestApiModel) SetProjectId(v int64)`
 
 SetProjectId sets ProjectId field to given value.
 
@@ -92,20 +92,20 @@ SetName sets Name field to given value.
 
 ### GetBaselineTestRunId
 
-`func (o *LoadTestApiModel) GetBaselineTestRunId() int32`
+`func (o *LoadTestApiModel) GetBaselineTestRunId() int64`
 
 GetBaselineTestRunId returns the BaselineTestRunId field if non-nil, zero value otherwise.
 
 ### GetBaselineTestRunIdOk
 
-`func (o *LoadTestApiModel) GetBaselineTestRunIdOk() (*int32, bool)`
+`func (o *LoadTestApiModel) GetBaselineTestRunIdOk() (*int64, bool)`
 
 GetBaselineTestRunIdOk returns a tuple with the BaselineTestRunId field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetBaselineTestRunId
 
-`func (o *LoadTestApiModel) SetBaselineTestRunId(v int32)`
+`func (o *LoadTestApiModel) SetBaselineTestRunId(v int64)`
 
 SetBaselineTestRunId sets BaselineTestRunId field to given value.
 

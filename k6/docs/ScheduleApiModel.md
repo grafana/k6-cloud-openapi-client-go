@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | **int32** | ID of the schedule. | 
-**LoadTestId** | **int32** | ID of the test to run. | 
+**Id** | **int64** | ID of the schedule. | 
+**LoadTestId** | **int64** | ID of the test to run. | 
 **Starts** | **time.Time** | The date on which the schedule will start running the test. | 
 **RecurrenceRule** | [**NullableScheduleRecurrenceRule**](ScheduleRecurrenceRule.md) |  | 
 **Cron** | [**NullableScheduleCron**](ScheduleCron.md) |  | 
@@ -17,7 +17,7 @@ Name | Type | Description | Notes
 
 ### NewScheduleApiModel
 
-`func NewScheduleApiModel(id int32, loadTestId int32, starts time.Time, recurrenceRule NullableScheduleRecurrenceRule, cron NullableScheduleCron, deactivated bool, nextRun NullableTime, createdBy NullableString, ) *ScheduleApiModel`
+`func NewScheduleApiModel(id int64, loadTestId int64, starts time.Time, recurrenceRule NullableScheduleRecurrenceRule, cron NullableScheduleCron, deactivated bool, nextRun NullableTime, createdBy NullableString, ) *ScheduleApiModel`
 
 NewScheduleApiModel instantiates a new ScheduleApiModel object
 This constructor will assign default values to properties that have it defined,
@@ -34,40 +34,40 @@ but it doesn't guarantee that properties required by API are set
 
 ### GetId
 
-`func (o *ScheduleApiModel) GetId() int32`
+`func (o *ScheduleApiModel) GetId() int64`
 
 GetId returns the Id field if non-nil, zero value otherwise.
 
 ### GetIdOk
 
-`func (o *ScheduleApiModel) GetIdOk() (*int32, bool)`
+`func (o *ScheduleApiModel) GetIdOk() (*int64, bool)`
 
 GetIdOk returns a tuple with the Id field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetId
 
-`func (o *ScheduleApiModel) SetId(v int32)`
+`func (o *ScheduleApiModel) SetId(v int64)`
 
 SetId sets Id field to given value.
 
 
 ### GetLoadTestId
 
-`func (o *ScheduleApiModel) GetLoadTestId() int32`
+`func (o *ScheduleApiModel) GetLoadTestId() int64`
 
 GetLoadTestId returns the LoadTestId field if non-nil, zero value otherwise.
 
 ### GetLoadTestIdOk
 
-`func (o *ScheduleApiModel) GetLoadTestIdOk() (*int32, bool)`
+`func (o *ScheduleApiModel) GetLoadTestIdOk() (*int64, bool)`
 
 GetLoadTestIdOk returns a tuple with the LoadTestId field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetLoadTestId
 
-`func (o *ScheduleApiModel) SetLoadTestId(v int32)`
+`func (o *ScheduleApiModel) SetLoadTestId(v int64)`
 
 SetLoadTestId sets LoadTestId field to given value.
 
