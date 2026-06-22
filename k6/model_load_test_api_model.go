@@ -3,7 +3,7 @@ Grafana Cloud k6
 
 HTTP API for interacting with Grafana Cloud k6.
 
-API version: 1.9.3
+API version: 1.9.9
 Contact: info@grafana.com
 */
 
@@ -23,13 +23,13 @@ var _ MappedNullable = &LoadTestApiModel{}
 // LoadTestApiModel struct for LoadTestApiModel
 type LoadTestApiModel struct {
 	// ID of the load test.
-	Id int32 `json:"id"`
+	Id int64 `json:"id"`
 	// ID of the parent project.
-	ProjectId int32 `json:"project_id"`
+	ProjectId int64 `json:"project_id"`
 	// Unique name of the test within the project.
 	Name string `json:"name"`
 	// ID of a baseline test run used for results comparison.
-	BaselineTestRunId NullableInt32 `json:"baseline_test_run_id"`
+	BaselineTestRunId NullableInt64 `json:"baseline_test_run_id"`
 	// The date when the test was created.
 	Created time.Time `json:"created"`
 	// The date when the test was last updated.
@@ -43,7 +43,7 @@ type _LoadTestApiModel LoadTestApiModel
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewLoadTestApiModel(id int32, projectId int32, name string, baselineTestRunId NullableInt32, created time.Time, updated time.Time) *LoadTestApiModel {
+func NewLoadTestApiModel(id int64, projectId int64, name string, baselineTestRunId NullableInt64, created time.Time, updated time.Time) *LoadTestApiModel {
 	this := LoadTestApiModel{}
 	this.Id = id
 	this.ProjectId = projectId
@@ -63,9 +63,9 @@ func NewLoadTestApiModelWithDefaults() *LoadTestApiModel {
 }
 
 // GetId returns the Id field value
-func (o *LoadTestApiModel) GetId() int32 {
+func (o *LoadTestApiModel) GetId() int64 {
 	if o == nil {
-		var ret int32
+		var ret int64
 		return ret
 	}
 
@@ -74,7 +74,7 @@ func (o *LoadTestApiModel) GetId() int32 {
 
 // GetIdOk returns a tuple with the Id field value
 // and a boolean to check if the value has been set.
-func (o *LoadTestApiModel) GetIdOk() (*int32, bool) {
+func (o *LoadTestApiModel) GetIdOk() (*int64, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -82,14 +82,14 @@ func (o *LoadTestApiModel) GetIdOk() (*int32, bool) {
 }
 
 // SetId sets field value
-func (o *LoadTestApiModel) SetId(v int32) {
+func (o *LoadTestApiModel) SetId(v int64) {
 	o.Id = v
 }
 
 // GetProjectId returns the ProjectId field value
-func (o *LoadTestApiModel) GetProjectId() int32 {
+func (o *LoadTestApiModel) GetProjectId() int64 {
 	if o == nil {
-		var ret int32
+		var ret int64
 		return ret
 	}
 
@@ -98,7 +98,7 @@ func (o *LoadTestApiModel) GetProjectId() int32 {
 
 // GetProjectIdOk returns a tuple with the ProjectId field value
 // and a boolean to check if the value has been set.
-func (o *LoadTestApiModel) GetProjectIdOk() (*int32, bool) {
+func (o *LoadTestApiModel) GetProjectIdOk() (*int64, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -106,7 +106,7 @@ func (o *LoadTestApiModel) GetProjectIdOk() (*int32, bool) {
 }
 
 // SetProjectId sets field value
-func (o *LoadTestApiModel) SetProjectId(v int32) {
+func (o *LoadTestApiModel) SetProjectId(v int64) {
 	o.ProjectId = v
 }
 
@@ -135,10 +135,10 @@ func (o *LoadTestApiModel) SetName(v string) {
 }
 
 // GetBaselineTestRunId returns the BaselineTestRunId field value
-// If the value is explicit nil, the zero value for int32 will be returned
-func (o *LoadTestApiModel) GetBaselineTestRunId() int32 {
+// If the value is explicit nil, the zero value for int64 will be returned
+func (o *LoadTestApiModel) GetBaselineTestRunId() int64 {
 	if o == nil || o.BaselineTestRunId.Get() == nil {
-		var ret int32
+		var ret int64
 		return ret
 	}
 
@@ -148,7 +148,7 @@ func (o *LoadTestApiModel) GetBaselineTestRunId() int32 {
 // GetBaselineTestRunIdOk returns a tuple with the BaselineTestRunId field value
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *LoadTestApiModel) GetBaselineTestRunIdOk() (*int32, bool) {
+func (o *LoadTestApiModel) GetBaselineTestRunIdOk() (*int64, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -156,7 +156,7 @@ func (o *LoadTestApiModel) GetBaselineTestRunIdOk() (*int32, bool) {
 }
 
 // SetBaselineTestRunId sets field value
-func (o *LoadTestApiModel) SetBaselineTestRunId(v int32) {
+func (o *LoadTestApiModel) SetBaselineTestRunId(v int64) {
 	o.BaselineTestRunId.Set(&v)
 }
 

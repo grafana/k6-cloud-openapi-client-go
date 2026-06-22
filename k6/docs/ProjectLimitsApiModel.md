@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ProjectId** | **int32** | ID of the related project. | 
+**ProjectId** | **int64** | ID of the related project. | 
 **VuhMaxPerMonth** | **NullableInt32** | Max amount of virtual user hours (VUH) used per one calendar month. | 
 **VuMaxPerTest** | **NullableInt32** | Max number of concurrent virtual users (VUs) used in one test. | 
 **VuBrowserMaxPerTest** | **NullableInt32** | Max number of concurrent browser virtual users (VUs) used in one test. | 
@@ -14,7 +14,7 @@ Name | Type | Description | Notes
 
 ### NewProjectLimitsApiModel
 
-`func NewProjectLimitsApiModel(projectId int32, vuhMaxPerMonth NullableInt32, vuMaxPerTest NullableInt32, vuBrowserMaxPerTest NullableInt32, durationMaxPerTest NullableInt32, ) *ProjectLimitsApiModel`
+`func NewProjectLimitsApiModel(projectId int64, vuhMaxPerMonth NullableInt32, vuMaxPerTest NullableInt32, vuBrowserMaxPerTest NullableInt32, durationMaxPerTest NullableInt32, ) *ProjectLimitsApiModel`
 
 NewProjectLimitsApiModel instantiates a new ProjectLimitsApiModel object
 This constructor will assign default values to properties that have it defined,
@@ -31,20 +31,20 @@ but it doesn't guarantee that properties required by API are set
 
 ### GetProjectId
 
-`func (o *ProjectLimitsApiModel) GetProjectId() int32`
+`func (o *ProjectLimitsApiModel) GetProjectId() int64`
 
 GetProjectId returns the ProjectId field if non-nil, zero value otherwise.
 
 ### GetProjectIdOk
 
-`func (o *ProjectLimitsApiModel) GetProjectIdOk() (*int32, bool)`
+`func (o *ProjectLimitsApiModel) GetProjectIdOk() (*int64, bool)`
 
 GetProjectIdOk returns a tuple with the ProjectId field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetProjectId
 
-`func (o *ProjectLimitsApiModel) SetProjectId(v int32)`
+`func (o *ProjectLimitsApiModel) SetProjectId(v int64)`
 
 SetProjectId sets ProjectId field to given value.
 

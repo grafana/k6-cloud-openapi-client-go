@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ProjectId** | Pointer to **NullableInt32** | ID of a project where the test belongs. | [optional] 
+**ProjectId** | Pointer to **NullableInt64** | ID of a project where the test belongs. | [optional] 
 **Options** | [**Options**](Options.md) | k6 script options object to validate. | 
 **K6Dependencies** | Pointer to **map[string]string** | Version of k6 and extensions to validate, as a map of dependency name to dependency version constraint. | [optional] 
 **IsLocalExecution** | Pointer to **bool** | Whether the test is being executed locally. | [optional] [default to false]
@@ -30,20 +30,20 @@ but it doesn't guarantee that properties required by API are set
 
 ### GetProjectId
 
-`func (o *ValidateOptionsRequest) GetProjectId() int32`
+`func (o *ValidateOptionsRequest) GetProjectId() int64`
 
 GetProjectId returns the ProjectId field if non-nil, zero value otherwise.
 
 ### GetProjectIdOk
 
-`func (o *ValidateOptionsRequest) GetProjectIdOk() (*int32, bool)`
+`func (o *ValidateOptionsRequest) GetProjectIdOk() (*int64, bool)`
 
 GetProjectIdOk returns a tuple with the ProjectId field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetProjectId
 
-`func (o *ValidateOptionsRequest) SetProjectId(v int32)`
+`func (o *ValidateOptionsRequest) SetProjectId(v int64)`
 
 SetProjectId sets ProjectId field to given value.
 

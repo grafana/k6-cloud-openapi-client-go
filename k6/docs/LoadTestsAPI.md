@@ -40,7 +40,7 @@ import (
 
 func main() {
 	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-	id := int32(56) // int32 | ID of the load test.
+	id := int64(789) // int64 | ID of the load test.
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -58,7 +58,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int32** | ID of the load test. | 
+**id** | **int64** | ID of the load test. | 
 
 ### Other Parameters
 
@@ -186,8 +186,8 @@ import (
 
 func main() {
 	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-	id := int32(56) // int32 | ID of the load test.
-	moveLoadTestApiModel := *openapiclient.NewMoveLoadTestApiModel(int32(123)) // MoveLoadTestApiModel | 
+	id := int64(789) // int64 | ID of the load test.
+	moveLoadTestApiModel := *openapiclient.NewMoveLoadTestApiModel(int64(123)) // MoveLoadTestApiModel | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -205,7 +205,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int32** | ID of the load test. | 
+**id** | **int64** | ID of the load test. | 
 
 ### Other Parameters
 
@@ -258,7 +258,7 @@ import (
 
 func main() {
 	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-	id := int32(56) // int32 | ID of the load test.
+	id := int64(789) // int64 | ID of the load test.
 	patchLoadTestApiModel := *openapiclient.NewPatchLoadTestApiModel() // PatchLoadTestApiModel |  (optional)
 
 	configuration := openapiclient.NewConfiguration()
@@ -277,7 +277,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int32** | ID of the load test. | 
+**id** | **int64** | ID of the load test. | 
 
 ### Other Parameters
 
@@ -330,7 +330,7 @@ import (
 
 func main() {
 	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-	id := int32(56) // int32 | ID of the load test.
+	id := int64(789) // int64 | ID of the load test.
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -350,7 +350,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int32** | ID of the load test. | 
+**id** | **int64** | ID of the load test. | 
 
 ### Other Parameters
 
@@ -402,7 +402,7 @@ import (
 
 func main() {
 	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-	id := int32(56) // int32 | ID of the load test.
+	id := int64(789) // int64 | ID of the load test.
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -422,7 +422,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int32** | ID of the load test. | 
+**id** | **int64** | ID of the load test. | 
 
 ### Other Parameters
 
@@ -474,7 +474,7 @@ import (
 
 func main() {
 	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-	id := int32(56) // int32 | ID of the load test.
+	id := int64(789) // int64 | ID of the load test.
 	body := os.NewFile(1234, "some_file") // *os.File |  (optional)
 
 	configuration := openapiclient.NewConfiguration()
@@ -493,7 +493,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int32** | ID of the load test. | 
+**id** | **int64** | ID of the load test. | 
 
 ### Other Parameters
 
@@ -546,7 +546,7 @@ import (
 
 func main() {
 	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-	id := int32(56) // int32 | ID of the load test.
+	id := int64(789) // int64 | ID of the load test.
 	k6IdempotencyKey := "k6IdempotencyKey_example" // string | Idempotency key to prevent duplicate test starts when retrying requests. The key is valid for 10 minutes. (optional)
 
 	configuration := openapiclient.NewConfiguration()
@@ -567,7 +567,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int32** | ID of the load test. | 
+**id** | **int64** | ID of the load test. | 
 
 ### Other Parameters
 
@@ -620,7 +620,7 @@ import (
 
 func main() {
 	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-	id := int32(56) // int32 | ID of the project.
+	id := int64(789) // int64 | ID of the project.
 	name := "name_example" // string | Unique name of the test within the project.
 	script := os.NewFile(1234, "some_file") // *os.File | Test script in the form of a UTF-8 encoded text or a k6 .tar archive. (optional)
 
@@ -642,7 +642,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int32** | ID of the project. | 
+**id** | **int64** | ID of the project. | 
 
 ### Other Parameters
 
@@ -696,7 +696,7 @@ import (
 
 func main() {
 	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-	id := int32(56) // int32 | ID of the project.
+	id := int64(789) // int64 | ID of the project.
 	count := true // bool | Include collection length in the response object as `@count`. (optional)
 	orderby := "id desc,project_id" // string | Comma-separated list of fields to use when ordering the results. Available fields: - id - project_id - name - created - updated  The default ascending order can be reversed by appending the `desc` specifier. (optional)
 	skip := int32(56) // int32 | The initial index from which to return the results. (optional)
@@ -721,7 +721,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int32** | ID of the project. | 
+**id** | **int64** | ID of the project. | 
 
 ### Other Parameters
 

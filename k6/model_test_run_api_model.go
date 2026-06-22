@@ -3,7 +3,7 @@ Grafana Cloud k6
 
 HTTP API for interacting with Grafana Cloud k6.
 
-API version: 1.9.3
+API version: 1.9.9
 Contact: info@grafana.com
 */
 
@@ -23,11 +23,11 @@ var _ MappedNullable = &TestRunApiModel{}
 // TestRunApiModel The API model for a test run.
 type TestRunApiModel struct {
 	// ID of the test run.
-	Id int32 `json:"id"`
+	Id int64 `json:"id"`
 	// ID of the parent test.
-	TestId int32 `json:"test_id"`
+	TestId int64 `json:"test_id"`
 	// ID of the parent project.
-	ProjectId int32 `json:"project_id"`
+	ProjectId int64 `json:"project_id"`
 	// Email of the user who started the test if started with a user token.
 	StartedBy NullableString `json:"started_by"`
 	// Date and time when the test run was started.
@@ -64,7 +64,9 @@ type TestRunApiModel struct {
 	// The estimated duration of the test run in seconds.
 	EstimatedDuration NullableInt32 `json:"estimated_duration"`
 	// The real billable duration of the test run in seconds.
-	ExecutionDuration    int32 `json:"execution_duration"`
+	ExecutionDuration int32 `json:"execution_duration"`
+	// Whether the test run is starred for quick access.
+	IsStarred            bool `json:"is_starred"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -74,7 +76,7 @@ type _TestRunApiModel TestRunApiModel
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewTestRunApiModel(id int32, testId int32, projectId int32, startedBy NullableString, created time.Time, ended NullableTime, note string, retentionExpiry NullableTime, cost NullableTestRunApiModelCost, status string, statusDetails StatusApiModel, statusHistory []StatusApiModel, distribution []DistributionZoneApiModel, result NullableString, resultDetails map[string]interface{}, options map[string]interface{}, k6Dependencies map[string]string, k6Versions map[string]string, maxVus NullableInt32, maxBrowserVus NullableInt32, estimatedDuration NullableInt32, executionDuration int32) *TestRunApiModel {
+func NewTestRunApiModel(id int64, testId int64, projectId int64, startedBy NullableString, created time.Time, ended NullableTime, note string, retentionExpiry NullableTime, cost NullableTestRunApiModelCost, status string, statusDetails StatusApiModel, statusHistory []StatusApiModel, distribution []DistributionZoneApiModel, result NullableString, resultDetails map[string]interface{}, options map[string]interface{}, k6Dependencies map[string]string, k6Versions map[string]string, maxVus NullableInt32, maxBrowserVus NullableInt32, estimatedDuration NullableInt32, executionDuration int32, isStarred bool) *TestRunApiModel {
 	this := TestRunApiModel{}
 	this.Id = id
 	this.TestId = testId
@@ -98,6 +100,7 @@ func NewTestRunApiModel(id int32, testId int32, projectId int32, startedBy Nulla
 	this.MaxBrowserVus = maxBrowserVus
 	this.EstimatedDuration = estimatedDuration
 	this.ExecutionDuration = executionDuration
+	this.IsStarred = isStarred
 	return &this
 }
 
@@ -110,9 +113,9 @@ func NewTestRunApiModelWithDefaults() *TestRunApiModel {
 }
 
 // GetId returns the Id field value
-func (o *TestRunApiModel) GetId() int32 {
+func (o *TestRunApiModel) GetId() int64 {
 	if o == nil {
-		var ret int32
+		var ret int64
 		return ret
 	}
 
@@ -121,7 +124,7 @@ func (o *TestRunApiModel) GetId() int32 {
 
 // GetIdOk returns a tuple with the Id field value
 // and a boolean to check if the value has been set.
-func (o *TestRunApiModel) GetIdOk() (*int32, bool) {
+func (o *TestRunApiModel) GetIdOk() (*int64, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -129,14 +132,14 @@ func (o *TestRunApiModel) GetIdOk() (*int32, bool) {
 }
 
 // SetId sets field value
-func (o *TestRunApiModel) SetId(v int32) {
+func (o *TestRunApiModel) SetId(v int64) {
 	o.Id = v
 }
 
 // GetTestId returns the TestId field value
-func (o *TestRunApiModel) GetTestId() int32 {
+func (o *TestRunApiModel) GetTestId() int64 {
 	if o == nil {
-		var ret int32
+		var ret int64
 		return ret
 	}
 
@@ -145,7 +148,7 @@ func (o *TestRunApiModel) GetTestId() int32 {
 
 // GetTestIdOk returns a tuple with the TestId field value
 // and a boolean to check if the value has been set.
-func (o *TestRunApiModel) GetTestIdOk() (*int32, bool) {
+func (o *TestRunApiModel) GetTestIdOk() (*int64, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -153,14 +156,14 @@ func (o *TestRunApiModel) GetTestIdOk() (*int32, bool) {
 }
 
 // SetTestId sets field value
-func (o *TestRunApiModel) SetTestId(v int32) {
+func (o *TestRunApiModel) SetTestId(v int64) {
 	o.TestId = v
 }
 
 // GetProjectId returns the ProjectId field value
-func (o *TestRunApiModel) GetProjectId() int32 {
+func (o *TestRunApiModel) GetProjectId() int64 {
 	if o == nil {
-		var ret int32
+		var ret int64
 		return ret
 	}
 
@@ -169,7 +172,7 @@ func (o *TestRunApiModel) GetProjectId() int32 {
 
 // GetProjectIdOk returns a tuple with the ProjectId field value
 // and a boolean to check if the value has been set.
-func (o *TestRunApiModel) GetProjectIdOk() (*int32, bool) {
+func (o *TestRunApiModel) GetProjectIdOk() (*int64, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -177,7 +180,7 @@ func (o *TestRunApiModel) GetProjectIdOk() (*int32, bool) {
 }
 
 // SetProjectId sets field value
-func (o *TestRunApiModel) SetProjectId(v int32) {
+func (o *TestRunApiModel) SetProjectId(v int64) {
 	o.ProjectId = v
 }
 
@@ -659,6 +662,30 @@ func (o *TestRunApiModel) SetExecutionDuration(v int32) {
 	o.ExecutionDuration = v
 }
 
+// GetIsStarred returns the IsStarred field value
+func (o *TestRunApiModel) GetIsStarred() bool {
+	if o == nil {
+		var ret bool
+		return ret
+	}
+
+	return o.IsStarred
+}
+
+// GetIsStarredOk returns a tuple with the IsStarred field value
+// and a boolean to check if the value has been set.
+func (o *TestRunApiModel) GetIsStarredOk() (*bool, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.IsStarred, true
+}
+
+// SetIsStarred sets field value
+func (o *TestRunApiModel) SetIsStarred(v bool) {
+	o.IsStarred = v
+}
+
 func (o TestRunApiModel) MarshalJSON() ([]byte, error) {
 	toSerialize, err := o.ToMap()
 	if err != nil {
@@ -697,6 +724,7 @@ func (o TestRunApiModel) ToMap() (map[string]interface{}, error) {
 	toSerialize["max_browser_vus"] = o.MaxBrowserVus.Get()
 	toSerialize["estimated_duration"] = o.EstimatedDuration.Get()
 	toSerialize["execution_duration"] = o.ExecutionDuration
+	toSerialize["is_starred"] = o.IsStarred
 
 	for key, value := range o.AdditionalProperties {
 		toSerialize[key] = value
@@ -732,6 +760,7 @@ func (o *TestRunApiModel) UnmarshalJSON(data []byte) (err error) {
 		"max_browser_vus",
 		"estimated_duration",
 		"execution_duration",
+		"is_starred",
 	}
 
 	allProperties := make(map[string]interface{})
@@ -783,6 +812,7 @@ func (o *TestRunApiModel) UnmarshalJSON(data []byte) (err error) {
 		delete(additionalProperties, "max_browser_vus")
 		delete(additionalProperties, "estimated_duration")
 		delete(additionalProperties, "execution_duration")
+		delete(additionalProperties, "is_starred")
 		o.AdditionalProperties = additionalProperties
 	}
 

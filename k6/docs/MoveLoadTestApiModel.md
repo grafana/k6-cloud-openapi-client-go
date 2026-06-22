@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ProjectId** | **int32** | ID of the destination project. | 
+**ProjectId** | **int64** | ID of the destination project. | 
 
 ## Methods
 
 ### NewMoveLoadTestApiModel
 
-`func NewMoveLoadTestApiModel(projectId int32, ) *MoveLoadTestApiModel`
+`func NewMoveLoadTestApiModel(projectId int64, ) *MoveLoadTestApiModel`
 
 NewMoveLoadTestApiModel instantiates a new MoveLoadTestApiModel object
 This constructor will assign default values to properties that have it defined,
@@ -27,20 +27,20 @@ but it doesn't guarantee that properties required by API are set
 
 ### GetProjectId
 
-`func (o *MoveLoadTestApiModel) GetProjectId() int32`
+`func (o *MoveLoadTestApiModel) GetProjectId() int64`
 
 GetProjectId returns the ProjectId field if non-nil, zero value otherwise.
 
 ### GetProjectIdOk
 
-`func (o *MoveLoadTestApiModel) GetProjectIdOk() (*int32, bool)`
+`func (o *MoveLoadTestApiModel) GetProjectIdOk() (*int64, bool)`
 
 GetProjectIdOk returns a tuple with the ProjectId field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetProjectId
 
-`func (o *MoveLoadTestApiModel) SetProjectId(v int32)`
+`func (o *MoveLoadTestApiModel) SetProjectId(v int64)`
 
 SetProjectId sets ProjectId field to given value.
 

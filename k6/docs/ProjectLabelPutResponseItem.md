@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**KeyId** | **int32** | Label key ID. | 
+**KeyId** | **int64** | Label key ID. | 
 **Key** | **string** | Label key name. | 
 **Value** | **string** | Label value. | 
 
@@ -12,7 +12,7 @@ Name | Type | Description | Notes
 
 ### NewProjectLabelPutResponseItem
 
-`func NewProjectLabelPutResponseItem(keyId int32, key string, value string, ) *ProjectLabelPutResponseItem`
+`func NewProjectLabelPutResponseItem(keyId int64, key string, value string, ) *ProjectLabelPutResponseItem`
 
 NewProjectLabelPutResponseItem instantiates a new ProjectLabelPutResponseItem object
 This constructor will assign default values to properties that have it defined,
@@ -29,20 +29,20 @@ but it doesn't guarantee that properties required by API are set
 
 ### GetKeyId
 
-`func (o *ProjectLabelPutResponseItem) GetKeyId() int32`
+`func (o *ProjectLabelPutResponseItem) GetKeyId() int64`
 
 GetKeyId returns the KeyId field if non-nil, zero value otherwise.
 
 ### GetKeyIdOk
 
-`func (o *ProjectLabelPutResponseItem) GetKeyIdOk() (*int32, bool)`
+`func (o *ProjectLabelPutResponseItem) GetKeyIdOk() (*int64, bool)`
 
 GetKeyIdOk returns a tuple with the KeyId field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetKeyId
 
-`func (o *ProjectLabelPutResponseItem) SetKeyId(v int32)`
+`func (o *ProjectLabelPutResponseItem) SetKeyId(v int64)`
 
 SetKeyId sets KeyId field to given value.
 

@@ -3,7 +3,7 @@ Grafana Cloud k6
 
 HTTP API for interacting with Grafana Cloud k6.
 
-API version: 1.9.3
+API version: 1.9.9
 Contact: info@grafana.com
 */
 
@@ -23,7 +23,7 @@ type PatchLoadTestApiModel struct {
 	// Unique name of the test within the project.
 	Name *string `json:"name,omitempty"`
 	// ID of a baseline test run used for results comparison.
-	BaselineTestRunId    NullableInt32 `json:"baseline_test_run_id,omitempty"`
+	BaselineTestRunId    NullableInt64 `json:"baseline_test_run_id,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -79,9 +79,9 @@ func (o *PatchLoadTestApiModel) SetName(v string) {
 }
 
 // GetBaselineTestRunId returns the BaselineTestRunId field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *PatchLoadTestApiModel) GetBaselineTestRunId() int32 {
+func (o *PatchLoadTestApiModel) GetBaselineTestRunId() int64 {
 	if o == nil || IsNil(o.BaselineTestRunId.Get()) {
-		var ret int32
+		var ret int64
 		return ret
 	}
 	return *o.BaselineTestRunId.Get()
@@ -90,7 +90,7 @@ func (o *PatchLoadTestApiModel) GetBaselineTestRunId() int32 {
 // GetBaselineTestRunIdOk returns a tuple with the BaselineTestRunId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *PatchLoadTestApiModel) GetBaselineTestRunIdOk() (*int32, bool) {
+func (o *PatchLoadTestApiModel) GetBaselineTestRunIdOk() (*int64, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -106,8 +106,8 @@ func (o *PatchLoadTestApiModel) HasBaselineTestRunId() bool {
 	return false
 }
 
-// SetBaselineTestRunId gets a reference to the given NullableInt32 and assigns it to the BaselineTestRunId field.
-func (o *PatchLoadTestApiModel) SetBaselineTestRunId(v int32) {
+// SetBaselineTestRunId gets a reference to the given NullableInt64 and assigns it to the BaselineTestRunId field.
+func (o *PatchLoadTestApiModel) SetBaselineTestRunId(v int64) {
 	o.BaselineTestRunId.Set(&v)
 }
 

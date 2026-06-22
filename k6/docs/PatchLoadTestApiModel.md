@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Name** | Pointer to **string** | Unique name of the test within the project. | [optional] 
-**BaselineTestRunId** | Pointer to **NullableInt32** | ID of a baseline test run used for results comparison. | [optional] 
+**BaselineTestRunId** | Pointer to **NullableInt64** | ID of a baseline test run used for results comparison. | [optional] 
 
 ## Methods
 
@@ -53,20 +53,20 @@ HasName returns a boolean if a field has been set.
 
 ### GetBaselineTestRunId
 
-`func (o *PatchLoadTestApiModel) GetBaselineTestRunId() int32`
+`func (o *PatchLoadTestApiModel) GetBaselineTestRunId() int64`
 
 GetBaselineTestRunId returns the BaselineTestRunId field if non-nil, zero value otherwise.
 
 ### GetBaselineTestRunIdOk
 
-`func (o *PatchLoadTestApiModel) GetBaselineTestRunIdOk() (*int32, bool)`
+`func (o *PatchLoadTestApiModel) GetBaselineTestRunIdOk() (*int64, bool)`
 
 GetBaselineTestRunIdOk returns a tuple with the BaselineTestRunId field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetBaselineTestRunId
 
-`func (o *PatchLoadTestApiModel) SetBaselineTestRunId(v int32)`
+`func (o *PatchLoadTestApiModel) SetBaselineTestRunId(v int64)`
 
 SetBaselineTestRunId sets BaselineTestRunId field to given value.
 

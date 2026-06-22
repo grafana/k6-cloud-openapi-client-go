@@ -179,7 +179,7 @@ import (
 
 func main() {
 	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-	id := int32(56) // int32 | ID of the project.
+	id := int64(789) // int64 | ID of the project.
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -197,7 +197,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int32** | ID of the project. | 
+**id** | **int64** | ID of the project. | 
 
 ### Other Parameters
 
@@ -249,7 +249,7 @@ import (
 
 func main() {
 	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-	id := int32(56) // int32 | ID of the project.
+	id := int64(789) // int64 | ID of the project.
 	patchProjectLimitsRequest := *openapiclient.NewPatchProjectLimitsRequest() // PatchProjectLimitsRequest |  (optional)
 
 	configuration := openapiclient.NewConfiguration()
@@ -268,7 +268,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int32** | ID of the project. | 
+**id** | **int64** | ID of the project. | 
 
 ### Other Parameters
 
@@ -321,7 +321,7 @@ import (
 
 func main() {
 	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-	id := int32(56) // int32 | ID of the project.
+	id := int64(789) // int64 | ID of the project.
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -341,7 +341,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int32** | ID of the project. | 
+**id** | **int64** | ID of the project. | 
 
 ### Other Parameters
 
@@ -471,7 +471,7 @@ import (
 
 func main() {
 	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-	id := int32(56) // int32 | ID of the project.
+	id := int64(789) // int64 | ID of the project.
 	patchProjectApiModel := *openapiclient.NewPatchProjectApiModel("Name_example") // PatchProjectApiModel | 
 
 	configuration := openapiclient.NewConfiguration()
@@ -490,7 +490,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int32** | ID of the project. | 
+**id** | **int64** | ID of the project. | 
 
 ### Other Parameters
 
@@ -543,7 +543,7 @@ import (
 
 func main() {
 	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-	id := int32(56) // int32 | ID of the project.
+	id := int64(789) // int64 | ID of the project.
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -563,7 +563,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int32** | ID of the project. | 
+**id** | **int64** | ID of the project. | 
 
 ### Other Parameters
 

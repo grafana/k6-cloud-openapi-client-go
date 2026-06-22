@@ -13,13 +13,15 @@ Method | HTTP request | Description
 [**TestRunsRetrieve**](TestRunsAPI.md#TestRunsRetrieve) | **Get** /cloud/v6/test_runs/{id} | Get a test run by ID.
 [**TestRunsSave**](TestRunsAPI.md#TestRunsSave) | **Post** /cloud/v6/test_runs/{id}/save | Save test run results.
 [**TestRunsScriptRetrieve**](TestRunsAPI.md#TestRunsScriptRetrieve) | **Get** /cloud/v6/test_runs/{id}/script | Download the test run script.
+[**TestRunsStar**](TestRunsAPI.md#TestRunsStar) | **Post** /cloud/v6/test_runs/{id}/star | Star a test run.
 [**TestRunsUnsave**](TestRunsAPI.md#TestRunsUnsave) | **Post** /cloud/v6/test_runs/{id}/unsave | Unsave test run results.
+[**TestRunsUnstar**](TestRunsAPI.md#TestRunsUnstar) | **Post** /cloud/v6/test_runs/{id}/unstar | Unstar a test run.
 
 
 
 ## LoadTestsTestRunsRetrieve
 
-> TestRunListResponse LoadTestsTestRunsRetrieve(ctx, id).XStackId(xStackId).Count(count).Orderby(orderby).Skip(skip).Top(top).CreatedAfter(createdAfter).CreatedBefore(createdBefore).Execute()
+> TestRunListResponse LoadTestsTestRunsRetrieve(ctx, id).XStackId(xStackId).Count(count).Orderby(orderby).Skip(skip).Top(top).CreatedAfter(createdAfter).CreatedBefore(createdBefore).IsStarred(isStarred).Execute()
 
 List all runs of a load test.
 
@@ -40,17 +42,18 @@ import (
 
 func main() {
 	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-	id := int32(56) // int32 | ID of the load test.
+	id := int64(789) // int64 | ID of the load test.
 	count := true // bool | Include collection length in the response object as `@count`. (optional)
 	orderby := "created desc" // string | Comma-separated list of fields to use when ordering the results. Available fields: - created  The default ascending order can be reversed by appending the `desc` specifier. (optional)
 	skip := int32(56) // int32 | The initial index from which to return the results. (optional)
 	top := int32(56) // int32 | Number of results to return per page. (optional) (default to 1000)
 	createdAfter := time.Now() // time.Time | Filter test runs created on or after this date and time (inclusive). (optional)
 	createdBefore := time.Now() // time.Time | Filter test runs created before this date and time (non-inclusive). (optional)
+	isStarred := true // bool | Filter by starred state. `true` or `1` returns only starred runs; `false` or `0` returns only unstarred runs. Omit the parameter to return all runs for this load test. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.TestRunsAPI.LoadTestsTestRunsRetrieve(context.Background(), id).XStackId(xStackId).Count(count).Orderby(orderby).Skip(skip).Top(top).CreatedAfter(createdAfter).CreatedBefore(createdBefore).Execute()
+	resp, r, err := apiClient.TestRunsAPI.LoadTestsTestRunsRetrieve(context.Background(), id).XStackId(xStackId).Count(count).Orderby(orderby).Skip(skip).Top(top).CreatedAfter(createdAfter).CreatedBefore(createdBefore).IsStarred(isStarred).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `TestRunsAPI.LoadTestsTestRunsRetrieve``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -66,7 +69,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int32** | ID of the load test. | 
+**id** | **int64** | ID of the load test. | 
 
 ### Other Parameters
 
@@ -83,6 +86,7 @@ Name | Type | Description  | Notes
  **top** | **int32** | Number of results to return per page. | [default to 1000]
  **createdAfter** | **time.Time** | Filter test runs created on or after this date and time (inclusive). | 
  **createdBefore** | **time.Time** | Filter test runs created before this date and time (non-inclusive). | 
+ **isStarred** | **bool** | Filter by starred state. &#x60;true&#x60; or &#x60;1&#x60; returns only starred runs; &#x60;false&#x60; or &#x60;0&#x60; returns only unstarred runs. Omit the parameter to return all runs for this load test. | 
 
 ### Return type
 
@@ -124,7 +128,7 @@ import (
 
 func main() {
 	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-	id := int32(56) // int32 | ID of the load test run.
+	id := int64(789) // int64 | ID of the load test run.
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -142,7 +146,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int32** | ID of the load test run. | 
+**id** | **int64** | ID of the load test run. | 
 
 ### Other Parameters
 
@@ -194,7 +198,7 @@ import (
 
 func main() {
 	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-	id := int32(56) // int32 | ID of the load test run.
+	id := int64(789) // int64 | ID of the load test run.
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -212,7 +216,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int32** | ID of the load test run. | 
+**id** | **int64** | ID of the load test run. | 
 
 ### Other Parameters
 
@@ -264,7 +268,7 @@ import (
 
 func main() {
 	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-	id := int32(56) // int32 | ID of the load test run.
+	id := int64(789) // int64 | ID of the load test run.
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -284,7 +288,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int32** | ID of the load test run. | 
+**id** | **int64** | ID of the load test run. | 
 
 ### Other Parameters
 
@@ -413,7 +417,7 @@ import (
 
 func main() {
 	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-	id := int32(56) // int32 | ID of the load test run.
+	id := int64(789) // int64 | ID of the load test run.
 	patchTestRunApiModel := *openapiclient.NewPatchTestRunApiModel("Note_example") // PatchTestRunApiModel | 
 
 	configuration := openapiclient.NewConfiguration()
@@ -432,7 +436,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int32** | ID of the load test run. | 
+**id** | **int64** | ID of the load test run. | 
 
 ### Other Parameters
 
@@ -485,7 +489,7 @@ import (
 
 func main() {
 	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-	id := int32(56) // int32 | ID of the load test run.
+	id := int64(789) // int64 | ID of the load test run.
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -505,7 +509,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int32** | ID of the load test run. | 
+**id** | **int64** | ID of the load test run. | 
 
 ### Other Parameters
 
@@ -557,7 +561,7 @@ import (
 
 func main() {
 	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-	id := int32(56) // int32 | ID of the load test run.
+	id := int64(789) // int64 | ID of the load test run.
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -575,7 +579,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int32** | ID of the load test run. | 
+**id** | **int64** | ID of the load test run. | 
 
 ### Other Parameters
 
@@ -627,7 +631,7 @@ import (
 
 func main() {
 	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-	id := int32(56) // int32 | ID of the load test run.
+	id := int64(789) // int64 | ID of the load test run.
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -647,7 +651,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int32** | ID of the load test run. | 
+**id** | **int64** | ID of the load test run. | 
 
 ### Other Parameters
 
@@ -677,6 +681,76 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
+## TestRunsStar
+
+> TestRunsStar(ctx, id).XStackId(xStackId).Execute()
+
+Star a test run.
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/grafana/k6-cloud-openapi-client/k6"
+)
+
+func main() {
+	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
+	id := int64(789) // int64 | ID of the load test run.
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	r, err := apiClient.TestRunsAPI.TestRunsStar(context.Background(), id).XStackId(xStackId).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `TestRunsAPI.TestRunsStar``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**id** | **int64** | ID of the load test run. | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiTestRunsStarRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **xStackId** | **int32** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. | 
+
+
+### Return type
+
+ (empty response body)
+
+### Authorization
+
+[k6ApiToken](../README.md#k6ApiToken)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
 ## TestRunsUnsave
 
 > TestRunsUnsave(ctx, id).XStackId(xStackId).Execute()
@@ -699,7 +773,7 @@ import (
 
 func main() {
 	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-	id := int32(56) // int32 | ID of the load test run.
+	id := int64(789) // int64 | ID of the load test run.
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -717,11 +791,81 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int32** | ID of the load test run. | 
+**id** | **int64** | ID of the load test run. | 
 
 ### Other Parameters
 
 Other parameters are passed through a pointer to a apiTestRunsUnsaveRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **xStackId** | **int32** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. | 
+
+
+### Return type
+
+ (empty response body)
+
+### Authorization
+
+[k6ApiToken](../README.md#k6ApiToken)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## TestRunsUnstar
+
+> TestRunsUnstar(ctx, id).XStackId(xStackId).Execute()
+
+Unstar a test run.
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/grafana/k6-cloud-openapi-client/k6"
+)
+
+func main() {
+	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
+	id := int64(789) // int64 | ID of the load test run.
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	r, err := apiClient.TestRunsAPI.TestRunsUnstar(context.Background(), id).XStackId(xStackId).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `TestRunsAPI.TestRunsUnstar``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**id** | **int64** | ID of the load test run. | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiTestRunsUnstarRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
