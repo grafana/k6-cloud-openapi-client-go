@@ -3,7 +3,7 @@ Grafana Cloud k6
 
 HTTP API for interacting with Grafana Cloud k6.
 
-API version: 1.9.9
+API version: 1.12.0
 Contact: info@grafana.com
 */
 
@@ -28,8 +28,11 @@ type LoadTestApiModel struct {
 	ProjectId int64 `json:"project_id"`
 	// Unique name of the test within the project.
 	Name string `json:"name"`
-	// ID of a baseline test run used for results comparison.
+	// ID of a baseline test run used for results comparison. Deprecated: baselines are being replaced by the star/unstar test run APIs and this field is scheduled for removal on 2026-09-01.
+	// Deprecated
 	BaselineTestRunId NullableInt64 `json:"baseline_test_run_id"`
+	// Identifier of the k6 version used to run the test.
+	K6Version NullableInt32 `json:"k6_version,omitempty"`
 	// The date when the test was created.
 	Created time.Time `json:"created"`
 	// The date when the test was last updated.
@@ -136,6 +139,7 @@ func (o *LoadTestApiModel) SetName(v string) {
 
 // GetBaselineTestRunId returns the BaselineTestRunId field value
 // If the value is explicit nil, the zero value for int64 will be returned
+// Deprecated
 func (o *LoadTestApiModel) GetBaselineTestRunId() int64 {
 	if o == nil || o.BaselineTestRunId.Get() == nil {
 		var ret int64
@@ -148,6 +152,7 @@ func (o *LoadTestApiModel) GetBaselineTestRunId() int64 {
 // GetBaselineTestRunIdOk returns a tuple with the BaselineTestRunId field value
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
+// Deprecated
 func (o *LoadTestApiModel) GetBaselineTestRunIdOk() (*int64, bool) {
 	if o == nil {
 		return nil, false
@@ -156,8 +161,52 @@ func (o *LoadTestApiModel) GetBaselineTestRunIdOk() (*int64, bool) {
 }
 
 // SetBaselineTestRunId sets field value
+// Deprecated
 func (o *LoadTestApiModel) SetBaselineTestRunId(v int64) {
 	o.BaselineTestRunId.Set(&v)
+}
+
+// GetK6Version returns the K6Version field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *LoadTestApiModel) GetK6Version() int32 {
+	if o == nil || IsNil(o.K6Version.Get()) {
+		var ret int32
+		return ret
+	}
+	return *o.K6Version.Get()
+}
+
+// GetK6VersionOk returns a tuple with the K6Version field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *LoadTestApiModel) GetK6VersionOk() (*int32, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.K6Version.Get(), o.K6Version.IsSet()
+}
+
+// HasK6Version returns a boolean if a field has been set.
+func (o *LoadTestApiModel) HasK6Version() bool {
+	if o != nil && o.K6Version.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetK6Version gets a reference to the given NullableInt32 and assigns it to the K6Version field.
+func (o *LoadTestApiModel) SetK6Version(v int32) {
+	o.K6Version.Set(&v)
+}
+
+// SetK6VersionNil sets the value for K6Version to be an explicit nil
+func (o *LoadTestApiModel) SetK6VersionNil() {
+	o.K6Version.Set(nil)
+}
+
+// UnsetK6Version ensures that no value is present for K6Version, not even an explicit nil
+func (o *LoadTestApiModel) UnsetK6Version() {
+	o.K6Version.Unset()
 }
 
 // GetCreated returns the Created field value
@@ -222,6 +271,9 @@ func (o LoadTestApiModel) ToMap() (map[string]interface{}, error) {
 	toSerialize["project_id"] = o.ProjectId
 	toSerialize["name"] = o.Name
 	toSerialize["baseline_test_run_id"] = o.BaselineTestRunId.Get()
+	if o.K6Version.IsSet() {
+		toSerialize["k6_version"] = o.K6Version.Get()
+	}
 	toSerialize["created"] = o.Created
 	toSerialize["updated"] = o.Updated
 
@@ -276,6 +328,7 @@ func (o *LoadTestApiModel) UnmarshalJSON(data []byte) (err error) {
 		delete(additionalProperties, "project_id")
 		delete(additionalProperties, "name")
 		delete(additionalProperties, "baseline_test_run_id")
+		delete(additionalProperties, "k6_version")
 		delete(additionalProperties, "created")
 		delete(additionalProperties, "updated")
 		o.AdditionalProperties = additionalProperties

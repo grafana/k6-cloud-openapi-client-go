@@ -10,6 +10,7 @@ api_schedules.go
 api_test_runs.go
 client.go
 configuration.go
+docs/AisdkSessionApiModel.md
 docs/AllowedLoadZoneApiModel.md
 docs/AllowedLoadZoneToUpdateApiModel.md
 docs/AllowedLoadZonesListApiModel.md
@@ -69,6 +70,7 @@ docs/ProtocolVuh.md
 docs/ProvisioningAPI.md
 docs/ReductionRate.md
 docs/ReductionRateBreakdownValue.md
+docs/ResultDetailsApiModel.md
 docs/RuntimeConfig.md
 docs/ScheduleApiModel.md
 docs/ScheduleCron.md
@@ -86,6 +88,7 @@ docs/StatusExtraApiModel.md
 docs/TestCostApiModel.md
 docs/TestRunApiModel.md
 docs/TestRunApiModelCost.md
+docs/TestRunApiModelResultDetails.md
 docs/TestRunDistributionApiModel.md
 docs/TestRunListResponse.md
 docs/TestRunsAPI.md
@@ -96,6 +99,7 @@ docs/UpdateAllowedProjectsListApiModel.md
 docs/ValidateOptionsRequest.md
 docs/ValidateOptionsResponse.md
 docs/Weekday.md
+model_aisdk_session_api_model.go
 model_allowed_load_zone_api_model.go
 model_allowed_load_zone_to_update_api_model.go
 model_allowed_load_zones_list_api_model.go
@@ -149,6 +153,7 @@ model_project_list_response.go
 model_protocol_vuh.go
 model_reduction_rate.go
 model_reduction_rate_breakdown_value.go
+model_result_details_api_model.go
 model_runtime_config.go
 model_schedule_api_model.go
 model_schedule_cron.go
@@ -165,6 +170,7 @@ model_status_extra_api_model.go
 model_test_cost_api_model.go
 model_test_run_api_model.go
 model_test_run_api_model_cost.go
+model_test_run_api_model_result_details.go
 model_test_run_distribution_api_model.go
 model_test_run_list_response.go
 model_total_vuh.go

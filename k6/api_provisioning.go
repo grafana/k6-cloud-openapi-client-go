@@ -3,7 +3,7 @@ Grafana Cloud k6
 
 HTTP API for interacting with Grafana Cloud k6.
 
-API version: 1.9.9
+API version: 1.12.0
 Contact: info@grafana.com
 */
 
@@ -26,7 +26,7 @@ type ProvisioningAPIService service
 type ApiStartLocalExecutionTestRequest struct {
 	ctx                            context.Context
 	ApiService                     *ProvisioningAPIService
-	id                             int32
+	id                             int64
 	startLocalExecutionTestRequest *StartLocalExecutionTestRequest
 	k6IdempotencyKey               *string
 }
@@ -55,7 +55,7 @@ Start a test in local execution mode.
 	@param id ID of the load test.
 	@return *ApiStartLocalExecutionTestRequest
 */
-func (a *ProvisioningAPIService) StartLocalExecutionTest(ctx context.Context, id int32) *ApiStartLocalExecutionTestRequest {
+func (a *ProvisioningAPIService) StartLocalExecutionTest(ctx context.Context, id int64) *ApiStartLocalExecutionTestRequest {
 	return &ApiStartLocalExecutionTestRequest{
 		ApiService: a,
 		ctx:        ctx,
@@ -202,11 +202,164 @@ func (a *ProvisioningAPIService) StartLocalExecutionTestExecute(r *ApiStartLocal
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
+type ApiTestRunsAisdkSessionRetrieveRequest struct {
+	ctx        context.Context
+	ApiService *ProvisioningAPIService
+	testRunId  int64
+}
+
+func (r *ApiTestRunsAisdkSessionRetrieveRequest) Execute() (*AisdkSessionApiModel, *http.Response, error) {
+	return r.ApiService.TestRunsAisdkSessionRetrieveExecute(r)
+}
+
+/*
+TestRunsAisdkSessionRetrieve Mint an ai-sdk access token for a test run.
+
+Mint an ai-sdk access token for the authenticated test run's stack.
+
+The test run id is part of the path so the “testrun_authenticate“
+middleware can validate the request and inject the “X-Stack-Id“,
+“X-Cluster-Slug“, and “X-K6-Org-Id“ headers; the id itself is not
+used by the mint.
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param testRunId ID of the test run.
+	@return *ApiTestRunsAisdkSessionRetrieveRequest
+*/
+func (a *ProvisioningAPIService) TestRunsAisdkSessionRetrieve(ctx context.Context, testRunId int64) *ApiTestRunsAisdkSessionRetrieveRequest {
+	return &ApiTestRunsAisdkSessionRetrieveRequest{
+		ApiService: a,
+		ctx:        ctx,
+		testRunId:  testRunId,
+	}
+}
+
+// Execute executes the request
+//
+//	@return AisdkSessionApiModel
+func (a *ProvisioningAPIService) TestRunsAisdkSessionRetrieveExecute(r *ApiTestRunsAisdkSessionRetrieveRequest) (*AisdkSessionApiModel, *http.Response, error) {
+	var (
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *AisdkSessionApiModel
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProvisioningAPIService.TestRunsAisdkSessionRetrieve")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/provisioning/v1/test_runs/{test_run_id}/aisdk_session"
+	localVarPath = strings.Replace(localVarPath, "{"+"test_run_id"+"}", url.PathEscape(parameterValueToString(r.testRunId, "testRunId")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 401 {
+			var v ErrorResponseApiModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v ErrorResponseApiModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 404 {
+			var v ErrorResponseApiModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 500 {
+			var v ErrorResponseApiModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
 type ApiTestRunsDecryptSecretRetrieveRequest struct {
 	ctx        context.Context
 	ApiService *ProvisioningAPIService
 	name       *string
-	testRunId  int32
+	testRunId  int64
 }
 
 // The name of the secret to decrypt.
@@ -232,7 +385,7 @@ to the code here, all we need is the organization related information.
 	@param testRunId ID of the test run.
 	@return *ApiTestRunsDecryptSecretRetrieveRequest
 */
-func (a *ProvisioningAPIService) TestRunsDecryptSecretRetrieve(ctx context.Context, testRunId int32) *ApiTestRunsDecryptSecretRetrieveRequest {
+func (a *ProvisioningAPIService) TestRunsDecryptSecretRetrieve(ctx context.Context, testRunId int64) *ApiTestRunsDecryptSecretRetrieveRequest {
 	return &ApiTestRunsDecryptSecretRetrieveRequest{
 		ApiService: a,
 		ctx:        ctx,
@@ -378,7 +531,7 @@ func (a *ProvisioningAPIService) TestRunsDecryptSecretRetrieveExecute(r *ApiTest
 type ApiTestRunsNotifyRequest struct {
 	ctx                                          context.Context
 	ApiService                                   *ProvisioningAPIService
-	id                                           int32
+	id                                           int64
 	scriptExecutionCompletedNotificationApiModel *ScriptExecutionCompletedNotificationApiModel
 }
 
@@ -400,7 +553,7 @@ Report a test run lifecycle event.
 	@param id ID of the test run.
 	@return *ApiTestRunsNotifyRequest
 */
-func (a *ProvisioningAPIService) TestRunsNotify(ctx context.Context, id int32) *ApiTestRunsNotifyRequest {
+func (a *ProvisioningAPIService) TestRunsNotify(ctx context.Context, id int64) *ApiTestRunsNotifyRequest {
 	return &ApiTestRunsNotifyRequest{
 		ApiService: a,
 		ctx:        ctx,

@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**TestRunId** | **int32** | ID of the created test run. | 
+**TestRunId** | **int64** | ID of the created test run. | 
 **RuntimeConfig** | [**RuntimeConfig**](RuntimeConfig.md) |  | 
 **ArchiveUploadUrl** | **NullableString** | URL to upload the k6 archive or null if not uploading. | 
 **TestRunDetailsPageUrl** | **string** | URL to the Grafana web app. | 
@@ -13,7 +13,7 @@ Name | Type | Description | Notes
 
 ### NewStartLocalExecutionTestResponse
 
-`func NewStartLocalExecutionTestResponse(testRunId int32, runtimeConfig RuntimeConfig, archiveUploadUrl NullableString, testRunDetailsPageUrl string, ) *StartLocalExecutionTestResponse`
+`func NewStartLocalExecutionTestResponse(testRunId int64, runtimeConfig RuntimeConfig, archiveUploadUrl NullableString, testRunDetailsPageUrl string, ) *StartLocalExecutionTestResponse`
 
 NewStartLocalExecutionTestResponse instantiates a new StartLocalExecutionTestResponse object
 This constructor will assign default values to properties that have it defined,
@@ -30,20 +30,20 @@ but it doesn't guarantee that properties required by API are set
 
 ### GetTestRunId
 
-`func (o *StartLocalExecutionTestResponse) GetTestRunId() int32`
+`func (o *StartLocalExecutionTestResponse) GetTestRunId() int64`
 
 GetTestRunId returns the TestRunId field if non-nil, zero value otherwise.
 
 ### GetTestRunIdOk
 
-`func (o *StartLocalExecutionTestResponse) GetTestRunIdOk() (*int32, bool)`
+`func (o *StartLocalExecutionTestResponse) GetTestRunIdOk() (*int64, bool)`
 
 GetTestRunIdOk returns a tuple with the TestRunId field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetTestRunId
 
-`func (o *StartLocalExecutionTestResponse) SetTestRunId(v int32)`
+`func (o *StartLocalExecutionTestResponse) SetTestRunId(v int64)`
 
 SetTestRunId sets TestRunId field to given value.
 

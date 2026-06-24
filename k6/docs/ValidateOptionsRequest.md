@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 **ProjectId** | Pointer to **NullableInt64** | ID of a project where the test belongs. | [optional] 
 **Options** | [**Options**](Options.md) | k6 script options object to validate. | 
 **K6Dependencies** | Pointer to **map[string]string** | Version of k6 and extensions to validate, as a map of dependency name to dependency version constraint. | [optional] 
+**K6Version** | Pointer to **NullableInt32** | Identifier of the k6 version used to run the test. | [optional] 
 **IsLocalExecution** | Pointer to **bool** | Whether the test is being executed locally. | [optional] [default to false]
 
 ## Methods
@@ -108,6 +109,41 @@ SetK6Dependencies sets K6Dependencies field to given value.
 
 HasK6Dependencies returns a boolean if a field has been set.
 
+### GetK6Version
+
+`func (o *ValidateOptionsRequest) GetK6Version() int32`
+
+GetK6Version returns the K6Version field if non-nil, zero value otherwise.
+
+### GetK6VersionOk
+
+`func (o *ValidateOptionsRequest) GetK6VersionOk() (*int32, bool)`
+
+GetK6VersionOk returns a tuple with the K6Version field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetK6Version
+
+`func (o *ValidateOptionsRequest) SetK6Version(v int32)`
+
+SetK6Version sets K6Version field to given value.
+
+### HasK6Version
+
+`func (o *ValidateOptionsRequest) HasK6Version() bool`
+
+HasK6Version returns a boolean if a field has been set.
+
+### SetK6VersionNil
+
+`func (o *ValidateOptionsRequest) SetK6VersionNil(b bool)`
+
+ SetK6VersionNil sets the value for K6Version to be an explicit nil
+
+### UnsetK6Version
+`func (o *ValidateOptionsRequest) UnsetK6Version()`
+
+UnsetK6Version ensures that no value is present for K6Version, not even an explicit nil
 ### GetIsLocalExecution
 
 `func (o *ValidateOptionsRequest) GetIsLocalExecution() bool`
