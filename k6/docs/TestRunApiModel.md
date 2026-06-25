@@ -18,7 +18,7 @@ Name | Type | Description | Notes
 **StatusHistory** | [**[]StatusApiModel**](StatusApiModel.md) | List of test run status objects sorted by the status start time. The list represents the test run status history. | 
 **Distribution** | [**[]DistributionZoneApiModel**](DistributionZoneApiModel.md) | List of the load zones configured for the test and the corresponding distribution percentages. | 
 **Result** | **NullableString** | Test run result. &#x60;passed&#x60; if there were no issues, &#x60;failed&#x60; if thresholds were breached, &#x60;error&#x60; if the execution was not completed. | 
-**ResultDetails** | **map[string]interface{}** | Additional information about the test run result. | 
+**ResultDetails** | [**NullableTestRunApiModelResultDetails**](TestRunApiModelResultDetails.md) |  | 
 **Options** | **map[string]interface{}** | The original options object if available. | 
 **K6Dependencies** | **map[string]string** | The requested version of k6 and extensions that was part of the script/archive. | 
 **K6Versions** | **map[string]string** | The computed version for k6 and extensions used to run the test. | 
@@ -32,7 +32,7 @@ Name | Type | Description | Notes
 
 ### NewTestRunApiModel
 
-`func NewTestRunApiModel(id int64, testId int64, projectId int64, startedBy NullableString, created time.Time, ended NullableTime, note string, retentionExpiry NullableTime, cost NullableTestRunApiModelCost, status string, statusDetails StatusApiModel, statusHistory []StatusApiModel, distribution []DistributionZoneApiModel, result NullableString, resultDetails map[string]interface{}, options map[string]interface{}, k6Dependencies map[string]string, k6Versions map[string]string, maxVus NullableInt32, maxBrowserVus NullableInt32, estimatedDuration NullableInt32, executionDuration int32, isStarred bool, ) *TestRunApiModel`
+`func NewTestRunApiModel(id int64, testId int64, projectId int64, startedBy NullableString, created time.Time, ended NullableTime, note string, retentionExpiry NullableTime, cost NullableTestRunApiModelCost, status string, statusDetails StatusApiModel, statusHistory []StatusApiModel, distribution []DistributionZoneApiModel, result NullableString, resultDetails NullableTestRunApiModelResultDetails, options map[string]interface{}, k6Dependencies map[string]string, k6Versions map[string]string, maxVus NullableInt32, maxBrowserVus NullableInt32, estimatedDuration NullableInt32, executionDuration int32, isStarred bool, ) *TestRunApiModel`
 
 NewTestRunApiModel instantiates a new TestRunApiModel object
 This constructor will assign default values to properties that have it defined,
@@ -389,20 +389,20 @@ SetResult sets Result field to given value.
 UnsetResult ensures that no value is present for Result, not even an explicit nil
 ### GetResultDetails
 
-`func (o *TestRunApiModel) GetResultDetails() map[string]interface{}`
+`func (o *TestRunApiModel) GetResultDetails() TestRunApiModelResultDetails`
 
 GetResultDetails returns the ResultDetails field if non-nil, zero value otherwise.
 
 ### GetResultDetailsOk
 
-`func (o *TestRunApiModel) GetResultDetailsOk() (*map[string]interface{}, bool)`
+`func (o *TestRunApiModel) GetResultDetailsOk() (*TestRunApiModelResultDetails, bool)`
 
 GetResultDetailsOk returns a tuple with the ResultDetails field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetResultDetails
 
-`func (o *TestRunApiModel) SetResultDetails(v map[string]interface{})`
+`func (o *TestRunApiModel) SetResultDetails(v TestRunApiModelResultDetails)`
 
 SetResultDetails sets ResultDetails field to given value.
 

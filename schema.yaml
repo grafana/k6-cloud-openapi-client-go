@@ -1,12 +1,30 @@
 openapi: 3.1.0
 info:
   title: Grafana Cloud k6
-  version: 1.9.9
+  version: 1.12.0
   description: HTTP API for interacting with Grafana Cloud k6.
   contact:
     name: Grafana Support
     url: https://grafana.com/help/
     email: info@grafana.com
+servers:
+- url: https://api.k6.io
+  description: Global k6 Cloud API.
+tags:
+- name: authorization
+  description: API endpoints for validating tokens.
+- name: labels
+  description: API endpoints for managing labels.
+- name: load_tests
+  description: API endpoints for managing and starting tests.
+- name: load_zones
+  description: API endpoints for managing load zones.
+- name: projects
+  description: API endpoints for managing projects.
+- name: schedules
+  description: API endpoints for managing test schedules.
+- name: test_runs
+  description: API endpoints for managing test runs.
 paths:
   /provisioning/v1/load_tests/{id}/start_local_execution:
     post:
@@ -25,6 +43,7 @@ paths:
         name: id
         schema:
           type: integer
+          format: int64
         description: ID of the load test.
         required: true
       tags:
@@ -113,6 +132,7 @@ paths:
         name: id
         schema:
           type: integer
+          format: int64
         description: ID of the test run.
         required: true
       tags:
@@ -147,6 +167,51 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/UnexpectedError'
+  /provisioning/v1/test_runs/{test_run_id}/aisdk_session:
+    get:
+      operationId: test_runs_aisdk_session_retrieve
+      description: |-
+        Mint an ai-sdk access token for the authenticated test run's stack.
+
+        The test run id is part of the path so the ``testrun_authenticate``
+        middleware can validate the request and inject the ``X-Stack-Id``,
+        ``X-Cluster-Slug``, and ``X-K6-Org-Id`` headers; the id itself is not
+        used by the mint.
+      summary: Mint an ai-sdk access token for a test run.
+      parameters:
+      - in: path
+        name: test_run_id
+        schema:
+          type: integer
+          format: int64
+        description: ID of the test run.
+        required: true
+      tags:
+      - provisioning
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AisdkSessionApiModel'
+              examples:
+                OK:
+                  value:
+                    access_token: eyJ...
+                    expires_at: '2026-05-18T16:00:00Z'
+                    base_url: https://assistant-dev-us-east-0.grafana-dev.net/assistant/api/v1/aisdk
+                    namespace: stacks-12345
+          description: OK.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/UnexpectedError'
+        '502':
+          description: Auth API backend error.
   /provisioning/v1/test_runs/{test_run_id}/decrypt_secret:
     get:
       operationId: test_runs_decrypt_secret_retrieve
@@ -168,6 +233,7 @@ paths:
         name: test_run_id
         schema:
           type: integer
+          format: int64
         description: ID of the test run.
         required: true
       tags:
@@ -497,6 +563,7 @@ paths:
                       project_id: 312
                       name: Orders API Soak Test
                       baseline_test_run_id: null
+                      k6_version: null
                       created: '2024-12-03T09:53:00.553'
                       updated: '2024-12-03T09:53:00.553'
                     '@count': 123
@@ -893,7 +960,7 @@ paths:
                               percent: 100
                           projectID: 12
                       result: null
-                      result_details: {}
+                      result_details: null
                       status: running
                       status_details:
                         type: running
@@ -954,6 +1021,7 @@ paths:
                     project_id: 312
                     name: Orders API Soak Test
                     baseline_test_run_id: null
+                    k6_version: null
                     created: '2024-12-03T09:53:00.553'
                     updated: '2024-12-03T09:53:00.553'
           description: OK.
@@ -1957,6 +2025,7 @@ paths:
                       project_id: 312
                       name: Orders API Soak Test
                       baseline_test_run_id: null
+                      k6_version: null
                       created: '2024-12-03T09:53:00.553'
                       updated: '2024-12-03T09:53:00.553'
                     '@count': 123
@@ -2042,6 +2111,7 @@ paths:
                     project_id: 312
                     name: Orders API Soak Test
                     baseline_test_run_id: null
+                    k6_version: null
                     created: '2024-12-03T09:53:00.553'
                     updated: '2024-12-03T09:53:00.553'
           description: OK.
@@ -2713,7 +2783,7 @@ paths:
                               percent: 100
                           projectID: 12
                       result: null
-                      result_details: {}
+                      result_details: null
                       status: running
                       status_details:
                         type: running
@@ -2808,7 +2878,7 @@ paths:
                             percent: 100
                         projectID: 12
                     result: null
-                    result_details: {}
+                    result_details: null
                     status: running
                     status_details:
                       type: running
@@ -2866,8 +2936,9 @@ paths:
                             loadZone: amazon:us:ashburn
                             percent: 100
                         projectID: 12
-                    result: success
-                    result_details: {}
+                    result: passed
+                    result_details:
+                      type: passed
                     status: completed
                     status_details:
                       type: completed
@@ -2908,7 +2979,10 @@ paths:
                     distribution: null
                     options: null
                     result: error
-                    result_details: {}
+                    result_details:
+                      type: error
+                      message: Validation error.
+                      code: 1234
                     status: aborted
                     status_details:
                       type: aborted
@@ -3107,7 +3181,7 @@ paths:
   /cloud/v6/test_runs/{id}/save:
     post:
       operationId: test_runs_save
-      description: Persist test run results to keep them past the data-retention period.
+      description: 'Deprecated: use [`POST /test_runs/{id}/star`](#tag/test_runs/operation/test_runs_star) instead. This operation is scheduled for removal on 2026-09-01.'
       summary: Save test run results.
       parameters:
       - $ref: '#/components/parameters/stackId'
@@ -3122,6 +3196,7 @@ paths:
       - test_runs
       security:
       - k6ApiToken: []
+      deprecated: true
       responses:
         '204':
           description: OK.
@@ -3246,10 +3321,7 @@ paths:
   /cloud/v6/test_runs/{id}/unsave:
     post:
       operationId: test_runs_unsave
-      description: |-
-        Disable persistence of the test run results past the data-retention period.
-
-        The data will be automatically deleted at the end of the retention period.
+      description: 'Deprecated: use [`POST /test_runs/{id}/unstar`](#tag/test_runs/operation/test_runs_unstar) instead. This operation is scheduled for removal on 2026-09-01.'
       summary: Unsave test run results.
       parameters:
       - $ref: '#/components/parameters/stackId'
@@ -3264,6 +3336,7 @@ paths:
       - test_runs
       security:
       - k6ApiToken: []
+      deprecated: true
       responses:
         '204':
           description: OK.
@@ -3408,6 +3481,33 @@ paths:
       - $ref: '#/components/parameters/stackId'
 components:
   schemas:
+    AisdkSessionApiModel:
+      description: Model for the response of the ai-sdk session endpoint.
+      properties:
+        access_token:
+          description: Short-lived access token (TTL matches the agentic test cap).
+          title: Access Token
+          type: string
+        expires_at:
+          description: ISO 8601 timestamp when the access token expires (UTC).
+          format: date-time
+          title: Expires At
+          type: string
+        base_url:
+          description: Region-matched URL of the hosted ai-sdk endpoint.
+          title: Base Url
+          type: string
+        namespace:
+          description: Stack-scoped namespace claim on the access token (e.g. 'stacks-12345').
+          title: Namespace
+          type: string
+      required:
+      - access_token
+      - expires_at
+      - base_url
+      - namespace
+      title: AisdkSession
+      type: object
     DecryptedApiModel:
       description: Model for the response of the secrets decryption endpoint.
       properties:
@@ -3418,6 +3518,68 @@ components:
       required:
       - plaintext
       title: Decrypted
+      type: object
+    ErrorApiModel:
+      description: Details of the error.
+      properties:
+        message:
+          description: Human-readable string describing the error.
+          title: Message
+          type: string
+        code:
+          description: Service-defined error code.
+          title: Code
+          type: string
+        target:
+          default: null
+          description: A string indicating the target of the error. For example, the name of the property in error.
+          title: Target
+          type:
+          - string
+          - 'null'
+        details:
+          default: null
+          description: Array of objects with more specific error information when applicable.
+          items:
+            $ref: '#/components/schemas/ErrorDetailsApiModel'
+          title: Details
+          type:
+          - array
+          - 'null'
+      required:
+      - message
+      - code
+      title: Error
+      type: object
+    ErrorDetailsApiModel:
+      properties:
+        message:
+          description: Human-readable string describing the error.
+          title: Message
+          type: string
+        code:
+          description: Service-defined error code.
+          title: Code
+          type: string
+        target:
+          default: null
+          description: A string indicating the target of the error. For example, the name of the property in error.
+          title: Target
+          type:
+          - string
+          - 'null'
+      required:
+      - message
+      - code
+      title: ErrorDetails
+      type: object
+    ErrorResponseApiModel:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorApiModel'
+      required:
+      - error
+      title: ErrorResponse
       type: object
     FilesRuntimeConfig:
       description: Files upload runtime configuration.
@@ -3671,6 +3833,7 @@ components:
       properties:
         test_run_id:
           description: ID of the created test run.
+          format: int64
           title: Test Run Id
           type: integer
         runtime_config:
@@ -3906,6 +4069,13 @@ components:
           type:
           - string
           - 'null'
+        k6_version:
+          default: null
+          description: Identifier of the k6 version used to run the test.
+          title: K6 Version
+          type:
+          - integer
+          - 'null'
       required:
       - name
       title: CreateLoadTest
@@ -3959,68 +4129,6 @@ components:
       - load_zone
       - percent
       title: DistributionZone
-      type: object
-    ErrorApiModel:
-      description: Details of the error.
-      properties:
-        message:
-          description: Human-readable string describing the error.
-          title: Message
-          type: string
-        code:
-          description: Service-defined error code.
-          title: Code
-          type: string
-        target:
-          default: null
-          description: A string indicating the target of the error. For example, the name of the property in error.
-          title: Target
-          type:
-          - string
-          - 'null'
-        details:
-          default: null
-          description: Array of objects with more specific error information when applicable.
-          items:
-            $ref: '#/components/schemas/ErrorDetailsApiModel'
-          title: Details
-          type:
-          - array
-          - 'null'
-      required:
-      - message
-      - code
-      title: Error
-      type: object
-    ErrorDetailsApiModel:
-      properties:
-        message:
-          description: Human-readable string describing the error.
-          title: Message
-          type: string
-        code:
-          description: Service-defined error code.
-          title: Code
-          type: string
-        target:
-          default: null
-          description: A string indicating the target of the error. For example, the name of the property in error.
-          title: Target
-          type:
-          - string
-          - 'null'
-      required:
-      - message
-      - code
-      title: ErrorDetails
-      type: object
-    ErrorResponseApiModel:
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorApiModel'
-      required:
-      - error
-      title: ErrorResponse
       type: object
     Frequency:
       description: The unit type of the recurrence interval.
@@ -4149,9 +4257,17 @@ components:
           title: Name
           type: string
         baseline_test_run_id:
-          description: ID of a baseline test run used for results comparison.
+          deprecated: true
+          description: 'ID of a baseline test run used for results comparison. Deprecated: baselines are being replaced by the star/unstar test run APIs and this field is scheduled for removal on 2026-09-01.'
           format: int64
           title: Baseline Test Run Id
+          type:
+          - integer
+          - 'null'
+        k6_version:
+          default: null
+          description: Identifier of the k6 version used to run the test.
+          title: K6 Version
           type:
           - integer
           - 'null'
@@ -4316,9 +4432,16 @@ components:
           title: Name
           type: string
         baseline_test_run_id:
-          description: ID of a baseline test run used for results comparison.
+          deprecated: true
+          description: 'ID of a baseline test run used for results comparison. Deprecated: baselines are being replaced by the star/unstar test run APIs and this field is scheduled for removal on 2026-09-01.'
           format: int64
           title: Baseline Test Run Id
+          type:
+          - integer
+          - 'null'
+        k6_version:
+          description: Identifier of the k6 version used to run the test.
+          title: K6 Version
           type:
           - integer
           - 'null'
@@ -4637,6 +4760,30 @@ components:
       - value
       title: ProjectListResponse
       type: object
+    ResultDetailsApiModel:
+      properties:
+        type:
+          description: 'Type of the result: `passed`, `failed` or `error`.'
+          title: Type
+          type: string
+        message:
+          default: null
+          description: Human-readable description of why the test failed or the description of the error if applicable.
+          title: Message
+          type:
+          - string
+          - 'null'
+        code:
+          default: null
+          description: Service-defined error code if applicable.
+          title: Code
+          type:
+          - integer
+          - 'null'
+      required:
+      - type
+      title: ResultDetails
+      type: object
     ScheduleApiModel:
       properties:
         id:
@@ -4857,12 +5004,10 @@ components:
           - string
           - 'null'
         result_details:
-          additionalProperties: true
           description: Additional information about the test run result.
-          title: Result Details
-          type:
-          - object
-          - 'null'
+          oneOf:
+          - $ref: '#/components/schemas/ResultDetailsApiModel'
+          - type: 'null'
         options:
           additionalProperties: true
           description: The original options object if available.
@@ -5089,12 +5234,10 @@ components:
           - string
           - 'null'
         result_details:
-          additionalProperties: true
           description: Additional information about the test run result.
-          title: Result Details
-          type:
-          - object
-          - 'null'
+          oneOf:
+          - $ref: '#/components/schemas/ResultDetailsApiModel'
+          - type: 'null'
         options:
           additionalProperties: true
           description: The original options object if available.
@@ -5251,6 +5394,13 @@ components:
           type:
           - object
           - 'null'
+        k6_version:
+          default: null
+          description: Identifier of the k6 version used to run the test.
+          title: K6 Version
+          type:
+          - integer
+          - 'null'
         is_local_execution:
           default: false
           description: Whether the test is being executed locally.
@@ -5298,17 +5448,6 @@ components:
       type: http
       scheme: bearer
       description: Token-based authentication using short-lived test run token.
-  parameters:
-    stackId:
-      in: header
-      name: X-Stack-Id
-      description: |-
-        Numeric ID of the Grafana stack representing the request scope.
-        - If the API is called with a *Personal API token*, the user must be a member of the specified stack.
-        - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-      schema:
-        type: integer
-      required: true
   responses:
     ValidationError:
       content:
@@ -5340,21 +5479,14 @@ components:
           schema:
             $ref: '#/components/schemas/ErrorResponseApiModel'
       description: Unexpected error.
-tags:
-- name: authorization
-  description: API endpoints for validating tokens.
-- name: labels
-  description: API endpoints for managing labels.
-- name: load_tests
-  description: API endpoints for managing and starting tests.
-- name: load_zones
-  description: API endpoints for managing load zones.
-- name: projects
-  description: API endpoints for managing projects.
-- name: schedules
-  description: API endpoints for managing test schedules.
-- name: test_runs
-  description: API endpoints for managing test runs.
-servers:
-- url: https://api.k6.io
-  description: Global k6 Cloud API.
+  parameters:
+    stackId:
+      in: header
+      name: X-Stack-Id
+      description: |-
+        Numeric ID of the Grafana stack representing the request scope.
+        - If the API is called with a *Personal API token*, the user must be a member of the specified stack.
+        - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
+      schema:
+        type: integer
+      required: true

@@ -3,7 +3,7 @@ Grafana Cloud k6
 
 HTTP API for interacting with Grafana Cloud k6.
 
-API version: 1.9.9
+API version: 1.12.0
 Contact: info@grafana.com
 */
 
@@ -1291,11 +1291,13 @@ func (r *ApiTestRunsSaveRequest) Execute() (*http.Response, error) {
 /*
 TestRunsSave Save test run results.
 
-Persist test run results to keep them past the data-retention period.
+Deprecated: use [`POST /test_runs/{id}/star`](#tag/test_runs/operation/test_runs_star) instead. This operation is scheduled for removal on 2026-09-01.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@param id ID of the load test run.
 	@return *ApiTestRunsSaveRequest
+
+Deprecated
 */
 func (a *TestRunsAPIService) TestRunsSave(ctx context.Context, id int64) *ApiTestRunsSaveRequest {
 	return &ApiTestRunsSaveRequest{
@@ -1306,6 +1308,7 @@ func (a *TestRunsAPIService) TestRunsSave(ctx context.Context, id int64) *ApiTes
 }
 
 // Execute executes the request
+// Deprecated
 func (a *TestRunsAPIService) TestRunsSaveExecute(r *ApiTestRunsSaveRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod = http.MethodPost
@@ -1752,13 +1755,13 @@ func (r *ApiTestRunsUnsaveRequest) Execute() (*http.Response, error) {
 /*
 TestRunsUnsave Unsave test run results.
 
-Disable persistence of the test run results past the data-retention period.
-
-The data will be automatically deleted at the end of the retention period.
+Deprecated: use [`POST /test_runs/{id}/unstar`](#tag/test_runs/operation/test_runs_unstar) instead. This operation is scheduled for removal on 2026-09-01.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@param id ID of the load test run.
 	@return *ApiTestRunsUnsaveRequest
+
+Deprecated
 */
 func (a *TestRunsAPIService) TestRunsUnsave(ctx context.Context, id int64) *ApiTestRunsUnsaveRequest {
 	return &ApiTestRunsUnsaveRequest{
@@ -1769,6 +1772,7 @@ func (a *TestRunsAPIService) TestRunsUnsave(ctx context.Context, id int64) *ApiT
 }
 
 // Execute executes the request
+// Deprecated
 func (a *TestRunsAPIService) TestRunsUnsaveExecute(r *ApiTestRunsUnsaveRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod = http.MethodPost

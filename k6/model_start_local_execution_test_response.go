@@ -3,7 +3,7 @@ Grafana Cloud k6
 
 HTTP API for interacting with Grafana Cloud k6.
 
-API version: 1.9.9
+API version: 1.12.0
 Contact: info@grafana.com
 */
 
@@ -22,7 +22,7 @@ var _ MappedNullable = &StartLocalExecutionTestResponse{}
 // StartLocalExecutionTestResponse struct for StartLocalExecutionTestResponse
 type StartLocalExecutionTestResponse struct {
 	// ID of the created test run.
-	TestRunId     int32         `json:"test_run_id"`
+	TestRunId     int64         `json:"test_run_id"`
 	RuntimeConfig RuntimeConfig `json:"runtime_config"`
 	// URL to upload the k6 archive or null if not uploading.
 	ArchiveUploadUrl NullableString `json:"archive_upload_url"`
@@ -37,7 +37,7 @@ type _StartLocalExecutionTestResponse StartLocalExecutionTestResponse
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewStartLocalExecutionTestResponse(testRunId int32, runtimeConfig RuntimeConfig, archiveUploadUrl NullableString, testRunDetailsPageUrl string) *StartLocalExecutionTestResponse {
+func NewStartLocalExecutionTestResponse(testRunId int64, runtimeConfig RuntimeConfig, archiveUploadUrl NullableString, testRunDetailsPageUrl string) *StartLocalExecutionTestResponse {
 	this := StartLocalExecutionTestResponse{}
 	this.TestRunId = testRunId
 	this.RuntimeConfig = runtimeConfig
@@ -55,9 +55,9 @@ func NewStartLocalExecutionTestResponseWithDefaults() *StartLocalExecutionTestRe
 }
 
 // GetTestRunId returns the TestRunId field value
-func (o *StartLocalExecutionTestResponse) GetTestRunId() int32 {
+func (o *StartLocalExecutionTestResponse) GetTestRunId() int64 {
 	if o == nil {
-		var ret int32
+		var ret int64
 		return ret
 	}
 
@@ -66,7 +66,7 @@ func (o *StartLocalExecutionTestResponse) GetTestRunId() int32 {
 
 // GetTestRunIdOk returns a tuple with the TestRunId field value
 // and a boolean to check if the value has been set.
-func (o *StartLocalExecutionTestResponse) GetTestRunIdOk() (*int32, bool) {
+func (o *StartLocalExecutionTestResponse) GetTestRunIdOk() (*int64, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -74,7 +74,7 @@ func (o *StartLocalExecutionTestResponse) GetTestRunIdOk() (*int32, bool) {
 }
 
 // SetTestRunId sets field value
-func (o *StartLocalExecutionTestResponse) SetTestRunId(v int32) {
+func (o *StartLocalExecutionTestResponse) SetTestRunId(v int64) {
 	o.TestRunId = v
 }
 

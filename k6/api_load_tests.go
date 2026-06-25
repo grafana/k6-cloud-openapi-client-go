@@ -3,7 +3,7 @@ Grafana Cloud k6
 
 HTTP API for interacting with Grafana Cloud k6.
 
-API version: 1.9.9
+API version: 1.12.0
 Contact: info@grafana.com
 */
 
@@ -1418,6 +1418,7 @@ type ApiProjectsLoadTestsCreateRequest struct {
 	id         int64
 	name       *string
 	script     io.ReadCloser
+	k6Version  *int32
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
@@ -1435,6 +1436,12 @@ func (r *ApiProjectsLoadTestsCreateRequest) Name(name string) *ApiProjectsLoadTe
 // Test script in the form of a UTF-8 encoded text or a k6 .tar archive.
 func (r *ApiProjectsLoadTestsCreateRequest) Script(script io.ReadCloser) *ApiProjectsLoadTestsCreateRequest {
 	r.script = script
+	return r
+}
+
+// Identifier of the k6 version used to run the test.
+func (r *ApiProjectsLoadTestsCreateRequest) K6Version(k6Version int32) *ApiProjectsLoadTestsCreateRequest {
+	r.k6Version = &k6Version
 	return r
 }
 
@@ -1538,6 +1545,9 @@ func (a *LoadTestsAPIService) ProjectsLoadTestsCreateExecute(r *ApiProjectsLoadT
 		}
 		scriptLocalVarFile.Close()
 		formFiles = append(formFiles, formFile{fileBytes: scriptLocalVarFileBytes, fileName: scriptLocalVarFileName, formFileName: scriptLocalVarFormFileName})
+	}
+	if r.k6Version != nil {
+		parameterAddToHeaderOrQuery(localVarFormParams, "k6_version", r.k6Version, "", "")
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {

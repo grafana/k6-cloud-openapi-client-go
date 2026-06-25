@@ -3,7 +3,7 @@ Grafana Cloud k6
 
 HTTP API for interacting with Grafana Cloud k6.
 
-API version: 1.9.9
+API version: 1.12.0
 Contact: info@grafana.com
 */
 
@@ -48,9 +48,8 @@ type TestRunApiModel struct {
 	// List of the load zones configured for the test and the corresponding distribution percentages.
 	Distribution []DistributionZoneApiModel `json:"distribution"`
 	// Test run result. `passed` if there were no issues, `failed` if thresholds were breached, `error` if the execution was not completed.
-	Result NullableString `json:"result"`
-	// Additional information about the test run result.
-	ResultDetails map[string]interface{} `json:"result_details"`
+	Result        NullableString                       `json:"result"`
+	ResultDetails NullableTestRunApiModelResultDetails `json:"result_details"`
 	// The original options object if available.
 	Options map[string]interface{} `json:"options"`
 	// The requested version of k6 and extensions that was part of the script/archive.
@@ -76,7 +75,7 @@ type _TestRunApiModel TestRunApiModel
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewTestRunApiModel(id int64, testId int64, projectId int64, startedBy NullableString, created time.Time, ended NullableTime, note string, retentionExpiry NullableTime, cost NullableTestRunApiModelCost, status string, statusDetails StatusApiModel, statusHistory []StatusApiModel, distribution []DistributionZoneApiModel, result NullableString, resultDetails map[string]interface{}, options map[string]interface{}, k6Dependencies map[string]string, k6Versions map[string]string, maxVus NullableInt32, maxBrowserVus NullableInt32, estimatedDuration NullableInt32, executionDuration int32, isStarred bool) *TestRunApiModel {
+func NewTestRunApiModel(id int64, testId int64, projectId int64, startedBy NullableString, created time.Time, ended NullableTime, note string, retentionExpiry NullableTime, cost NullableTestRunApiModelCost, status string, statusDetails StatusApiModel, statusHistory []StatusApiModel, distribution []DistributionZoneApiModel, result NullableString, resultDetails NullableTestRunApiModelResultDetails, options map[string]interface{}, k6Dependencies map[string]string, k6Versions map[string]string, maxVus NullableInt32, maxBrowserVus NullableInt32, estimatedDuration NullableInt32, executionDuration int32, isStarred bool) *TestRunApiModel {
 	this := TestRunApiModel{}
 	this.Id = id
 	this.TestId = testId
@@ -461,29 +460,29 @@ func (o *TestRunApiModel) SetResult(v string) {
 }
 
 // GetResultDetails returns the ResultDetails field value
-// If the value is explicit nil, the zero value for map[string]interface{} will be returned
-func (o *TestRunApiModel) GetResultDetails() map[string]interface{} {
-	if o == nil {
-		var ret map[string]interface{}
+// If the value is explicit nil, the zero value for TestRunApiModelResultDetails will be returned
+func (o *TestRunApiModel) GetResultDetails() TestRunApiModelResultDetails {
+	if o == nil || o.ResultDetails.Get() == nil {
+		var ret TestRunApiModelResultDetails
 		return ret
 	}
 
-	return o.ResultDetails
+	return *o.ResultDetails.Get()
 }
 
 // GetResultDetailsOk returns a tuple with the ResultDetails field value
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *TestRunApiModel) GetResultDetailsOk() (map[string]interface{}, bool) {
-	if o == nil || IsNil(o.ResultDetails) {
-		return map[string]interface{}{}, false
+func (o *TestRunApiModel) GetResultDetailsOk() (*TestRunApiModelResultDetails, bool) {
+	if o == nil {
+		return nil, false
 	}
-	return o.ResultDetails, true
+	return o.ResultDetails.Get(), o.ResultDetails.IsSet()
 }
 
 // SetResultDetails sets field value
-func (o *TestRunApiModel) SetResultDetails(v map[string]interface{}) {
-	o.ResultDetails = v
+func (o *TestRunApiModel) SetResultDetails(v TestRunApiModelResultDetails) {
+	o.ResultDetails.Set(&v)
 }
 
 // GetOptions returns the Options field value
@@ -712,9 +711,7 @@ func (o TestRunApiModel) ToMap() (map[string]interface{}, error) {
 		toSerialize["distribution"] = o.Distribution
 	}
 	toSerialize["result"] = o.Result.Get()
-	if o.ResultDetails != nil {
-		toSerialize["result_details"] = o.ResultDetails
-	}
+	toSerialize["result_details"] = o.ResultDetails.Get()
 	if o.Options != nil {
 		toSerialize["options"] = o.Options
 	}

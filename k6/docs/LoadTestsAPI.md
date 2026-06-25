@@ -600,7 +600,7 @@ Name | Type | Description  | Notes
 
 ## ProjectsLoadTestsCreate
 
-> LoadTestApiModel ProjectsLoadTestsCreate(ctx, id).XStackId(xStackId).Name(name).Script(script).Execute()
+> LoadTestApiModel ProjectsLoadTestsCreate(ctx, id).XStackId(xStackId).Name(name).Script(script).K6Version(k6Version).Execute()
 
 Create a new test.
 
@@ -623,10 +623,11 @@ func main() {
 	id := int64(789) // int64 | ID of the project.
 	name := "name_example" // string | Unique name of the test within the project.
 	script := os.NewFile(1234, "some_file") // *os.File | Test script in the form of a UTF-8 encoded text or a k6 .tar archive. (optional)
+	k6Version := int32(56) // int32 | Identifier of the k6 version used to run the test. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.LoadTestsAPI.ProjectsLoadTestsCreate(context.Background(), id).XStackId(xStackId).Name(name).Script(script).Execute()
+	resp, r, err := apiClient.LoadTestsAPI.ProjectsLoadTestsCreate(context.Background(), id).XStackId(xStackId).Name(name).Script(script).K6Version(k6Version).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `LoadTestsAPI.ProjectsLoadTestsCreate``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -655,6 +656,7 @@ Name | Type | Description  | Notes
 
  **name** | **string** | Unique name of the test within the project. | 
  **script** | ***os.File** | Test script in the form of a UTF-8 encoded text or a k6 .tar archive. | 
+ **k6Version** | **int32** | Identifier of the k6 version used to run the test. | 
 
 ### Return type
 
