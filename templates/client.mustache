@@ -752,14 +752,22 @@ func strlen(s string) int {
 
 // GenericOpenAPIError Provides access to the body, error and model on returned errors.
 type GenericOpenAPIError struct {
-	body  []byte
-	error string
-	model interface{}
+	body       []byte
+	error      string
+	model      interface{}
+	statusCode int
 }
 
 // Error returns non-empty string if there was an error.
 func (e GenericOpenAPIError) Error() string {
 	return e.error
+}
+
+// StatusCode returns the HTTP status code of the response that produced
+// this error, or 0 if the error was not produced from an HTTP response
+// (e.g. a failure building the request before it was sent).
+func (e GenericOpenAPIError) StatusCode() int {
+	return e.statusCode
 }
 
 // Body returns the raw bytes of the response

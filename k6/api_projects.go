@@ -168,8 +168,9 @@ func (a *ProjectsAPIService) ProjectLimitsRetrieveExecute(r *ApiProjectLimitsRet
 
 	if localVarHTTPResponse.StatusCode >= 300 {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
+			body:       localVarBody,
+			error:      localVarHTTPResponse.Status,
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		if localVarHTTPResponse.StatusCode == 400 {
 			var v ErrorResponseApiModel
@@ -220,8 +221,9 @@ func (a *ProjectsAPIService) ProjectLimitsRetrieveExecute(r *ApiProjectLimitsRet
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
+			body:       localVarBody,
+			error:      err.Error(),
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -333,8 +335,9 @@ func (a *ProjectsAPIService) ProjectsCreateExecute(r *ApiProjectsCreateRequest) 
 
 	if localVarHTTPResponse.StatusCode >= 300 {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
+			body:       localVarBody,
+			error:      localVarHTTPResponse.Status,
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		if localVarHTTPResponse.StatusCode == 400 {
 			var v ErrorResponseApiModel
@@ -396,8 +399,9 @@ func (a *ProjectsAPIService) ProjectsCreateExecute(r *ApiProjectsCreateRequest) 
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
+			body:       localVarBody,
+			error:      err.Error(),
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -499,8 +503,9 @@ func (a *ProjectsAPIService) ProjectsDestroyExecute(r *ApiProjectsDestroyRequest
 
 	if localVarHTTPResponse.StatusCode >= 300 {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
+			body:       localVarBody,
+			error:      localVarHTTPResponse.Status,
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
 			var v ErrorResponseApiModel
@@ -666,8 +671,9 @@ func (a *ProjectsAPIService) ProjectsLimitsPartialUpdateExecute(r *ApiProjectsLi
 
 	if localVarHTTPResponse.StatusCode >= 300 {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
+			body:       localVarBody,
+			error:      localVarHTTPResponse.Status,
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		if localVarHTTPResponse.StatusCode == 400 {
 			var v ErrorResponseApiModel
@@ -826,8 +832,9 @@ func (a *ProjectsAPIService) ProjectsLimitsRetrieveExecute(r *ApiProjectsLimitsR
 
 	if localVarHTTPResponse.StatusCode >= 300 {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
+			body:       localVarBody,
+			error:      localVarHTTPResponse.Status,
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
 			var v ErrorResponseApiModel
@@ -878,8 +885,9 @@ func (a *ProjectsAPIService) ProjectsLimitsRetrieveExecute(r *ApiProjectsLimitsR
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
+			body:       localVarBody,
+			error:      err.Error(),
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -1043,8 +1051,9 @@ func (a *ProjectsAPIService) ProjectsListExecute(r *ApiProjectsListRequest) (*Pr
 
 	if localVarHTTPResponse.StatusCode >= 300 {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
+			body:       localVarBody,
+			error:      localVarHTTPResponse.Status,
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		if localVarHTTPResponse.StatusCode == 400 {
 			var v ErrorResponseApiModel
@@ -1095,8 +1104,9 @@ func (a *ProjectsAPIService) ProjectsListExecute(r *ApiProjectsListRequest) (*Pr
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
+			body:       localVarBody,
+			error:      err.Error(),
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -1209,8 +1219,9 @@ func (a *ProjectsAPIService) ProjectsPartialUpdateExecute(r *ApiProjectsPartialU
 
 	if localVarHTTPResponse.StatusCode >= 300 {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
+			body:       localVarBody,
+			error:      localVarHTTPResponse.Status,
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		if localVarHTTPResponse.StatusCode == 400 {
 			var v ErrorResponseApiModel
@@ -1380,8 +1391,9 @@ func (a *ProjectsAPIService) ProjectsRetrieveExecute(r *ApiProjectsRetrieveReque
 
 	if localVarHTTPResponse.StatusCode >= 300 {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
+			body:       localVarBody,
+			error:      localVarHTTPResponse.Status,
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
 			var v ErrorResponseApiModel
@@ -1432,8 +1444,9 @@ func (a *ProjectsAPIService) ProjectsRetrieveExecute(r *ApiProjectsRetrieveReque
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
+			body:       localVarBody,
+			error:      err.Error(),
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}

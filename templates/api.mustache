@@ -397,8 +397,9 @@ func (a *{{{classname}}}Service) {{nickname}}Execute(r *{{#structPrefix}}{{&clas
 {{/withCustomMiddlewareFunction}}
 	if localVarHTTPResponse.StatusCode >= 300 {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
+			body:       localVarBody,
+			error:      localVarHTTPResponse.Status,
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		{{#responses}}
 		{{#dataType}}
@@ -445,8 +446,9 @@ func (a *{{{classname}}}Service) {{nickname}}Execute(r *{{#structPrefix}}{{&clas
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
+			body:       localVarBody,
+			error:      err.Error(),
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		return {{#returnType}}localVarReturnValue, {{/returnType}}localVarHTTPResponse, newErr
 	}

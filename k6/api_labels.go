@@ -130,8 +130,9 @@ func (a *LabelsAPIService) LabelsCreateExecute(r *ApiLabelsCreateRequest) (*Labe
 
 	if localVarHTTPResponse.StatusCode >= 300 {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
+			body:       localVarBody,
+			error:      localVarHTTPResponse.Status,
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		if localVarHTTPResponse.StatusCode == 400 {
 			var v ErrorResponseApiModel
@@ -193,8 +194,9 @@ func (a *LabelsAPIService) LabelsCreateExecute(r *ApiLabelsCreateRequest) (*Labe
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
+			body:       localVarBody,
+			error:      err.Error(),
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -299,8 +301,9 @@ func (a *LabelsAPIService) LabelsDestroyExecute(r *ApiLabelsDestroyRequest) (*ht
 
 	if localVarHTTPResponse.StatusCode >= 300 {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
+			body:       localVarBody,
+			error:      localVarHTTPResponse.Status,
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
 			var v ErrorResponseApiModel
@@ -444,8 +447,9 @@ func (a *LabelsAPIService) LabelsListExecute(r *ApiLabelsListRequest) (*LabelKey
 
 	if localVarHTTPResponse.StatusCode >= 300 {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
+			body:       localVarBody,
+			error:      localVarHTTPResponse.Status,
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
 			var v ErrorResponseApiModel
@@ -485,8 +489,9 @@ func (a *LabelsAPIService) LabelsListExecute(r *ApiLabelsListRequest) (*LabelKey
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
+			body:       localVarBody,
+			error:      err.Error(),
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -599,8 +604,9 @@ func (a *LabelsAPIService) LabelsPartialUpdateExecute(r *ApiLabelsPartialUpdateR
 
 	if localVarHTTPResponse.StatusCode >= 300 {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
+			body:       localVarBody,
+			error:      localVarHTTPResponse.Status,
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		if localVarHTTPResponse.StatusCode == 400 {
 			var v ErrorResponseApiModel
@@ -673,8 +679,9 @@ func (a *LabelsAPIService) LabelsPartialUpdateExecute(r *ApiLabelsPartialUpdateR
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
+			body:       localVarBody,
+			error:      err.Error(),
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -780,8 +787,9 @@ func (a *LabelsAPIService) ProjectsLabelsDestroyExecute(r *ApiProjectsLabelsDest
 
 	if localVarHTTPResponse.StatusCode >= 300 {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
+			body:       localVarBody,
+			error:      localVarHTTPResponse.Status,
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
 			var v ErrorResponseApiModel
@@ -929,8 +937,9 @@ func (a *LabelsAPIService) ProjectsLabelsListExecute(r *ApiProjectsLabelsListReq
 
 	if localVarHTTPResponse.StatusCode >= 300 {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
+			body:       localVarBody,
+			error:      localVarHTTPResponse.Status,
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
 			var v ErrorResponseApiModel
@@ -981,8 +990,9 @@ func (a *LabelsAPIService) ProjectsLabelsListExecute(r *ApiProjectsLabelsListReq
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
+			body:       localVarBody,
+			error:      err.Error(),
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -1100,8 +1110,9 @@ func (a *LabelsAPIService) ProjectsLabelsUpdateExecute(r *ApiProjectsLabelsUpdat
 
 	if localVarHTTPResponse.StatusCode >= 300 {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
+			body:       localVarBody,
+			error:      localVarHTTPResponse.Status,
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		if localVarHTTPResponse.StatusCode == 400 {
 			var v ErrorResponseApiModel
@@ -1174,8 +1185,9 @@ func (a *LabelsAPIService) ProjectsLabelsUpdateExecute(r *ApiProjectsLabelsUpdat
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
+			body:       localVarBody,
+			error:      err.Error(),
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}

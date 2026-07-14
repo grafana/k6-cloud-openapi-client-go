@@ -120,8 +120,9 @@ func (a *LoadZonesAPIService) LoadZonesAllowedProjectsRetrieveExecute(r *ApiLoad
 
 	if localVarHTTPResponse.StatusCode >= 300 {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
+			body:       localVarBody,
+			error:      localVarHTTPResponse.Status,
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
 			var v ErrorResponseApiModel
@@ -172,8 +173,9 @@ func (a *LoadZonesAPIService) LoadZonesAllowedProjectsRetrieveExecute(r *ApiLoad
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
+			body:       localVarBody,
+			error:      err.Error(),
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -289,8 +291,9 @@ func (a *LoadZonesAPIService) LoadZonesAllowedProjectsUpdateExecute(r *ApiLoadZo
 
 	if localVarHTTPResponse.StatusCode >= 300 {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
+			body:       localVarBody,
+			error:      localVarHTTPResponse.Status,
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		if localVarHTTPResponse.StatusCode == 400 {
 			var v ErrorResponseApiModel
@@ -352,8 +355,9 @@ func (a *LoadZonesAPIService) LoadZonesAllowedProjectsUpdateExecute(r *ApiLoadZo
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
+			body:       localVarBody,
+			error:      err.Error(),
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -464,8 +468,9 @@ func (a *LoadZonesAPIService) LoadZonesListExecute(r *ApiLoadZonesListRequest) (
 
 	if localVarHTTPResponse.StatusCode >= 300 {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
+			body:       localVarBody,
+			error:      localVarHTTPResponse.Status,
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		if localVarHTTPResponse.StatusCode == 400 {
 			var v ErrorResponseApiModel
@@ -516,8 +521,9 @@ func (a *LoadZonesAPIService) LoadZonesListExecute(r *ApiLoadZonesListRequest) (
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
+			body:       localVarBody,
+			error:      err.Error(),
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -622,8 +628,9 @@ func (a *LoadZonesAPIService) ProjectsAllowedLoadZonesRetrieveExecute(r *ApiProj
 
 	if localVarHTTPResponse.StatusCode >= 300 {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
+			body:       localVarBody,
+			error:      localVarHTTPResponse.Status,
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
 			var v ErrorResponseApiModel
@@ -674,8 +681,9 @@ func (a *LoadZonesAPIService) ProjectsAllowedLoadZonesRetrieveExecute(r *ApiProj
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
+			body:       localVarBody,
+			error:      err.Error(),
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -791,8 +799,9 @@ func (a *LoadZonesAPIService) ProjectsAllowedLoadZonesUpdateExecute(r *ApiProjec
 
 	if localVarHTTPResponse.StatusCode >= 300 {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
+			body:       localVarBody,
+			error:      localVarHTTPResponse.Status,
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		if localVarHTTPResponse.StatusCode == 400 {
 			var v ErrorResponseApiModel
@@ -854,8 +863,9 @@ func (a *LoadZonesAPIService) ProjectsAllowedLoadZonesUpdateExecute(r *ApiProjec
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
+			body:       localVarBody,
+			error:      err.Error(),
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}

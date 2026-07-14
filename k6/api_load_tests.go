@@ -118,8 +118,9 @@ func (a *LoadTestsAPIService) LoadTestsDestroyExecute(r *ApiLoadTestsDestroyRequ
 
 	if localVarHTTPResponse.StatusCode >= 300 {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
+			body:       localVarBody,
+			error:      localVarHTTPResponse.Status,
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
 			var v ErrorResponseApiModel
@@ -327,8 +328,9 @@ func (a *LoadTestsAPIService) LoadTestsListExecute(r *ApiLoadTestsListRequest) (
 
 	if localVarHTTPResponse.StatusCode >= 300 {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
+			body:       localVarBody,
+			error:      localVarHTTPResponse.Status,
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		if localVarHTTPResponse.StatusCode == 400 {
 			var v ErrorResponseApiModel
@@ -379,8 +381,9 @@ func (a *LoadTestsAPIService) LoadTestsListExecute(r *ApiLoadTestsListRequest) (
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
+			body:       localVarBody,
+			error:      err.Error(),
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -494,8 +497,9 @@ func (a *LoadTestsAPIService) LoadTestsMoveExecute(r *ApiLoadTestsMoveRequest) (
 
 	if localVarHTTPResponse.StatusCode >= 300 {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
+			body:       localVarBody,
+			error:      localVarHTTPResponse.Status,
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		if localVarHTTPResponse.StatusCode == 400 {
 			var v ErrorResponseApiModel
@@ -670,8 +674,9 @@ func (a *LoadTestsAPIService) LoadTestsPartialUpdateExecute(r *ApiLoadTestsParti
 
 	if localVarHTTPResponse.StatusCode >= 300 {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
+			body:       localVarBody,
+			error:      localVarHTTPResponse.Status,
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		if localVarHTTPResponse.StatusCode == 400 {
 			var v ErrorResponseApiModel
@@ -841,8 +846,9 @@ func (a *LoadTestsAPIService) LoadTestsRetrieveExecute(r *ApiLoadTestsRetrieveRe
 
 	if localVarHTTPResponse.StatusCode >= 300 {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
+			body:       localVarBody,
+			error:      localVarHTTPResponse.Status,
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
 			var v ErrorResponseApiModel
@@ -893,8 +899,9 @@ func (a *LoadTestsAPIService) LoadTestsRetrieveExecute(r *ApiLoadTestsRetrieveRe
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
+			body:       localVarBody,
+			error:      err.Error(),
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -1002,8 +1009,9 @@ func (a *LoadTestsAPIService) LoadTestsScriptRetrieveExecute(r *ApiLoadTestsScri
 
 	if localVarHTTPResponse.StatusCode >= 300 {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
+			body:       localVarBody,
+			error:      localVarHTTPResponse.Status,
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
 			var v ErrorResponseApiModel
@@ -1065,8 +1073,9 @@ func (a *LoadTestsAPIService) LoadTestsScriptRetrieveExecute(r *ApiLoadTestsScri
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
+			body:       localVarBody,
+			error:      err.Error(),
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -1180,8 +1189,9 @@ func (a *LoadTestsAPIService) LoadTestsScriptUpdateExecute(r *ApiLoadTestsScript
 
 	if localVarHTTPResponse.StatusCode >= 300 {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
+			body:       localVarBody,
+			error:      localVarHTTPResponse.Status,
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		if localVarHTTPResponse.StatusCode == 400 {
 			var v ErrorResponseApiModel
@@ -1350,8 +1360,9 @@ func (a *LoadTestsAPIService) LoadTestsStartExecute(r *ApiLoadTestsStartRequest)
 
 	if localVarHTTPResponse.StatusCode >= 300 {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
+			body:       localVarBody,
+			error:      localVarHTTPResponse.Status,
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
 			var v ErrorResponseApiModel
@@ -1402,8 +1413,9 @@ func (a *LoadTestsAPIService) LoadTestsStartExecute(r *ApiLoadTestsStartRequest)
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
+			body:       localVarBody,
+			error:      err.Error(),
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -1558,8 +1570,9 @@ func (a *LoadTestsAPIService) ProjectsLoadTestsCreateExecute(r *ApiProjectsLoadT
 
 	if localVarHTTPResponse.StatusCode >= 300 {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
+			body:       localVarBody,
+			error:      localVarHTTPResponse.Status,
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		if localVarHTTPResponse.StatusCode == 400 {
 			var v ErrorResponseApiModel
@@ -1632,8 +1645,9 @@ func (a *LoadTestsAPIService) ProjectsLoadTestsCreateExecute(r *ApiProjectsLoadT
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
+			body:       localVarBody,
+			error:      err.Error(),
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -1791,8 +1805,9 @@ func (a *LoadTestsAPIService) ProjectsLoadTestsRetrieveExecute(r *ApiProjectsLoa
 
 	if localVarHTTPResponse.StatusCode >= 300 {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
+			body:       localVarBody,
+			error:      localVarHTTPResponse.Status,
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		if localVarHTTPResponse.StatusCode == 400 {
 			var v ErrorResponseApiModel
@@ -1854,8 +1869,9 @@ func (a *LoadTestsAPIService) ProjectsLoadTestsRetrieveExecute(r *ApiProjectsLoa
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
+			body:       localVarBody,
+			error:      err.Error(),
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -1969,8 +1985,9 @@ func (a *LoadTestsAPIService) ValidateOptionsExecute(r *ApiValidateOptionsReques
 
 	if localVarHTTPResponse.StatusCode >= 300 {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
+			body:       localVarBody,
+			error:      localVarHTTPResponse.Status,
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		if localVarHTTPResponse.StatusCode == 400 {
 			var v ErrorResponseApiModel
@@ -2021,8 +2038,9 @@ func (a *LoadTestsAPIService) ValidateOptionsExecute(r *ApiValidateOptionsReques
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
 		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
+			body:       localVarBody,
+			error:      err.Error(),
+			statusCode: localVarHTTPResponse.StatusCode,
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
