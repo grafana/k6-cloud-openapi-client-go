@@ -27,12 +27,12 @@ type LoadTestsAPIService service
 type ApiLoadTestsDestroyRequest struct {
 	ctx        context.Context
 	ApiService *LoadTestsAPIService
-	xStackId   *int32
+	xStackId   *int64
 	id         int64
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiLoadTestsDestroyRequest) XStackId(xStackId int32) *ApiLoadTestsDestroyRequest {
+func (r *ApiLoadTestsDestroyRequest) XStackId(xStackId int64) *ApiLoadTestsDestroyRequest {
 	r.xStackId = &xStackId
 	return r
 }
@@ -184,7 +184,7 @@ func (a *LoadTestsAPIService) LoadTestsDestroyExecute(r *ApiLoadTestsDestroyRequ
 type ApiLoadTestsListRequest struct {
 	ctx        context.Context
 	ApiService *LoadTestsAPIService
-	xStackId   *int32
+	xStackId   *int64
 	count      *bool
 	orderby    *string
 	skip       *int32
@@ -193,7 +193,7 @@ type ApiLoadTestsListRequest struct {
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiLoadTestsListRequest) XStackId(xStackId int32) *ApiLoadTestsListRequest {
+func (r *ApiLoadTestsListRequest) XStackId(xStackId int64) *ApiLoadTestsListRequest {
 	r.xStackId = &xStackId
 	return r
 }
@@ -391,13 +391,13 @@ func (a *LoadTestsAPIService) LoadTestsListExecute(r *ApiLoadTestsListRequest) (
 type ApiLoadTestsMoveRequest struct {
 	ctx                  context.Context
 	ApiService           *LoadTestsAPIService
-	xStackId             *int32
+	xStackId             *int64
 	id                   int64
 	moveLoadTestApiModel *MoveLoadTestApiModel
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiLoadTestsMoveRequest) XStackId(xStackId int32) *ApiLoadTestsMoveRequest {
+func (r *ApiLoadTestsMoveRequest) XStackId(xStackId int64) *ApiLoadTestsMoveRequest {
 	r.xStackId = &xStackId
 	return r
 }
@@ -571,13 +571,13 @@ func (a *LoadTestsAPIService) LoadTestsMoveExecute(r *ApiLoadTestsMoveRequest) (
 type ApiLoadTestsPartialUpdateRequest struct {
 	ctx                   context.Context
 	ApiService            *LoadTestsAPIService
-	xStackId              *int32
+	xStackId              *int64
 	id                    int64
 	patchLoadTestApiModel *PatchLoadTestApiModel
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiLoadTestsPartialUpdateRequest) XStackId(xStackId int32) *ApiLoadTestsPartialUpdateRequest {
+func (r *ApiLoadTestsPartialUpdateRequest) XStackId(xStackId int64) *ApiLoadTestsPartialUpdateRequest {
 	r.xStackId = &xStackId
 	return r
 }
@@ -747,12 +747,12 @@ func (a *LoadTestsAPIService) LoadTestsPartialUpdateExecute(r *ApiLoadTestsParti
 type ApiLoadTestsRetrieveRequest struct {
 	ctx        context.Context
 	ApiService *LoadTestsAPIService
-	xStackId   *int32
+	xStackId   *int64
 	id         int64
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiLoadTestsRetrieveRequest) XStackId(xStackId int32) *ApiLoadTestsRetrieveRequest {
+func (r *ApiLoadTestsRetrieveRequest) XStackId(xStackId int64) *ApiLoadTestsRetrieveRequest {
 	r.xStackId = &xStackId
 	return r
 }
@@ -905,12 +905,12 @@ func (a *LoadTestsAPIService) LoadTestsRetrieveExecute(r *ApiLoadTestsRetrieveRe
 type ApiLoadTestsScriptRetrieveRequest struct {
 	ctx        context.Context
 	ApiService *LoadTestsAPIService
-	xStackId   *int32
+	xStackId   *int64
 	id         int64
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiLoadTestsScriptRetrieveRequest) XStackId(xStackId int32) *ApiLoadTestsScriptRetrieveRequest {
+func (r *ApiLoadTestsScriptRetrieveRequest) XStackId(xStackId int64) *ApiLoadTestsScriptRetrieveRequest {
 	r.xStackId = &xStackId
 	return r
 }
@@ -1077,13 +1077,13 @@ func (a *LoadTestsAPIService) LoadTestsScriptRetrieveExecute(r *ApiLoadTestsScri
 type ApiLoadTestsScriptUpdateRequest struct {
 	ctx        context.Context
 	ApiService *LoadTestsAPIService
-	xStackId   *int32
+	xStackId   *int64
 	id         int64
 	body       io.ReadCloser
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiLoadTestsScriptUpdateRequest) XStackId(xStackId int32) *ApiLoadTestsScriptUpdateRequest {
+func (r *ApiLoadTestsScriptUpdateRequest) XStackId(xStackId int64) *ApiLoadTestsScriptUpdateRequest {
 	r.xStackId = &xStackId
 	return r
 }
@@ -1246,13 +1246,13 @@ func (a *LoadTestsAPIService) LoadTestsScriptUpdateExecute(r *ApiLoadTestsScript
 type ApiLoadTestsStartRequest struct {
 	ctx              context.Context
 	ApiService       *LoadTestsAPIService
-	xStackId         *int32
+	xStackId         *int64
 	id               int64
 	k6IdempotencyKey *string
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiLoadTestsStartRequest) XStackId(xStackId int32) *ApiLoadTestsStartRequest {
+func (r *ApiLoadTestsStartRequest) XStackId(xStackId int64) *ApiLoadTestsStartRequest {
 	r.xStackId = &xStackId
 	return r
 }
@@ -1414,7 +1414,7 @@ func (a *LoadTestsAPIService) LoadTestsStartExecute(r *ApiLoadTestsStartRequest)
 type ApiProjectsLoadTestsCreateRequest struct {
 	ctx        context.Context
 	ApiService *LoadTestsAPIService
-	xStackId   *int32
+	xStackId   *int64
 	id         int64
 	name       *string
 	script     io.ReadCloser
@@ -1422,7 +1422,7 @@ type ApiProjectsLoadTestsCreateRequest struct {
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiProjectsLoadTestsCreateRequest) XStackId(xStackId int32) *ApiProjectsLoadTestsCreateRequest {
+func (r *ApiProjectsLoadTestsCreateRequest) XStackId(xStackId int64) *ApiProjectsLoadTestsCreateRequest {
 	r.xStackId = &xStackId
 	return r
 }
@@ -1654,7 +1654,7 @@ func (a *LoadTestsAPIService) ProjectsLoadTestsCreateExecute(r *ApiProjectsLoadT
 type ApiProjectsLoadTestsRetrieveRequest struct {
 	ctx        context.Context
 	ApiService *LoadTestsAPIService
-	xStackId   *int32
+	xStackId   *int64
 	id         int64
 	count      *bool
 	orderby    *string
@@ -1664,7 +1664,7 @@ type ApiProjectsLoadTestsRetrieveRequest struct {
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiProjectsLoadTestsRetrieveRequest) XStackId(xStackId int32) *ApiProjectsLoadTestsRetrieveRequest {
+func (r *ApiProjectsLoadTestsRetrieveRequest) XStackId(xStackId int64) *ApiProjectsLoadTestsRetrieveRequest {
 	r.xStackId = &xStackId
 	return r
 }
@@ -1876,12 +1876,12 @@ func (a *LoadTestsAPIService) ProjectsLoadTestsRetrieveExecute(r *ApiProjectsLoa
 type ApiValidateOptionsRequest struct {
 	ctx                    context.Context
 	ApiService             *LoadTestsAPIService
-	xStackId               *int32
+	xStackId               *int64
 	validateOptionsRequest *ValidateOptionsRequest
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiValidateOptionsRequest) XStackId(xStackId int32) *ApiValidateOptionsRequest {
+func (r *ApiValidateOptionsRequest) XStackId(xStackId int64) *ApiValidateOptionsRequest {
 	r.xStackId = &xStackId
 	return r
 }

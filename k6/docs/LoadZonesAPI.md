@@ -33,7 +33,7 @@ import (
 )
 
 func main() {
-	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
+	xStackId := int64(789) // int64 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
 	id := int64(789) // int64 | ID of the load zone.
 
 	configuration := openapiclient.NewConfiguration()
@@ -54,7 +54,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int64** | ID of the load zone. | 
+**id** | **int64** | ID of the load zone. |
 
 ### Other Parameters
 
@@ -63,7 +63,7 @@ Other parameters are passed through a pointer to a apiLoadZonesAllowedProjectsRe
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **xStackId** | **int32** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. | 
+ **xStackId** | **int64** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. |
 
 
 ### Return type
@@ -105,9 +105,9 @@ import (
 )
 
 func main() {
-	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
+	xStackId := int64(789) // int64 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
 	id := int64(789) // int64 | ID of the load zone.
-	updateAllowedProjectsListApiModel := *openapiclient.NewUpdateAllowedProjectsListApiModel([]openapiclient.AllowedProjectToUpdateApiModel{*openapiclient.NewAllowedProjectToUpdateApiModel(int64(123))}) // UpdateAllowedProjectsListApiModel | 
+	updateAllowedProjectsListApiModel := *openapiclient.NewUpdateAllowedProjectsListApiModel([]openapiclient.AllowedProjectToUpdateApiModel{*openapiclient.NewAllowedProjectToUpdateApiModel(int64(123))}) // UpdateAllowedProjectsListApiModel |
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -127,7 +127,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int64** | ID of the load zone. | 
+**id** | **int64** | ID of the load zone. |
 
 ### Other Parameters
 
@@ -136,9 +136,9 @@ Other parameters are passed through a pointer to a apiLoadZonesAllowedProjectsUp
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **xStackId** | **int32** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. | 
+ **xStackId** | **int64** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. |
 
- **updateAllowedProjectsListApiModel** | [**UpdateAllowedProjectsListApiModel**](UpdateAllowedProjectsListApiModel.md) |  | 
+ **updateAllowedProjectsListApiModel** | [**UpdateAllowedProjectsListApiModel**](UpdateAllowedProjectsListApiModel.md) |  |
 
 ### Return type
 
@@ -179,7 +179,7 @@ import (
 )
 
 func main() {
-	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
+	xStackId := int64(789) // int64 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
 	k6LoadZoneId := "k6LoadZoneId_example" // string | Filter results by k6 load zone ID (exact match). (optional)
 
 	configuration := openapiclient.NewConfiguration()
@@ -205,8 +205,8 @@ Other parameters are passed through a pointer to a apiLoadZonesListRequest struc
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **xStackId** | **int32** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. | 
- **k6LoadZoneId** | **string** | Filter results by k6 load zone ID (exact match). | 
+ **xStackId** | **int64** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. |
+ **k6LoadZoneId** | **string** | Filter results by k6 load zone ID (exact match). |
 
 ### Return type
 
@@ -247,7 +247,7 @@ import (
 )
 
 func main() {
-	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
+	xStackId := int64(789) // int64 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
 	id := int64(789) // int64 | ID of the project.
 
 	configuration := openapiclient.NewConfiguration()
@@ -268,7 +268,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int64** | ID of the project. | 
+**id** | **int64** | ID of the project. |
 
 ### Other Parameters
 
@@ -277,7 +277,7 @@ Other parameters are passed through a pointer to a apiProjectsAllowedLoadZonesRe
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **xStackId** | **int32** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. | 
+ **xStackId** | **int64** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. |
 
 
 ### Return type
@@ -319,9 +319,9 @@ import (
 )
 
 func main() {
-	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
+	xStackId := int64(789) // int64 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
 	id := int64(789) // int64 | ID of the project.
-	updateAllowedLoadZonesListApiModel := *openapiclient.NewUpdateAllowedLoadZonesListApiModel([]openapiclient.AllowedLoadZoneToUpdateApiModel{*openapiclient.NewAllowedLoadZoneToUpdateApiModel(int64(123))}) // UpdateAllowedLoadZonesListApiModel | 
+	updateAllowedLoadZonesListApiModel := *openapiclient.NewUpdateAllowedLoadZonesListApiModel([]openapiclient.AllowedLoadZoneToUpdateApiModel{*openapiclient.NewAllowedLoadZoneToUpdateApiModel(int64(123))}) // UpdateAllowedLoadZonesListApiModel |
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -341,7 +341,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int64** | ID of the project. | 
+**id** | **int64** | ID of the project. |
 
 ### Other Parameters
 
@@ -350,9 +350,9 @@ Other parameters are passed through a pointer to a apiProjectsAllowedLoadZonesUp
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **xStackId** | **int32** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. | 
+ **xStackId** | **int64** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. |
 
- **updateAllowedLoadZonesListApiModel** | [**UpdateAllowedLoadZonesListApiModel**](UpdateAllowedLoadZonesListApiModel.md) |  | 
+ **updateAllowedLoadZonesListApiModel** | [**UpdateAllowedLoadZonesListApiModel**](UpdateAllowedLoadZonesListApiModel.md) |  |
 
 ### Return type
 

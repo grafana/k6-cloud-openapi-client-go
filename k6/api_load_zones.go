@@ -26,12 +26,12 @@ type LoadZonesAPIService service
 type ApiLoadZonesAllowedProjectsRetrieveRequest struct {
 	ctx        context.Context
 	ApiService *LoadZonesAPIService
-	xStackId   *int32
+	xStackId   *int64
 	id         int64
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiLoadZonesAllowedProjectsRetrieveRequest) XStackId(xStackId int32) *ApiLoadZonesAllowedProjectsRetrieveRequest {
+func (r *ApiLoadZonesAllowedProjectsRetrieveRequest) XStackId(xStackId int64) *ApiLoadZonesAllowedProjectsRetrieveRequest {
 	r.xStackId = &xStackId
 	return r
 }
@@ -184,13 +184,13 @@ func (a *LoadZonesAPIService) LoadZonesAllowedProjectsRetrieveExecute(r *ApiLoad
 type ApiLoadZonesAllowedProjectsUpdateRequest struct {
 	ctx                               context.Context
 	ApiService                        *LoadZonesAPIService
-	xStackId                          *int32
+	xStackId                          *int64
 	id                                int64
 	updateAllowedProjectsListApiModel *UpdateAllowedProjectsListApiModel
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiLoadZonesAllowedProjectsUpdateRequest) XStackId(xStackId int32) *ApiLoadZonesAllowedProjectsUpdateRequest {
+func (r *ApiLoadZonesAllowedProjectsUpdateRequest) XStackId(xStackId int64) *ApiLoadZonesAllowedProjectsUpdateRequest {
 	r.xStackId = &xStackId
 	return r
 }
@@ -364,12 +364,12 @@ func (a *LoadZonesAPIService) LoadZonesAllowedProjectsUpdateExecute(r *ApiLoadZo
 type ApiLoadZonesListRequest struct {
 	ctx          context.Context
 	ApiService   *LoadZonesAPIService
-	xStackId     *int32
+	xStackId     *int64
 	k6LoadZoneId *string
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiLoadZonesListRequest) XStackId(xStackId int32) *ApiLoadZonesListRequest {
+func (r *ApiLoadZonesListRequest) XStackId(xStackId int64) *ApiLoadZonesListRequest {
 	r.xStackId = &xStackId
 	return r
 }
@@ -528,12 +528,12 @@ func (a *LoadZonesAPIService) LoadZonesListExecute(r *ApiLoadZonesListRequest) (
 type ApiProjectsAllowedLoadZonesRetrieveRequest struct {
 	ctx        context.Context
 	ApiService *LoadZonesAPIService
-	xStackId   *int32
+	xStackId   *int64
 	id         int64
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiProjectsAllowedLoadZonesRetrieveRequest) XStackId(xStackId int32) *ApiProjectsAllowedLoadZonesRetrieveRequest {
+func (r *ApiProjectsAllowedLoadZonesRetrieveRequest) XStackId(xStackId int64) *ApiProjectsAllowedLoadZonesRetrieveRequest {
 	r.xStackId = &xStackId
 	return r
 }
@@ -686,13 +686,13 @@ func (a *LoadZonesAPIService) ProjectsAllowedLoadZonesRetrieveExecute(r *ApiProj
 type ApiProjectsAllowedLoadZonesUpdateRequest struct {
 	ctx                                context.Context
 	ApiService                         *LoadZonesAPIService
-	xStackId                           *int32
+	xStackId                           *int64
 	id                                 int64
 	updateAllowedLoadZonesListApiModel *UpdateAllowedLoadZonesListApiModel
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiProjectsAllowedLoadZonesUpdateRequest) XStackId(xStackId int32) *ApiProjectsAllowedLoadZonesUpdateRequest {
+func (r *ApiProjectsAllowedLoadZonesUpdateRequest) XStackId(xStackId int64) *ApiProjectsAllowedLoadZonesUpdateRequest {
 	r.xStackId = &xStackId
 	return r
 }

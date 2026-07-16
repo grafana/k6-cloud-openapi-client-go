@@ -36,9 +36,9 @@ import (
 )
 
 func main() {
-	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
+	xStackId := int64(789) // int64 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
 	id := int64(789) // int64 | ID of the load test.
-	createScheduleRequest := *openapiclient.NewCreateScheduleRequest(time.Now()) // CreateScheduleRequest | 
+	createScheduleRequest := *openapiclient.NewCreateScheduleRequest(time.Now()) // CreateScheduleRequest |
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -58,7 +58,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int64** | ID of the load test. | 
+**id** | **int64** | ID of the load test. |
 
 ### Other Parameters
 
@@ -67,9 +67,9 @@ Other parameters are passed through a pointer to a apiLoadTestsScheduleCreateReq
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **xStackId** | **int32** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. | 
+ **xStackId** | **int64** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. |
 
- **createScheduleRequest** | [**CreateScheduleRequest**](CreateScheduleRequest.md) |  | 
+ **createScheduleRequest** | [**CreateScheduleRequest**](CreateScheduleRequest.md) |  |
 
 ### Return type
 
@@ -110,7 +110,7 @@ import (
 )
 
 func main() {
-	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
+	xStackId := int64(789) // int64 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
 	id := int64(789) // int64 | ID of the load test.
 
 	configuration := openapiclient.NewConfiguration()
@@ -131,7 +131,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int64** | ID of the load test. | 
+**id** | **int64** | ID of the load test. |
 
 ### Other Parameters
 
@@ -140,7 +140,7 @@ Other parameters are passed through a pointer to a apiLoadTestsScheduleRetrieveR
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **xStackId** | **int32** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. | 
+ **xStackId** | **int64** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. |
 
 
 ### Return type
@@ -182,7 +182,7 @@ import (
 )
 
 func main() {
-	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
+	xStackId := int64(789) // int64 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
 	id := int64(789) // int64 | ID of the schedule.
 
 	configuration := openapiclient.NewConfiguration()
@@ -201,7 +201,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int64** | ID of the schedule. | 
+**id** | **int64** | ID of the schedule. |
 
 ### Other Parameters
 
@@ -210,7 +210,7 @@ Other parameters are passed through a pointer to a apiScheduleActivateRequest st
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **xStackId** | **int32** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. | 
+ **xStackId** | **int64** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. |
 
 
 ### Return type
@@ -252,7 +252,7 @@ import (
 )
 
 func main() {
-	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
+	xStackId := int64(789) // int64 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
 	id := int64(789) // int64 | ID of the schedule.
 
 	configuration := openapiclient.NewConfiguration()
@@ -271,7 +271,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int64** | ID of the schedule. | 
+**id** | **int64** | ID of the schedule. |
 
 ### Other Parameters
 
@@ -280,7 +280,7 @@ Other parameters are passed through a pointer to a apiScheduleDeactivateRequest 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **xStackId** | **int32** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. | 
+ **xStackId** | **int64** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. |
 
 
 ### Return type
@@ -322,7 +322,7 @@ import (
 )
 
 func main() {
-	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
+	xStackId := int64(789) // int64 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
 	id := int64(789) // int64 | ID of the schedule.
 
 	configuration := openapiclient.NewConfiguration()
@@ -341,7 +341,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int64** | ID of the schedule. | 
+**id** | **int64** | ID of the schedule. |
 
 ### Other Parameters
 
@@ -350,7 +350,7 @@ Other parameters are passed through a pointer to a apiSchedulesDestroyRequest st
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **xStackId** | **int32** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. | 
+ **xStackId** | **int64** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. |
 
 
 ### Return type
@@ -392,7 +392,7 @@ import (
 )
 
 func main() {
-	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
+	xStackId := int64(789) // int64 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
 	count := true // bool | Include collection length in the response object as `@count`. (optional)
 	skip := int32(56) // int32 | The initial index from which to return the results. (optional)
 	top := int32(56) // int32 | Number of results to return per page. (optional) (default to 1000)
@@ -420,9 +420,9 @@ Other parameters are passed through a pointer to a apiSchedulesListRequest struc
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **xStackId** | **int32** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. | 
- **count** | **bool** | Include collection length in the response object as &#x60;@count&#x60;. | 
- **skip** | **int32** | The initial index from which to return the results. | 
+ **xStackId** | **int64** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. |
+ **count** | **bool** | Include collection length in the response object as &#x60;@count&#x60;. |
+ **skip** | **int32** | The initial index from which to return the results. |
  **top** | **int32** | Number of results to return per page. | [default to 1000]
 
 ### Return type
@@ -464,7 +464,7 @@ import (
 )
 
 func main() {
-	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
+	xStackId := int64(789) // int64 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
 	id := int64(789) // int64 | ID of the schedule.
 
 	configuration := openapiclient.NewConfiguration()
@@ -485,7 +485,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int64** | ID of the schedule. | 
+**id** | **int64** | ID of the schedule. |
 
 ### Other Parameters
 
@@ -494,7 +494,7 @@ Other parameters are passed through a pointer to a apiSchedulesRetrieveRequest s
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **xStackId** | **int32** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. | 
+ **xStackId** | **int64** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. |
 
 
 ### Return type

@@ -26,12 +26,12 @@ type LabelsAPIService service
 type ApiLabelsCreateRequest struct {
 	ctx                   context.Context
 	ApiService            *LabelsAPIService
-	xStackId              *int32
+	xStackId              *int64
 	labelKeyCreateRequest *LabelKeyCreateRequest
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiLabelsCreateRequest) XStackId(xStackId int32) *ApiLabelsCreateRequest {
+func (r *ApiLabelsCreateRequest) XStackId(xStackId int64) *ApiLabelsCreateRequest {
 	r.xStackId = &xStackId
 	return r
 }
@@ -205,12 +205,12 @@ func (a *LabelsAPIService) LabelsCreateExecute(r *ApiLabelsCreateRequest) (*Labe
 type ApiLabelsDestroyRequest struct {
 	ctx        context.Context
 	ApiService *LabelsAPIService
-	xStackId   *int32
+	xStackId   *int64
 	id         int64
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiLabelsDestroyRequest) XStackId(xStackId int32) *ApiLabelsDestroyRequest {
+func (r *ApiLabelsDestroyRequest) XStackId(xStackId int64) *ApiLabelsDestroyRequest {
 	r.xStackId = &xStackId
 	return r
 }
@@ -354,11 +354,11 @@ func (a *LabelsAPIService) LabelsDestroyExecute(r *ApiLabelsDestroyRequest) (*ht
 type ApiLabelsListRequest struct {
 	ctx        context.Context
 	ApiService *LabelsAPIService
-	xStackId   *int32
+	xStackId   *int64
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiLabelsListRequest) XStackId(xStackId int32) *ApiLabelsListRequest {
+func (r *ApiLabelsListRequest) XStackId(xStackId int64) *ApiLabelsListRequest {
 	r.xStackId = &xStackId
 	return r
 }
@@ -497,13 +497,13 @@ func (a *LabelsAPIService) LabelsListExecute(r *ApiLabelsListRequest) (*LabelKey
 type ApiLabelsPartialUpdateRequest struct {
 	ctx                  context.Context
 	ApiService           *LabelsAPIService
-	xStackId             *int32
+	xStackId             *int64
 	id                   int64
 	labelKeyPatchRequest *LabelKeyPatchRequest
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiLabelsPartialUpdateRequest) XStackId(xStackId int32) *ApiLabelsPartialUpdateRequest {
+func (r *ApiLabelsPartialUpdateRequest) XStackId(xStackId int64) *ApiLabelsPartialUpdateRequest {
 	r.xStackId = &xStackId
 	return r
 }
@@ -685,13 +685,13 @@ func (a *LabelsAPIService) LabelsPartialUpdateExecute(r *ApiLabelsPartialUpdateR
 type ApiProjectsLabelsDestroyRequest struct {
 	ctx        context.Context
 	ApiService *LabelsAPIService
-	xStackId   *int32
+	xStackId   *int64
 	key        string
 	projectId  int64
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiProjectsLabelsDestroyRequest) XStackId(xStackId int32) *ApiProjectsLabelsDestroyRequest {
+func (r *ApiProjectsLabelsDestroyRequest) XStackId(xStackId int64) *ApiProjectsLabelsDestroyRequest {
 	r.xStackId = &xStackId
 	return r
 }
@@ -835,12 +835,12 @@ func (a *LabelsAPIService) ProjectsLabelsDestroyExecute(r *ApiProjectsLabelsDest
 type ApiProjectsLabelsListRequest struct {
 	ctx        context.Context
 	ApiService *LabelsAPIService
-	xStackId   *int32
+	xStackId   *int64
 	projectId  int64
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiProjectsLabelsListRequest) XStackId(xStackId int32) *ApiProjectsLabelsListRequest {
+func (r *ApiProjectsLabelsListRequest) XStackId(xStackId int64) *ApiProjectsLabelsListRequest {
 	r.xStackId = &xStackId
 	return r
 }
@@ -993,13 +993,13 @@ func (a *LabelsAPIService) ProjectsLabelsListExecute(r *ApiProjectsLabelsListReq
 type ApiProjectsLabelsUpdateRequest struct {
 	ctx                    context.Context
 	ApiService             *LabelsAPIService
-	xStackId               *int32
+	xStackId               *int64
 	projectId              int64
 	projectLabelPutRequest *ProjectLabelPutRequest
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiProjectsLabelsUpdateRequest) XStackId(xStackId int32) *ApiProjectsLabelsUpdateRequest {
+func (r *ApiProjectsLabelsUpdateRequest) XStackId(xStackId int64) *ApiProjectsLabelsUpdateRequest {
 	r.xStackId = &xStackId
 	return r
 }

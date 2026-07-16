@@ -27,7 +27,7 @@ type ProjectsAPIService service
 type ApiProjectLimitsRetrieveRequest struct {
 	ctx         context.Context
 	ApiService  *ProjectsAPIService
-	xStackId    *int32
+	xStackId    *int64
 	count       *bool
 	skip        *int32
 	top         *int32
@@ -35,7 +35,7 @@ type ApiProjectLimitsRetrieveRequest struct {
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiProjectLimitsRetrieveRequest) XStackId(xStackId int32) *ApiProjectLimitsRetrieveRequest {
+func (r *ApiProjectLimitsRetrieveRequest) XStackId(xStackId int64) *ApiProjectLimitsRetrieveRequest {
 	r.xStackId = &xStackId
 	return r
 }
@@ -232,12 +232,12 @@ func (a *ProjectsAPIService) ProjectLimitsRetrieveExecute(r *ApiProjectLimitsRet
 type ApiProjectsCreateRequest struct {
 	ctx                   context.Context
 	ApiService            *ProjectsAPIService
-	xStackId              *int32
+	xStackId              *int64
 	createProjectApiModel *CreateProjectApiModel
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiProjectsCreateRequest) XStackId(xStackId int32) *ApiProjectsCreateRequest {
+func (r *ApiProjectsCreateRequest) XStackId(xStackId int64) *ApiProjectsCreateRequest {
 	r.xStackId = &xStackId
 	return r
 }
@@ -408,12 +408,12 @@ func (a *ProjectsAPIService) ProjectsCreateExecute(r *ApiProjectsCreateRequest) 
 type ApiProjectsDestroyRequest struct {
 	ctx        context.Context
 	ApiService *ProjectsAPIService
-	xStackId   *int32
+	xStackId   *int64
 	id         int64
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiProjectsDestroyRequest) XStackId(xStackId int32) *ApiProjectsDestroyRequest {
+func (r *ApiProjectsDestroyRequest) XStackId(xStackId int64) *ApiProjectsDestroyRequest {
 	r.xStackId = &xStackId
 	return r
 }
@@ -565,13 +565,13 @@ func (a *ProjectsAPIService) ProjectsDestroyExecute(r *ApiProjectsDestroyRequest
 type ApiProjectsLimitsPartialUpdateRequest struct {
 	ctx                       context.Context
 	ApiService                *ProjectsAPIService
-	xStackId                  *int32
+	xStackId                  *int64
 	id                        int64
 	patchProjectLimitsRequest *PatchProjectLimitsRequest
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiProjectsLimitsPartialUpdateRequest) XStackId(xStackId int32) *ApiProjectsLimitsPartialUpdateRequest {
+func (r *ApiProjectsLimitsPartialUpdateRequest) XStackId(xStackId int64) *ApiProjectsLimitsPartialUpdateRequest {
 	r.xStackId = &xStackId
 	return r
 }
@@ -732,12 +732,12 @@ func (a *ProjectsAPIService) ProjectsLimitsPartialUpdateExecute(r *ApiProjectsLi
 type ApiProjectsLimitsRetrieveRequest struct {
 	ctx        context.Context
 	ApiService *ProjectsAPIService
-	xStackId   *int32
+	xStackId   *int64
 	id         int64
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiProjectsLimitsRetrieveRequest) XStackId(xStackId int32) *ApiProjectsLimitsRetrieveRequest {
+func (r *ApiProjectsLimitsRetrieveRequest) XStackId(xStackId int64) *ApiProjectsLimitsRetrieveRequest {
 	r.xStackId = &xStackId
 	return r
 }
@@ -890,7 +890,7 @@ func (a *ProjectsAPIService) ProjectsLimitsRetrieveExecute(r *ApiProjectsLimitsR
 type ApiProjectsListRequest struct {
 	ctx        context.Context
 	ApiService *ProjectsAPIService
-	xStackId   *int32
+	xStackId   *int64
 	count      *bool
 	orderby    *string
 	skip       *int32
@@ -900,7 +900,7 @@ type ApiProjectsListRequest struct {
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiProjectsListRequest) XStackId(xStackId int32) *ApiProjectsListRequest {
+func (r *ApiProjectsListRequest) XStackId(xStackId int64) *ApiProjectsListRequest {
 	r.xStackId = &xStackId
 	return r
 }
@@ -1107,13 +1107,13 @@ func (a *ProjectsAPIService) ProjectsListExecute(r *ApiProjectsListRequest) (*Pr
 type ApiProjectsPartialUpdateRequest struct {
 	ctx                  context.Context
 	ApiService           *ProjectsAPIService
-	xStackId             *int32
+	xStackId             *int64
 	id                   int64
 	patchProjectApiModel *PatchProjectApiModel
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiProjectsPartialUpdateRequest) XStackId(xStackId int32) *ApiProjectsPartialUpdateRequest {
+func (r *ApiProjectsPartialUpdateRequest) XStackId(xStackId int64) *ApiProjectsPartialUpdateRequest {
 	r.xStackId = &xStackId
 	return r
 }
@@ -1286,12 +1286,12 @@ func (a *ProjectsAPIService) ProjectsPartialUpdateExecute(r *ApiProjectsPartialU
 type ApiProjectsRetrieveRequest struct {
 	ctx        context.Context
 	ApiService *ProjectsAPIService
-	xStackId   *int32
+	xStackId   *int64
 	id         int64
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiProjectsRetrieveRequest) XStackId(xStackId int32) *ApiProjectsRetrieveRequest {
+func (r *ApiProjectsRetrieveRequest) XStackId(xStackId int64) *ApiProjectsRetrieveRequest {
 	r.xStackId = &xStackId
 	return r
 }

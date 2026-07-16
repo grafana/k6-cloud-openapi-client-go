@@ -35,8 +35,8 @@ import (
 )
 
 func main() {
-	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-	labelKeyCreateRequest := *openapiclient.NewLabelKeyCreateRequest([]openapiclient.LabelKeyCreateItem{*openapiclient.NewLabelKeyCreateItem("Key_example")}) // LabelKeyCreateRequest | 
+	xStackId := int64(789) // int64 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
+	labelKeyCreateRequest := *openapiclient.NewLabelKeyCreateRequest([]openapiclient.LabelKeyCreateItem{*openapiclient.NewLabelKeyCreateItem("Key_example")}) // LabelKeyCreateRequest |
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -61,8 +61,8 @@ Other parameters are passed through a pointer to a apiLabelsCreateRequest struct
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **xStackId** | **int32** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. | 
- **labelKeyCreateRequest** | [**LabelKeyCreateRequest**](LabelKeyCreateRequest.md) |  | 
+ **xStackId** | **int64** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. |
+ **labelKeyCreateRequest** | [**LabelKeyCreateRequest**](LabelKeyCreateRequest.md) |  |
 
 ### Return type
 
@@ -103,7 +103,7 @@ import (
 )
 
 func main() {
-	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
+	xStackId := int64(789) // int64 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
 	id := int64(789) // int64 | ID of the label key.
 
 	configuration := openapiclient.NewConfiguration()
@@ -122,7 +122,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int64** | ID of the label key. | 
+**id** | **int64** | ID of the label key. |
 
 ### Other Parameters
 
@@ -131,7 +131,7 @@ Other parameters are passed through a pointer to a apiLabelsDestroyRequest struc
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **xStackId** | **int32** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. | 
+ **xStackId** | **int64** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. |
 
 
 ### Return type
@@ -173,7 +173,7 @@ import (
 )
 
 func main() {
-	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
+	xStackId := int64(789) // int64 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -198,7 +198,7 @@ Other parameters are passed through a pointer to a apiLabelsListRequest struct v
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **xStackId** | **int32** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. | 
+ **xStackId** | **int64** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. |
 
 ### Return type
 
@@ -239,7 +239,7 @@ import (
 )
 
 func main() {
-	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
+	xStackId := int64(789) // int64 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
 	id := int64(789) // int64 | ID of the label key.
 	labelKeyPatchRequest := *openapiclient.NewLabelKeyPatchRequest() // LabelKeyPatchRequest |  (optional)
 
@@ -261,7 +261,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int64** | ID of the label key. | 
+**id** | **int64** | ID of the label key. |
 
 ### Other Parameters
 
@@ -270,9 +270,9 @@ Other parameters are passed through a pointer to a apiLabelsPartialUpdateRequest
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **xStackId** | **int32** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. | 
+ **xStackId** | **int64** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. |
 
- **labelKeyPatchRequest** | [**LabelKeyPatchRequest**](LabelKeyPatchRequest.md) |  | 
+ **labelKeyPatchRequest** | [**LabelKeyPatchRequest**](LabelKeyPatchRequest.md) |  |
 
 ### Return type
 
@@ -313,7 +313,7 @@ import (
 )
 
 func main() {
-	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
+	xStackId := int64(789) // int64 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
 	key := "key_example" // string | Label key name.
 	projectId := int64(789) // int64 | ID of the project.
 
@@ -333,8 +333,8 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**key** | **string** | Label key name. | 
-**projectId** | **int64** | ID of the project. | 
+**key** | **string** | Label key name. |
+**projectId** | **int64** | ID of the project. |
 
 ### Other Parameters
 
@@ -343,7 +343,7 @@ Other parameters are passed through a pointer to a apiProjectsLabelsDestroyReque
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **xStackId** | **int32** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. | 
+ **xStackId** | **int64** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. |
 
 
 
@@ -386,7 +386,7 @@ import (
 )
 
 func main() {
-	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
+	xStackId := int64(789) // int64 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
 	projectId := int64(789) // int64 | ID of the project.
 
 	configuration := openapiclient.NewConfiguration()
@@ -407,7 +407,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**projectId** | **int64** | ID of the project. | 
+**projectId** | **int64** | ID of the project. |
 
 ### Other Parameters
 
@@ -416,7 +416,7 @@ Other parameters are passed through a pointer to a apiProjectsLabelsListRequest 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **xStackId** | **int32** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. | 
+ **xStackId** | **int64** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. |
 
 
 ### Return type
@@ -458,9 +458,9 @@ import (
 )
 
 func main() {
-	xStackId := int32(56) // int32 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
+	xStackId := int64(789) // int64 | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
 	projectId := int64(789) // int64 | ID of the project.
-	projectLabelPutRequest := *openapiclient.NewProjectLabelPutRequest([]openapiclient.ProjectLabelPutItem{*openapiclient.NewProjectLabelPutItem("Value_example")}) // ProjectLabelPutRequest | 
+	projectLabelPutRequest := *openapiclient.NewProjectLabelPutRequest([]openapiclient.ProjectLabelPutItem{*openapiclient.NewProjectLabelPutItem("Value_example")}) // ProjectLabelPutRequest |
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -480,7 +480,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**projectId** | **int64** | ID of the project. | 
+**projectId** | **int64** | ID of the project. |
 
 ### Other Parameters
 
@@ -489,9 +489,9 @@ Other parameters are passed through a pointer to a apiProjectsLabelsUpdateReques
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **xStackId** | **int32** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. | 
+ **xStackId** | **int64** | Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack. |
 
- **projectLabelPutRequest** | [**ProjectLabelPutRequest**](ProjectLabelPutRequest.md) |  | 
+ **projectLabelPutRequest** | [**ProjectLabelPutRequest**](ProjectLabelPutRequest.md) |  |
 
 ### Return type
 
