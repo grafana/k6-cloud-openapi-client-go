@@ -27,7 +27,7 @@ type TestRunsAPIService service
 type ApiLoadTestsTestRunsRetrieveRequest struct {
 	ctx           context.Context
 	ApiService    *TestRunsAPIService
-	xStackId      *int32
+	xStackId      *int64
 	id            int64
 	count         *bool
 	orderby       *string
@@ -39,7 +39,7 @@ type ApiLoadTestsTestRunsRetrieveRequest struct {
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiLoadTestsTestRunsRetrieveRequest) XStackId(xStackId int32) *ApiLoadTestsTestRunsRetrieveRequest {
+func (r *ApiLoadTestsTestRunsRetrieveRequest) XStackId(xStackId int64) *ApiLoadTestsTestRunsRetrieveRequest {
 	r.xStackId = &xStackId
 	return r
 }
@@ -269,12 +269,12 @@ func (a *TestRunsAPIService) LoadTestsTestRunsRetrieveExecute(r *ApiLoadTestsTes
 type ApiTestRunsAbortRequest struct {
 	ctx        context.Context
 	ApiService *TestRunsAPIService
-	xStackId   *int32
+	xStackId   *int64
 	id         int64
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiTestRunsAbortRequest) XStackId(xStackId int32) *ApiTestRunsAbortRequest {
+func (r *ApiTestRunsAbortRequest) XStackId(xStackId int64) *ApiTestRunsAbortRequest {
 	r.xStackId = &xStackId
 	return r
 }
@@ -426,12 +426,12 @@ func (a *TestRunsAPIService) TestRunsAbortExecute(r *ApiTestRunsAbortRequest) (*
 type ApiTestRunsDestroyRequest struct {
 	ctx        context.Context
 	ApiService *TestRunsAPIService
-	xStackId   *int32
+	xStackId   *int64
 	id         int64
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiTestRunsDestroyRequest) XStackId(xStackId int32) *ApiTestRunsDestroyRequest {
+func (r *ApiTestRunsDestroyRequest) XStackId(xStackId int64) *ApiTestRunsDestroyRequest {
 	r.xStackId = &xStackId
 	return r
 }
@@ -583,12 +583,12 @@ func (a *TestRunsAPIService) TestRunsDestroyExecute(r *ApiTestRunsDestroyRequest
 type ApiTestRunsDistributionRetrieveRequest struct {
 	ctx        context.Context
 	ApiService *TestRunsAPIService
-	xStackId   *int32
+	xStackId   *int64
 	id         int64
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiTestRunsDistributionRetrieveRequest) XStackId(xStackId int32) *ApiTestRunsDistributionRetrieveRequest {
+func (r *ApiTestRunsDistributionRetrieveRequest) XStackId(xStackId int64) *ApiTestRunsDistributionRetrieveRequest {
 	r.xStackId = &xStackId
 	return r
 }
@@ -741,7 +741,7 @@ func (a *TestRunsAPIService) TestRunsDistributionRetrieveExecute(r *ApiTestRunsD
 type ApiTestRunsListRequest struct {
 	ctx           context.Context
 	ApiService    *TestRunsAPIService
-	xStackId      *int32
+	xStackId      *int64
 	count         *bool
 	skip          *int32
 	top           *int32
@@ -750,7 +750,7 @@ type ApiTestRunsListRequest struct {
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiTestRunsListRequest) XStackId(xStackId int32) *ApiTestRunsListRequest {
+func (r *ApiTestRunsListRequest) XStackId(xStackId int64) *ApiTestRunsListRequest {
 	r.xStackId = &xStackId
 	return r
 }
@@ -948,13 +948,13 @@ func (a *TestRunsAPIService) TestRunsListExecute(r *ApiTestRunsListRequest) (*Te
 type ApiTestRunsPartialUpdateRequest struct {
 	ctx                  context.Context
 	ApiService           *TestRunsAPIService
-	xStackId             *int32
+	xStackId             *int64
 	id                   int64
 	patchTestRunApiModel *PatchTestRunApiModel
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiTestRunsPartialUpdateRequest) XStackId(xStackId int32) *ApiTestRunsPartialUpdateRequest {
+func (r *ApiTestRunsPartialUpdateRequest) XStackId(xStackId int64) *ApiTestRunsPartialUpdateRequest {
 	r.xStackId = &xStackId
 	return r
 }
@@ -1116,12 +1116,12 @@ func (a *TestRunsAPIService) TestRunsPartialUpdateExecute(r *ApiTestRunsPartialU
 type ApiTestRunsRetrieveRequest struct {
 	ctx        context.Context
 	ApiService *TestRunsAPIService
-	xStackId   *int32
+	xStackId   *int64
 	id         int64
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiTestRunsRetrieveRequest) XStackId(xStackId int32) *ApiTestRunsRetrieveRequest {
+func (r *ApiTestRunsRetrieveRequest) XStackId(xStackId int64) *ApiTestRunsRetrieveRequest {
 	r.xStackId = &xStackId
 	return r
 }
@@ -1274,12 +1274,12 @@ func (a *TestRunsAPIService) TestRunsRetrieveExecute(r *ApiTestRunsRetrieveReque
 type ApiTestRunsSaveRequest struct {
 	ctx        context.Context
 	ApiService *TestRunsAPIService
-	xStackId   *int32
+	xStackId   *int64
 	id         int64
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiTestRunsSaveRequest) XStackId(xStackId int32) *ApiTestRunsSaveRequest {
+func (r *ApiTestRunsSaveRequest) XStackId(xStackId int64) *ApiTestRunsSaveRequest {
 	r.xStackId = &xStackId
 	return r
 }
@@ -1434,12 +1434,12 @@ func (a *TestRunsAPIService) TestRunsSaveExecute(r *ApiTestRunsSaveRequest) (*ht
 type ApiTestRunsScriptRetrieveRequest struct {
 	ctx        context.Context
 	ApiService *TestRunsAPIService
-	xStackId   *int32
+	xStackId   *int64
 	id         int64
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiTestRunsScriptRetrieveRequest) XStackId(xStackId int32) *ApiTestRunsScriptRetrieveRequest {
+func (r *ApiTestRunsScriptRetrieveRequest) XStackId(xStackId int64) *ApiTestRunsScriptRetrieveRequest {
 	r.xStackId = &xStackId
 	return r
 }
@@ -1592,12 +1592,12 @@ func (a *TestRunsAPIService) TestRunsScriptRetrieveExecute(r *ApiTestRunsScriptR
 type ApiTestRunsStarRequest struct {
 	ctx        context.Context
 	ApiService *TestRunsAPIService
-	xStackId   *int32
+	xStackId   *int64
 	id         int64
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiTestRunsStarRequest) XStackId(xStackId int32) *ApiTestRunsStarRequest {
+func (r *ApiTestRunsStarRequest) XStackId(xStackId int64) *ApiTestRunsStarRequest {
 	r.xStackId = &xStackId
 	return r
 }
@@ -1738,12 +1738,12 @@ func (a *TestRunsAPIService) TestRunsStarExecute(r *ApiTestRunsStarRequest) (*ht
 type ApiTestRunsUnsaveRequest struct {
 	ctx        context.Context
 	ApiService *TestRunsAPIService
-	xStackId   *int32
+	xStackId   *int64
 	id         int64
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiTestRunsUnsaveRequest) XStackId(xStackId int32) *ApiTestRunsUnsaveRequest {
+func (r *ApiTestRunsUnsaveRequest) XStackId(xStackId int64) *ApiTestRunsUnsaveRequest {
 	r.xStackId = &xStackId
 	return r
 }
@@ -1887,12 +1887,12 @@ func (a *TestRunsAPIService) TestRunsUnsaveExecute(r *ApiTestRunsUnsaveRequest) 
 type ApiTestRunsUnstarRequest struct {
 	ctx        context.Context
 	ApiService *TestRunsAPIService
-	xStackId   *int32
+	xStackId   *int64
 	id         int64
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiTestRunsUnstarRequest) XStackId(xStackId int32) *ApiTestRunsUnstarRequest {
+func (r *ApiTestRunsUnstarRequest) XStackId(xStackId int64) *ApiTestRunsUnstarRequest {
 	r.xStackId = &xStackId
 	return r
 }

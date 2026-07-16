@@ -26,13 +26,13 @@ type SchedulesAPIService service
 type ApiLoadTestsScheduleCreateRequest struct {
 	ctx                   context.Context
 	ApiService            *SchedulesAPIService
-	xStackId              *int32
+	xStackId              *int64
 	id                    int64
 	createScheduleRequest *CreateScheduleRequest
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiLoadTestsScheduleCreateRequest) XStackId(xStackId int32) *ApiLoadTestsScheduleCreateRequest {
+func (r *ApiLoadTestsScheduleCreateRequest) XStackId(xStackId int64) *ApiLoadTestsScheduleCreateRequest {
 	r.xStackId = &xStackId
 	return r
 }
@@ -211,12 +211,12 @@ func (a *SchedulesAPIService) LoadTestsScheduleCreateExecute(r *ApiLoadTestsSche
 type ApiLoadTestsScheduleRetrieveRequest struct {
 	ctx        context.Context
 	ApiService *SchedulesAPIService
-	xStackId   *int32
+	xStackId   *int64
 	id         int64
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiLoadTestsScheduleRetrieveRequest) XStackId(xStackId int32) *ApiLoadTestsScheduleRetrieveRequest {
+func (r *ApiLoadTestsScheduleRetrieveRequest) XStackId(xStackId int64) *ApiLoadTestsScheduleRetrieveRequest {
 	r.xStackId = &xStackId
 	return r
 }
@@ -369,12 +369,12 @@ func (a *SchedulesAPIService) LoadTestsScheduleRetrieveExecute(r *ApiLoadTestsSc
 type ApiScheduleActivateRequest struct {
 	ctx        context.Context
 	ApiService *SchedulesAPIService
-	xStackId   *int32
+	xStackId   *int64
 	id         int64
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiScheduleActivateRequest) XStackId(xStackId int32) *ApiScheduleActivateRequest {
+func (r *ApiScheduleActivateRequest) XStackId(xStackId int64) *ApiScheduleActivateRequest {
 	r.xStackId = &xStackId
 	return r
 }
@@ -529,12 +529,12 @@ func (a *SchedulesAPIService) ScheduleActivateExecute(r *ApiScheduleActivateRequ
 type ApiScheduleDeactivateRequest struct {
 	ctx        context.Context
 	ApiService *SchedulesAPIService
-	xStackId   *int32
+	xStackId   *int64
 	id         int64
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiScheduleDeactivateRequest) XStackId(xStackId int32) *ApiScheduleDeactivateRequest {
+func (r *ApiScheduleDeactivateRequest) XStackId(xStackId int64) *ApiScheduleDeactivateRequest {
 	r.xStackId = &xStackId
 	return r
 }
@@ -680,12 +680,12 @@ func (a *SchedulesAPIService) ScheduleDeactivateExecute(r *ApiScheduleDeactivate
 type ApiSchedulesDestroyRequest struct {
 	ctx        context.Context
 	ApiService *SchedulesAPIService
-	xStackId   *int32
+	xStackId   *int64
 	id         int64
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiSchedulesDestroyRequest) XStackId(xStackId int32) *ApiSchedulesDestroyRequest {
+func (r *ApiSchedulesDestroyRequest) XStackId(xStackId int64) *ApiSchedulesDestroyRequest {
 	r.xStackId = &xStackId
 	return r
 }
@@ -826,14 +826,14 @@ func (a *SchedulesAPIService) SchedulesDestroyExecute(r *ApiSchedulesDestroyRequ
 type ApiSchedulesListRequest struct {
 	ctx        context.Context
 	ApiService *SchedulesAPIService
-	xStackId   *int32
+	xStackId   *int64
 	count      *bool
 	skip       *int32
 	top        *int32
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiSchedulesListRequest) XStackId(xStackId int32) *ApiSchedulesListRequest {
+func (r *ApiSchedulesListRequest) XStackId(xStackId int64) *ApiSchedulesListRequest {
 	r.xStackId = &xStackId
 	return r
 }
@@ -1013,12 +1013,12 @@ func (a *SchedulesAPIService) SchedulesListExecute(r *ApiSchedulesListRequest) (
 type ApiSchedulesRetrieveRequest struct {
 	ctx        context.Context
 	ApiService *SchedulesAPIService
-	xStackId   *int32
+	xStackId   *int64
 	id         int64
 }
 
 // Numeric ID of the Grafana stack representing the request scope. - If the API is called with a *Personal API token*, the user must be a member of the specified stack. - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
-func (r *ApiSchedulesRetrieveRequest) XStackId(xStackId int32) *ApiSchedulesRetrieveRequest {
+func (r *ApiSchedulesRetrieveRequest) XStackId(xStackId int64) *ApiSchedulesRetrieveRequest {
 	r.xStackId = &xStackId
 	return r
 }

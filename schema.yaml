@@ -5489,4 +5489,5 @@ components:
         - If the API is called with a *Grafana Stack API token*, the value must be the ID of the corresponding stack.
       schema:
         type: integer
+        format: int64
       required: true
